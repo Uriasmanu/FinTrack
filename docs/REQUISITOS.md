@@ -229,6 +229,26 @@ fintrack/
 - Listagem com filtros por período, categoria e tipo
 - Busca por descrição
 
+#### 2.0 Extrato com Saldo
+
+A listagem de transações funciona como um **extrato bancário**, exibindo o saldo após cada transação:
+
+- Cada linha mostra: data, descrição, valor (entrada/saída) e **saldo acumulado**
+- O saldo é calculado em tempo real conforme as transações são listadas
+- Transações futuras (parceladas ou recorrentes) também são consideradas no saldo
+- Formato visual: estilo extrato bancário com linhas alternadas
+- Saldo final = soma de todas as receitas - soma de todas as despesas
+
+**Exemplo de exibição:**
+
+| Data | Descrição | Valor | Saldo |
+|---|---|---|---|
+| 01/01 | Salário | +R$ 5.000,00 | R$ 5.000,00 |
+| 03/01 | Aluguel | -R$ 1.500,00 | R$ 3.500,00 |
+| 05/01 | Supermercado | -R$ 800,00 | R$ 2.700,00 |
+| 10/01 | Parcela Celular 3/12 | -R$ 250,00 | R$ 2.450,00 |
+| 15/01 | Freela | +R$ 1.200,00 | R$ 3.650,00 |
+
 #### 2.1 Tipo de Recorrência
 
 Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
@@ -292,6 +312,12 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 #### 6.1 Regras de Metas (baseadas no salário)
 
 O usuário define seu salário mensal na configuração. Os multiplicadores definem objetivos a curto e longo prazo, e monitoram gastos por categoria. Todos podem ser editados em **Configurações > Objetivos**.
+
+**Metas predefinidas vêm habilitadas por padrão** ao criar a conta.
+
+Cada card de meta pré-definida possui um **menu de 3 pontinhos** (⋮) com as opções:
+- **Editar**: alterar o valor do multiplicador ou nome da meta
+- **Desabilitar**: oculta a meta do dashboard (dados são mantidos)
 
 **Objetivos de Longo Prazo** — Validar porcentagem acumulada:
 

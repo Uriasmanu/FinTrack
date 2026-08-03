@@ -11,6 +11,7 @@ import { Metas } from "@/pages/Metas";
 import { Exportar } from "@/pages/Exportar";
 import { Configuracoes } from "@/pages/Configuracoes";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 function App() {
   const { inicializar } = useFinanceStore();
@@ -20,21 +21,23 @@ function App() {
   }, [inicializar]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/transacoes" element={<Transacoes />} />
-          <Route path="/categorias" element={<Categorias />} />
-          <Route path="/contas" element={<Contas />} />
-          <Route path="/cartoes" element={<Cartoes />} />
-          <Route path="/graficos" element={<Graficos />} />
-          <Route path="/metas" element={<Metas />} />
-          <Route path="/exportar" element={<Exportar />} />
-          <Route path="/configuracoes" element={<Configuracoes />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/transacoes" element={<Transacoes />} />
+            <Route path="/categorias" element={<Categorias />} />
+            <Route path="/contas" element={<Contas />} />
+            <Route path="/cartoes" element={<Cartoes />} />
+            <Route path="/graficos" element={<Graficos />} />
+            <Route path="/metas" element={<Metas />} />
+            <Route path="/exportar" element={<Exportar />} />
+            <Route path="/configuracoes" element={<Configuracoes />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

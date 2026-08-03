@@ -31,45 +31,56 @@ function criarDadosAnoNovo(ano: number): DadosAno {
 }
 
 function carregarDadosAno(ano?: number): DadosAno {
-  const chave = obterChaveAno(ano);
-  const dados = localStorage.getItem(chave);
-
-  if (!dados) {
-    const novoAno = ano ?? new Date().getFullYear();
-    return criarDadosAnoNovo(novoAno);
-  }
-
   try {
-    return JSON.parse(dados) as DadosAno;
-  } catch {
+    const chave = obterChaveAno(ano);
+    const dados = localStorage.getItem(chave);
+
+    if (!dados) {
+      const novoAno = ano ?? new Date().getFullYear();
+      return criarDadosAnoNovo(novoAno);
+    }
+
+    const dadosParseados = JSON.parse(dados);
+
+    if (!dadosParseados || typeof dadosParseados !== "object") {
+      const novoAno = ano ?? new Date().getFullYear();
+      return criarDadosAnoNovo(novoAno);
+    }
+
+    if (!dadosParseados.ano || !Array.isArray(dadosParseados.transacoes)) {
+      const novoAno = ano ?? new Date().getFullYear();
+      return criarDadosAnoNovo(novoAno);
+    }
+
+    return dadosParseados as DadosAno;
+  } catch (erro) {
+    console.error("Erro ao carregar dados:", erro);
     const novoAno = ano ?? new Date().getFullYear();
     return criarDadosAnoNovo(novoAno);
   }
 }
 
-function salvarDadosAno(dados: DadosAno): void {
-  const chave = obterChaveAno(dados.ano);
-  localStorage.setItem(chave, JSON.stringify(dados));
+function salvarDadosAno(dados: DadosAno): boolean {
+  try {
+    const chave = obterChaveAno(dados.ano);
+    const dadosString = JSON.stringify(dados);
+
+    if (!dadosString) {
+      console.error("Erro ao serializar dados");
+      return false;
+    }
+
+    localStorage.setItem(chave, dadosString);
+    return true;
+  } catch (erro) {
+    console.error("Erro ao salvar dados:", erro);
+    return false;
+  }
 }
 
 function verificarOuCriarAnoAtual(): DadosAno {
   const anoAtual = new Date().getFullYear();
-  const chave = obterChaveAno(anoAtual);
-  const dados = localStorage.getItem(chave);
-
-  if (!dados) {
-    const novoDados = criarDadosAnoNovo(anoAtual);
-    salvarDadosAno(novoDados);
-    return novoDados;
-  }
-
-  try {
-    return JSON.parse(dados) as DadosAno;
-  } catch {
-    const novoDados = criarDadosAnoNovo(anoAtual);
-    salvarDadosAno(novoDados);
-    return novoDados;
-  }
+  return carregarDadosAno(anoAtual);
 }
 
 function migrarDadosSeNecessario(dadosAtuais: DadosAno): DadosAno {
@@ -87,22 +98,65 @@ function migrarDadosSeNecessario(dadosAtuais: DadosAno): DadosAno {
 function listarAnosDisponiveis(): number[] {
   const anos: number[] = [];
 
-  for (let i = 0; i < localStorage.length; i++) {
-    const chave = localStorage.key(i);
-    if (chave?.startsWith(`${PREFIXO}_`)) {
-      const ano = parseInt(chave.replace(`${PREFIXO}_`, ""), 10);
-      if (!isNaN(ano)) {
-        anos.push(ano);
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const chave = localStorage.key(i);
+      if (chave?.startsWith(`${PREFIXO}_`)) {
+        const ano = parseInt(chave.replace(`${PREFIXO}_`, ""), 10);
+        if (!isNaN(ano)) {
+          anos.push(ano);
+        }
       }
     }
+  } catch (erro) {
+    console.error("Erro ao listar anos:", erro);
   }
 
   return anos.sort((a, b) => b - a);
 }
 
-function excluirDadosAno(ano: number): void {
-  const chave = obterChaveAno(ano);
-  localStorage.removeItem(chave);
+function excluirDadosAno(ano: number): boolean {
+  try {
+    const chave = obterChaveAno(ano);
+    localStorage.removeItem(chave);
+    return true;
+  } catch (erro) {
+    console.error("Erro ao excluir dados:", erro);
+    return false;
+  }
+}
+
+function exportarDados(ano: number): string | null {
+  try {
+    const dados = carregarDadosAno(ano);
+    return JSON.stringify(dados, null, 2);
+  } catch (erro) {
+    console.error("Erro ao exportar dados:", erro);
+    return null;
+  }
+}
+
+function importarDados(jsonString: string): DadosAno | null {
+  try {
+    const dados = JSON.parse(jsonString);
+
+    if (!dados || typeof dados !== "object") {
+      console.error("Dados inválidos");
+      return null;
+    }
+
+    if (!dados.ano || !Array.isArray(dados.transacoes)) {
+      console.error("Estrutura de dados inválida");
+      return null;
+    }
+
+    const dadosAno = dados as DadosAno;
+    salvarDadosAno(dadosAno);
+    return dadosAno;
+  } catch (erro) {
+    console.error("Erro ao importar dados:", erro);
+    return null;
+  }
 }
 
 export const storage = {
@@ -114,4 +168,6 @@ export const storage = {
   migrarDadosSeNecessario,
   listarAnosDisponiveis,
   excluirDadosAno,
+  exportarDados,
+  importarDados,
 };

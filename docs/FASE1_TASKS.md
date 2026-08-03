@@ -208,12 +208,12 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 10.4 Salvar preferência de tema no localStorage
 - [x] 10.5 Aplicar tema ao carregar o app
 
-### 11. Tratamento de Erros
+### 11. Tratamento de Erros ✅
 
-- [ ] 11.1 Criar componente `src/components/ui/error-boundary.tsx`
-- [ ] 11.2 Implementar fallback amigável quando ocorrer erro
-- [ ] 11.3 Adicionar tratamento de erro nas funções de storage
-- [ ] 11.4 Adicionar tratamento de JSON inválido no localStorage
+- [x] 11.1 Criar componente `src/components/ui/error-boundary.tsx`
+- [x] 11.2 Implementar fallback amigável quando ocorrer erro
+- [x] 11.3 Adicionar tratamento de erro nas funções de storage
+- [x] 11.4 Adicionar tratamento de JSON inválido no localStorage
 
 ### 12. Testes
 
@@ -237,8 +237,8 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 7. **Tasks 7.1 a 7.9** — Layout e navegação ✅
 8. **Tasks 9.1 a 9.14** — Funções de cálculo ✅
 9. **Tasks 8.1 a 8.10** — Dashboard ✅
-10. **Tasks 10.1 a 10.5** — Tema
-11. **Tasks 11.1 a 11.4** — Tratamento de erros
+10. **Tasks 10.1 a 10.5** — Tema ✅
+11. **Tasks 11.1 a 11.4** — Tratamento de Erros ✅
 12. **Tasks 12.1 a 12.6** — Testes
 
 ---
