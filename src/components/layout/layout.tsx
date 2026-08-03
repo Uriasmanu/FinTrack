@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
@@ -9,6 +9,15 @@ export function Layout() {
   const { dadosAno, atualizarConfig } = useFinanceStore();
 
   const tema = dadosAno?.config.tema ?? "claro";
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (tema === "escuro") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [tema]);
 
   const handleTemaChange = () => {
     const novoTema = tema === "claro" ? "escuro" : "claro";

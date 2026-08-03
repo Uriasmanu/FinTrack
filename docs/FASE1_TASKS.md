@@ -200,13 +200,13 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 9.13 Implementar `formatarPrazo(meses)` — formata para "3 anos e 6 meses" ou "8 meses"
 - [x] 9.14 Implementar `calcularParcelaMensal(valorAlvo, meses)` — valorAlvo / meses
 
-### 10. Tema (Claro/Escuro)
+### 10. Tema (Claro/Escuro) ✅
 
-- [ ] 10.1 Criar arquivo `src/index.css` com variáveis CSS do tema claro
-- [ ] 10.2 Adicionar variáveis CSS do tema escuro com classe `.dark`
-- [ ] 10.3 Implementar toggle de tema no header
-- [ ] 10.4 Salvar preferência de tema no localStorage
-- [ ] 10.5 Aplicar tema ao carregar o app
+- [x] 10.1 Criar arquivo `src/index.css` com variáveis CSS do tema claro
+- [x] 10.2 Adicionar variáveis CSS do tema escuro com classe `.dark`
+- [x] 10.3 Implementar toggle de tema no header
+- [x] 10.4 Salvar preferência de tema no localStorage
+- [x] 10.5 Aplicar tema ao carregar o app
 
 ### 11. Tratamento de Erros
 
