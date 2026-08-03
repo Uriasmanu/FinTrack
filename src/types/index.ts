@@ -1,5 +1,7 @@
 export type TipoTransacao = "receita" | "despesa";
 
+export type TipoRecorrencia = "unica" | "recorrente" | "parcelado";
+
 export type TipoConta = "corrente" | "poupanca" | "investimento";
 
 export type StatusMeta = "em_andamento" | "concluida" | "cancelada";
@@ -11,13 +13,13 @@ export type Tema = "claro" | "escuro";
 export interface Transacao {
   id: string;
   tipo: TipoTransacao;
+  tipoRecorrencia: TipoRecorrencia;
   descricao: string;
   valor: number;
   data: string;
   categoriaId: string;
   contaId: string;
   cartaoId: string | null;
-  recorrente: boolean;
   parcelaAtual: number;
   totalParcelas: number;
   grupoParcelaId: string | null;

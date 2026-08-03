@@ -228,13 +228,30 @@ fintrack/
 - Edição e exclusão de transações
 - Listagem com filtros por período, categoria e tipo
 - Busca por descrição
-- Marcar transação como recorrente
 
-#### 2.1 Despesas Parceladas
+#### 2.1 Tipo de Recorrência
 
-- Despesas podem ser cadastradas como parceladas
-- Campos adicionais: parcela atual, total de parcelas (ex: 5/36)
-- Título da transação exibe progresso: "Netflix 5/36"
+Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
+
+| Tipo | Descrição | Exemplo |
+|---|---|---|
+| **Única** | Transação única, sem repetição | Compra de um produto à vista |
+| **Recorrente** | Repete indefinidamente, sem prazo final | Aluguel, assinatura de streaming |
+| **Parcelado** | Repete por número definido de parcelas | Compra parcelada em 12x |
+
+**Transação Única:**
+- Sem campos adicionais
+- Gera apenas uma transação
+
+**Transação Recorrente (sem prazo final):**
+- Repete todo mês na mesma data
+- Sem número definido de parcelas
+- Pode ser cancelada a qualquer momento
+- Campo `tipoRecorrencia`: `"unica" | "recorrente" | "parcelado"`
+
+**Transação Parcelada:**
+- Campo adicional: `parcelaAtual` e `totalParcelas`
+- Título exibe progresso: "Netflix 5/36"
 - Parcela inicial pode começar de qualquer quantidade (ex: 1/36, 5/36, 12/36)
 - Cada parcela gera uma transação individual na data correspondente
 - Ao editar o total de parcelas, as parcelas futuras são recalculadas automaticamente
@@ -368,13 +385,13 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
     {
       "id": "uuid",
       "tipo": "receita | despesa",
+      "tipoRecorrencia": "unica | recorrente | parcelado",
       "descricao": "string",
       "valor": 0.00,
       "data": "YYYY-MM-DD",
       "categoriaId": "uuid",
       "contaId": "uuid",
       "cartaoId": "uuid | null",
-      "recorrente": false,
       "parcelaAtual": 1,
       "totalParcelas": 1,
       "grupoParcelaId": "uuid | null",
