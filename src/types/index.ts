@@ -4,6 +4,8 @@ export type TipoConta = "corrente" | "poupanca" | "investimento";
 
 export type StatusMeta = "em_andamento" | "concluida" | "cancelada";
 
+export type TipoMeta = "padrao" | "personalizado";
+
 export type Tema = "claro" | "escuro";
 
 export interface Transacao {
@@ -47,8 +49,12 @@ export interface Cartao {
 export interface Meta {
   id: string;
   nome: string;
+  tipo: TipoMeta;
+  ativo: boolean;
   valorAlvo: number;
   valorAtual: number;
+  meses: number;
+  parcelaMensal: number;
   dataInicio: string;
   dataFim: string;
   status: StatusMeta;

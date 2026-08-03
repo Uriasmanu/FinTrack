@@ -179,6 +179,11 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [ ] 8.7 Criar componente `src/components/dashboard/alerta-metas.tsx`
   - Mostrar metas que estão atrasadas ou próximas do prazo
   - Indicador visual de progresso
+- [ ] 8.7.1 Criar componente `src/components/dashboard/objetivos-personalizados.tsx`
+  - Listar objetivos personalizados do usuário
+  - Exibir: nome, valor alvo, parcela mensal, prazo, progresso
+  - Barra de progresso com porcentagem
+  - Link para criar novo objetivo
 - [ ] 8.8 Montar layout do dashboard com Grid responsivo
 - [ ] 8.9 Conectar todos os componentes ao store Zustand
 - [ ] 8.10 Tratar estado vazio (primeira vez usando o app)

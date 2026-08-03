@@ -313,6 +313,12 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
    - Valor já economizado vs valor alvo
    - Status: em andamento, concluído, atrasado
 
+5. Habilitar/Desabilitar objetivos:
+   - Objetivos podem serativados ou desativados a qualquer momento
+   - Objetivos desabilitados não aparecem no dashboard
+   - Dados são mantidos mesmo quando desabilitados
+   - Possibilita criar múltiplos objetivos e alternar entre eles conforme necessário
+
 **Exemplo de uso:**
 
 | Campo | Valor |
@@ -392,8 +398,12 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
     {
       "id": "uuid",
       "nome": "string",
+      "tipo": "padrao | personalizado",
+      "ativo": true,
       "valorAlvo": 0.00,
       "valorAtual": 0.00,
+      "meses": 12,
+      "parcelaMensal": 0.00,
       "dataInicio": "YYYY-MM-DD",
       "dataFim": "YYYY-MM-DD",
       "status": "em_andamento | concluida | cancelada"
