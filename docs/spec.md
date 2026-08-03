@@ -26,6 +26,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 ### [aberto]  Últimas Transações em dashbord tem que mostrar somente do mes atual
 ### [aberto]  tem que fazer calcular o Alertas de Metas
 ### [aberto]  No dashbord sempre mostrar bem evidente o mes atual ou o mes que esta sendo exibido
+### [aberto] excluir só essa ou todas
 
 ## Histórico de Correções
 
