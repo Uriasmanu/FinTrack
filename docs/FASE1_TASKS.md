@@ -29,12 +29,12 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 ## Tasks
 
-### 1. Configuração do Projeto
+### 1. Configuração do Projeto ✅
 
-- [ ] 1.3 Instalar dependências base: `npm install`
-- [ ] 1.4 Instalar Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
-- [ ] 1.5 Inicializar Tailwind: `npx tailwindcss init -p`
-- [ ] 1.6 Instalar dependências do shadcn/ui:
+- [x] 1.3 Instalar dependências base: `npm install`
+- [x] 1.4 Instalar Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
+- [x] 1.5 Inicializar Tailwind: `npx tailwindcss init -p`
+- [x] 1.6 Instalar dependências do shadcn/ui:
   - `npm install class-variance-authority clsx tailwind-merge`
   - `npm install tailwindcss-animate`
   - `npm install lucide-react`
@@ -45,15 +45,15 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
   - `npm install @radix-ui/react-dropdown-menu`
   - `npm install @radix-ui/react-progress`
   - `npm install @radix-ui/react-tooltip`
-- [ ] 1.7 Configurar alias `@/` no tsconfig.json e vite.config.ts
-- [ ] 1.8 Criar arquivo `src/lib/cn.ts` com utility para merge de classes
-- [ ] 1.9 Instalar React Router: `npm install react-router-dom`
-- [ ] 1.10 Instalar Zustand: `npm install zustand`
-- [ ] 1.11 Instalar Recharts: `npm install recharts`
-- [ ] 1.12 Instalar jsPDF e html2canvas: `npm install jspdf html2canvas`
-- [ ] 1.13 Instalar papaparse: `npm install papaparse && npm install -D @types/papaparse`
-- [ ] 1.14 Instalar React Hook Form + Zod: `npm install react-hook-form zod @hookform/resolvers`
-- [ ] 1.15 Criar estrutura de pastas do projeto:
+- [x] 1.7 Configurar alias `@/` no tsconfig.json e vite.config.ts
+- [x] 1.8 Criar arquivo `src/lib/cn.ts` com utility para merge de classes
+- [x] 1.9 Instalar React Router: `npm install react-router-dom`
+- [x] 1.10 Instalar Zustand: `npm install zustand`
+- [x] 1.11 Instalar Recharts: `npm install recharts`
+- [x] 1.12 Instalar jsPDF e html2canvas: `npm install jspdf html2canvas`
+- [x] 1.13 Instalar papaparse: `npm install papaparse && npm install -D @types/papaparse`
+- [x] 1.14 Instalar React Hook Form + Zod: `npm install react-hook-form zod @hookform/resolvers`
+- [x] 1.15 Criar estrutura de pastas do projeto
   ```
   src/
   ├── components/
@@ -68,64 +68,64 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
   └── types/
   ```
 
-### 2. Tipagens TypeScript
+### 2. Tipagens TypeScript ✅
 
-- [ ] 2.1 Criar arquivo `src/types/index.ts`
-- [ ] 2.2 Definir interface `Transacao` (id, tipo, descricao, valor, data, categoriaId, contaId, cartaoId, recorrente, criadoEm)
-- [ ] 2.3 Definir interface `Categoria` (id, nome, cor, icone, tipo)
-- [ ] 2.4 Definir interface `Conta` (id, nome, banco, saldoInicial, tipo)
-- [ ] 2.5 Definir interface `Cartao` (id, nome, bandeira, limite, diaFechamento, diaVencimento)
-- [ ] 2.6 Definir interface `Meta` (id, nome, valorAlvo, valorAtual, dataInicio, dataFim, status)
-- [ ] 2.7 Definir interface `Config` (salario, tema, moeda, multiplicadores)
-- [ ] 2.8 Definir interface `DadosAno` (ano, transacoes, categorias, contas, cartoes, metas, config)
-- [ ] 2.9 Definir tipos auxiliares (TipoTransacao, TipoConta, StatusMeta)
+- [x] 2.1 Criar arquivo `src/types/index.ts`
+- [x] 2.2 Definir interface `Transacao` (id, tipo, descricao, valor, data, categoriaId, contaId, cartaoId, recorrente, criadoEm)
+- [x] 2.3 Definir interface `Categoria` (id, nome, cor, icone, tipo)
+- [x] 2.4 Definir interface `Conta` (id, nome, banco, saldoInicial, tipo)
+- [x] 2.5 Definir interface `Cartao` (id, nome, bandeira, limite, diaFechamento, diaVencimento)
+- [x] 2.6 Definir interface `Meta` (id, nome, valorAlvo, valorAtual, dataInicio, dataFim, status)
+- [x] 2.7 Definir interface `Config` (salario, tema, moeda, multiplicadores)
+- [x] 2.8 Definir interface `DadosAno` (ano, transacoes, categorias, contas, cartoes, metas, config)
+- [x] 2.9 Definir tipos auxiliares (TipoTransacao, TipoConta, StatusMeta)
 
-### 3. Utilitários Base
+### 3. Utilitários Base ✅
 
-- [ ] 3.1 Criar arquivo `src/lib/cn.ts` com função de concatenação de classes
-- [ ] 3.2 Criar arquivo `src/lib/uuid.ts` com geração de ID usando `crypto.randomUUID()`
-- [ ] 3.3 Criar arquivo `src/lib/storage.ts` com funções de leitura/escrita no localStorage
-- [ ] 3.4 Implementar função `obterChaveAno()` que retorna `fintrack_{anoAtual}`
-- [ ] 3.5 Implementar função `carregarDadosAno()` que lê o JSON do ano atual do localStorage
-- [ ] 3.6 Implementar função `salvarDadosAno(dados)` que salva o JSON no localStorage
-- [ ] 3.7 Implementar função `criarDadosAnoNovo(ano)` que cria estrutura vazia para um novo ano
-- [ ] 3.8 Implementar função `verificarOuCriarAnoAtual()` que verifica se o JSON do ano existe, senão cria
-- [ ] 3.9 Implementar função `migrarDadosSeNecessario()` que detecta mudança de ano e cria novo JSON
+- [x] 3.1 Criar arquivo `src/lib/cn.ts` com função de concatenação de classes
+- [x] 3.2 Criar arquivo `src/lib/uuid.ts` com geração de ID usando `crypto.randomUUID()`
+- [x] 3.3 Criar arquivo `src/lib/storage.ts` com funções de leitura/escrita no localStorage
+- [x] 3.4 Implementar função `obterChaveAno()` que retorna `fintrack_{anoAtual}`
+- [x] 3.5 Implementar função `carregarDadosAno()` que lê o JSON do ano atual do localStorage
+- [x] 3.6 Implementar função `salvarDadosAno(dados)` que salva o JSON no localStorage
+- [x] 3.7 Implementar função `criarDadosAnoNovo(ano)` que cria estrutura vazia para um novo ano
+- [x] 3.8 Implementar função `verificarOuCriarAnoAtual()` que verifica se o JSON do ano existe, senão cria
+- [x] 3.9 Implementar função `migrarDadosSeNecessario()` que detecta mudança de ano e cria novo JSON
 
-### 4. Dados Iniciais (Defaults)
+### 4. Dados Iniciais (Defaults) ✅
 
-- [ ] 4.1 Criar arquivo `src/data/categorias-default.json`
-- [ ] 4.2 Adicionar categorias padrão: Alimentação, Transporte, Moradia, Lazer, Saúde, Educação, Salário, Investimentos, Outros
-- [ ] 4.3 Criar arquivo `src/data/config-default.json` com valores padrão da config
-- [ ] 4.4 Criar função `obterCategoriasDefault()` que retorna as categorias iniciais
+- [x] 4.1 Criar arquivo `src/data/categorias-default.json`
+- [x] 4.2 Adicionar categorias padrão: Alimentação, Transporte, Moradia, Lazer, Saúde, Educação, Salário, Investimentos, Outros
+- [x] 4.3 Criar arquivo `src/data/config-default.json` com valores padrão da config
+- [x] 4.4 Criar função `obterCategoriasDefault()` que retorna as categorias iniciais
 
-### 5. Store Global (Zustand)
+### 5. Store Global (Zustand) ✅
 
-- [ ] 5.1 Instalar Zustand
-- [ ] 5.2 Criar arquivo `src/stores/useFinanceStore.ts`
-- [ ] 5.3 Implementar state: `dadosAno` (DadosAno | null)
-- [ ] 5.4 Implementar action: `inicializar()` — carrega dados do ano atual ao iniciar o app
-- [ ] 5.5 Implementar action: `adicionarTransacao(transacao)` — adiciona e salva
-- [ ] 5.6 Implementar action: `editarTransacao(id, dados)` — edita e salva
-- [ ] 5.7 Implementar action: `excluirTransacao(id)` — exclui e salva
-- [ ] 5.8 Implementar action: `adicionarCategoria(categoria)` — adiciona e salva
-- [ ] 5.9 Implementar action: `editarCategoria(id, dados)` — edita e salva
-- [ ] 5.10 Implementar action: `excluirCategoria(id)` — exclui e salva
-- [ ] 5.11 Implementar action: `adicionarConta(conta)` — adiciona e salva
-- [ ] 5.12 Implementar action: `editarConta(id, dados)` — edita e salva
-- [ ] 5.13 Implementar action: `excluirConta(id)` — exclui e salva
-- [ ] 5.14 Implementar action: `adicionarCartao(cartao)` — adiciona e salva
-- [ ] 5.15 Implementar action: `editarCartao(id, dados)` — edita e salva
-- [ ] 5.16 Implementar action: `excluirCartao(id)` — exclui e salva
-- [ ] 5.17 Implementar action: `adicionarMeta(meta)` — adiciona e salva
-- [ ] 5.18 Implementar action: `editarMeta(id, dados)` — edita e salva
-- [ ] 5.19 Implementar action: `excluirMeta(id)` — exclui e salva
-- [ ] 5.20 Implementar action: `atualizarConfig(config)` — atualiza e salva
-- [ ] 5.21 Implementar selector: `obterSaldoAtual()` — soma receitas - despesas
-- [ ] 5.22 Implementar selector: `obterReceitasMes(mes)` — total de receitas no mês
-- [ ] 5.23 Implementar selector: `obterDespesasMes(mes)` — total de despesas no mês
-- [ ] 5.24 Implementar selector: `obterTransacoesMes(mes)` — lista de transações do mês
-- [ ] 5.25 Implementar selector: `obterUltimasTransacoes(quantidade)` — últimas N transações
+- [x] 5.1 Instalar Zustand
+- [x] 5.2 Criar arquivo `src/stores/useFinanceStore.ts`
+- [x] 5.3 Implementar state: `dadosAno` (DadosAno | null)
+- [x] 5.4 Implementar action: `inicializar()` — carrega dados do ano atual ao iniciar o app
+- [x] 5.5 Implementar action: `adicionarTransacao(transacao)` — adiciona e salva
+- [x] 5.6 Implementar action: `editarTransacao(id, dados)` — edita e salva
+- [x] 5.7 Implementar action: `excluirTransacao(id)` — exclui e salva
+- [x] 5.8 Implementar action: `adicionarCategoria(categoria)` — adiciona e salva
+- [x] 5.9 Implementar action: `editarCategoria(id, dados)` — edita e salva
+- [x] 5.10 Implementar action: `excluirCategoria(id)` — exclui e salva
+- [x] 5.11 Implementar action: `adicionarConta(conta)` — adiciona e salva
+- [x] 5.12 Implementar action: `editarConta(id, dados)` — edita e salva
+- [x] 5.13 Implementar action: `excluirConta(id)` — exclui e salva
+- [x] 5.14 Implementar action: `adicionarCartao(cartao)` — adiciona e salva
+- [x] 5.15 Implementar action: `editarCartao(id, dados)` — edita e salva
+- [x] 5.16 Implementar action: `excluirCartao(id)` — exclui e salva
+- [x] 5.17 Implementar action: `adicionarMeta(meta)` — adiciona e salva
+- [x] 5.18 Implementar action: `editarMeta(id, dados)` — edita e salva
+- [x] 5.19 Implementar action: `excluirMeta(id)` — exclui e salva
+- [x] 5.20 Implementar action: `atualizarConfig(config)` — atualiza e salva
+- [x] 5.21 Implementar selector: `obterSaldoAtual()` — soma receitas - despesas
+- [x] 5.22 Implementar selector: `obterReceitasMes(mes)` — total de receitas no mês
+- [x] 5.23 Implementar selector: `obterDespesasMes(mes)` — total de despesas no mês
+- [x] 5.24 Implementar selector: `obterTransacoesMes(mes)` — lista de transações do mês
+- [x] 5.25 Implementar selector: `obterUltimasTransacoes(quantidade)` — últimas N transações
 
 ### 6. Componentes shadcn/ui
 

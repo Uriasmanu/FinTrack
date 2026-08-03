@@ -264,17 +264,65 @@ fintrack/
 
 #### 6.1 Regras de Metas (baseadas no salário)
 
-O usuário define seu salário mensal na configuração. As metas são calculadas automaticamente com base nesse valor:
+O usuário define seu salário mensal na configuração. Os multiplicadores definem objetivos a curto e longo prazo, e monitoram gastos por categoria. Todos podem ser editados em **Configurações > Objetivos**.
 
-| Meta | Fórmula | Descrição |
+**Objetivos de Longo Prazo** — Validar porcentagem acumulada:
+
+| Multiplicador | Fórmula | Descrição |
 |---|---|---|
 | Viver de Renda | `salário × 200` | Valor necessário para viver apenas de rendimentos passivos |
-| Reserva de Emergência Total | `salário × 6` | Cobertura de 6 meses de despesas |
-| Guardar por Mês | `salário × 0,1` | Valor mínimo para economizar todo mês (10% do salário) |
-| Valor Máximo em Conta Fixa | `salário × 0,6` | Limite máximo gasto com despesas fixas (60% do salário) |
-| Lazer | `salário × 0,3` | Orçamento mensal para lazer e entretenimento (30% do salário) |
+| Reserva de Emergência | `salário × 6` | Cobertura de 6 meses de despesas |
 
-> **Nota**: O usuário pode ajustar os multiplicadores nas configurações do app.
+**Objetivo de Curto Prazo** — Validar se a categoria "Guarda" está sendo seguida:
+
+| Multiplicador | Fórmula | Descrição |
+|---|---|---|
+| Guardar por Mês | `salário × 0,1` | Meta mensal de economia (10% do salário). Mostra porcentagem do objetivo atingido |
+
+**Monitoramento de Gastos** — Verificar se o gasto por categoria está dentro da meta:
+
+| Multiplicador | Fórmula | Descrição |
+|---|---|---|
+| Conta Fixa | `salário × 0,6` | Limite máximo para despesas fixas (60% do salário). Mostra porcentagem gasta vs limite |
+| Lazer | `salário × 0,3` | Orçamento para lazer e entretenimento (30% do salário). Mostra porcentagem gasta vs limite |
+
+> **Nota**: Todos os multiplicadores podem ser ajustados em **Configurações > Objetivos**.
+
+#### 6.2 Objetivos Personalizados
+
+Além dos objetivos padrão, o usuário pode criar objetivos personalizados com valores e prazos definidos por ele.
+
+**Como funciona:**
+
+1. O usuário cadastra um objetivo com:
+   - Nome do objetivo (ex: "Comprar um carro", "Viagem internacional")
+   - Valor total alvo
+   - Prazo em meses
+
+2. O app calcula automaticamente:
+   - **Parcela mensal**: `valorTotal / meses`
+   - **Previsão de conclusão**: data baseada no prazo informado
+
+3. O usuário pode ajustar o slider de meses em tempo real:
+   - Ao diminuir os meses, a parcela mensal aumenta
+   - Ao aumentar os meses, a parcela mensal diminui
+   - Pré-visualização instantânea do valor mensal até encontrar um valor acessível
+
+4. Acompanhamento do progresso:
+   - Barra de progresso com porcentagem acumulada
+   - Valor já economizado vs valor alvo
+   - Status: em andamento, concluído, atrasado
+
+**Exemplo de uso:**
+
+| Campo | Valor |
+|---|---|
+| Nome | Comprar um carro |
+| Valor alvo | R$ 45.000,00 |
+| Prazo | 24 meses |
+| **Parcela mensal** | **R$ 1.875,00** |
+
+> O usuário ajusta o slider de 24 para 36 meses e vê a parcela cair para R$ 1.250,00, encontrando um valor mais acessível.
 
 ### 7. Exportação de Dados
 
@@ -383,7 +431,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
 | `/metas` | Metas | Acompanhamento de metas de economia |
 | `/metas/nova` | NovaMeta | Cadastrar nova meta |
 | `/exportar` | Exportar | Opções de exportação PDF/CSV |
-| `/configuracoes` | Configuracoes | Preferências, salário e backup |
+| `/configuracoes` | Configuracoes | Preferências, salário, backup e objetivos (multiplicadores) |
 
 ---
 
