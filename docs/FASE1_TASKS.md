@@ -31,54 +31,36 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 ### 1. Configuração do Projeto ✅
 
-- [x] 1.3 Instalar dependências base: `npm install`
-- [x] 1.4 Instalar Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
-- [x] 1.5 Inicializar Tailwind: `npx tailwindcss init -p`
-- [x] 1.6 Instalar dependências do shadcn/ui:
-  - `npm install class-variance-authority clsx tailwind-merge`
-  - `npm install tailwindcss-animate`
-  - `npm install lucide-react`
-  - `npm install @radix-ui/react-slot`
-  - `npm install @radix-ui/react-dialog`
-  - `npm install @radix-ui/react-select`
-  - `npm install @radix-ui/react-tabs`
-  - `npm install @radix-ui/react-dropdown-menu`
-  - `npm install @radix-ui/react-progress`
-  - `npm install @radix-ui/react-tooltip`
-- [x] 1.7 Configurar alias `@/` no tsconfig.json e vite.config.ts
-- [x] 1.8 Criar arquivo `src/lib/cn.ts` com utility para merge de classes
-- [x] 1.9 Instalar React Router: `npm install react-router-dom`
-- [x] 1.10 Instalar Zustand: `npm install zustand`
-- [x] 1.11 Instalar Recharts: `npm install recharts`
-- [x] 1.12 Instalar jsPDF e html2canvas: `npm install jspdf html2canvas`
-- [x] 1.13 Instalar papaparse: `npm install papaparse && npm install -D @types/papaparse`
-- [x] 1.14 Instalar React Hook Form + Zod: `npm install react-hook-form zod @hookform/resolvers`
-- [x] 1.15 Criar estrutura de pastas do projeto
-  ```
-  src/
-  ├── components/
-  │   ├── ui/
-  │   ├── layout/
-  │   ├── dashboard/
-  │   └── graficos/
-  ├── pages/
-  ├── lib/
-  ├── data/
-  ├── stores/
-  └── types/
-  ```
+- [x] 1.1 Criar projeto React com Vite + TypeScript
+- [x] 1.2 Instalar dependências base
+- [x] 1.3 Instalar Tailwind CSS
+- [x] 1.4 Instalar dependências do shadcn/ui
+- [x] 1.5 Configurar alias `@/` no tsconfig.json e vite.config.ts
+- [x] 1.6 Criar arquivo `src/lib/cn.ts`
+- [x] 1.7 Instalar React Router
+- [x] 1.8 Instalar Zustand
+- [x] 1.9 Instalar Recharts
+- [x] 1.10 Instalar jsPDF e html2canvas
+- [x] 1.11 Instalar papaparse
+- [x] 1.12 Instalar React Hook Form + Zod
+- [x] 1.13 Criar estrutura de pastas do projeto
 
 ### 2. Tipagens TypeScript ✅
 
 - [x] 2.1 Criar arquivo `src/types/index.ts`
-- [x] 2.2 Definir interface `Transacao` (id, tipo, descricao, valor, data, categoriaId, contaId, cartaoId, recorrente, criadoEm)
+- [x] 2.2 Definir interface `Transacao` (id, tipo, tipoRecorrencia, descricao, valor, data, categoriaId, contaId, cartaoId, parcelaAtual, totalParcelas, grupoParcelaId, criadoEm)
 - [x] 2.3 Definir interface `Categoria` (id, nome, cor, icone, tipo)
 - [x] 2.4 Definir interface `Conta` (id, nome, banco, saldoInicial, tipo)
 - [x] 2.5 Definir interface `Cartao` (id, nome, bandeira, limite, diaFechamento, diaVencimento)
-- [x] 2.6 Definir interface `Meta` (id, nome, valorAlvo, valorAtual, dataInicio, dataFim, status)
+- [x] 2.6 Definir interface `Meta` (id, nome, tipo, ativo, valorAlvo, valorAtual, meses, parcelaMensal, dataInicio, dataFim, status)
 - [x] 2.7 Definir interface `Config` (salario, tema, moeda, multiplicadores)
 - [x] 2.8 Definir interface `DadosAno` (ano, transacoes, categorias, contas, cartoes, metas, config)
-- [x] 2.9 Definir tipos auxiliares (TipoTransacao, TipoConta, StatusMeta)
+- [x] 2.9 Definir tipo `TipoTransacao` ("receita" | "despesa")
+- [x] 2.10 Definir tipo `TipoRecorrencia` ("unica" | "recorrente" | "parcelado")
+- [x] 2.11 Definir tipo `TipoMeta` ("padrao" | "personalizado")
+- [x] 2.12 Definir tipo `TipoConta` ("corrente" | "poupanca" | "investimento")
+- [x] 2.13 Definir tipo `StatusMeta` ("em_andamento" | "concluida" | "cancelada")
+- [x] 2.14 Definir tipo `Tema` ("claro" | "escuro")
 
 ### 3. Utilitários Base ✅
 
@@ -139,6 +121,8 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [ ] 6.8 Criar componente `Tabs` (para navegação interna)
 - [ ] 6.9 Criar componente `Tooltip`
 - [ ] 6.10 Criar componente `DropdownMenu`
+- [ ] 6.11 Criar componente `Slider` (para ajuste de meses em objetivos)
+- [ ] 6.12 Criar componente `Switch` (para habilitar/desabilitar objetivos)
 
 ### 7. Layout da Aplicação
 
@@ -172,6 +156,8 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
   - Lista das últimas 5 transações
   - Mostrar: ícone da categoria, descrição, valor, data
   - Indicador de cor (verde para receita, vermelho para despesa)
+  - Para transações parceladas: exibir progresso "5/36" no título
+  - Para transações recorrentes: exibir ícone de recorrência
   - Link "Ver todas" para a página de transações
 - [ ] 8.6 Criar componente `src/components/dashboard/resumo-categorias.tsx`
   - Top 3 categorias com mais gastos no mês
@@ -180,11 +166,12 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
   - Mostrar metas que estão atrasadas ou próximas do prazo
   - Indicador visual de progresso
 - [ ] 8.7.1 Criar componente `src/components/dashboard/objetivos-personalizados.tsx`
-  - Listar objetivos personalizados do usuário
+  - Listar objetivos personalizados do usuário (apenas ativos)
   - Exibir: nome, valor alvo, parcela mensal, prazo (em meses ou anos), progresso
   - Barra de progresso com porcentagem
   - Formatação do prazo: meses (< 12) ou anos e meses (ex: "3 anos e 6 meses")
-  - Link para criar novo objetivo
+  - Botão para criar novo objetivo
+  - Botão para habilitar/desabilitar objetivo
 - [ ] 8.8 Montar layout do dashboard com Grid responsivo
 - [ ] 8.9 Conectar todos os componentes ao store Zustand
 - [ ] 8.10 Tratar estado vazio (primeira vez usando o app)
@@ -202,6 +189,9 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [ ] 9.9 Implementar `calcularTopCategorias(transacoes, categorias, limite)` — ranking
 - [ ] 9.10 Implementar `formatarMoeda(valor)` — formata para R$ X.XXX,XX
 - [ ] 9.11 Implementar `formatarData(data)` — formata para DD/MM/AAAA
+- [ ] 9.12 Implementar `formatarParcela(atual, total)` — formata para "5/36"
+- [ ] 9.13 Implementar `formatarPrazo(meses)` — formata para "3 anos e 6 meses" ou "8 meses"
+- [ ] 9.14 Implementar `calcularParcelaMensal(valorAlvo, meses)` — valorAlvo / meses
 
 ### 10. Tema (Claro/Escuro)
 
@@ -222,7 +212,7 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 - [ ] 12.1 Instalar Vitest + React Testing Library
 - [ ] 12.2 Testar funções de storage (criar, ler, salvar, migrar ano)
-- [ ] 12.3 Testar funções de cálculo (saldo, médias, variação)
+- [ ] 12.3 Testar funções de cálculo (saldo, médias, variação, parcelas)
 - [ ] 12.4 Testar store Zustand (ações e selectors)
 - [ ] 12.5 Testar componente Dashboard (renderização com dados mockados)
 - [ ] 12.6 Testar componente Dashboard (estado vazio)
@@ -231,14 +221,14 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 ## Ordem de Execução Sugerida
 
-1. **Tasks 1.1 a 1.15** — Setup do projeto e dependências
-2. **Tasks 2.1 a 2.9** — Tipagens
+1. **Tasks 1.1 a 1.13** — Setup do projeto e dependências
+2. **Tasks 2.1 a 2.14** — Tipagens
 3. **Tasks 3.1 a 3.9** — Utilitários de storage
 4. **Tasks 4.1 a 4.4** — Dados iniciais
 5. **Tasks 5.1 a 5.25** — Store global
-6. **Tasks 6.1 a 6.10** — Componentes UI base
+6. **Tasks 6.1 a 6.12** — Componentes UI base
 7. **Tasks 7.1 a 7.9** — Layout e navegação
-8. **Tasks 9.1 a 9.11** — Funções de cálculo (antes do dashboard)
+8. **Tasks 9.1 a 9.14** — Funções de cálculo (antes do dashboard)
 9. **Tasks 8.1 a 8.10** — Dashboard
 10. **Tasks 10.1 a 10.5** — Tema
 11. **Tasks 11.1 a 11.4** — Tratamento de erros
