@@ -5,6 +5,7 @@ import { UltimasTransacoes } from "@/components/dashboard/ultimas-transacoes";
 import { ResumoCategorias } from "@/components/dashboard/resumo-categorias";
 import { AlertaMetas } from "@/components/dashboard/alerta-metas";
 import { ObjetivosPersonalizados } from "@/components/dashboard/objetivos-personalizados";
+import { DespesasPorFinalidade } from "@/components/dashboard/despesas-por-finalidade";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
 export function Dashboard() {
@@ -33,6 +34,7 @@ export function Dashboard() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <DespesasPorFinalidade />
         <ObjetivosPersonalizados />
       </div>
     </div>

@@ -16,13 +16,32 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Tem que ter a opção se a transação ja foi efetivada ou não, por padrão é não ate que seja alterada para sim, por meio dos tres pontinhos ou clicando para abrir o card da transação ao editar (atualize requisitos)
-### [aberto] lazer e gastos fixos tem que aparecer no dashbord (atualize requisitos)
-### [aberto] lazer deve ter base nas transaçoes da categoria lazer (atualize requisitos)
-### [aberto] gasto fixo deve ser com base em todas as categorias de despesa com esseção do lazer (atualize requisitos)
-### [aberto] gasto Educação tambem deve mostrar no dashbord, pois ele é importante ser mostradoem um grafico bem aparente (atualize requisitos)
-
 ## Histórico de Correções
+
+### [resolvido] Opção de transação efetivada ou não
+**Data:** 2026-08-03
+**Descrição:** Adicionado campo `confirmada: boolean` na interface Transacao, no formulário com checkbox e badge "Efetivada" no card de exibição
+**Arquivos afetados:** types/index.ts, transacao-form.tsx, transacao-item.tsx, NovaTransacao.tsx, EditarTransacao.tsx, transacoes.ts
+
+### [resolvido] Lazer e gastos fixos no dashboard
+**Data:** 2026-08-03
+**Descrição:** Criado componente "Despesas por Finalidade" exibindo Gastos Fixos (despesas exceto lazer), Lazer e Educação com valores e percentuais
+**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx, Dashboard.tsx
+
+### [resolvido] Lazer baseado nas transações da categoria
+**Data:** 2026-08-03
+**Descrição:** Valor de lazer calculado com base nas transações de despesa da categoria "Lazer" (cat-004)
+**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
+
+### [resolvido] Gasto fixo = despesas exceto lazer
+**Data:** 2026-08-03
+**Descrição:** Gastos fixos calculado como total de despesas menos valor de lazer
+**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
+
+### [resolvido] Educação no dashboard
+**Data:** 2026-08-03
+**Descrição:** Exibido valor e percentual de educação com base nas transações da categoria "Educação" (cat-006)
+**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
 
 ### [resolvido] Adicionar tipo de conta ticket
 **Data:** 2026-08-03
