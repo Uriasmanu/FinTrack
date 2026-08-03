@@ -1,0 +1,65 @@
+[
+  {
+    "id": "cat-001",
+    "nome": "Alimentacao",
+    "cor": "#F97316",
+    "icone": "UtensilsCrossed",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-002",
+    "nome": "Transporte",
+    "cor": "#3B82F6",
+    "icone": "Car",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-003",
+    "nome": "Moradia",
+    "cor": "#8B5CF6",
+    "icone": "Home",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-004",
+    "nome": "Lazer",
+    "cor": "#EC4899",
+    "icone": "Gamepad2",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-005",
+    "nome": "Saude",
+    "cor": "#10B981",
+    "icone": "Heart",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-006",
+    "nome": "Educacao",
+    "cor": "#06B6D4",
+    "icone": "GraduationCap",
+    "tipo": "despesa"
+  },
+  {
+    "id": "cat-007",
+    "nome": "Salario",
+    "cor": "#16A34A",
+    "icone": "Banknote",
+    "tipo": "receita"
+  },
+  {
+    "id": "cat-008",
+    "nome": "Investimentos",
+    "cor": "#6366F1",
+    "icone": "TrendingUp",
+    "tipo": "receita"
+  },
+  {
+    "id": "cat-009",
+    "nome": "Outros",
+    "cor": "#6B7280",
+    "icone": "MoreHorizontal",
+    "tipo": "ambos"
+  }
+]

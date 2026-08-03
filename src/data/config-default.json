@@ -1,0 +1,12 @@
+{
+  "salario": 0,
+  "tema": "claro",
+  "moeda": "BRL",
+  "multiplicadores": {
+    "viverDeRenda": 200,
+    "reservaEmergencia": 6,
+    "guardarPorMes": 0.1,
+    "contaFixa": 0.6,
+    "lazer": 0.3
+  }
+}
