@@ -10,7 +10,7 @@ import type {
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
-import { obterCategoriasDefault, obterConfigDefault } from "@/data/defaults";
+import { obterCategoriasDefault, obterConfigDefault, obterMetasDefault } from "@/data/defaults";
 import {
   criarTransacoesRecorrentes,
   excluirParcelasFuturas,
@@ -44,6 +44,8 @@ interface FinanceState {
   obterDespesasMes: (mes: number) => number;
   obterTransacoesMes: (mes: number) => Transacao[];
   obterUltimasTransacoes: (quantidade: number) => Transacao[];
+  obterSaldoConta: (contaId: string) => number;
+  obterFaturaCartao: (cartaoId: string) => number;
 }
 
 function salvar(state: DadosAno) {
@@ -85,6 +87,10 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
     if (dados.config.salario === 0) {
       dados.config = obterConfigDefault();
+    }
+
+    if (dados.metas.length === 0) {
+      dados.metas = obterMetasDefault();
     }
 
     salvar(dados);
@@ -430,5 +436,28 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     return [...state.transacoes]
       .sort((a, b) => new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime())
       .slice(0, quantidade);
+  },
+
+  obterSaldoConta: (contaId) => {
+    const state = get().dadosAno;
+    if (!state) return 0;
+
+    const conta = state.contas.find((c) => c.id === contaId);
+    if (!conta) return 0;
+
+    const saldoTransacoes = state.transacoes
+      .filter((t) => t.contaId === contaId)
+      .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0);
+
+    return conta.saldoInicial + saldoTransacoes;
+  },
+
+  obterFaturaCartao: (cartaoId) => {
+    const state = get().dadosAno;
+    if (!state) return 0;
+
+    return state.transacoes
+      .filter((t) => t.cartaoId === cartaoId && t.tipo === "despesa")
+      .reduce((acc, t) => acc + t.valor, 0);
   },
 }));

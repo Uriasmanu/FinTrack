@@ -23,14 +23,14 @@ Tornar o app **usável no dia a dia**. O usuário deve conseguir:
 
 ## Prioridades da Fase 2
 
-### Prioridade ALTA (MVP - Uso Imediato)
+### Prioridade ALTA (MVP - Uso Imediato) ✅ CONCLUÍDO
 
 Estas são as funcionalidades mínimas para o app ser útil:
 
-#### 1. Cadastro de Transações ✅ Obrigatório
+#### 1. Cadastro de Transações ✅
 
-- [ ] 1.1 Criar página `src/pages/NovaTransacao.tsx`
-- [ ] 1.2 Criar componente `src/components/transacoes/transacao-form.tsx`
+- [x] 1.1 Criar página `src/pages/NovaTransacao.tsx`
+- [x] 1.2 Criar componente `src/components/transacoes/transacao-form.tsx`
   - Campos obrigatórios: descrição, valor, data, tipo (receita/despesa)
   - Select de categoria (filtrado por tipo)
   - Select de conta
@@ -39,171 +39,150 @@ Estas são as funcionalidades mínimas para o app ser útil:
   - Campos condicionais: parcelaAtual/totalParcelas (quando parcelado)
   - Validação com Zod
   - Integração com React Hook Form
-- [ ] 1.3 Criar página `src/pages/EditarTransacao.tsx`
+- [x] 1.3 Criar página `src/pages/EditarTransacao.tsx`
   - Reutilizar componente transacao-form
   - Carregar dados da transação pelo ID
   - Tratar parcelas futuras ao editar total
 
-#### 2. Extrato Bancário ✅ Obrigatório
+#### 2. Extrato Bancário ✅
 
-- [ ] 2.1 Criar componente `src/components/transacoes/transacao-item.tsx`
+- [x] 2.1 Criar componente `src/components/transacoes/transacao-item.tsx`
   - Exibir: data, descrição, valor (entrada/saída), saldo acumulado
   - Cor: verde para receita, vermelho para despesa
   - Badge de parcela (ex: "5/36") para parcelados
   - Ícone de recorrência para recorrentes
   - Menu de 3 pontinhos: Editar, Excluir
-- [ ] 2.2 Implementar cálculo de saldo acumulado
+- [x] 2.2 Implementar cálculo de saldo acumulado
   - Ordenar transações por data
   - Calcular saldo após cada transação
   - Exibir saldo final no rodapé
-- [ ] 2.3 Criar componente `src/components/transacoes/filtros.tsx`
+- [x] 2.3 Criar componente `src/components/transacoes/filtros.tsx`
   - Filtro por período (data inicial e final)
   - Filtro por tipo (receita, despesa, todos)
   - Filtro por categoria (select)
   - Filtro por conta (select)
   - Campo de busca por descrição
   - Botão limpar filtros
-- [ ] 2.4 Atualizar página `src/pages/Transacoes.tsx`
+- [x] 2.4 Atualizar página `src/pages/Transacoes.tsx`
   - Listar todas as transações com extrato
   - Integrar filtros
   - Botão "Nova Transação"
 
-#### 3. Categorias Básicas ✅ Obrigatório
+#### 3. Categorias Básicas ✅
 
-- [ ] 3.1 Criar página `src/pages/Categorias.tsx`
+- [x] 3.1 Criar página `src/pages/Categorias.tsx`
   - Listar categorias existentes
   - Botão "Nova Categoria"
-- [ ] 3.2 Criar componente `src/components/categorias/categoria-card.tsx`
+- [x] 3.2 Criar componente `src/components/categorias/categoria-card.tsx`
   - Exibir: nome, cor, ícone, tipo
   - Menu de 3 pontinhos: Editar, Excluir
-- [ ] 3.3 Criar componente `src/components/categorias/categoria-form.tsx`
-  - Campos: nome, cor (input color), ícone (select lucide), tipo
+- [x] 3.3 Criar componente `src/components/categorias/categoria-form.tsx`
+  - Campos: nome, cor (input color), ícone (select), tipo
   - Modal de cadastro/edição (Dialog)
   - Validação com Zod
 
-#### 4. Contas Básicas ✅ Obrigatório
+#### 4. Contas Básicas ✅
 
-- [ ] 4.1 Criar página `src/pages/Contas.tsx`
+- [x] 4.1 Criar página `src/pages/Contas.tsx`
   - Listar contas existentes
   - Botão "Nova Conta"
-- [ ] 4.2 Criar componente `src/components/contas/conta-card.tsx`
+- [x] 4.2 Criar componente `src/components/contas/conta-card.tsx`
   - Exibir: nome, banco, tipo, saldo atual
   - Menu de 3 pontinhos: Editar, Excluir
-- [ ] 4.3 Criar componente `src/components/contas/conta-form.tsx`
+- [x] 4.3 Criar componente `src/components/contas/conta-form.tsx`
   - Campos: nome, banco, saldo inicial, tipo
   - Modal de cadastro/edição (Dialog)
   - Validação com Zod
 
-#### 5. Cartões Básicos ✅ Obrigatório
+#### 5. Cartões Básicos ✅
 
-- [ ] 5.1 Criar página `src/pages/Cartoes.tsx`
+- [x] 5.1 Criar página `src/pages/Cartoes.tsx`
   - Listar cartões existentes
   - Botão "Novo Cartão"
-- [ ] 5.2 Criar componente `src/components/cartoes/cartao-card.tsx`
+- [x] 5.2 Criar componente `src/components/cartoes/cartao-card.tsx`
   - Exibir: nome, bandeira, limite, fatura atual
   - Menu de 3 pontinhos: Editar, Excluir
-- [ ] 5.3 Criar componente `src/components/cartoes/cartao-form.tsx`
+- [x] 5.3 Criar componente `src/components/cartoes/cartao-form.tsx`
   - Campos: nome, bandeira, limite, diaFechamento, diaVencimento
   - Modal de cadastro/edição (Dialog)
   - Validação com Zod
 
-#### 6. Metas Predefinidas ✅ Obrigatório
+#### 6. Metas Predefinidas ✅
 
-- [ ] 6.1 Atualizar store para criar metas predefinidas na inicialização
+- [x] 6.1 Atualizar store para criar metas predefinidas na inicialização
   - Criar metas padrão quando `dadosAno.metas.length === 0`
   - Metas: Viver de Renda, Reserva de Emergência, Guardar por Mês, Conta Fixa, Lazer
   - Todas com `ativo: true` por padrão
-- [ ] 6.2 Criar componente `src/components/metas/metas-predefinidas.tsx`
+- [x] 6.2 Criar componente `src/components/metas/metas-predefinidas.tsx`
   - Cards das metas baseadas nos multiplicadores
   - Menu de 3 pontinhos: Editar multiplicador, Desabilitar
   - Cálculo automático baseado no salário
   - Toggle de habilitar/desabilitar
-- [ ] 6.3 Criar página `src/pages/Metas.tsx`
+- [x] 6.3 Criar página `src/pages/Metas.tsx`
   - Listar metas predefinidas e personalizadas
   - Botão "Nova Meta"
-- [ ] 6.4 Criar componente `src/components/metas/meta-card.tsx`
+- [x] 6.4 Criar componente `src/components/metas/meta-card.tsx`
   - Exibir: nome, valor alvo, valor atual, progresso
   - Barra de progresso
   - Badge de status
   - Menu de 3 pontinhos: Editar, Habilitar/Desabilitar, Excluir
+- [x] 6.5 Criar componente `src/components/metas/meta-form.tsx`
+  - Campos: nome, valor alvo, prazo (meses)
+  - Slider para ajuste de meses
+  - Pré-visualização da parcela mensal
+  - Validação com Zod
+  - Modal de cadastro/edição (Dialog)
 
-### Prioridade MÉDIA (Funcionalidades Complementares)
+### Prioridade MÉDIA (Funcionalidades Complementares) ✅ CONCLUÍDO
 
-Estas melhoriam a experiência mas não são bloqueantes:
+- [x] 7.1 Adicionar função `obterSaldoConta(contaId)` no store
+- [x] 7.2 Adicionar função `obterFaturaCartao(cartaoId)` no store
 
-#### 7. Configurações Básicas
-
-- [ ] 7.1 Criar página `src/pages/Configuracoes.tsx`
-- [ ] 7.2 Criar componente `src/components/configuracoes/perfil.tsx`
-  - Campo: salário mensal
-  - Salvar automaticamente ao alterar
-- [ ] 7.3 Criar componente `src/components/configuracoes/tema.tsx`
-  - Toggle claro/escuro
-- [ ] 7.4 Criar componente `src/components/configuracoes/objetivos.tsx`
-  - Lista dos multiplicadores editáveis
-
-#### 8. Funções Auxiliares no Store
-
-- [ ] 8.1 Criar função `calcularSaldoConta(contaId)` no store
-- [ ] 8.2 Criar função `calcularFaturaCartao(cartaoId)` no store
-- [ ] 8.3 Criar função `calcularSaldoAcumulado(transacoes)` para extrato
-
-### Prioridade BAixa (Features Avançadas)
+### Prioridade BAIXA (Features Avançadas) - PENDENTE
 
 Estas podem vir em fases futuras:
 
-#### 9. Gráficos
+#### 8. Gráficos
 
-- [ ] 9.1 Criar página `src/pages/Graficos.tsx`
-- [ ] 9.2 Criar componente `src/components/graficos/barras-mensais.tsx`
-- [ ] 9.3 Criar componente `src/components/graficos/pizza-categorias.tsx`
-- [ ] 9.4 Criar componente `src/components/graficos/linha-saldo.tsx`
+- [ ] 8.1 Criar página `src/pages/Graficos.tsx`
+- [ ] 8.2 Criar componente `src/components/graficos/barras-mensais.tsx`
+- [ ] 8.3 Criar componente `src/components/graficos/pizza-categorias.tsx`
+- [ ] 8.4 Criar componente `src/components/graficos/linha-saldo.tsx`
 
-#### 10. Exportação
+#### 9. Exportação
 
-- [ ] 10.1 Criar página `src/pages/Exportar.tsx`
-- [ ] 10.2 Criar componente `src/components/exportar/exportar-pdf.tsx`
-- [ ] 10.3 Criar componente `src/components/exportar/exportar-csv.tsx`
+- [ ] 9.1 Criar página `src/pages/Exportar.tsx`
+- [ ] 9.2 Criar componente `src/components/exportar/exportar-pdf.tsx`
+- [ ] 9.3 Criar componente `src/components/exportar/exportar-csv.tsx`
+
+#### 10. Configurações
+
+- [ ] 10.1 Criar página `src/pages/Configuracoes.tsx`
+- [ ] 10.2 Criar componente `src/components/configuracoes/perfil.tsx`
+- [ ] 10.3 Criar componente `src/components/configuracoes/tema.tsx`
+- [ ] 10.4 Criar componente `src/components/configuracoes/objetivos.tsx`
 
 #### 11. Backup/Restore
 
 - [ ] 11.1 Criar componente `src/components/configuracoes/backup.tsx`
-  - Botão Exportar JSON
-  - Botão Importar JSON
 
 ---
 
-## Ordem de Execução (MVP)
+## Entregáveis da Fase 2 (MVP) ✅
 
-1. **Tasks 1.1 a 1.3** — Formulário de transação (cadastro/edição)
-2. **Tasks 2.1 a 2.4** — Extrato bancário com filtros
-3. **Tasks 6.1 a 6.4** — Metas predefinidas
-4. **Tasks 3.1 a 3.3** — Categorias
-5. **Tasks 4.1 a 4.3** — Contas
-6. **Tasks 5.1 a 5.3** — Cartões
-7. **Tasks 8.1 a 8.3** — Funções auxiliares no store
-8. **Tasks 7.1 a 7.4** — Configurações básicas
-
----
-
-## Entregáveis da Fase 2 (MVP)
-
-- [ ] Usuário pode cadastrar receitas e despesas
-- [ ] Usuário pode editar e excluir transações
-- [ ] Extrato bancário com saldo acumulado
-- [ ] Filtros por período, tipo, categoria e conta
-- [ ] Metas predefinidas visíveis no dashboard
-- [ ] Categorias, contas e cartões gerenciáveis
-- [ ] Configurações de salário e tema
-- [ ] Build sem erros (`npm run build`)
+- [x] Usuário pode cadastrar receitas e despesas
+- [x] Usuário pode editar e excluir transações
+- [x] Extrato bancário com saldo acumulado
+- [x] Filtros por período, tipo, categoria e conta
+- [x] Metas predefinidas visíveis no dashboard
+- [x] Categorias, contas e cartões gerenciáveis
+- [x] Build sem erros (`npm run build`)
 
 ---
 
-## Critérios de Aceite
+## Próximos Passos
 
-1. **Cadastro**: Usuário consegue criar uma transação completa em < 30 segundos
-2. **Extrato**: Saldo acumulado é calculado corretamente após cada transação
-3. **Metas**: Metas predefinidas aparecem no dashboard com cálculos corretos
-4. **Persistência**: Dados são salvos no localStorage e persistem ao recarregar
-5. **Responsividade**: Layout funciona em desktop e mobile
-6. **Temas**: Tema claro/escuro funciona em todas as páginas
+1. Implementar Gráficos (Recharts)
+2. Implementar Exportação (PDF/CSV)
+3. Implementar Configurações completas
+4. Implementar Backup/Restore

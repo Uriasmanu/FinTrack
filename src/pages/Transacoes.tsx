@@ -1,8 +1,115 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TransacaoItem } from "@/components/transacoes/transacao-item";
+import { Filtros, type FiltrosTransacao } from "@/components/transacoes/filtros";
+import { useFinanceStore } from "@/stores/useFinanceStore";
+import { formatarMoeda } from "@/lib/calculos";
+
 export function Transacoes() {
+  const navigate = useNavigate();
+  const { dadosAno } = useFinanceStore();
+  const [filtros, setFiltros] = useState<FiltrosTransacao>({
+    busca: "",
+    tipo: "todos",
+    categoriaId: "todas",
+    contaId: "todas",
+    dataInicio: "",
+    dataFim: "",
+  });
+
+  const transacoesFiltradas = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      if (filtros.busca && !t.descricao.toLowerCase().includes(filtros.busca.toLowerCase())) {
+        return false;
+      }
+      if (filtros.tipo !== "todos" && t.tipo !== filtros.tipo) {
+        return false;
+      }
+      if (filtros.categoriaId !== "todas" && t.categoriaId !== filtros.categoriaId) {
+        return false;
+      }
+      if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) {
+        return false;
+      }
+      if (filtros.dataInicio && t.data < filtros.dataInicio) {
+        return false;
+      }
+      if (filtros.dataFim && t.data > filtros.dataFim) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+
+  let saldoAcumulado = 0;
+  const transacoesComSaldo = transacoesFiltradas.map((t) => {
+    saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
+    return { ...t, saldoAcumulado };
+  });
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold">Transações</h2>
-      <p className="text-muted-foreground">Página em construção...</p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Transações</h2>
+          <p className="text-muted-foreground">
+            Extrato bancário com saldo acumulado
+          </p>
+        </div>
+        <Button onClick={() => navigate("/transacoes/nova")}>
+          <Plus className="mr-2 h-4 w-4" />
+          Nova Transação
+        </Button>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Filtros</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Filtros filtros={filtros} onFiltrosChange={setFiltros} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Extrato</CardTitle>
+          <span className="text-sm text-muted-foreground">
+            {transacoesFiltradas.length} transação(ões)
+          </span>
+        </CardHeader>
+        <CardContent>
+          {transacoesFiltradas.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">
+              Nenhuma transação encontrada
+            </p>
+          ) : (
+            <div>
+              {transacoesComSaldo.map((transacao) => (
+                <TransacaoItem
+                  key={transacao.id}
+                  transacao={transacao}
+                  saldoAcumulado={transacao.saldoAcumulado}
+                  onEditar={(id) => navigate(`/transacoes/${id}`)}
+                />
+              ))}
+              <div className="flex justify-between items-center pt-4 border-t mt-4">
+                <span className="font-medium">Saldo Final</span>
+                <span
+                  className={`text-lg font-bold ${
+                    saldoAcumulado >= 0 ? "text-success" : "text-destructive"
+                  }`}
+                >
+                  {formatarMoeda(saldoAcumulado)}
+                </span>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
