@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O **FinTrack** é um aplicativo mobile desenvolvido em **React Native (Expo)** para controle financeiro pessoal. O app permite ao usuário gerenciar receitas, despesas, contas bancárias, cartões e metas de economia, além de visualizar gráficos e exportar dados.
+O **FinTrack** é um aplicativo web desenvolvido em **React** para controle financeiro pessoal. O app permite ao usuário gerenciar receitas, despesas, contas bancárias, cartões e metas de economia, além de visualizar gráficos e exportar dados.
 
 ---
 
@@ -10,18 +10,18 @@ O **FinTrack** é um aplicativo mobile desenvolvido em **React Native (Expo)** p
 
 | Camada | Tecnologia | Versão |
 |---|---|---|
-| Framework | React Native (Expo) | SDK 52+ |
+| Framework | React + Vite | 18.x / 5.x |
 | Linguagem | TypeScript | 5.x |
-| Estilização | NativeWind (Tailwind CSS) | 4.x |
-| Componentes | React Native Reusables (shadcn) | latest |
-| Navegação | Expo Router | 4.x |
-| Gráficos | react-native-gifted-charts | latest |
-| Armazenamento Local | expo-file-system + JSON | — |
-| Geração de PDF | expo-print | — |
-| Geração de CSV | papaparse + expo-sharing | — |
+| Estilização | Tailwind CSS | 3.4+ |
+| Componentes | shadcn/ui | latest |
+| Navegação | React Router | 6.x |
+| Gráficos | Recharts | 2.x |
+| Armazenamento Local | localStorage + JSON | — |
+| Geração de PDF | jsPDF + html2canvas | — |
+| Geração de CSV | papaparse | — |
 | Formulários | React Hook Form + Zod | latest |
-| Ícones | lucide-react-native | latest |
-| UUID | expo-crypto | — |
+| Ícones | lucide-react | latest |
+| UUID | crypto.randomUUID() | nativo |
 
 ---
 
@@ -29,35 +29,52 @@ O **FinTrack** é um aplicativo mobile desenvolvido em **React Native (Expo)** p
 
 ```json
 {
+  "name": "fintrack",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
   "dependencies": {
-    "expo": "~52.0.0",
-    "expo-router": "~4.0.0",
-    "expo-file-system": "~18.0.0",
-    "expo-print": "~13.0.0",
-    "expo-sharing": "~13.0.0",
-    "expo-crypto": "~14.0.0",
-    "react": "18.3.1",
-    "react-native": "0.76.0",
-    "react-native-gifted-charts": "^1.4.0",
-    "react-native-linear-gradient": "^2.8.0",
-    "react-native-svg": "^15.0.0",
-    "nativewind": "^4.0.0",
-    "tailwindcss": "^3.4.0",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0",
-    "lucide-react-native": "^0.400.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-router-dom": "^6.22.0",
+    "recharts": "^2.12.0",
+    "papaparse": "^5.4.0",
+    "jspdf": "^2.5.0",
+    "html2canvas": "^1.4.0",
     "react-hook-form": "^7.50.0",
     "zod": "^3.22.0",
     "@hookform/resolvers": "^3.3.0",
-    "papaparse": "^5.4.0",
-    "react-native-reanimated": "~3.16.0",
-    "react-native-gesture-handler": "~2.20.0"
+    "lucide-react": "^0.400.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss-animate": "^1.0.7",
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-tabs": "^1.0.0",
+    "@radix-ui/react-slot": "^1.0.0",
+    "@radix-ui/react-dropdown-menu": "^2.0.0",
+    "@radix-ui/react-progress": "^1.0.0",
+    "@radix-ui/react-tooltip": "^1.0.0"
   },
   "devDependencies": {
-    "@types/react": "~18.3.0",
-    "typescript": "~5.5.0",
-    "@babel/core": "^7.24.0"
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/papaparse": "^5.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
   }
 }
 ```
@@ -122,73 +139,73 @@ O **FinTrack** é um aplicativo mobile desenvolvido em **React Native (Expo)** p
 
 ```
 fintrack/
-├── app/                          # Expo Router (rotas)
-│   ├── _layout.tsx               # Layout raiz
-│   ├── (tabs)/                   # Rotas com tab navigation
-│   │   ├── _layout.tsx           # Configuração das tabs
-│   │   ├── index.tsx             # Dashboard (Home)
-│   │   ├── transacoes.tsx        # Lista de transações
-│   │   ├── graficos.tsx          # Gráficos
-│   │   └── config.tsx            # Configurações
-│   ├── transacoes/
-│   │   ├── nova.tsx              # Nova transação
-│   │   └── [id].tsx              # Editar transação
-│   ├── categorias/
-│   │   ├── index.tsx             # Lista de categorias
-│   │   └── nova.tsx              # Nova categoria
-│   ├── contas/
-│   │   ├── index.tsx             # Lista de contas
-│   │   ├── nova.tsx              # Nova conta
-│   │   └── [id].tsx              # Editar conta
-│   ├── cartoes/
-│   │   ├── index.tsx             # Lista de cartões
-│   │   ├── nova.tsx              # Novo cartão
-│   │   └── [id].tsx              # Editar cartão
-│   ├── metas/
-│   │   ├── index.tsx             # Lista de metas
-│   │   ├── nova.tsx              # Nova meta
-│   │   └── [id].tsx              # Editar meta
-│   └── exportar.tsx              # Tela de exportação
-├── components/                   # Componentes reutilizáveis
-│   ├── ui/                       # Componentes shadcn/ui
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   ├── badge.tsx
-│   │   ├── dialog.tsx
-│   │   ├── select.tsx
-│   │   ├── tabs.tsx
-│   │   └── ...
-│   ├── dashboard/
-│   │   ├── saldo-card.tsx
-│   │   ├── receitas-despesas-card.tsx
-│   │   └── resumo-mensal.tsx
-│   ├── transacoes/
-│   │   ├── transacao-item.tsx
-│   │   └── transacao-form.tsx
-│   ├── graficos/
-│   │   ├── barras-mensais.tsx
-│   │   ├── pizza-categorias.tsx
-│   │   └── linha-saldo.tsx
-│   └── metas/
-│       ├── meta-card.tsx
-│       └── progresso-meta.tsx
-├── lib/                          # Utilitários
-│   ├── storage.ts                # Leitura/escrita de JSON
-│   ├── export.ts                 # Exportação PDF/CSV
-│   ├── calculos.ts               # Cálculos financeiros
-│   ├── uuid.ts                   # Geração de IDs
-│   └── cn.ts                     # Utility para classes
-├── data/                         # Dados iniciais
-│   ├── categorias-default.json
-│   └── templates-metas.json
-├── stores/                       # State management
-│   └── useFinanceStore.ts        # Zustand store
-├── types/                        # Tipagens TypeScript
-│   └── index.ts
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── main.tsx                    # Entry point
+│   ├── App.tsx                     # Router principal
+│   ├── index.css                   # Tailwind imports
+│   ├── components/
+│   │   ├── ui/                     # shadcn/ui components
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── tabs.tsx
+│   │   │   ├── progress.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── tooltip.tsx
+│   │   │   └── separator.tsx
+│   │   ├── layout/
+│   │   │   ├── sidebar.tsx
+│   │   │   ├── header.tsx
+│   │   │   └── layout.tsx
+│   │   ├── dashboard/
+│   │   │   ├── saldo-card.tsx
+│   │   │   ├── receitas-despesas-card.tsx
+│   │   │   └── resumo-mensal.tsx
+│   │   ├── transacoes/
+│   │   │   ├── transacao-item.tsx
+│   │   │   ├── transacao-form.tsx
+│   │   │   └── filtros.tsx
+│   │   ├── graficos/
+│   │   │   ├── barras-mensais.tsx
+│   │   │   ├── pizza-categorias.tsx
+│   │   │   └── linha-saldo.tsx
+│   │   └── metas/
+│   │       ├── meta-card.tsx
+│   │       └── progresso-meta.tsx
+│   ├── pages/
+│   │   ├── Dashboard.tsx
+│   │   ├── Transacoes.tsx
+│   │   ├── NovaTransacao.tsx
+│   │   ├── EditarTransacao.tsx
+│   │   ├── Categorias.tsx
+│   │   ├── Contas.tsx
+│   │   ├── Cartoes.tsx
+│   │   ├── Graficos.tsx
+│   │   ├── Metas.tsx
+│   │   ├── NovaMeta.tsx
+│   │   ├── Exportar.tsx
+│   │   └── Configuracoes.tsx
+│   ├── lib/
+│   │   ├── storage.ts              # Leitura/escrita localStorage
+│   │   ├── export.ts               # Exportação PDF/CSV
+│   │   ├── calculos.ts             # Cálculos financeiros
+│   │   └── cn.ts                   # Utility para classes
+│   ├── data/
+│   │   ├── categorias-default.json
+│   │   └── templates-metas.json
+│   ├── stores/
+│   │   └── useFinanceStore.ts      # Zustand store
+│   └── types/
+│       └── index.ts
 ├── tailwind.config.js
-├── nativewind-env.d.ts
-├── app.json
+├── postcss.config.js
+├── tsconfig.json
+├── vite.config.ts
 └── package.json
 ```
 
@@ -232,7 +249,7 @@ fintrack/
 
 ### 5. Gráficos Mensais
 
-- Gráfico de barras: receitas vs despesas por mês
+- Gráfico de barras: receitas vs despesas por mês (Recharts)
 - Gráfico de pizza: distribuição de despesas por categoria
 - Gráfico de linha: evolução do saldo ao longo do tempo
 - Seletor de período para análise
@@ -243,7 +260,6 @@ fintrack/
 - Criação de metas com valor alvo e prazo
 - Acompanhamento do progresso (porcentagem e valor acumulado)
 - Edição e exclusão de metas
-- Notificações de progresso (opcional)
 - Visualização de metas atingidas e pendentes
 
 #### 6.1 Regras de Metas (baseadas no salário)
@@ -262,30 +278,30 @@ O usuário define seu salário mensal na configuração. As metas são calculada
 
 ### 7. Exportação de Dados
 
-- **Exportar para PDF**: relatório mensal/anual com gráficos e tabelas
-- **Exportar para CSV**: dados brutos para uso em planilhas
+- **Exportar para PDF**: relatório mensal/anual com gráficos e tabelas (jsPDF + html2canvas)
+- **Exportar para CSV**: dados brutos para uso em planilhas (papaparse)
 - Seleção de período para exportação
-- Compartilhamento via apps do dispositivo (e-mail, messaging, etc.)
+- Download direto no navegador
 
-### 8. Armazenamento Local (JSON Interno)
+### 8. Armazenamento Local (localStorage)
 
-- Todos os dados persistidos em arquivo JSON via `expo-file-system`
-- Estrutura de dados organizada por módulo:
-  - `transacoes.json` — lista de receitas e despesas
-  - `categorias.json` — categorias personalizadas
-  - `contas.json` — contas bancárias
-  - `cartoes.json` — cartões de crédito
-  - `metas.json` — metas de economia
-  - `config.json` — configurações do usuário (salário, tema, etc.)
+- Todos os dados persistidos em `localStorage` do navegador
+- Estrutura de dados organizada por chave:
+  - `fintrack_transacoes` — lista de receitas e despesas
+  - `fintrack_categorias` — categorias personalizadas
+  - `fintrack_contas` — contas bancárias
+  - `fintrack_cartoes` — cartões de crédito
+  - `fintrack_metas` — metas de economia
+  - `fintrack_config` — configurações do usuário
 - Backup e restauração de dados (importação/exportação do JSON)
 
 ---
 
-## Estrutura de Dados (JSON)
+## Estrutura de Dados (localStorage)
 
 ```json
 {
-  "transacoes": [
+  "fintrack_transacoes": [
     {
       "id": "uuid",
       "tipo": "receita | despesa",
@@ -299,7 +315,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "criadoEm": "ISO timestamp"
     }
   ],
-  "categorias": [
+  "fintrack_categorias": [
     {
       "id": "uuid",
       "nome": "string",
@@ -308,7 +324,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "tipo": "receita | despesa | ambos"
     }
   ],
-  "contas": [
+  "fintrack_contas": [
     {
       "id": "uuid",
       "nome": "string",
@@ -317,7 +333,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "tipo": "corrente | poupanca | investimento"
     }
   ],
-  "cartoes": [
+  "fintrack_cartoes": [
     {
       "id": "uuid",
       "nome": "string",
@@ -327,7 +343,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "diaVencimento": 10
     }
   ],
-  "metas": [
+  "fintrack_metas": [
     {
       "id": "uuid",
       "nome": "string",
@@ -338,7 +354,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "status": "em_andamento | concluida | cancelada"
     }
   ],
-  "config": {
+  "fintrack_config": {
     "salario": 0.00,
     "tema": "claro | escuro",
     "moeda": "BRL",
@@ -355,82 +371,123 @@ O usuário define seu salário mensal na configuração. As metas são calculada
 
 ---
 
-## Telas Principais
+## Rotas
 
-| Tela | Rota | Descrição |
+| Rota | Página | Descrição |
 |---|---|---|
-| Dashboard | `(tabs)/` | Resumo financeiro e indicadores |
-| Transações | `(tabs)/transacoes` | Lista com filtros e busca |
-| Nova Transação | `/transacoes/nova` | Formulário de cadastro |
-| Editar Transação | `/transacoes/[id]` | Formulário de edição |
-| Categorias | `/categorias` | Gestão de categorias |
-| Contas | `/contas` | Gestão de contas bancárias |
-| Cartões | `/cartoes` | Gestão de cartões de crédito |
-| Gráficos | `(tabs)/graficos` | Visualização gráfica dos dados |
-| Metas | `/metas` | Acompanhamento de metas de economia |
-| Exportar | `/exportar` | Opções de exportação PDF/CSV |
-| Configurações | `(tabs)/config` | Preferências, salário e backup |
+| `/` | Dashboard | Resumo financeiro e indicadores |
+| `/transacoes` | Transacoes | Lista com filtros e busca |
+| `/transacoes/nova` | NovaTransacao | Formulário de cadastro |
+| `/transacoes/:id` | EditarTransacao | Formulário de edição |
+| `/categorias` | Categorias | Gestão de categorias |
+| `/contas` | Contas | Gestão de contas bancárias |
+| `/cartoes` | Cartoes | Gestão de cartões de crédito |
+| `/graficos` | Graficos | Visualização gráfica dos dados |
+| `/metas` | Metas | Acompanhamento de metas de economia |
+| `/metas/nova` | NovaMeta | Cadastrar nova meta |
+| `/exportar` | Exportar | Opções de exportação PDF/CSV |
+| `/configuracoes` | Configuracoes | Preferências, salário e backup |
 
 ---
 
 ## Configurações do Projeto
 
-### app.json
+### vite.config.ts
 
-```json
-{
-  "expo": {
-    "name": "FinTrack",
-    "slug": "fintrack",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "backgroundColor": "#2563EB"
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.fintrack.app"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#2563EB"
-      },
-      "package": "com.fintrack.app"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-file-system",
-      "expo-print",
-      "expo-sharing"
-    ]
-  }
-}
+  },
+});
 ```
 
 ### tailwind.config.js
 
 ```js
-module.exports = {
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: "#2563EB",
-        "primary-hover": "#1D4ED8",
-        success: "#16A34A",
-        "success-bg": "#DCFCE7",
-        danger: "#DC2626",
-        "danger-bg": "#FEE2E2",
-        warning: "#F59E0B",
-        "warning-bg": "#FEF3C7",
-        border: "#E5E7EB",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };
+```
+
+### tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
 ```
 
 ---
@@ -441,5 +498,6 @@ module.exports = {
 - **Usabilidade**: interface intuitiva e responsiva
 - **Segurança**: dados armazenados localmente (sem servidor externo)
 - **Acessibilidade**: suporte a leitores de tela e fontes escaláveis
-- **Compatibilidade**: Android 10+ e iOS 14+
+- **Responsividade**: layout adaptável para desktop e mobile
 - **Offline**: funcionamento completo sem conexão com a internet
+- **Navegadores**: Chrome, Firefox, Safari, Edge (últimas 2 versões)
