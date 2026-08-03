@@ -21,7 +21,7 @@ import {
 const contaSchema = z.object({
   banco: z.string().min(1, "Banco é obrigatório"),
   saldoInicial: z.number(),
-  tipo: z.enum(["corrente", "poupanca", "investimento"]),
+  tipo: z.enum(["corrente", "poupanca", "investimento", "ticket"]),
 });
 
 type ContaFormData = z.infer<typeof contaSchema>;
@@ -92,7 +92,7 @@ export function ContaForm({
             <label className="text-sm font-medium">Tipo</label>
             <Select
               value={watch("tipo")}
-              onValueChange={(v) => setValue("tipo", v as "corrente" | "poupanca" | "investimento")}
+              onValueChange={(v) => setValue("tipo", v as "corrente" | "poupanca" | "investimento" | "ticket")}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -101,6 +101,7 @@ export function ContaForm({
                 <SelectItem value="corrente">Corrente</SelectItem>
                 <SelectItem value="poupanca">Poupança</SelectItem>
                 <SelectItem value="investimento">Investimento</SelectItem>
+                <SelectItem value="ticket">Ticket (Mercado)</SelectItem>
               </SelectContent>
             </Select>
           </div>

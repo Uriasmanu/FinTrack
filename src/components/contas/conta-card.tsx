@@ -41,6 +41,7 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
     corrente: "Corrente",
     poupanca: "Poupança",
     investimento: "Investimento",
+    ticket: "Ticket (Mercado)",
   };
 
   return (

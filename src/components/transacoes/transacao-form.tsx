@@ -24,6 +24,7 @@ const transacaoSchema = z.object({
   tipoRecorrencia: z.enum(["unica", "recorrente", "parcelado"]),
   parcelaAtual: z.number().min(1),
   totalParcelas: z.number().min(1),
+  confirmada: z.boolean(),
 });
 
 type TransacaoFormData = z.infer<typeof transacaoSchema>;
@@ -60,6 +61,7 @@ export function TransacaoForm({
       tipoRecorrencia: initialData?.tipoRecorrencia ?? "unica",
       parcelaAtual: initialData?.parcelaAtual ?? 1,
       totalParcelas: initialData?.totalParcelas ?? 1,
+      confirmada: initialData?.confirmada ?? false,
     },
   });
 
@@ -219,6 +221,20 @@ export function TransacaoForm({
             </div>
           </>
         )}
+
+        <div className="col-span-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register("confirmada")}
+              className="w-4 h-4 rounded border-input"
+            />
+            <span className="text-sm font-medium">Transação efetivada</span>
+          </label>
+          <p className="text-xs text-muted-foreground mt-1">
+            Marque se a transação já foi confirmada/paga
+          </p>
+        </div>
       </div>
 
       <div className="flex justify-end gap-2">

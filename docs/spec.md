@@ -16,8 +16,17 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-
+### [aberto] Tem que ter a opção se a transação ja foi efetivada ou não, por padrão é não ate que seja alterada para sim, por meio dos tres pontinhos ou clicando para abrir o card da transação ao editar (atualize requisitos)
 ### [aberto] Adicione o tipo de conta ticket que é exclusivo para compras no meercado (atualize requisitos)
+### [aberto] adicione a categoria de receita que é o ticket (atualize requisitos)
+### [aberto] o confirmação de deletar tem que ser sempre usando o dialog do shadcn (atualize requisitos)
+### [aberto] o extrato tem que mostrar o valor depois da transação porem cada transação tem uma data diferente então tem que ficar espassado mostrando o saldo final a baixo de cada transação e não como esta atualmente. o saldo que vou ter ao final de cada dia (atualize requisitos)
+### [aberto] transações do tipo alimentação, por padrão são direcionado para o tipo de conta alimentação, podem pode ser mudado, esse padrão visa agilizar ja que a maioria das vezes a gente usa o ticket para fazer compra (atualize requisitos)
+### [aberto] as metas devem ser com base nos valores dos recebimentos do categoria salario, atualmente ele não esta atualizando  (atualize requisitos)
+### [aberto] lazer e gastos fixos tem que aparecer no dashbord (atualize requisitos)
+### [aberto] lazer deve ter base nas transaçoes da categoria lazer (atualize requisitos)
+### [aberto] gasto fixo deve ser com base em todas as categorias de despesa com esseção do lazer (atualize requisitos)
+### [aberto] gasto Educação tambem deve mostrar no dashbord, pois ele é importante ser mostradoem um grafico bem aparente (atualize requisitos)
 
 ## Histórico de Correções
 

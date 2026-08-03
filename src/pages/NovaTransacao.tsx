@@ -6,7 +6,7 @@ export function NovaTransacao() {
   const navigate = useNavigate();
   const { adicionarTransacao, adicionarTransacoesRecorrentes } = useFinanceStore();
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number }) {
+  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
     const dadosComGrupo = {
       ...data,
       grupoParcelaId: null,

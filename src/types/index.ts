@@ -2,7 +2,7 @@ export type TipoTransacao = "receita" | "despesa";
 
 export type TipoRecorrencia = "unica" | "recorrente" | "parcelado";
 
-export type TipoConta = "corrente" | "poupanca" | "investimento";
+export type TipoConta = "corrente" | "poupanca" | "investimento" | "ticket";
 
 export type StatusMeta = "em_andamento" | "concluida" | "cancelada";
 
@@ -24,6 +24,7 @@ export interface Transacao {
   totalParcelas: number;
   grupoParcelaId: string | null;
   criadoEm: string;
+  confirmada: boolean;
 }
 
 export interface Categoria {

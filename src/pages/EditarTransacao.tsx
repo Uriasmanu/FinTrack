@@ -19,7 +19,7 @@ export function EditarTransacao() {
 
   const transacaoEncontrada = transacao;
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number }) {
+  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
     editarTransacao(transacaoEncontrada.id, {
       ...data,
       grupoParcelaId: transacaoEncontrada.grupoParcelaId,
