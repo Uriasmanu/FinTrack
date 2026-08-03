@@ -18,6 +18,9 @@ export interface Transacao {
   contaId: string;
   cartaoId: string | null;
   recorrente: boolean;
+  parcelaAtual: number;
+  totalParcelas: number;
+  grupoParcelaId: string | null;
   criadoEm: string;
 }
 

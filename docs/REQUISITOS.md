@@ -230,6 +230,16 @@ fintrack/
 - Busca por descrição
 - Marcar transação como recorrente
 
+#### 2.1 Despesas Parceladas
+
+- Despesas podem ser cadastradas como parceladas
+- Campos adicionais: parcela atual, total de parcelas (ex: 5/36)
+- Título da transação exibe progresso: "Netflix 5/36"
+- Parcela inicial pode começar de qualquer quantidade (ex: 1/36, 5/36, 12/36)
+- Cada parcela gera uma transação individual na data correspondente
+- Ao editar o total de parcelas, as parcelas futuras são recalculadas automaticamente
+- Exclusão de uma parcela exclui todas as parcelas futuras
+
 ### 3. Categorias Personalizadas
 
 - Criação de categorias customizadas pelo usuário
@@ -365,6 +375,9 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
       "contaId": "uuid",
       "cartaoId": "uuid | null",
       "recorrente": false,
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "grupoParcelaId": "uuid | null",
       "criadoEm": "ISO timestamp"
     }
   ],
