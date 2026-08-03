@@ -15,63 +15,21 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] a meta de despesa fixa deve levar em consideração as despesas recorrentes (atualize requisitos)
+### [aberto] pode adicionar uma despesa/receita repetida, porem tem que mostrar que ela ja existe só para garantir se tem certeza se quer cadastrar duplicado. tem que mostrar um previwer da despesa reseita que ja existe (atualize requisitos)
+### [aberto]  em transaçoes o extrato só mostra o mes atual por padrão , so mostra outros meses se colocar que quer
+### [aberto]  Nas recorrentes e parceladdas quando o valor ou a data é editada, tem que perguntar se é só essa ou todas
+### [aberto]  Categoria de transação tem que ter Divida
+### [aberto]  Saldo Total em dashbord tem que mostrar somente do mes atual
+### [aberto]  no sidebar não é o lugar das categorias e sim dentro de configurações
+### [aberto]  Modo escuro esta sando sempre que a tela recarrega
+### [aberto]  Últimas Transações em dashbord tem que mostrar somente do mes atual
+### [aberto]  tem que fazer calcular o Alertas de Metas
+### [aberto]  No dashbord sempre mostrar bem evidente o mes atual ou o mes que esta sendo exibido
 
 ## Histórico de Correções
 
-### [resolvido] Opção de transação efetivada ou não
-**Data:** 2026-08-03
-**Descrição:** Adicionado campo `confirmada: boolean` na interface Transacao, no formulário com checkbox e badge "Efetivada" no card de exibição
-**Arquivos afetados:** types/index.ts, transacao-form.tsx, transacao-item.tsx, NovaTransacao.tsx, EditarTransacao.tsx, transacoes.ts
 
-### [resolvido] Lazer e gastos fixos no dashboard
-**Data:** 2026-08-03
-**Descrição:** Criado componente "Despesas por Finalidade" exibindo Gastos Fixos (despesas exceto lazer), Lazer e Educação com valores e percentuais
-**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx, Dashboard.tsx
-
-### [resolvido] Lazer baseado nas transações da categoria
-**Data:** 2026-08-03
-**Descrição:** Valor de lazer calculado com base nas transações de despesa da categoria "Lazer" (cat-004)
-**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
-
-### [resolvido] Gasto fixo = despesas exceto lazer
-**Data:** 2026-08-03
-**Descrição:** Gastos fixos calculado como total de despesas menos valor de lazer
-**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
-
-### [resolvido] Educação no dashboard
-**Data:** 2026-08-03
-**Descrição:** Exibido valor e percentual de educação com base nas transações da categoria "Educação" (cat-006)
-**Arquivos afetados:** dashboard/despesas-por-finalidade.tsx
-
-### [resolvido] Adicionar tipo de conta ticket
-**Data:** 2026-08-03
-**Descrição:** Adicionado tipo de conta "ticket" exclusivo para compras no mercado
-**Arquivos afetados:** types/index.ts, contas/conta-form.tsx, contas/conta-card.tsx, pages/Contas.tsx
-
-### [resolvido] Adicionar categoria de receita Ticket
-**Data:** 2026-08-03
-**Descrição:** Adicionada categoria de receita "Ticket" (id: cat-009) no defaults
-**Arquivos afetados:** data/categorias-default.json
-
-### [resolvido] Confirmação de delete usando Dialog do shadcn
-**Data:** 2026-08-03
-**Descrição:** Substituído confirm() nativo por AlertDialog do shadcn em todos os componentes de exclusão
-**Arquivos afetados:** cartoes/cartao-card.tsx, contas/conta-card.tsx, categorias/categoria-card.tsx, metas/meta-card.tsx, transacoes/transacao-item.tsx, ui/delete-confirm-dialog.tsx, ui/alert-dialog.tsx
-
-### [resolvido] Extrato com saldo por data
-**Data:** 2026-08-03
-**Descrição:** Extrato agrupa transações por data e mostra saldo acumulado ao final de cada dia
-**Arquivos afetados:** pages/Transacoes.tsx
-
-### [resolvido] Conta ticket como padrão para alimentação
-**Data:** 2026-08-03
-**Descrição:** Ao selecionar categoria "Alimentação", conta do tipo "ticket" é selecionada automaticamente
-**Arquivos afetados:** components/transacoes/transacao-form.tsx
-
-### [resolvido] Metas baseadas no salário
-**Data:** 2026-08-03
-**Descrição:** Metas padrão calculam valorAlvo e parcelaMensal com base nas transações de receita da categoria "Salário" e multiplicadores da config
-**Arquivos afetados:** components/metas/metas-predefinidas.tsx
 
 
 
