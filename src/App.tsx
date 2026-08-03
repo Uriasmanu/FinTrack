@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/layout/layout";
 import { Dashboard } from "@/pages/Dashboard";
 import { Transacoes } from "@/pages/Transacoes";
+import { NovaTransacao } from "@/pages/NovaTransacao";
+import { EditarTransacao } from "@/pages/EditarTransacao";
 import { Categorias } from "@/pages/Categorias";
 import { Contas } from "@/pages/Contas";
 import { Cartoes } from "@/pages/Cartoes";
@@ -27,6 +29,8 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/transacoes" element={<Transacoes />} />
+            <Route path="/transacoes/nova" element={<NovaTransacao />} />
+            <Route path="/transacoes/:id" element={<EditarTransacao />} />
             <Route path="/categorias" element={<Categorias />} />
             <Route path="/contas" element={<Contas />} />
             <Route path="/cartoes" element={<Cartoes />} />

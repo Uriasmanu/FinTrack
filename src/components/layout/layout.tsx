@@ -17,7 +17,15 @@ export function Layout() {
     } else {
       root.classList.remove("dark");
     }
+    localStorage.setItem("fintrack-tema", tema);
   }, [tema]);
+
+  useEffect(() => {
+    const temaSalvo = localStorage.getItem("fintrack-tema") as "claro" | "escuro" | null;
+    if (temaSalvo && temaSalvo !== tema) {
+      atualizarConfig({ tema: temaSalvo });
+    }
+  }, []);
 
   const handleTemaChange = () => {
     const novoTema = tema === "claro" ? "escuro" : "claro";

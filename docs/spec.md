@@ -16,9 +16,25 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-<!-- aberto — resolvido em 02/07/2026, movido para Histórico de Correções -->
+### [aberto] ainda não esta ficando salvo o modo escuro, quando recarrega a pagina volta para o claro
 
 ## Histórico de Correções
+
+### [resolvido] Quando clico em nova transação só fica uma tela em branco
+- **Data:** 03/08/2026
+- **Comportamento atual:** Clicar em "Nova Transação" abria uma tela em branco
+- **Comportamento esperado:** Formulário de cadastro de transação é exibido
+- **Causa:** Rotas `/transacoes/nova` e `/transacoes/:id` não estavam definidas no App.tsx
+- **Correção:** Adicionadas rotas e imports de NovaTransacao e EditarTransacao no App.tsx
+- **Arquivos afetados:** `src/App.tsx`
+
+### [resolvido] Tema escuro não é registrado ao recarregar a página
+- **Data:** 03/08/2026
+- **Comportamento atual:** Tema escolhido era perdido ao recarregar a página
+- **Comportamento esperado:** Tema é persistido e aplicado na inicialização
+- **Causa:** Tema não era salvo no localStorage e não era aplicado no carregamento inicial
+- **Correção:** Adicionado `localStorage.setItem("fintrack-tema", tema)` e `useEffect` para ler tema salvo na inicialização
+- **Arquivos afetados:** `src/components/layout/layout.tsx`
 
 ## Feature
 
