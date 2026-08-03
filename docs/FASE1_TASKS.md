@@ -143,62 +143,62 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 7.8 Implementar responsividade: sidebar colapsável em mobile (hamburger menu)
 - [x] 7.9 Configurar rotas no App.tsx com React Router
 
-### 8. Página Dashboard
+### 8. Página Dashboard ✅
 
-- [ ] 8.1 Criar página `src/pages/Dashboard.tsx`
-- [ ] 8.2 Criar componente `src/components/dashboard/saldo-card.tsx`
+- [x] 8.1 Criar página `src/pages/Dashboard.tsx`
+- [x] 8.2 Criar componente `src/components/dashboard/saldo-card.tsx`
   - Exibir saldo total consolidado (receitas - despesas)
   - Mostrar ícone de seta para cima (verde) ou para baixo (vermelho)
   - Mostrar variação em relação ao mês anterior
-- [ ] 8.3 Criar componente `src/components/dashboard/receitas-despesas-card.tsx`
+- [x] 8.3 Criar componente `src/components/dashboard/receitas-despesas-card.tsx`
   - Card dividido: lado esquerdo receitas (verde), lado direito despesas (vermelho)
   - Exibir valor total de cada um no mês atual
   - Mostrar ícones de seta para indicar tendência
-- [ ] 8.4 Criar componente `src/components/dashboard/resumo-mensal.tsx`
+- [x] 8.4 Criar componente `src/components/dashboard/resumo-mensal.tsx`
   - Quantidade de transações no mês
   - Média de gasto por dia
   - Maior transação do mês
   - Percentual de economia (receitas - despesas / receitas)
-- [ ] 8.5 Criar componente `src/components/dashboard/ultimas-transacoes.tsx`
+- [x] 8.5 Criar componente `src/components/dashboard/ultimas-transacoes.tsx`
   - Lista das últimas 5 transações
   - Mostrar: ícone da categoria, descrição, valor, data
   - Indicador de cor (verde para receita, vermelho para despesa)
   - Para transações parceladas: exibir progresso "5/36" no título
   - Para transações recorrentes: exibir ícone de recorrência
   - Link "Ver todas" para a página de transações
-- [ ] 8.6 Criar componente `src/components/dashboard/resumo-categorias.tsx`
+- [x] 8.6 Criar componente `src/components/dashboard/resumo-categorias.tsx`
   - Top 3 categorias com mais gastos no mês
   - Barra de progresso com porcentagem de cada uma
-- [ ] 8.7 Criar componente `src/components/dashboard/alerta-metas.tsx`
+- [x] 8.7 Criar componente `src/components/dashboard/alerta-metas.tsx`
   - Mostrar metas que estão atrasadas ou próximas do prazo
   - Indicador visual de progresso
-- [ ] 8.7.1 Criar componente `src/components/dashboard/objetivos-personalizados.tsx`
+- [x] 8.7.1 Criar componente `src/components/dashboard/objetivos-personalizados.tsx`
   - Listar objetivos personalizados do usuário (apenas ativos)
   - Exibir: nome, valor alvo, parcela mensal, prazo (em meses ou anos), progresso
   - Barra de progresso com porcentagem
   - Formatação do prazo: meses (< 12) ou anos e meses (ex: "3 anos e 6 meses")
   - Botão para criar novo objetivo
   - Botão para habilitar/desabilitar objetivo
-- [ ] 8.8 Montar layout do dashboard com Grid responsivo
-- [ ] 8.9 Conectar todos os componentes ao store Zustand
-- [ ] 8.10 Tratar estado vazio (primeira vez usando o app)
+- [x] 8.8 Montar layout do dashboard com Grid responsivo
+- [x] 8.9 Conectar todos os componentes ao store Zustand
+- [x] 8.10 Tratar estado vazio (primeira vez usando o app)
 
-### 9. Funções de Cálculo
+### 9. Funções de Cálculo ✅
 
-- [ ] 9.1 Criar arquivo `src/lib/calculos.ts`
-- [ ] 9.2 Implementar `calcularSaldo(transacoes)` — soma receitas - despesas
-- [ ] 9.3 Implementar `calcularReceitasMes(transacoes, mes, ano)` — total receitas no período
-- [ ] 9.4 Implementar `calcularDespesasMes(transacoes, mes, ano)` — total despesas no período
-- [ ] 9.5 Implementar `calcularVariacaoMes(atual, anterior)` — percentual de variação
-- [ ] 9.6 Implementar `calcularMediaGastoDiario(despesas, diasNoMes)` — média diária
-- [ ] 9.7 Implementar `calcularMaiorTransacao(transacoes)` — retorna a maior
-- [ ] 9.8 Implementar `calcularPercentualEconomia(receitas, despesas)` — (receitas - despesas) / receitas
-- [ ] 9.9 Implementar `calcularTopCategorias(transacoes, categorias, limite)` — ranking
-- [ ] 9.10 Implementar `formatarMoeda(valor)` — formata para R$ X.XXX,XX
-- [ ] 9.11 Implementar `formatarData(data)` — formata para DD/MM/AAAA
-- [ ] 9.12 Implementar `formatarParcela(atual, total)` — formata para "5/36"
-- [ ] 9.13 Implementar `formatarPrazo(meses)` — formata para "3 anos e 6 meses" ou "8 meses"
-- [ ] 9.14 Implementar `calcularParcelaMensal(valorAlvo, meses)` — valorAlvo / meses
+- [x] 9.1 Criar arquivo `src/lib/calculos.ts`
+- [x] 9.2 Implementar `calcularSaldo(transacoes)` — soma receitas - despesas
+- [x] 9.3 Implementar `calcularReceitasMes(transacoes, mes, ano)` — total receitas no período
+- [x] 9.4 Implementar `calcularDespesasMes(transacoes, mes, ano)` — total despesas no período
+- [x] 9.5 Implementar `calcularVariacaoMes(atual, anterior)` — percentual de variação
+- [x] 9.6 Implementar `calcularMediaGastoDiario(despesas, diasNoMes)` — média diária
+- [x] 9.7 Implementar `calcularMaiorTransacao(transacoes)` — retorna a maior
+- [x] 9.8 Implementar `calcularPercentualEconomia(receitas, despesas)` — (receitas - despesas) / receitas
+- [x] 9.9 Implementar `calcularTopCategorias(transacoes, categorias, limite)` — ranking
+- [x] 9.10 Implementar `formatarMoeda(valor)` — formata para R$ X.XXX,XX
+- [x] 9.11 Implementar `formatarData(data)` — formata para DD/MM/AAAA
+- [x] 9.12 Implementar `formatarParcela(atual, total)` — formata para "5/36"
+- [x] 9.13 Implementar `formatarPrazo(meses)` — formata para "3 anos e 6 meses" ou "8 meses"
+- [x] 9.14 Implementar `calcularParcelaMensal(valorAlvo, meses)` — valorAlvo / meses
 
 ### 10. Tema (Claro/Escuro)
 
@@ -235,8 +235,8 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 5. **Tasks 5.1 a 5.28** — Store global
 6. **Tasks 6.1 a 6.12** — Componentes UI base
 7. **Tasks 7.1 a 7.9** — Layout e navegação ✅
-8. **Tasks 9.1 a 9.14** — Funções de cálculo (antes do dashboard)
-9. **Tasks 8.1 a 8.10** — Dashboard
+8. **Tasks 9.1 a 9.14** — Funções de cálculo ✅
+9. **Tasks 8.1 a 8.10** — Dashboard ✅
 10. **Tasks 10.1 a 10.5** — Tema
 11. **Tasks 11.1 a 11.4** — Tratamento de erros
 12. **Tasks 12.1 a 12.6** — Testes
