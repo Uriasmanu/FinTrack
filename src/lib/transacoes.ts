@@ -45,6 +45,7 @@ export function criarTransacoesRecorrentes({
       totalParcelas: 1,
       grupoParcelaId: null,
       criadoEm: new Date().toISOString(),
+      confirmada: false,
     });
     return transacoes;
   }
@@ -72,6 +73,7 @@ export function criarTransacoesRecorrentes({
         totalParcelas,
         grupoParcelaId: grupoId,
         criadoEm: new Date().toISOString(),
+        confirmada: false,
       });
     }
     return transacoes;
@@ -92,6 +94,7 @@ export function criarTransacoesRecorrentes({
       totalParcelas: 1,
       grupoParcelaId: grupoId,
       criadoEm: new Date().toISOString(),
+      confirmada: false,
     });
     return transacoes;
   }

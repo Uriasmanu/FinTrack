@@ -421,7 +421,8 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
       "parcelaAtual": 1,
       "totalParcelas": 1,
       "grupoParcelaId": "uuid | null",
-      "criadoEm": "ISO timestamp"
+      "criadoEm": "ISO timestamp",
+      "confirmada": false
     }
   ],
   "categorias": [
@@ -436,10 +437,9 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
   "contas": [
     {
       "id": "uuid",
-      "nome": "string",
       "banco": "string",
       "saldoInicial": 0.00,
-      "tipo": "corrente | poupanca | investimento"
+      "tipo": "corrente | poupanca | investimento | ticket"
     }
   ],
   "cartoes": [

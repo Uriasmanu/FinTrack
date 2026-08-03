@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pencil, Trash2, Power, PowerOff } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarPrazo } from "@/lib/calculos";
 import type { Meta } from "@/types";
@@ -17,6 +19,7 @@ interface MetaCardProps {
 }
 
 export function MetaCard({ meta, onEditar }: MetaCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { editarMeta, excluirMeta } = useFinanceStore();
 
   const percentual = meta.valorAlvo > 0
@@ -36,9 +39,12 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
   } as const;
 
   function handleExcluir() {
-    if (confirm("Tem certeza que deseja excluir esta meta?")) {
-      excluirMeta(meta.id);
-    }
+    setDialogOpen(true);
+  }
+
+  function confirmarExclusao() {
+    excluirMeta(meta.id);
+    setDialogOpen(false);
   }
 
   function handleToggleAtivo() {
@@ -111,6 +117,14 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
           <span className="font-medium">{formatarMoeda(meta.parcelaMensal)}</span>
         </div>
       )}
+
+      <DeleteConfirmDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onConfirm={confirmarExclusao}
+        title="Excluir meta"
+        description="Tem certeza que deseja excluir esta meta? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }

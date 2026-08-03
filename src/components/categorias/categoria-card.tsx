@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -5,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import type { Categoria } from "@/types";
 
@@ -14,6 +16,7 @@ interface CategoriaCardProps {
 }
 
 export function CategoriaCard({ categoria, onEditar }: CategoriaCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { excluirCategoria, dadosAno } = useFinanceStore();
 
   const transacoesNaCategoria = dadosAno?.transacoes.filter(
@@ -25,9 +28,12 @@ export function CategoriaCard({ categoria, onEditar }: CategoriaCardProps) {
       alert("Não é possível excluir uma categoria com transações vinculadas.");
       return;
     }
-    if (confirm("Tem certeza que deseja excluir esta categoria?")) {
-      excluirCategoria(categoria.id);
-    }
+    setDialogOpen(true);
+  }
+
+  function confirmarExclusao() {
+    excluirCategoria(categoria.id);
+    setDialogOpen(false);
   }
 
   const tipoLabel = {
@@ -73,6 +79,14 @@ export function CategoriaCard({ categoria, onEditar }: CategoriaCardProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <DeleteConfirmDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onConfirm={confirmarExclusao}
+        title="Excluir categoria"
+        description="Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }

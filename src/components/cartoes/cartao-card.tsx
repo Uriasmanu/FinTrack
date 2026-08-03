@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -6,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 import type { Cartao } from "@/types";
@@ -16,6 +18,7 @@ interface CartaoCardProps {
 }
 
 export function CartaoCard({ cartao, onEditar }: CartaoCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { excluirCartao, dadosAno } = useFinanceStore();
 
   const faturaAtual =
@@ -36,9 +39,12 @@ export function CartaoCard({ cartao, onEditar }: CartaoCardProps) {
       alert("Não é possível excluir um cartão com transações vinculadas.");
       return;
     }
-    if (confirm("Tem certeza que deseja excluir este cartão?")) {
-      excluirCartao(cartao.id);
-    }
+    setDialogOpen(true);
+  }
+
+  function confirmarExclusao() {
+    excluirCartao(cartao.id);
+    setDialogOpen(false);
   }
 
   return (
@@ -94,6 +100,14 @@ export function CartaoCard({ cartao, onEditar }: CartaoCardProps) {
         <span>Fechamento: dia {cartao.diaFechamento}</span>
         <span>Vencimento: dia {cartao.diaVencimento}</span>
       </div>
+
+      <DeleteConfirmDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onConfirm={confirmarExclusao}
+        title="Excluir cartão"
+        description="Tem certeza que deseja excluir este cartão? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }

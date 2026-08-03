@@ -57,6 +57,13 @@
   },
   {
     "id": "cat-009",
+    "nome": "Ticket",
+    "cor": "#F59E0B",
+    "icone": "Ticket",
+    "tipo": "receita"
+  },
+  {
+    "id": "cat-010",
     "nome": "Outros",
     "cor": "#6B7280",
     "icone": "MoreHorizontal",

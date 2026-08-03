@@ -1,4 +1,5 @@
-import { Pencil, Trash2, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { Pencil, Trash2, RefreshCw, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -6,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 import type { Transacao } from "@/types";
@@ -21,6 +23,7 @@ export function TransacaoItem({
   saldoAcumulado,
   onEditar,
 }: TransacaoItemProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { excluirTransacao, dadosAno } = useFinanceStore();
 
   const categoria = dadosAno?.categorias.find(
@@ -29,9 +32,12 @@ export function TransacaoItem({
   const conta = dadosAno?.contas.find((c) => c.id === transacao.contaId);
 
   function handleExcluir() {
-    if (confirm("Tem certeza que deseja excluir esta transação?")) {
-      excluirTransacao(transacao.id);
-    }
+    setDialogOpen(true);
+  }
+
+  function confirmarExclusao() {
+    excluirTransacao(transacao.id);
+    setDialogOpen(false);
   }
 
   return (
@@ -73,6 +79,12 @@ export function TransacaoItem({
                   {transacao.parcelaAtual}/{transacao.totalParcelas}
                 </Badge>
               )}
+            {transacao.confirmada && (
+              <Badge variant="default" className="bg-success text-success-foreground text-xs">
+                <Check className="mr-1 h-3 w-3" />
+                Efetivada
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>{formatarData(transacao.data)}</span>
@@ -124,6 +136,14 @@ export function TransacaoItem({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <DeleteConfirmDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onConfirm={confirmarExclusao}
+        title="Excluir transação"
+        description="Tem certeza que deseja excluir esta transação? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }

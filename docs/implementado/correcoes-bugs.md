@@ -40,9 +40,57 @@
 
 **Problema:** Verificar se todas as exclusões possuem confirmação.
 
-**Solução:** Todos os componentes já utilizam `confirm()` antes de excluir (transação, categoria, conta, cartão, meta).
+**Solução:** Substituído `confirm()` nativo por `AlertDialog` do shadcn/ui em todos os componentes de exclusão.
 
-**Status:** Já implementado
+**Arquivos modificados:** `src/components/cartoes/cartao-card.tsx`, `src/components/contas/conta-card.tsx`, `src/components/categorias/categoria-card.tsx`, `src/components/metas/meta-card.tsx`, `src/components/transacoes/transacao-item.tsx`, `src/components/ui/delete-confirm-dialog.tsx`, `src/components/ui/alert-dialog.tsx`
+
+### 6. Tipo de conta "ticket"
+
+**Problema:** Não existia tipo de conta para compras no mercado.
+
+**Solução:** Adicionado tipo "ticket" na interface TipoConta e no formulário de contas.
+
+**Arquivos modificados:** `src/types/index.ts`, `src/components/contas/conta-form.tsx`, `src/components/contas/conta-card.tsx`, `src/pages/Contas.tsx`
+
+### 7. Categoria de receita "Ticket"
+
+**Problema:** Não existia categoria de receita para ticket.
+
+**Solução:** Adicionada categoria "Ticket" (id: cat-009) no arquivo de categorias default.
+
+**Arquivos modificados:** `src/data/categorias-default.json`
+
+### 8. Extrato com saldo por data
+
+**Problema:** Extrato mostrava todas as transações sem agrupamento por data.
+
+**Solução:** Transações são agrupadas por data, com saldo acumulado exibido ao final de cada dia.
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### 9. Conta ticket como padrão para alimentação
+
+**Problema:** Ao cadastrar transação de alimentação, não havia seleção automática da conta.
+
+**Solução:** Ao selecionar categoria "Alimentação", conta do tipo "ticket" é selecionada automaticamente.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 10. Metas baseadas no salário
+
+**Problema:** Metas padrão não calculavam valores com base no salário.
+
+**Solução:** Metas calculam `valorAlvo` e `parcelaMensal` com base nas transações de receita da categoria "Salário" e multiplicadores da configuração.
+
+**Arquivos modificados:** `src/components/metas/metas-predefinidas.tsx`
+
+### 11. Campo "confirmada" na transação
+
+**Problema:** Não havia opção para marcar se transação foi efetivada.
+
+**Solução:** Adicionado campo `confirmada: boolean` na interface Transacao, no formulário e no card de exibição.
+
+**Arquivos modificados:** `src/types/index.ts`, `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`, `src/pages/NovaTransacao.tsx`, `src/pages/EditarTransacao.tsx`, `src/lib/transacoes.ts`
 
 ## DDR (Design Decision Record)
 

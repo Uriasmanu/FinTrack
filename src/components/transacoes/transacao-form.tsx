@@ -67,11 +67,18 @@ export function TransacaoForm({
 
   const tipo = watch("tipo");
   const tipoRecorrencia = watch("tipoRecorrencia");
+  const categoriaId = watch("categoriaId");
   const categorias = dadosAno?.categorias.filter(
     (c) => c.tipo === tipo || c.tipo === "ambos"
   ) ?? [];
   const contas = dadosAno?.contas ?? [];
   const cartoes = dadosAno?.cartoes ?? [];
+
+  const contaTicket = contas.find((c) => c.tipo === "ticket");
+
+  if (categoriaId === "cat-001" && contaTicket && watch("contaId") !== contaTicket.id) {
+    setValue("contaId", contaTicket.id);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

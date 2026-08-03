@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TransacaoItem } from "@/components/transacoes/transacao-item";
 import { Filtros, type FiltrosTransacao } from "@/components/transacoes/filtros";
 import { useFinanceStore } from "@/stores/useFinanceStore";
-import { formatarMoeda } from "@/lib/calculos";
+import { formatarMoeda, formatarData } from "@/lib/calculos";
 
 export function Transacoes() {
   const navigate = useNavigate();
@@ -51,6 +51,14 @@ export function Transacoes() {
     saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
     return { ...t, saldoAcumulado };
   });
+
+  const transacoesPorDia = transacoesComSaldo.reduce<Record<string, typeof transacoesComSaldo>>((acc, t) => {
+    if (!acc[t.data]) {
+      acc[t.data] = [];
+    }
+    acc[t.data].push(t);
+    return acc;
+  }, {});
 
   return (
     <div className="space-y-6">
@@ -114,14 +122,28 @@ export function Transacoes() {
               Nenhuma transação encontrada
             </p>
           ) : (
-            <div>
-              {transacoesComSaldo.map((transacao) => (
-                <TransacaoItem
-                  key={transacao.id}
-                  transacao={transacao}
-                  saldoAcumulado={transacao.saldoAcumulado}
-                  onEditar={(id) => navigate(`/transacoes/${id}`)}
-                />
+            <div className="space-y-4">
+              {Object.entries(transacoesPorDia).map(([data, transacoes]) => (
+                <div key={data} className="space-y-2">
+                  <div className="flex justify-between items-center py-2 border-b">
+                    <span className="font-medium text-sm">{formatarData(data)}</span>
+                    <span className={`text-sm font-medium ${
+                      transacoes[transacoes.length - 1].saldoAcumulado >= 0
+                        ? "text-success"
+                        : "text-destructive"
+                    }`}>
+                      Saldo do dia: {formatarMoeda(transacoes[transacoes.length - 1].saldoAcumulado)}
+                    </span>
+                  </div>
+                  {transacoes.map((transacao) => (
+                    <TransacaoItem
+                      key={transacao.id}
+                      transacao={transacao}
+                      saldoAcumulado={transacao.saldoAcumulado}
+                      onEditar={(id) => navigate(`/transacoes/${id}`)}
+                    />
+                  ))}
+                </div>
               ))}
               <div className="flex justify-between items-center pt-4 border-t mt-4">
                 <span className="font-medium">Saldo Final</span>

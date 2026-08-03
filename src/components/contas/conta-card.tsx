@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -5,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 import type { Conta } from "@/types";
@@ -15,6 +17,7 @@ interface ContaCardProps {
 }
 
 export function ContaCard({ conta, onEditar }: ContaCardProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { excluirConta, dadosAno } = useFinanceStore();
 
   const saldoAtual =
@@ -32,9 +35,12 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
       alert("Não é possível excluir uma conta com transações vinculadas.");
       return;
     }
-    if (confirm("Tem certeza que deseja excluir esta conta?")) {
-      excluirConta(conta.id);
-    }
+    setDialogOpen(true);
+  }
+
+  function confirmarExclusao() {
+    excluirConta(conta.id);
+    setDialogOpen(false);
   }
 
   const tipoLabel = {
@@ -90,6 +96,14 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <DeleteConfirmDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onConfirm={confirmarExclusao}
+        title="Excluir conta"
+        description="Tem certeza que deseja excluir esta conta? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }
