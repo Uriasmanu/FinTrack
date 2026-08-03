@@ -31,8 +31,6 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 ### 1. Configuração do Projeto
 
-- [ ] 1.1 Criar projeto React com Vite + TypeScript: `npm create vite@latest fintrack -- --template react-ts`
-- [ ] 1.2 Entrar na pasta do projeto: `cd fintrack`
 - [ ] 1.3 Instalar dependências base: `npm install`
 - [ ] 1.4 Instalar Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
 - [ ] 1.5 Inicializar Tailwind: `npx tailwindcss init -p`
