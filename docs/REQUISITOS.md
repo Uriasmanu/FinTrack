@@ -16,7 +16,7 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 | Componentes | shadcn/ui | latest |
 | Navegação | React Router | 6.x |
 | Gráficos | Recharts | 2.x |
-| Armazenamento Local | localStorage + JSON | — |
+| Armazenamento Local | JSON por ano (localStorage) | — |
 | Geração de PDF | jsPDF + html2canvas | — |
 | Geração de CSV | papaparse | — |
 | Formulários | React Hook Form + Zod | latest |
@@ -283,25 +283,22 @@ O usuário define seu salário mensal na configuração. As metas são calculada
 - Seleção de período para exportação
 - Download direto no navegador
 
-### 8. Armazenamento Local (localStorage)
+### 8. Armazenamento Local (JSON por Ano)
 
-- Todos os dados persistidos em `localStorage` do navegador
-- Estrutura de dados organizada por chave:
-  - `fintrack_transacoes` — lista de receitas e despesas
-  - `fintrack_categorias` — categorias personalizadas
-  - `fintrack_contas` — contas bancárias
-  - `fintrack_cartoes` — cartões de crédito
-  - `fintrack_metas` — metas de economia
-  - `fintrack_config` — configurações do usuário
+- Um único JSON por ano: `fintrack_2026.json`, `fintrack_2027.json`, etc.
+- O JSON do ano atual é o ativo (lido e escrito)
+- Ao mudar o ano, o app cria um novo JSON automaticamente
+- Todos os dados do ano ficam em um único arquivo
 - Backup e restauração de dados (importação/exportação do JSON)
 
 ---
 
-## Estrutura de Dados (localStorage)
+## Estrutura de Dados (JSON por Ano)
 
 ```json
 {
-  "fintrack_transacoes": [
+  "ano": 2026,
+  "transacoes": [
     {
       "id": "uuid",
       "tipo": "receita | despesa",
@@ -315,7 +312,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "criadoEm": "ISO timestamp"
     }
   ],
-  "fintrack_categorias": [
+  "categorias": [
     {
       "id": "uuid",
       "nome": "string",
@@ -324,7 +321,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "tipo": "receita | despesa | ambos"
     }
   ],
-  "fintrack_contas": [
+  "contas": [
     {
       "id": "uuid",
       "nome": "string",
@@ -333,7 +330,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "tipo": "corrente | poupanca | investimento"
     }
   ],
-  "fintrack_cartoes": [
+  "cartoes": [
     {
       "id": "uuid",
       "nome": "string",
@@ -343,7 +340,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "diaVencimento": 10
     }
   ],
-  "fintrack_metas": [
+  "metas": [
     {
       "id": "uuid",
       "nome": "string",
@@ -354,7 +351,7 @@ O usuário define seu salário mensal na configuração. As metas são calculada
       "status": "em_andamento | concluida | cancelada"
     }
   ],
-  "fintrack_config": {
+  "config": {
     "salario": 0.00,
     "tema": "claro | escuro",
     "moeda": "BRL",
