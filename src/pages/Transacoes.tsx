@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TransacaoItem } from "@/components/transacoes/transacao-item";
@@ -19,6 +19,8 @@ export function Transacoes() {
     dataInicio: "",
     dataFim: "",
   });
+
+  const temContas = (dadosAno?.contas.length ?? 0) > 0;
 
   const transacoesFiltradas = (dadosAno?.transacoes ?? [])
     .filter((t) => {
@@ -59,11 +61,36 @@ export function Transacoes() {
             Extrato bancário com saldo acumulado
           </p>
         </div>
-        <Button onClick={() => navigate("/transacoes/nova")}>
+        <Button
+          onClick={() => navigate("/transacoes/nova")}
+          disabled={!temContas}
+          title={!temContas ? "Cadastre pelo menos 1 conta antes de criar transações" : undefined}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Nova Transação
         </Button>
       </div>
+
+      {!temContas && (
+        <Card className="border-warning bg-warning/5">
+          <CardContent className="flex items-center gap-3 py-4">
+            <AlertTriangle className="h-5 w-5 text-warning" />
+            <div>
+              <p className="font-medium">Nenhuma conta cadastrada</p>
+              <p className="text-sm text-muted-foreground">
+                Cadastre pelo menos 1 conta antes de criar transações.{" "}
+                <Button
+                  variant="link"
+                  className="p-0 h-auto"
+                  onClick={() => navigate("/contas")}
+                >
+                  Cadastrar conta
+                </Button>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

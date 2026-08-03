@@ -85,7 +85,7 @@ export function TransacaoItem({
             {conta && (
               <>
                 <span>·</span>
-                <span>{conta.nome}</span>
+                <span>{conta.banco}</span>
               </>
             )}
           </div>

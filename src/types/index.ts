@@ -36,7 +36,6 @@ export interface Categoria {
 
 export interface Conta {
   id: string;
-  nome: string;
   banco: string;
   saldoInicial: number;
   tipo: TipoConta;

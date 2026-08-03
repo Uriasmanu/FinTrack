@@ -16,10 +16,30 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] ainda não esta ficando salvo o modo escuro, quando recarrega a pagina volta para o claro, registre no JSON a preferencia e atualize o requisitos
-### [aberto] Nova transação so fica habilitado depois que cadastra pelo menos 1 conta, avise o usuario e atualize o requisitos
+<!-- aberto — resolvido em 02/07/2026, movido para Histórico de Correções -->
+<!-- aberto — resolvido em 03/08/2026, movido para Histórico de Correções -->
+<!-- aberto — resolvido em 03/08/2026, movido para Histórico de Correções -->
+<!-- aberto — resolvido em 03/08/2026, movido para Histórico de Correções -->
+<!-- aberto — resolvido em 03/08/2026, movido para Histórico de Correções -->
+
+### [aberto] Adicione o tipo de conta ticket que é exclusivo para compras no meercado (atualize requisitos)
 
 ## Histórico de Correções
+
+### [resolvido] No formulário da conta, remova o campo nome, não é necessário
+- **Data:** 03/08/2026
+- **Comportamento atual:** Formulário de conta tinha campo "nome" obrigatório
+- **Comportamento esperado:** Campo "nome" removido completamente do código
+- **Causa:** Campo "nome" não era necessário, o banco já identifica a conta
+- **Correção:** Removido campo "nome" do schema Zod, formulário, interface TypeScript e todas as referências
+- **Arquivos afetados:** `src/types/index.ts`, `src/components/contas/conta-form.tsx`, `src/components/contas/conta-card.tsx`, `src/components/transacoes/filtros.tsx`, `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`
+
+### [resolvido] Sempre confirmar antes de excluir
+- **Data:** 03/08/2026
+- **Comportamento atual:** Todas as exclusões já possuíam confirmação
+- **Comportamento esperado:** `confirm()` antes de qualquer exclusão
+- **Verificação:** Todos os componentes (transação, categoria, conta, cartão, meta) já utilizam `confirm()` antes de excluir
+- **Status:** Já implementado
 
 ### [resolvido] Quando clico em nova transação só fica uma tela em branco
 - **Data:** 03/08/2026
@@ -36,6 +56,22 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 - **Causa:** Tema não era salvo no localStorage e não era aplicado no carregamento inicial
 - **Correção:** Adicionado `localStorage.setItem("fintrack-tema", tema)` e `useEffect` para ler tema salvo na inicialização
 - **Arquivos afetados:** `src/components/layout/layout.tsx`
+
+### [resolvido] Tema escuro não fica salvo ao recarregar a página
+- **Data:** 03/08/2026
+- **Comportamento atual:** Tema voltava para claro ao recarregar
+- **Comportamento esperado:** Tema permanece ao recarregar a página
+- **Causa:** Tema era salvo em localStorage separado mas o store inicializava com valor padrão
+- **Correção:** Removido localStorage separado. Temo agora é persistido apenas no JSON via `atualizarConfig` e carregado na inicialização
+- **Arquivos afetados:** `src/components/layout/layout.tsx`
+
+### [resolvido] Nova transação só fica habilitado depois que cadastra pelo menos 1 conta
+- **Data:** 03/08/2026
+- **Comportamento atual:** Botão "Nova Transação" estava sempre habilitado
+- **Comportamento esperado:** Botão desabilitado e aviso quando não há contas cadastradas
+- **Causa:** Não havia verificação de existência de contas
+- **Correção:** Adicionada verificação `temContas` e card de aviso com link para cadastrar conta
+- **Arquivos afetados:** `src/pages/Transacoes.tsx`
 
 ## Feature
 

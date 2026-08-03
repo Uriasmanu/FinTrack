@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select";
 
 const contaSchema = z.object({
-  nome: z.string().min(1, "Nome é obrigatório"),
   banco: z.string().min(1, "Banco é obrigatório"),
   saldoInicial: z.number(),
   tipo: z.enum(["corrente", "poupanca", "investimento"]),
@@ -50,7 +49,6 @@ export function ContaForm({
   } = useForm<ContaFormData>({
     resolver: zodResolver(contaSchema),
     defaultValues: {
-      nome: initialData?.nome ?? "",
       banco: initialData?.banco ?? "",
       saldoInicial: initialData?.saldoInicial ?? 0,
       tipo: initialData?.tipo ?? "corrente",
@@ -74,16 +72,8 @@ export function ContaForm({
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           <div>
-            <label className="text-sm font-medium">Nome</label>
-            <Input {...register("nome")} placeholder="Ex: Nubank, Itaú..." />
-            {errors.nome && (
-              <p className="text-sm text-destructive">{errors.nome.message}</p>
-            )}
-          </div>
-
-          <div>
             <label className="text-sm font-medium">Banco</label>
-            <Input {...register("banco")} placeholder="Ex: Bradesco, BB..." />
+            <Input {...register("banco")} placeholder="Ex: Nubank, Itaú, Bradesco..." />
             {errors.banco && (
               <p className="text-sm text-destructive">{errors.banco.message}</p>
             )}

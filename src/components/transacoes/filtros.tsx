@@ -107,7 +107,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
             <SelectItem value="todas">Todas contas</SelectItem>
             {contas.map((conta) => (
               <SelectItem key={conta.id} value={conta.id}>
-                {conta.nome}
+                {conta.banco}
               </SelectItem>
             ))}
           </SelectContent>

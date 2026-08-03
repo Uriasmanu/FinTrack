@@ -52,9 +52,9 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
           </span>
         </div>
         <div>
-          <p className="font-medium">{conta.nome}</p>
+          <p className="font-medium">{conta.banco}</p>
           <p className="text-sm text-muted-foreground">
-            {conta.banco} · {tipoLabel[conta.tipo]}
+            {tipoLabel[conta.tipo]}
           </p>
         </div>
       </div>

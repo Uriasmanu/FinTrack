@@ -22,7 +22,7 @@ export function Contas() {
     setOpen(true);
   }
 
-  function handleSubmit(data: { nome: string; banco: string; saldoInicial: number; tipo: "corrente" | "poupanca" | "investimento" }) {
+  function handleSubmit(data: { banco: string; saldoInicial: number; tipo: "corrente" | "poupanca" | "investimento" }) {
     if (editingId) {
       editarConta(editingId, data);
     } else {

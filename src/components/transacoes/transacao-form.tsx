@@ -152,7 +152,7 @@ export function TransacaoForm({
             <SelectContent>
               {contas.map((conta) => (
                 <SelectItem key={conta.id} value={conta.id}>
-                  {conta.nome}
+                  {conta.banco}
                 </SelectItem>
               ))}
             </SelectContent>
