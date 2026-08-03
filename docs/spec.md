@@ -16,7 +16,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] ainda não esta ficando salvo o modo escuro, quando recarrega a pagina volta para o claro
+### [aberto] ainda não esta ficando salvo o modo escuro, quando recarrega a pagina volta para o claro, registre no JSON a preferencia e atualize o requisitos
+### [aberto] Nova transação so fica habilitado depois que cadastra pelo menos 1 conta, avise o usuario e atualize o requisitos
 
 ## Histórico de Correções
 
