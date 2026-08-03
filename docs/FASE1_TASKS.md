@@ -73,6 +73,10 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 3.7 Implementar função `criarDadosAnoNovo(ano)` que cria estrutura vazia para um novo ano
 - [x] 3.8 Implementar função `verificarOuCriarAnoAtual()` que verifica se o JSON do ano existe, senão cria
 - [x] 3.9 Implementar função `migrarDadosSeNecessario()` que detecta mudança de ano e cria novo JSON
+- [x] 3.10 Criar arquivo `src/lib/transacoes.ts` com funções de parcelas e recorrência
+- [x] 3.11 Implementar função `criarTransacoesRecorrentes()` — gera parcelas ou transação recorrente
+- [x] 3.12 Implementar função `excluirParcelasFuturas()` — exclui parcelas a partir de uma data
+- [x] 3.13 Implementar função `recalcularParcelas()` — recalcula total de parcelas de um grupo
 
 ### 4. Dados Iniciais (Defaults) ✅
 
@@ -88,8 +92,11 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 5.3 Implementar state: `dadosAno` (DadosAno | null)
 - [x] 5.4 Implementar action: `inicializar()` — carrega dados do ano atual ao iniciar o app
 - [x] 5.5 Implementar action: `adicionarTransacao(transacao)` — adiciona e salva
+- [x] 5.5.1 Implementar action: `adicionarTransacoesRecorrentes(dados)` — cria parcelas ou recorrência
 - [x] 5.6 Implementar action: `editarTransacao(id, dados)` — edita e salva
 - [x] 5.7 Implementar action: `excluirTransacao(id)` — exclui e salva
+- [x] 5.7.1 Implementar action: `excluirParcelasFuturas(grupoParcelaId, dataLimite)` — exclui parcelas futuras
+- [x] 5.7.2 Implementar action: `recalcularParcelas(grupoParcelaId, novoTotal)` — recalcula total de parcelas
 - [x] 5.8 Implementar action: `adicionarCategoria(categoria)` — adiciona e salva
 - [x] 5.9 Implementar action: `editarCategoria(id, dados)` — edita e salva
 - [x] 5.10 Implementar action: `excluirCategoria(id)` — exclui e salva
@@ -109,20 +116,20 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 5.24 Implementar selector: `obterTransacoesMes(mes)` — lista de transações do mês
 - [x] 5.25 Implementar selector: `obterUltimasTransacoes(quantidade)` — últimas N transações
 
-### 6. Componentes shadcn/ui
+### 6. Componentes shadcn/ui ✅
 
-- [ ] 6.1 Criar componente `Button`
-- [ ] 6.2 Criar componente `Card` (CardHeader, CardContent, CardTitle, CardDescription)
-- [ ] 6.3 Criar componente `Input`
-- [ ] 6.4 Criar componente `Badge`
-- [ ] 6.5 Criar componente `Separator`
-- [ ] 6.6 Criar componente `Select` (para filtros e formulários)
-- [ ] 6.7 Criar componente `Dialog` (para modais de confirmação)
-- [ ] 6.8 Criar componente `Tabs` (para navegação interna)
-- [ ] 6.9 Criar componente `Tooltip`
-- [ ] 6.10 Criar componente `DropdownMenu`
-- [ ] 6.11 Criar componente `Slider` (para ajuste de meses em objetivos)
-- [ ] 6.12 Criar componente `Switch` (para habilitar/desabilitar objetivos)
+- [x] 6.1 Criar componente `Button`
+- [x] 6.2 Criar componente `Card` (CardHeader, CardContent, CardTitle, CardDescription)
+- [x] 6.3 Criar componente `Input`
+- [x] 6.4 Criar componente `Badge`
+- [x] 6.5 Criar componente `Separator`
+- [x] 6.6 Criar componente `Select` (para filtros e formulários)
+- [x] 6.7 Criar componente `Dialog` (para modais de confirmação)
+- [x] 6.8 Criar componente `Tabs` (para navegação interna)
+- [x] 6.9 Criar componente `Tooltip`
+- [x] 6.10 Criar componente `DropdownMenu`
+- [x] 6.11 Criar componente `Slider` (para ajuste de meses em objetivos)
+- [x] 6.12 Criar componente `Switch` (para habilitar/desabilitar objetivos)
 
 ### 7. Layout da Aplicação
 

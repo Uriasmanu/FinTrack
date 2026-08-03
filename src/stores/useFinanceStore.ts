@@ -11,13 +11,21 @@ import type {
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
 import { obterCategoriasDefault, obterConfigDefault } from "@/data/defaults";
+import {
+  criarTransacoesRecorrentes,
+  excluirParcelasFuturas,
+  recalcularParcelas,
+} from "@/lib/transacoes";
 
 interface FinanceState {
   dadosAno: DadosAno | null;
   inicializar: () => void;
   adicionarTransacao: (dados: Omit<Transacao, "id" | "criadoEm">) => void;
+  adicionarTransacoesRecorrentes: (dados: Omit<Transacao, "id" | "criadoEm">) => void;
   editarTransacao: (id: string, dados: Partial<Transacao>) => void;
   excluirTransacao: (id: string) => void;
+  excluirParcelasFuturas: (grupoParcelaId: string, dataLimite: string) => void;
+  recalcularParcelas: (grupoParcelaId: string, novoTotal: number) => void;
   adicionarCategoria: (dados: Omit<Categoria, "id">) => void;
   editarCategoria: (id: string, dados: Partial<Categoria>) => void;
   excluirCategoria: (id: string) => void;
@@ -122,6 +130,66 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const novoState: DadosAno = {
       ...state,
       transacoes: excluirItemArray(state.transacoes, id),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  adicionarTransacoesRecorrentes: (dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novasTransacoes = criarTransacoesRecorrentes({
+      tipo: dados.tipo,
+      tipoRecorrencia: dados.tipoRecorrencia,
+      descricao: dados.descricao,
+      valor: dados.valor,
+      dataInicio: dados.data,
+      categoriaId: dados.categoriaId,
+      contaId: dados.contaId,
+      cartaoId: dados.cartaoId,
+      parcelaAtual: dados.parcelaAtual,
+      totalParcelas: dados.totalParcelas,
+    });
+
+    const novoState: DadosAno = {
+      ...state,
+      transacoes: [...state.transacoes, ...novasTransacoes],
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  excluirParcelasFuturas: (grupoParcelaId, dataLimite) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoState: DadosAno = {
+      ...state,
+      transacoes: excluirParcelasFuturas(
+        state.transacoes,
+        grupoParcelaId,
+        dataLimite
+      ),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  recalcularParcelas: (grupoParcelaId, novoTotal) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoState: DadosAno = {
+      ...state,
+      transacoes: recalcularParcelas(
+        state.transacoes,
+        grupoParcelaId,
+        novoTotal
+      ),
     };
 
     salvar(novoState);
