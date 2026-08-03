@@ -131,17 +131,17 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 - [x] 6.11 Criar componente `Slider` (para ajuste de meses em objetivos)
 - [x] 6.12 Criar componente `Switch` (para habilitar/desabilitar objetivos)
 
-### 7. Layout da Aplicação
+### 7. Layout da Aplicação ✅
 
-- [ ] 7.1 Criar componente `src/components/layout/sidebar.tsx`
-- [ ] 7.2 Adicionar logo/título "FinTrack" no topo da sidebar
-- [ ] 7.3 Adicionar links de navegação: Dashboard, Transações, Categorias, Contas, Cartões, Gráficos, Metas, Exportar, Configurações
-- [ ] 7.4 Criar componente `src/components/layout/header.tsx`
-- [ ] 7.5 Adicionar título da página atual no header
-- [ ] 7.6 Adicionar ícones do lucide-react nos itens do menu
-- [ ] 7.7 Criar componente `src/components/layout/layout.tsx` que combina sidebar + header + conteúdo
-- [ ] 7.8 Implementar responsividade: sidebar colapsável em mobile (hamburger menu)
-- [ ] 7.9 Configurar rotas no App.tsx com React Router
+- [x] 7.1 Criar componente `src/components/layout/sidebar.tsx`
+- [x] 7.2 Adicionar logo/título "FinTrack" no topo da sidebar
+- [x] 7.3 Adicionar links de navegação: Dashboard, Transações, Categorias, Contas, Cartões, Gráficos, Metas, Exportar, Configurações
+- [x] 7.4 Criar componente `src/components/layout/header.tsx`
+- [x] 7.5 Adicionar título da página atual no header
+- [x] 7.6 Adicionar ícones do lucide-react nos itens do menu
+- [x] 7.7 Criar componente `src/components/layout/layout.tsx` que combina sidebar + header + conteúdo
+- [x] 7.8 Implementar responsividade: sidebar colapsável em mobile (hamburger menu)
+- [x] 7.9 Configurar rotas no App.tsx com React Router
 
 ### 8. Página Dashboard
 
@@ -230,11 +230,11 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
 
 1. **Tasks 1.1 a 1.13** — Setup do projeto e dependências
 2. **Tasks 2.1 a 2.14** — Tipagens
-3. **Tasks 3.1 a 3.9** — Utilitários de storage
+3. **Tasks 3.1 a 3.13** — Utilitários de storage e transações
 4. **Tasks 4.1 a 4.4** — Dados iniciais
-5. **Tasks 5.1 a 5.25** — Store global
+5. **Tasks 5.1 a 5.28** — Store global
 6. **Tasks 6.1 a 6.12** — Componentes UI base
-7. **Tasks 7.1 a 7.9** — Layout e navegação
+7. **Tasks 7.1 a 7.9** — Layout e navegação ✅
 8. **Tasks 9.1 a 9.14** — Funções de cálculo (antes do dashboard)
 9. **Tasks 8.1 a 8.10** — Dashboard
 10. **Tasks 10.1 a 10.5** — Tema
