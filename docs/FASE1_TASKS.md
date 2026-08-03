@@ -181,8 +181,9 @@ Implementar o dashboard com resumo financeiro e o sistema de armazenamento local
   - Indicador visual de progresso
 - [ ] 8.7.1 Criar componente `src/components/dashboard/objetivos-personalizados.tsx`
   - Listar objetivos personalizados do usuário
-  - Exibir: nome, valor alvo, parcela mensal, prazo, progresso
+  - Exibir: nome, valor alvo, parcela mensal, prazo (em meses ou anos), progresso
   - Barra de progresso com porcentagem
+  - Formatação do prazo: meses (< 12) ou anos e meses (ex: "3 anos e 6 meses")
   - Link para criar novo objetivo
 - [ ] 8.8 Montar layout do dashboard com Grid responsivo
 - [ ] 8.9 Conectar todos os componentes ao store Zustand

@@ -304,9 +304,11 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
    - **Previsão de conclusão**: data baseada no prazo informado
 
 3. O usuário pode ajustar o slider de meses em tempo real:
+   - Objetivos podem levar meses ou anos (ex: 36, 60, 120 meses)
    - Ao diminuir os meses, a parcela mensal aumenta
    - Ao aumentar os meses, a parcela mensal diminui
    - Pré-visualização instantânea do valor mensal até encontrar um valor acessível
+   - Exibição do prazo formatado em meses ou anos (ex: "3 anos e 6 meses")
 
 4. Acompanhamento do progresso:
    - Barra de progresso com porcentagem acumulada
@@ -325,10 +327,10 @@ Além dos objetivos padrão, o usuário pode criar objetivos personalizados com 
 |---|---|
 | Nome | Comprar um carro |
 | Valor alvo | R$ 45.000,00 |
-| Prazo | 24 meses |
+| Prazo | 24 meses (2 anos) |
 | **Parcela mensal** | **R$ 1.875,00** |
 
-> O usuário ajusta o slider de 24 para 36 meses e vê a parcela cair para R$ 1.250,00, encontrando um valor mais acessível.
+> O usuário ajusta o slider de 24 para 60 meses e vê a parcela cair para R$ 750,00, encontrando um valor mais acessível com prazo de 5 anos.
 
 ### 7. Exportação de Dados
 
