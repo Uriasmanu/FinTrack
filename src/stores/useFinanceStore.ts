@@ -85,8 +85,15 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       dados.categorias = obterCategoriasDefault();
     }
 
-    if (dados.config.salario === 0) {
-      dados.config = obterConfigDefault();
+    const configDefault = obterConfigDefault();
+    if (!dados.config.criadoEm) {
+      dados.config = {
+        salario: dados.config.salario || configDefault.salario,
+        tema: dados.config.tema || configDefault.tema,
+        moeda: dados.config.moeda || configDefault.moeda,
+        multiplicadores: dados.config.multiplicadores || configDefault.multiplicadores,
+        criadoEm: dados.config.criadoEm || new Date().toISOString(),
+      };
     }
 
     if (dados.metas.length === 0) {

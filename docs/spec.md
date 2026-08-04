@@ -15,7 +15,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] refaça a lógica de config padrão vem com "salario": 0. A intenção era: "se o usuário nunca configurou o salário, significa que o app acabou de ser criado, então carregue os defaults". Implemente um timestamp para ser colocado a cada alteração que é feita, ou seja quando eu crio a conta (que é a primeiro passo a ser feito na aplicação) isso gera um registro e se existe esse registro de timestamp significa que ja foi usado uma vez o sistema
+### [resolvido] Lógica de detecção de novo usuário baseada em salario===0 destrói configurações do usuário
+**Comportamento atual:** Na inicialização (`useFinanceStore.ts:88-89`), quando `config.salario === 0`, o objeto `config` inteiro é substituído por `obterConfigDefault()`, que define `"tema": "claro"`, `"moeda": "BRL"` e multiplicadores padrão. Isso destrói qualquer configuração que o usuário já tenha alterado (tema, moeda, multiplicadores) enquanto o salário continua zerado.
+**Comportamento esperado:** O sistema deve detectar se é a primeira vez que o usuário usa o app por meio de um timestamp de criação da conta (primeiro passo do onboarding). Se o timestamp existir, o sistema NÃO deve sobrescrever o config. Apenas campos ausentes devem ser preenchidos com defaults (fusão seletiva, não substituição).
+**Escopo:** `src/stores/useFinanceStore.ts` (inicialização), `src/types/index.ts` (interface Config), `src/lib/storage.ts` (criação de dados), `src/data/config-default.json` (defaults)
 
 ### [aberto] Editar metas não esta trazendo o valor do card selecionado para editar
 
@@ -39,7 +42,13 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
+### 48. Lógica de detecção de novo usuário corrigida com timestamp
 
+**Problema:** Na inicialização, quando `config.salario === 0`, o objeto `config` inteiro era substituído por defaults, destruindo tema, moeda e multiplicadores do usuário.
+
+**Solução:** Adicionado campo `criadoEm` à interface `Config`. Na inicialização, verificação de `criadoEm` substitui verificação de `salario===0`. Fusão seletiva preserva campos existentes. Dados legados (sem `criadoEm`) são tratados com fallback.
+
+**Arquivos modificados:** `src/types/index.ts`, `src/lib/storage.ts`, `src/stores/useFinanceStore.ts`
 
 
 ## Feature

@@ -79,6 +79,7 @@ export interface Config {
   tema: Tema;
   moeda: string;
   multiplicadores: Multiplicadores;
+  criadoEm?: string;
 }
 
 export interface DadosAno {

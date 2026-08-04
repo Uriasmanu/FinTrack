@@ -26,6 +26,7 @@ function criarDadosAnoNovo(ano: number): DadosAno {
         contaFixa: 0.6,
         lazer: 0.3,
       },
+      criadoEm: new Date().toISOString(),
     },
   };
 }
