@@ -15,38 +15,21 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] O saldono inicio do dia 4 em extrato, não esta coerente com o valor do saldo em conta. esta mostrando 1054,36 quando deveria estar mostrando 939,17
+
+### [aberto] o JSON do ano tem que ser armazenado fisicamente dentro de data
+
+### [aberto] melhore as distribuição dos card em Dashboard
+
+### [aberto] Em transações tem que ter a possibilidade de alem de ver o mes atual, mostre o mes anterior e o proximo mes
+
+### [aberto] Em graficos tem que ter a possibilidade de alem de ver o mes atual, mostre o mes anterior e o proximo mes
+
+### [aberto] em Nova Transação em receitas tem que ter a categoria ticket/VR/VA
+
+### [aberto] Tem que ter um tipo de transação que é a movimentação entre contas, exemplo quero fazer uma tranferencia da conta corrrente para a poupança e chamar categorizar essa transferencia de guardar
 
 ## Histórico de Correções
-
-### [resolvido] Data nova transação volta para hoje (timezone)
-**Ciclo:** 3
-**Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`
-**Descrição:** Substituir `new Date().toISOString().split("T")[0]` por construção de data local para evitar problemas de timezone.
-
-### [resolvido] Dashboard - Próximas Transações ao invés de Últimas
-**Ciclo:** 3
-**Arquivos afetados:** `src/pages/Dashboard.tsx`, `src/components/dashboard/proximas-transacoes.tsx`
-**Descrição:** Criar componente ProximasTransacoes que lista transações confirmadas+próximas do mês, substituindo ÚltimasTransacoes.
-
-### [resolvido] Remover Alertas de Metas do dashboard
-**Ciclo:** 3
-**Arquivos afetados:** `src/pages/Dashboard.tsx`
-**Descrição:** Remover import e uso do componente AlertaMetas do Dashboard.
-
-### [resolvido] Dashboard transitar entre meses
-**Ciclo:** 3
-**Arquivos afetados:** `src/pages/Dashboard.tsx`, `src/components/dashboard/saldo-card.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`, `src/components/dashboard/resumo-mensal.tsx`, `src/components/dashboard/resumo-categorias.tsx`, `src/components/dashboard/proximas-transacoes.tsx`
-**Descrição:** Adicionar navegação de meses com botões anterior/atual/seguinte, passando props mes/ano para todos os componentes filhos.
-
-### [resolvido] Alimentação puxa ticket mas permite trocar
-**Ciclo:** 3
-**Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`
-**Descrição:** Alimentação auto-puxa ticket apenas quando não está editando, permitindo trocar para outra conta.
-
-### [resolvido] Metas - escolher receitas base para cálculo
-**Ciclo:** 3
-**Arquivos afetados:** `src/types/index.ts`, `src/components/metas/meta-form.tsx`, `src/components/metas/metas-predefinidas.tsx`, `src/data/defaults.ts`, `src/components/ui/checkbox.tsx`
-**Descrição:** Adicionar campo `receitasBase` ao tipo Meta, criar componente Checkbox, incluir seletor de categorias de receita no MetaForm, atualizar MetasPredefinidas para usar categorias selecionadas ao invés de hardcoded `cat-007`.
 
 
 
