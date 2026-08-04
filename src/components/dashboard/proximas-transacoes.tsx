@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { RefreshCw, Clock, Check } from "lucide-react";
+import { RefreshCw, Clock, Check, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,14 +34,16 @@ export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <Clock className="h-4 w-4" />
+          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-warning/10">
+            <Clock className="h-3 w-3 text-warning" />
+          </div>
           Próximas Transações
         </CardTitle>
         <Link
           to="/transacoes"
-          className="text-xs text-primary hover:underline"
+          className="text-xs text-primary hover:underline flex items-center gap-1"
         >
-          Ver todas
+          Ver todas <ArrowRight className="h-3 w-3" />
         </Link>
       </CardHeader>
       <CardContent>
@@ -54,7 +56,7 @@ export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
             {proximasTransacoes.map((transacao) => (
               <div
                 key={transacao.id}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors duration-150 ease-in-out"
               >
                 <div className="flex items-center gap-3">
                   <div

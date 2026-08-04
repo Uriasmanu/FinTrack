@@ -120,7 +120,7 @@ export function DespesasPorFinalidade() {
           </p>
         ) : (
           categorias.map((cat) => (
-            <div key={cat.nome} className="space-y-2">
+            <div key={cat.nome} className="space-y-2 p-2 rounded-lg hover:bg-accent/50 transition-colors duration-150 ease-in-out">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div

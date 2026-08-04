@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Building2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,13 +69,18 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
     ticket: "Ticket (Mercado)",
   };
 
+  const tipoCor = {
+    corrente: "bg-primary",
+    poupanca: "bg-success",
+    investimento: "bg-chart-3",
+    ticket: "bg-warning",
+  };
+
   return (
-    <div className="flex items-center justify-between p-4 border rounded-lg">
+    <div className="flex items-center justify-between p-4 border rounded-xl bg-card hover:shadow-md transition-all duration-200 ease-in-out">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-primary font-bold text-sm">
-            {conta.banco.substring(0, 2).toUpperCase()}
-          </span>
+        <div className={`w-10 h-10 rounded-full ${tipoCor[conta.tipo]} flex items-center justify-center`}>
+          <Building2 className="h-5 w-5 text-white" />
         </div>
         <div>
           <p className="font-medium">{conta.banco}</p>
@@ -110,7 +115,7 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">
-            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none">
+            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none transition-colors duration-200 ease-in-out">
               ⋮
             </span>
           </DropdownMenuTrigger>

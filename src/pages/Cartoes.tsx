@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartaoCard } from "@/components/cartoes/cartao-card";
 import { CartaoForm } from "@/components/cartoes/cartao-form";
@@ -42,7 +42,7 @@ export function Cartoes() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold">Cartões</h2>
           <p className="text-muted-foreground">
@@ -55,7 +55,7 @@ export function Cartoes() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cartoes.map((cartao) => (
           <CartaoCard
             key={cartao.id}
@@ -66,9 +66,18 @@ export function Cartoes() {
       </div>
 
       {cartoes.length === 0 && (
-        <p className="text-center text-muted-foreground py-8">
-          Nenhum cartão cadastrado
-        </p>
+        <div className="text-center py-12">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted mx-auto mb-4">
+            <CreditCard className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <p className="text-muted-foreground mb-4">
+            Nenhum cartão cadastrado
+          </p>
+          <Button onClick={handleNovo}>
+            <Plus className="mr-2 h-4 w-4" />
+            Criar primeiro cartão
+          </Button>
+        </div>
       )}
 
       <CartaoForm

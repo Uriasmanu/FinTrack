@@ -70,14 +70,14 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {categoriasOrdenadas.map((categoria) => (
-          <div key={categoria.id} className="space-y-2">
+          <div key={categoria.id} className="space-y-2 p-2 rounded-lg hover:bg-accent/50 transition-colors duration-150 ease-in-out">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
                   className="h-3 w-3 rounded-full"
                   style={{ backgroundColor: categoria.cor }}
                 />
-                <span className="text-sm">{categoria.nome}</span>
+                <span className="text-sm font-medium">{categoria.nome}</span>
               </div>
               <span className="text-sm font-medium">
                 {formatarMoeda(categoria.valor)}

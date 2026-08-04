@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Target, Plus } from "lucide-react";
+import { Target, Plus, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,10 @@ export function ObjetivosPersonalizados() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
+        <CardTitle className="text-sm font-medium flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10">
+            <Target className="h-3 w-3 text-primary" />
+          </div>
           Objetivos Personalizados
         </CardTitle>
         <Link to="/metas/nova">
@@ -35,12 +38,14 @@ export function ObjetivosPersonalizados() {
       <CardContent>
         {objetivos.length === 0 ? (
           <div className="text-center py-6">
-            <Target className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted mx-auto mb-3">
+              <Target className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">
               Nenhum objetivo criado
             </p>
             <Link to="/metas/nova">
-              <Button variant="outline" size="sm" className="mt-2">
+              <Button variant="outline" size="sm">
                 Criar primeiro objetivo
               </Button>
             </Link>
@@ -51,7 +56,7 @@ export function ObjetivosPersonalizados() {
               const percentual = (objetivo.valorAtual / objetivo.valorAlvo) * 100;
 
               return (
-                <div key={objetivo.id} className="space-y-2">
+                <div key={objetivo.id} className="space-y-2 p-2 rounded-lg hover:bg-accent/50 transition-colors duration-150 ease-in-out">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{objetivo.nome}</span>
                     <Switch
@@ -83,9 +88,9 @@ export function ObjetivosPersonalizados() {
             {objetivosAtivos.length > 3 && (
               <Link
                 to="/metas"
-                className="block text-center text-xs text-primary hover:underline"
+                className="flex items-center justify-center gap-1 text-xs text-primary hover:underline"
               >
-                Ver todos ({objetivosAtivos.length})
+                Ver todos ({objetivosAtivos.length}) <ArrowRight className="h-3 w-3" />
               </Link>
             )}
           </div>

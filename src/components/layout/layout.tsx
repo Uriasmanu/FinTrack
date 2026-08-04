@@ -77,7 +77,7 @@ export function Layout() {
           <AlertDialogHeader>
             <AlertDialogTitle>Alterar tema</AlertDialogTitle>
             <AlertDialogDescription>
-              Deseja alterar o tema para <strong>{temaPendente === "escuro" ? "escuro" : "claro"</strong>? Esta preferência será salva.
+              Deseja alterar o tema para <strong>{temaPendente === "escuro" ? "escuro" : "claro"}</strong>? Esta preferência será salva.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -44,7 +44,7 @@ export function TransacaoItem({
   }
 
   return (
-    <div className="flex items-center justify-between py-3 border-b last:border-b-0">
+    <div className="flex items-center justify-between py-3 px-2 border-b last:border-b-0 hover:bg-accent/50 transition-colors duration-150 ease-in-out rounded-lg">
       <div className="flex items-center gap-3">
         <div
           className={`flex h-10 w-10 items-center justify-center rounded-full ${
@@ -83,7 +83,7 @@ export function TransacaoItem({
                 </Badge>
               )}
             {transacao.confirmada && (
-              <Badge variant="default" className="bg-success text-success-foreground text-xs">
+              <Badge variant="success" className="text-xs">
                 <Check className="mr-1 h-3 w-3" />
                 Efetivada
               </Badge>
@@ -129,7 +129,7 @@ export function TransacaoItem({
 
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">
-            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none">
+            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none transition-colors duration-200 ease-in-out">
               ⋮
             </span>
           </DropdownMenuTrigger>

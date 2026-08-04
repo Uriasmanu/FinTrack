@@ -73,9 +73,9 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg">
             {mesSelecionado + 1}
           </div>
           <div>
@@ -101,13 +101,13 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <SaldoCard mes={mesSelecionado} ano={anoSelecionado} />
         <ReceitasDespesasCard mes={mesSelecionado} ano={anoSelecionado} />
         <ResumoMensal mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
-      <div className="flex items-center gap-4 justify-end">
+      <div className="flex flex-wrap items-center gap-4 justify-end">
         <div className="flex items-center gap-2">
           <Switch
             id="mostrar-graficos"
@@ -130,19 +130,19 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <ProximasTransacoes mes={mesSelecionado} ano={anoSelecionado} />
         <ResumoCategorias mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
       {mostrarGraficos && (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <DespesasPorFinalidade />
         </div>
       )}
 
       {mostrarMetas && (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <ObjetivosPersonalizados />
         </div>
       )}

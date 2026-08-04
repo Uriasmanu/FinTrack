@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, TrendingDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
@@ -38,17 +38,19 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
       : 0;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
+    <Card className="overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
           Receitas vs Despesas
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-success" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success/10">
+                <TrendingUp className="h-3 w-3 text-success" />
+              </div>
               <span className="text-xs text-muted-foreground">Receitas</span>
             </div>
             <div className="text-lg font-bold text-success">
@@ -71,7 +73,9 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-destructive" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-destructive/10">
+                <TrendingDown className="h-3 w-3 text-destructive" />
+              </div>
               <span className="text-xs text-muted-foreground">Despesas</span>
             </div>
             <div className="text-lg font-bold text-destructive">
@@ -94,7 +98,9 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className={`h-3 w-3 rounded-full ${saldoMes >= 0 ? "bg-primary" : "bg-destructive"}`} />
+              <div className={`flex h-6 w-6 items-center justify-center rounded-full ${saldoMes >= 0 ? "bg-primary/10" : "bg-destructive/10"}`}>
+                <div className={`h-3 w-3 rounded-full ${saldoMes >= 0 ? "bg-primary" : "bg-destructive"}`} />
+              </div>
               <span className="text-xs text-muted-foreground">Saldo</span>
             </div>
             <div className={`text-lg font-bold ${saldoMes >= 0 ? "text-success" : "text-destructive"}`}>

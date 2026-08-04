@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContaCard } from "@/components/contas/conta-card";
 import { ContaForm } from "@/components/contas/conta-form";
@@ -46,9 +46,9 @@ export function Contas() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg">
             {mesAtual + 1}
           </div>
           <div>
@@ -64,7 +64,7 @@ export function Contas() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {contas.map((conta) => (
           <ContaCard
             key={conta.id}
@@ -75,9 +75,18 @@ export function Contas() {
       </div>
 
       {contas.length === 0 && (
-        <p className="text-center text-muted-foreground py-8">
-          Nenhuma conta cadastrada
-        </p>
+        <div className="text-center py-12">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted mx-auto mb-4">
+            <Wallet className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <p className="text-muted-foreground mb-4">
+            Nenhuma conta cadastrada
+          </p>
+          <Button onClick={handleNovo}>
+            <Plus className="mr-2 h-4 w-4" />
+            Criar primeira conta
+          </Button>
+        </div>
       )}
 
       <ContaForm

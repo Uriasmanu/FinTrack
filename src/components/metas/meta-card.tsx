@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, Power, PowerOff } from "lucide-react";
+import { Pencil, Trash2, Power, PowerOff, Target } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,7 +34,7 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
 
   const statusVariant = {
     em_andamento: "default",
-    concluida: "default",
+    concluida: "success",
     cancelada: "destructive",
   } as const;
 
@@ -51,10 +51,19 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
     editarMeta(meta.id, { ativo: !meta.ativo });
   }
 
+  const progressColor = percentual >= 100
+    ? "bg-success"
+    : percentual >= 50
+    ? "bg-primary"
+    : "bg-warning";
+
   return (
-    <div className={`p-4 border rounded-lg space-y-3 ${!meta.ativo ? "opacity-60" : ""}`}>
+    <div className={`p-4 border rounded-xl space-y-3 bg-card hover:shadow-md transition-all duration-200 ease-in-out ${!meta.ativo ? "opacity-60" : ""}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <Target className="h-4 w-4 text-primary" />
+          </div>
           <h3 className="font-medium">{meta.nome}</h3>
           <Badge variant={statusVariant[meta.status]}>
             {statusLabel[meta.status]}
@@ -63,7 +72,7 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">
-            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none">
+            <span className="text-muted-foreground hover:text-foreground cursor-pointer text-xl leading-none transition-colors duration-200 ease-in-out">
               ⋮
             </span>
           </DropdownMenuTrigger>
@@ -100,7 +109,9 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
             {formatarMoeda(meta.valorAtual)} / {formatarMoeda(meta.valorAlvo)}
           </span>
         </div>
-        <Progress value={percentual} className="h-2" />
+        <div className="relative">
+          <Progress value={percentual} className="h-2" />
+        </div>
         <p className="text-xs text-muted-foreground text-right">
           {percentual.toFixed(1)}%
         </p>
