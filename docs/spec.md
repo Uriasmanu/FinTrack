@@ -31,6 +31,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Crie uma logica que leve em consideração que o saldo do ticket não pode ser usado paara pagar conta, então no balanço final ele não afeta tanto para mais ou para menos, tem que só mostra se no mes eu gastei todo saldo ou acumulo e quanto isso é em comparação ao mes passado
 
+### [aberto] quando eu atribuo um valor inicial para a conta isso deve ser regitrado em extrato para que a soma fique correta
+
+### [aberto] saldo total tem que trazer o valor de saldo final no extrato 
+
+### [aberto] implemente o exporta e importa JSON
+
 ## Histórico de Correções
 
 
