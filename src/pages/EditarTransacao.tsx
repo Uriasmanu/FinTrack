@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TransacaoForm } from "@/components/transacoes/transacao-form";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,7 +34,7 @@ export function EditarTransacao() {
   const transacaoEncontrada = transacao;
   const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "parcelado";
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
+  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
     if (isRecorrente && (data.valor !== transacaoEncontrada.valor || data.data !== transacaoEncontrada.data)) {
       setDadosPendentes(data as unknown as Record<string, unknown>);
       setDialogAberto(true);
@@ -106,6 +107,11 @@ export function EditarTransacao() {
           onSubmit={handleSubmit}
           isEditing
         />
+        <div className="flex justify-end mt-4">
+          <Button type="button" variant="outline" onClick={() => navigate("/transacoes")}>
+            Cancelar
+          </Button>
+        </div>
       </div>
 
       <AlertDialog open={dialogAberto} onOpenChange={setDialogAberto}>

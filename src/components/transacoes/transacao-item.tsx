@@ -29,6 +29,9 @@ export function TransacaoItem({
   const categoria = dadosAno?.categorias.find(
     (c) => c.id === transacao.categoriaId
   );
+  const subtipo = transacao.subtipoId
+    ? dadosAno?.categorias.find((c) => c.id === transacao.subtipoId)
+    : null;
   const conta = dadosAno?.contas.find((c) => c.id === transacao.contaId);
 
   function handleExcluir() {
@@ -92,6 +95,12 @@ export function TransacaoItem({
               <>
                 <span>·</span>
                 <span style={{ color: categoria.cor }}>{categoria.nome}</span>
+              </>
+            )}
+            {subtipo && (
+              <>
+                <span>·</span>
+                <span style={{ color: subtipo.cor }}>{subtipo.nome}</span>
               </>
             )}
             {conta && (

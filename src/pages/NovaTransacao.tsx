@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { TransacaoForm } from "@/components/transacoes/transacao-form";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import { Button } from "@/components/ui/button";
 
 export function NovaTransacao() {
   const navigate = useNavigate();
@@ -31,6 +32,11 @@ export function NovaTransacao() {
 
       <div className="border rounded-lg p-6">
         <TransacaoForm onSubmit={handleSubmit} />
+        <div className="flex justify-end mt-4">
+          <Button type="button" variant="outline" onClick={() => navigate("/transacoes")}>
+            Cancelar
+          </Button>
+        </div>
       </div>
     </div>
   );

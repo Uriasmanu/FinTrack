@@ -36,11 +36,23 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Arquivo modificado:** `src/components/transacoes/transacao-item.tsx`
 **Spec:** `docs/implementado/efetivar-pelo-dropdown.md`
 
-### [aberto] Quando for categoria Alimentação no form de transação tem que aparecer a opção de selecionar o subtipo, nesse subtipo que vai as categorias que a gente compra no mercado
+### [resolvido] Subtipo Alimentação no form de transação
+**Data resolução:** 04/08/2026
+**Solução:** Adicionado campo `subtipoId` ao tipo `Transacao`. Quando a categoria selecionada é "Alimentação" (cat-001), um select de subtipo aparece com as categorias: Limpeza, Comida, Besteira, Açougue. O subtipo é exibido na listagem de transações.
+**Arquivos modificados:** `src/types/index.ts`, `src/lib/transacoes.ts`, `src/stores/useFinanceStore.ts`, `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`, `src/pages/NovaTransacao.tsx`, `src/pages/EditarTransacao.tsx`
+**Spec:** `docs/implementado/subtipo-alimentacao.md`
 
-### [aberto] botão de fechar os forms
+### [resolvido] Botão de fechar nos forms
+**Data resolução:** 04/08/2026
+**Solução:** Adicionado botão "Cancelar" nas páginas de NovaTransacao e EditarTransacao que usam formulário inline. Os formulários baseados em Dialog (Categorias, Contas, Cartões, Metas) já possuíam botão "Cancelar" no DialogFooter.
+**Arquivos modificados:** `src/pages/NovaTransacao.tsx`, `src/pages/EditarTransacao.tsx`
+**Spec:** `docs/implementado/botao-fechar-forms.md`
 
-### [aberto] grafico da conta de cartão alimentação tem que ser com base nos subtipos
+### [resolvido] Gráfico de despesas por categoria usa subtipos para Alimentação
+**Data resolução:** 04/08/2026
+**Solução:** No gráfico de "Despesas por Categoria", quando a transação é da categoria "Alimentação" (cat-001) e possui `subtipoId`, o nome exibido é o do subtipo (Limpeza, Comida, Besteira, Açougue) em vez de "Alimentação".
+**Arquivo modificado:** `src/pages/Graficos.tsx`
+**Spec:** `docs/implementado/grafico-alimentacao-subtipos.md`
 
 ### [aberto] A meta padrão Contas fixas e Lazer, não é uma meta de guardar e sim uma meta de limite de gasto, então ela usa como referencia todas as despesas que são recorrentes e parceladas
 
