@@ -34,6 +34,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] opção de ver graficos por conta
 
+### [aberto] quero que avise quando uma transação vai fazer com que o saldo do dia fique negativo, ou o saldo final do mes fique negativo
 
 ## Feature
 
