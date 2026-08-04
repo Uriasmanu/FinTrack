@@ -55,7 +55,7 @@ export function Layout() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex flex-1 flex-col overflow-hidden">
@@ -66,7 +66,9 @@ export function Layout() {
         />
 
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          <Outlet />
+          <div className="mx-auto max-w-7xl">
+            <Outlet />
+          </div>
         </main>
       </div>
 
@@ -75,7 +77,7 @@ export function Layout() {
           <AlertDialogHeader>
             <AlertDialogTitle>Alterar tema</AlertDialogTitle>
             <AlertDialogDescription>
-              Deseja alterar o tema para <strong>{temaPendente === "escuro" ? "escuro" : "claro"}</strong>? Esta preferência será salva.
+              Deseja alterar o tema para <strong>{temaPendente === "escuro" ? "escuro" : "claro"</strong>? Esta preferência será salva.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

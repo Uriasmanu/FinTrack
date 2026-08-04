@@ -1,63 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(222.2 84% 4.9%);
+  --color-background: hsl(43 50% 95%);
+  --color-foreground: hsl(0 0% 8%);
   --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(222.2 84% 4.9%);
+  --color-card-foreground: hsl(0 0% 8%);
   --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(222.2 84% 4.9%);
-  --color-primary: hsl(221.2 83.2% 53.3%);
-  --color-primary-foreground: hsl(210 40% 98%);
-  --color-secondary: hsl(210 40% 96.1%);
-  --color-secondary-foreground: hsl(222.2 47.4% 11.2%);
-  --color-muted: hsl(210 40% 96.1%);
-  --color-muted-foreground: hsl(215.4 16.3% 46.9%);
-  --color-accent: hsl(210 40% 96.1%);
-  --color-accent-foreground: hsl(222.2 47.4% 11.2%);
-  --color-destructive: hsl(0 84.2% 60.2%);
-  --color-destructive-foreground: hsl(210 40% 98%);
-  --color-border: hsl(214.3 31.8% 91.4%);
-  --color-input: hsl(214.3 31.8% 91.4%);
-  --color-ring: hsl(221.2 83.2% 53.3%);
-  --color-success: hsl(142 76% 36%);
-  --color-success-foreground: hsl(355.7 100% 97.3%);
-  --color-warning: hsl(38 92% 50%);
-  --color-warning-foreground: hsl(48 96% 89%);
-  --color-chart-1: hsl(12 76% 61%);
-  --color-chart-2: hsl(173 58% 39%);
-  --color-chart-3: hsl(197 37% 24%);
-  --color-chart-4: hsl(43 74% 66%);
-  --color-chart-5: hsl(27 87% 67%);
+  --color-popover-foreground: hsl(0 0% 8%);
+  --color-primary: hsl(174 55% 35%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(43 50% 93%);
+  --color-secondary-foreground: hsl(0 0% 12%);
+  --color-muted: hsl(43 30% 94%);
+  --color-muted-foreground: hsl(0 0% 45%);
+  --color-accent: hsl(43 40% 92%);
+  --color-accent-foreground: hsl(0 0% 12%);
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(43 20% 88%);
+  --color-input: hsl(43 20% 88%);
+  --color-ring: hsl(174 55% 35%);
+  --color-success: hsl(142 50% 45%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 80% 50%);
+  --color-warning-foreground: hsl(0 0% 100%);
+  --color-chart-1: hsl(160 45% 55%);
+  --color-chart-2: hsl(174 55% 40%);
+  --color-chart-3: hsl(195 60% 40%);
+  --color-chart-4: hsl(43 50% 75%);
+  --color-chart-5: hsl(0 60% 55%);
   --radius-lg: 0.5rem;
   --radius-md: calc(0.5rem - 2px);
   --radius-sm: calc(0.5rem - 4px);
 }
 
 .dark {
-  --color-background: hsl(222.2 84% 4.9%);
-  --color-foreground: hsl(210 40% 98%);
-  --color-card: hsl(222.2 84% 4.9%);
-  --color-card-foreground: hsl(210 40% 98%);
-  --color-popover: hsl(222.2 84% 4.9%);
-  --color-popover-foreground: hsl(210 40% 98%);
-  --color-primary: hsl(217.2 91.2% 59.8%);
-  --color-primary-foreground: hsl(222.2 47.4% 11.2%);
-  --color-secondary: hsl(217.2 32.6% 17.5%);
-  --color-secondary-foreground: hsl(210 40% 98%);
-  --color-muted: hsl(217.2 32.6% 17.5%);
-  --color-muted-foreground: hsl(215 20.2% 65.1%);
-  --color-accent: hsl(217.2 32.6% 17.5%);
-  --color-accent-foreground: hsl(210 40% 98%);
-  --color-destructive: hsl(0 72% 51%);
-  --color-destructive-foreground: hsl(210 40% 98%);
-  --color-border: hsl(217.2 32.6% 17.5%);
-  --color-input: hsl(217.2 32.6% 17.5%);
-  --color-ring: hsl(224.3 76.3% 48%);
-  --color-success: hsl(142 71% 45%);
-  --color-success-foreground: hsl(355.7 100% 97.3%);
-  --color-warning: hsl(48 96% 53%);
-  --color-warning-foreground: hsl(48 96% 12%);
+  --color-background: hsl(210 15% 10%);
+  --color-foreground: hsl(0 0% 92%);
+  --color-card: hsl(210 12% 14%);
+  --color-card-foreground: hsl(0 0% 92%);
+  --color-popover: hsl(210 12% 14%);
+  --color-popover-foreground: hsl(0 0% 92%);
+  --color-primary: hsl(174 55% 40%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(210 12% 18%);
+  --color-secondary-foreground: hsl(0 0% 90%);
+  --color-muted: hsl(210 10% 18%);
+  --color-muted-foreground: hsl(0 0% 60%);
+  --color-accent: hsl(210 12% 20%);
+  --color-accent-foreground: hsl(0 0% 90%);
+  --color-destructive: hsl(0 65% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(210 10% 22%);
+  --color-input: hsl(210 10% 22%);
+  --color-ring: hsl(174 55% 40%);
+  --color-success: hsl(142 50% 50%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(38 80% 55%);
+  --color-warning-foreground: hsl(0 0% 100%);
 }
 
 @layer base {
@@ -66,5 +66,22 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    @apply transition-all duration-200 ease-in-out;
+  }
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 }

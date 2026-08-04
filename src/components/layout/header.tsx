@@ -39,7 +39,7 @@ export function Header({ onMenuClick, tema, onTemaChange }: HeaderProps) {
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-card px-4 lg:px-6">
+    <header className="flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 lg:px-6">
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
@@ -49,7 +49,7 @@ export function Header({ onMenuClick, tema, onTemaChange }: HeaderProps) {
         >
           <Menu className="h-5 w-5" />
         </Button>
-        <h1 className="text-lg font-semibold">{getTitle()}</h1>
+        <h1 className="text-lg font-semibold text-foreground">{getTitle()}</h1>
       </div>
 
       <div className="flex items-center gap-2">
@@ -58,6 +58,7 @@ export function Header({ onMenuClick, tema, onTemaChange }: HeaderProps) {
           size="icon"
           onClick={onTemaChange}
           title={tema === "claro" ? "Mudar para escuro" : "Mudar para claro"}
+          className="rounded-full"
         >
           {tema === "claro" ? (
             <Moon className="h-5 w-5" />

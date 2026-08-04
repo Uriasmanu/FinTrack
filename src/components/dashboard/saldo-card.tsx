@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
@@ -28,7 +28,6 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
   const transacoesAteMesAnterior = (dadosAno?.transacoes ?? [])
     .filter((t) => {
       const dataTransacao = new Date(t.data);
-      const anoRef = mesAnterior === 11 ? ano - 1 : ano;
       return t.data <= hojeStr && (
         dataTransacao.getFullYear() < ano ||
         (dataTransacao.getFullYear() === ano && dataTransacao.getMonth() < mes)
@@ -47,12 +46,25 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
   const variacaoPositiva = variacao >= 0;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Saldo Total</CardTitle>
+    <Card className="overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardTitle className="text-sm font-medium text-muted-foreground">Saldo Total</CardTitle>
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+          <Wallet className="h-4 w-4 text-primary" />
+        </div>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <div
+          className={`text-2xl font-bold ${
+            isPositivo ? "text-success" : "text-destructive"
+          }`}
+        >
+          {isPositivo ? "+" : ""}
+          {formatarMoeda(saldoHoje)}
+        </div>
         {variacao !== 0 && (
           <div
-            className={`flex items-center gap-1 text-xs ${
+            className={`mt-1 flex items-center gap-1 text-xs ${
               variacaoPositiva ? "text-success" : "text-destructive"
             }`}
           >
@@ -62,21 +74,11 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
               <ArrowDown className="h-3 w-3" />
             )}
             {Math.abs(variacao).toFixed(1)}%
+            <span className="text-muted-foreground ml-1">
+              {variacaoPositiva ? "Aumento" : "Redução"} vs mês anterior
+            </span>
           </div>
         )}
-      </CardHeader>
-      <CardContent>
-        <div
-          className={`text-2xl font-bold ${
-            isPositivo ? "text-success" : "text-destructive"
-          }`}
-        >
-          {isPositivo ? "+" : ""}
-          {formatarMoeda(saldoHoje)}
-        </div>
-        <p className="text-xs text-muted-foreground">
-          {variacaoPositiva ? "Aumento" : "Redução"} em relação ao mês anterior
-        </p>
       </CardContent>
     </Card>
   );
