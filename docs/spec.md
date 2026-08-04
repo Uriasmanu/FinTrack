@@ -18,71 +18,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
-### [resolvido] Quero pode efetiver uma transação em Próximas Transações no dashbord de forma pratica
-**Data resolução:** 04/08/2026
-**Solução:** Adicionado botão de efetivar (ícone Check) ao lado de cada transação no card "Próximas Transações" do Dashboard. Ao clicar, a transação é marcada como `confirmada: true` e some do card.
-**Arquivo modificado:** `src/components/dashboard/proximas-transacoes.tsx`
-**Spec:** `docs/implementado/efetivar-transacao-dashboard.md`
 
-### [resolvido] Transações recorrentes não apareciam no mês seguinte no Dashboard
-**Data resolução:** 04/08/2026
-**Solução:** O filtro em `proximas-transacoes.tsx` comparava `t.data >= hojeStr` usando comparação de strings, o que filtrava incorretamente transações com datas antes de hoje em meses futuros (ex: "2026-09-01" < "2026-08-04"). Corrigido para aplicar o filtro de data apenas no mês atual.
-**Arquivo modificado:** `src/components/dashboard/proximas-transacoes.tsx`
-**Spec:** `docs/implementado/correcao-transacoes-recorrentes-mes.md`
-
-### [resolvido] Efetivar transação pelo menu dos 3 pontinhos (dropdown)
-**Data resolução:** 04/08/2026
-**Solução:** Adicionada opção "Efetivar" (ícone Check) no DropdownMenu do componente `transacao-item.tsx`. A opção aparece apenas quando a transação não está confirmada. Ao clicar, a transação é marcada como `confirmada: true` via `editarTransacao`.
-**Arquivo modificado:** `src/components/transacoes/transacao-item.tsx`
-**Spec:** `docs/implementado/efetivar-pelo-dropdown.md`
-
-### [resolvido] Subtipo Alimentação no form de transação
-**Data resolução:** 04/08/2026
-**Solução:** Adicionado campo `subtipoId` ao tipo `Transacao`. Quando a categoria selecionada é "Alimentação" (cat-001), um select de subtipo aparece com as categorias: Limpeza, Comida, Besteira, Açougue. O subtipo é exibido na listagem de transações.
-**Arquivos modificados:** `src/types/index.ts`, `src/lib/transacoes.ts`, `src/stores/useFinanceStore.ts`, `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`, `src/pages/NovaTransacao.tsx`, `src/pages/EditarTransacao.tsx`
-**Spec:** `docs/implementado/subtipo-alimentacao.md`
-
-### [resolvido] Botão de fechar nos forms
-**Data resolução:** 04/08/2026
-**Solução:** Adicionado botão "Cancelar" nas páginas de NovaTransacao e EditarTransacao que usam formulário inline. Os formulários baseados em Dialog (Categorias, Contas, Cartões, Metas) já possuíam botão "Cancelar" no DialogFooter.
-**Arquivos modificados:** `src/pages/NovaTransacao.tsx`, `src/pages/EditarTransacao.tsx`
-**Spec:** `docs/implementado/botao-fechar-forms.md`
-
-### [resolvido] Gráfico de despesas por categoria usa subtipos para Alimentação
-**Data resolução:** 04/08/2026
-**Solução:** No gráfico de "Despesas por Categoria", quando a transação é da categoria "Alimentação" (cat-001) e possui `subtipoId`, o nome exibido é o do subtipo (Limpeza, Comida, Besteira, Açougue) em vez de "Alimentação".
-**Arquivo modificado:** `src/pages/Graficos.tsx`
-**Spec:** `docs/implementado/grafico-alimentacao-subtipos.md`
-
-### [resolvido] Meta padrão Lazer usa despesas recorrentes/parceladas como limite
-**Data resolução:** 04/08/2026
-**Solução:** A meta "Lazer" agora usa as despesas recorrentes e parceladas da categoria "Lazer" (cat-004) do mês atual como valor alvo, em vez de usar um multiplicador do salário. Se não houver despesas de lazer, usa o multiplicador como fallback. A meta "Conta Fixa" já usava despesas recorrentes/parceladas.
-**Arquivo modificado:** `src/components/metas/metas-predefinidas.tsx`
-**Spec:** `docs/implementado/meta-limite-gasto.md`
-
-### [resolvido] Editar meta padrão traz valor original do card
-**Data resolução:** 04/08/2026
-**Solução:** Modificado `MetasPredefinidas` para passar os valores calculados (`valorAlvo`, `meses`) ao chamar `onEditar`. O `Metas.tsx` armazena esses overrides e os passa ao `MetaForm` como `initialData`, garantindo que o formulário inicie com os valores exibidos no card.
-**Arquivos modificados:** `src/components/metas/metas-predefinidas.tsx`, `src/components/metas/meta-card.tsx`, `src/pages/Metas.tsx`
-**Spec:** `docs/implementado/editar-meta-valor-original.md`
-
-### [resolvido] Toggle de visibilidade para Gráficos e Metas no Dashboard
-**Data resolução:** 04/08/2026
-**Solução:** Adicionados toggles (Switch) no Dashboard para mostrar/ocultar as seções de Gráficos (DespesasPorFinalidade) e Metas (ObjetivosPersonalizados). A preferência é salva no localStorage e persiste entre sessões.
-**Arquivo modificado:** `src/pages/Dashboard.tsx`
-**Spec:** `docs/implementado/toggle-dashboard.md`
-
-### [resolvido] Converter transação única para recorrente/parcelada gera transações futuras
-**Data resolução:** 04/08/2026
-**Solução:** Ao editar uma transação e alterar o tipoRecorrencia de "unica" para "recorrente" ou "parcelado", o sistema exclui a transação original e gera as transações futuras usando `adicionarTransacoesRecorrentes`.
-**Arquivo modificado:** `src/pages/EditarTransacao.tsx`
-**Spec:** `docs/implementado/converter-unica-recorrente.md`
-
-### [resolvido] Dashboard Saldo Total mostra saldo de hoje e Receitas vs Despesas tem terceiro valor
-**Data resolução:** 04/08/2026
-**Solução:** O card "Saldo Total" agora mostra o saldo real de hoje (saldoInicial + todas transações até hoje). O card "Receitas vs Despesas" agora exibe 3 colunas: Receitas, Despesas e Saldo (receitas - despesas do mês).
-**Arquivos modificados:** `src/components/dashboard/saldo-card.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`
-**Spec:** `docs/implementado/saldo-dashboard.md`
 
 ## Feature
 
