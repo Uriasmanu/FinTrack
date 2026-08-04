@@ -15,104 +15,24 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [resolvido] Lógica de detecção de novo usuário baseada em salario===0 destrói configurações do usuário
-**Comportamento atual:** Na inicialização (`useFinanceStore.ts:88-89`), quando `config.salario === 0`, o objeto `config` inteiro é substituído por `obterConfigDefault()`, que define `"tema": "claro"`, `"moeda": "BRL"` e multiplicadores padrão. Isso destrói qualquer configuração que o usuário já tenha alterado (tema, moeda, multiplicadores) enquanto o salário continua zerado.
-**Comportamento esperado:** O sistema deve detectar se é a primeira vez que o usuário usa o app por meio de um timestamp de criação da conta (primeiro passo do onboarding). Se o timestamp existir, o sistema NÃO deve sobrescrever o config. Apenas campos ausentes devem ser preenchidos com defaults (fusão seletiva, não substituição).
-**Escopo:** `src/stores/useFinanceStore.ts` (inicialização), `src/types/index.ts` (interface Config), `src/lib/storage.ts` (criação de dados), `src/data/config-default.json` (defaults)
+### [aberto] Receitas vs Despesas tem que ser um reflexo de todas as receitas e todas as despesas registradas no mes
 
-### [resolvido] Editar metas não esta trazendo o valor do card selecionado para editar
 
-### [resolvido] saldo inicial no dia 03/08 tem que considerar que a conta foi criada com o valor de 1036 e não Saldo do dia: R$ 914,17
+### [aberto] Saldo do dia em extrato ficou confuso pois ele esta mostrando o saldo do final do dia? se sim esse valor deveria ser em baixo e nao em cima
 
-### [resolvido] O saldo do extrato sempre mostra o valor no inicio do dia o e o valor no final do dia
+### [aberto] no form Nova Transação quando eu seleciono receita e clico em categoria, não esta aparecendo a categoria VA/VR
 
-### [resolvido] Saldo Total em dashbord não esta mostrando o valor corretamente
+### [aberto] nas categorias Transferência entre Contas esta faltando a categoria "Gardar"
 
-### [resolvido] em nova transação alem do nome do banco, tem que traser entre parenteses se é conta corrente ou poupança etc
+### [aberto] No dashbord tem que mostrar o quanto é gasto com alimentação em um car proprio
 
-### [resolvido] em Transferência entre Contas não esta aparecendo a categoria guardar
-
-### [resolvido] Crie uma logica que leve em consideração que o saldo do ticket não pode ser usado paara pagar conta, então no balanço final ele não afeta tanto para mais ou para menos, tem que só mostra se no mes eu gastei todo saldo ou acumulo e quanto isso é em comparação ao mes passado
-
-### [resolvido] quando eu atribuo um valor inicial para a conta isso deve ser regitrado em extrato para que a soma fique correta
-
-### [resolvido] saldo total tem que trazer o valor de saldo final no extrato 
-
-### [resolvido] implemente o exporta e importa JSON
+### [aberto] Crie as subcategorias de compras para casa (limpeza, comida, besteira, açougue, etc) pois quero saber quanto eu gasti com essas coisas nesse mes em relação ao mes passado
 
 ## Histórico de Correções
 
-### 48. Lógica de detecção de novo usuário corrigida com timestamp
+### [aberto] opção de ver extrato por conta
 
-**Problema:** Na inicialização, quando `config.salario === 0`, o objeto `config` inteiro era substituído por defaults, destruindo tema, moeda e multiplicadores do usuário.
-
-**Solução:** Adicionado campo `criadoEm` à interface `Config`. Na inicialização, verificação de `criadoEm` substitui verificação de `salario===0`. Fusão seletiva preserva campos existentes. Dados legados (sem `criadoEm`) são tratados com fallback.
-
-**Arquivos modificados:** `src/types/index.ts`, `src/lib/storage.ts`, `src/stores/useFinanceStore.ts`
-
-### 49. Editar metas não trazia valores do card selecionado
-
-**Problema:** Ao editar uma meta, o formulário não preenchia os valores da meta selecionada porque `useForm` só lê `defaultValues` no mount.
-
-**Solução:** Adicionado `useEffect` com `reset()` para atualizar o formulário quando `initialData` muda.
-
-**Arquivos modificados:** `src/components/metas/meta-form.tsx`
-
-### 50. Saldo inicial não considerava data de criação da conta
-
-**Problema:** O saldo inicial de todas as contas era somado independentemente da data de criação, causando saldos incorretos no extrato.
-
-**Solução:** Adicionado campo `dataCriacao` à interface `Conta`. No extrato, saldo inicial só é considerado se a conta foi criada antes do período filtrado.
-
-**Arquivos modificados:** `src/types/index.ts`, `src/pages/Transacoes.tsx`
-
-### 51. Extrato não mostrava saldo início e fim do dia
-
-**Problema:** Extrato apenas mostrava saldo final do dia, sem indicar o saldo no início.
-
-**Solução:** Adicionado cálculo de saldo acumulado anterior por dia. Exibição agora mostra "Início: X" e "Saldo do dia: Y".
-
-**Arquivos modificados:** `src/pages/Transacoes.tsx`
-
-### 52. Saldo Total no dashboard não considerava saldoInicial
-
-**Problema:** SaldoCard calculava apenas receitas - despesas do mês, ignorando saldoInicial das contas e transações anteriores.
-
-**Solução:** SaldoCard agora soma saldoInicial + transações anteriores + receitas - despesas do mês.
-
-**Arquivos modificados:** `src/components/dashboard/saldo-card.tsx`
-
-### 53. Dropdowns de contas não mostravam tipo entre parênteses
-
-**Problema:** Seletores de conta mostravam apenas o nome do banco, sem indicar o tipo (Corrente, Poupança, etc.).
-
-**Solução:** Todos os dropdowns de contas agora mostram "Banco (Tipo)".
-
-**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`, `src/pages/Transferencia.tsx`, `src/components/transacoes/filtros.tsx`
-
-### 54. Categoria "Guardar" não existia
-
-**Problema:** Não havia categoria "Guardar" para transferências entre contas.
-
-**Solução:** Adicionada categoria "Guardar" (cat-014) com cor #16A34A e ícone PiggyBank.
-
-**Arquivos modificados:** `src/data/categorias-default.json`
-
-### 55. Saldo de contas ticket afetava saldo total
-
-**Problema:** Contas ticket (vale-alimentação) eram incluídas nos cálculos de saldo total, distorcendo o balanço financeiro.
-
-**Solução:** Criada função `obterSaldoAtualSemTicket()` que exclui transações de contas ticket. Dashboard usa esta função para cálculos de saldo.
-
-**Arquivos modificados:** `src/stores/useFinanceStore.ts`, `src/components/dashboard/saldo-card.tsx`
-
-### 56. Exportação e importação JSON implementadas
-
-**Problema:** Página de exportação era apenas um placeholder.
-
-**Solução:** Implementada página completa com exportação (download JSON) e importação (upload com validação e confirmação).
-
-**Arquivos modificados:** `src/pages/Exportar.tsx`
+### [aberto] opção de ver graficos por conta
 
 
 ## Feature
