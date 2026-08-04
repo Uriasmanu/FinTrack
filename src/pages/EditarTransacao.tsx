@@ -17,7 +17,7 @@ import {
 export function EditarTransacao() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { dadosAno, editarTransacao, excluirParcelasFuturas, recalcularParcelas } = useFinanceStore();
+  const { dadosAno, editarTransacao, excluirTransacao, excluirParcelasFuturas, recalcularParcelas, adicionarTransacoesRecorrentes } = useFinanceStore();
 
   const transacao = dadosAno?.transacoes.find((t) => t.id === id);
   const [dialogAberto, setDialogAberto] = useState(false);
@@ -35,6 +35,29 @@ export function EditarTransacao() {
   const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "parcelado";
 
   function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
+    const mudouParaRecorrente = transacaoEncontrada.tipoRecorrencia === "unica" &&
+      (data.tipoRecorrencia === "recorrente" || data.tipoRecorrencia === "parcelado");
+
+    if (mudouParaRecorrente) {
+      excluirTransacao(transacaoEncontrada.id);
+      adicionarTransacoesRecorrentes({
+        tipo: data.tipo,
+        tipoRecorrencia: data.tipoRecorrencia,
+        descricao: data.descricao,
+        valor: data.valor,
+        data: data.data,
+        categoriaId: data.categoriaId,
+        subtipoId: data.subtipoId,
+        contaId: data.contaId,
+        cartaoId: data.cartaoId,
+        parcelaAtual: data.parcelaAtual,
+        totalParcelas: data.totalParcelas,
+        confirmada: data.confirmada,
+      });
+      navigate("/transacoes");
+      return;
+    }
+
     if (isRecorrente && (data.valor !== transacaoEncontrada.valor || data.data !== transacaoEncontrada.data)) {
       setDadosPendentes(data as unknown as Record<string, unknown>);
       setDialogAberto(true);

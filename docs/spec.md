@@ -74,6 +74,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] transaçoes que são alteradas de unicas para recorrentes ou parcelada tem que aparecer nos proximos meses tambem
 
+
+### [aberto] em dashbord Saldo Total deve mostrar o saldo de hoje e em Receitas vs Despesas tem que ter um terceiro valor que é o que antes era exibido no saldo total
+
 ## Feature
 
 # Guia de Spec para Implementação de Features
