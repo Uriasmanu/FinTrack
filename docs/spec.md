@@ -24,6 +24,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] em transação quero pode efetivar o pagamento pelos 3 pontinho tambem (adicione junto com o editar e apagar)
 
+### [aberto] Quando for categoria Alimentação no form de transação tem que aparecer a opção de selecionar o subtipo, nesse subtipo que vai as categorias que a gente compra no mercado
+
+### [aberto] botão de fechar os forms
+
+### [aberto] grafico da conta de cartão alimentação tem que ser com base nos subtipos
+
 ## Feature
 
 # Guia de Spec para Implementação de Features
