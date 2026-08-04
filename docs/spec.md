@@ -22,6 +22,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Quando coloco uma despesa como recorrente e olho o mes seguinte ela não esta lá
 
+### [aberto] em transação quero pode efetivar o pagamento pelos 3 pontinho tambem (adicione junto com o editar e apagar)
+
 ## Feature
 
 # Guia de Spec para Implementação de Features
