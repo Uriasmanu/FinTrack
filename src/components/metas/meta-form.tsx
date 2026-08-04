@@ -12,11 +12,14 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { formatarMoeda, formatarPrazo, calcularParcelaMensal } from "@/lib/calculos";
+import { useFinanceStore } from "@/stores/useFinanceStore";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const metaSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   valorAlvo: z.number().min(0.01, "Valor deve ser maior que zero"),
   meses: z.number().min(1, "Mínimo 1 mês"),
+  receitasBase: z.array(z.string()).default([]),
 });
 
 type MetaFormData = z.infer<typeof metaSchema>;
@@ -34,6 +37,9 @@ export function MetaForm({
   initialData,
   onSubmit,
 }: MetaFormProps) {
+  const { dadosAno } = useFinanceStore();
+  const categoriasReceita = dadosAno?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+
   const {
     register,
     handleSubmit,
@@ -47,17 +53,27 @@ export function MetaForm({
       nome: initialData?.nome ?? "",
       valorAlvo: initialData?.valorAlvo ?? 0,
       meses: initialData?.meses ?? 12,
+      receitasBase: initialData?.receitasBase ?? [],
     },
   });
 
   const valorAlvo = watch("valorAlvo");
   const meses = watch("meses");
+  const receitasBase = watch("receitasBase");
   const parcelaMensal = calcularParcelaMensal(valorAlvo || 0, meses || 1);
 
   function handleFormSubmit(data: MetaFormData) {
     onSubmit(data);
     reset();
     onOpenChange(false);
+  }
+
+  function toggleReceitaBase(categoriaId: string) {
+    const atual = receitasBase ?? [];
+    const novo = atual.includes(categoriaId)
+      ? atual.filter((id) => id !== categoriaId)
+      : [...atual, categoriaId];
+    setValue("receitasBase", novo);
   }
 
   return (
@@ -111,6 +127,24 @@ export function MetaForm({
           <div className="p-4 bg-muted rounded-lg">
             <p className="text-sm text-muted-foreground">Parcela mensal</p>
             <p className="text-2xl font-bold">{formatarMoeda(parcelaMensal)}</p>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Receitas base para cálculo</label>
+            <p className="text-xs text-muted-foreground mb-2">
+              Selecione as categorias de receita usadas como base para calcular o valor da meta
+            </p>
+            <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2">
+              {categoriasReceita.map((cat) => (
+                <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox
+                    checked={(receitasBase ?? []).includes(cat.id)}
+                    onCheckedChange={() => toggleReceitaBase(cat.id)}
+                  />
+                  <span className="text-sm">{cat.nome}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <DialogFooter>

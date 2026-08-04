@@ -3,16 +3,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
-export function ResumoMensal() {
+interface ResumoMensalProps {
+  mes: number;
+  ano: number;
+}
+
+export function ResumoMensal({ mes, ano }: ResumoMensalProps) {
   const { obterTransacoesMes, obterReceitasMes, obterDespesasMes } =
     useFinanceStore();
 
-  const mesAtual = new Date().getMonth();
-  const diasPassados = new Date().getDate();
+  const transacoes = obterTransacoesMes(mes);
+  const receitas = obterReceitasMes(mes);
+  const despesas = obterDespesasMes(mes);
 
-  const transacoes = obterTransacoesMes(mesAtual);
-  const receitas = obterReceitasMes(mesAtual);
-  const despesas = obterDespesasMes(mesAtual);
+  const hoje = new Date();
+  const isMesAtual = mes === hoje.getMonth() && ano === hoje.getFullYear();
+  const diasPassados = isMesAtual ? hoje.getDate() : new Date(ano, mes + 1, 0).getDate();
 
   const quantidadeTransacoes = transacoes.length;
 

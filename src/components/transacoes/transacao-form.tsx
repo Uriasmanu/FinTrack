@@ -55,7 +55,10 @@ export function TransacaoForm({
     defaultValues: {
       descricao: initialData?.descricao ?? "",
       valor: initialData?.valor ?? 0,
-      data: initialData?.data ?? new Date().toISOString().split("T")[0],
+      data: initialData?.data ?? (() => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      })(),
       tipo: initialData?.tipo ?? "despesa",
       categoriaId: initialData?.categoriaId ?? "",
       contaId: initialData?.contaId ?? "",
@@ -89,7 +92,7 @@ export function TransacaoForm({
 
   const contaTicket = contas.find((c) => c.tipo === "ticket");
 
-  if (categoriaId === "cat-001" && contaTicket && watch("contaId") !== contaTicket.id) {
+  if (categoriaId === "cat-001" && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
     setValue("contaId", contaTicket.id);
   }
 

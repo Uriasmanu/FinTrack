@@ -3,11 +3,21 @@ import { Progress } from "@/components/ui/progress";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
-export function ResumoCategorias() {
-  const { dadosAno, obterDespesasMes } = useFinanceStore();
+interface ResumoCategoriasProps {
+  mes: number;
+  ano: number;
+}
 
-  const mesAtual = new Date().getMonth();
-  const despesasMes = obterDespesasMes(mesAtual);
+export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
+  const { dadosAno } = useFinanceStore();
+
+  const despesasMes = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      if (t.tipo !== "despesa") return false;
+      const data = new Date(t.data);
+      return data.getMonth() === mes && data.getFullYear() === ano;
+    })
+    .reduce((total, t) => total + t.valor, 0);
 
   if (!dadosAno || despesasMes === 0) {
     return (
@@ -30,7 +40,7 @@ export function ResumoCategorias() {
     .filter((t) => {
       if (t.tipo !== "despesa") return false;
       const data = new Date(t.data);
-      return data.getMonth() === mesAtual && data.getFullYear() === dadosAno.ano;
+      return data.getMonth() === mes && data.getFullYear() === ano;
     })
     .reduce<Record<string, number>>((acc, t) => {
       acc[t.categoriaId] = (acc[t.categoriaId] || 0) + t.valor;

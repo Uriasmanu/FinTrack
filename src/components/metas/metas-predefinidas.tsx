@@ -1,6 +1,5 @@
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { MetaCard } from "./meta-card";
-import { formatarMoeda } from "@/lib/calculos";
 
 interface MetasPredefinidasProps {
   onEditar: (id: string) => void;
@@ -15,13 +14,23 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     return null;
   }
 
-  const salarioTransacoes = dadosAno?.transacoes.filter(
-    (t) => t.categoriaId === "cat-007" && t.tipo === "receita"
-  ) ?? [];
+  const categoriasReceita = dadosAno?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
 
-  const salarioMensal = salarioTransacoes.length > 0
-    ? Math.max(...salarioTransacoes.map((t) => t.valor))
-    : 0;
+  function obterReceitasMeta(meta: typeof metasPadrao[0]) {
+    const categoriasBase = meta.receitasBase && meta.receitasBase.length > 0
+      ? meta.receitasBase
+      : categoriasReceita.map((c) => c.id);
+
+    return (dadosAno?.transacoes ?? [])
+      .filter((t) => categoriasBase.includes(t.categoriaId) && t.tipo === "receita");
+  }
+
+  function obterSalarioMensal(meta: typeof metasPadrao[0]) {
+    const receitas = obterReceitasMeta(meta);
+    return receitas.length > 0
+      ? Math.max(...receitas.map((t) => t.valor))
+      : 0;
+  }
 
   const mesAtual = new Date().getMonth();
   const anoAtual = dadosAno?.ano ?? new Date().getFullYear();
@@ -36,6 +45,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     .reduce((total, t) => total + t.valor, 0);
 
   const metasComValores = metasPadrao.map((meta) => {
+    const salarioMensal = obterSalarioMensal(meta);
     let valorAlvo = 0;
     let parcelaMensal = 0;
 
@@ -70,6 +80,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       ...meta,
       valorAlvo,
       parcelaMensal,
+      salarioMensal,
     };
   });
 
@@ -77,15 +88,10 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">Metas Padrão</h3>
-        {salarioMensal > 0 && (
-          <span className="text-sm text-muted-foreground">
-            Baseado no salário: {formatarMoeda(salarioMensal)}
-          </span>
-        )}
       </div>
-      {salarioMensal === 0 && (
+      {metasComValores.every((m) => m.salarioMensal === 0) && (
         <p className="text-sm text-warning">
-          Cadastre transações de receita com a categoria "Salário" para calcular os valores das metas automaticamente.
+          Cadastre transações de receita para calcular os valores das metas automaticamente.
         </p>
       )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

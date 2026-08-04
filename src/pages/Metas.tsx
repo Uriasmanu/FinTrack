@@ -23,7 +23,7 @@ export function Metas() {
     setOpen(true);
   }
 
-  function handleSubmit(data: { nome: string; valorAlvo: number; meses: number }) {
+  function handleSubmit(data: { nome: string; valorAlvo: number; meses: number; receitasBase: string[] }) {
     const hoje = new Date();
     const dataInicio = hoje.toISOString().split("T")[0];
     const dataFim = new Date(
@@ -52,6 +52,7 @@ export function Metas() {
         dataFim,
         parcelaMensal,
         status: "em_andamento",
+        receitasBase: data.receitasBase ?? [],
       });
     }
   }

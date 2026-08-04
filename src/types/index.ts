@@ -63,6 +63,7 @@ export interface Meta {
   dataInicio: string;
   dataFim: string;
   status: StatusMeta;
+  receitasBase: string[];
 }
 
 export interface Multiplicadores {

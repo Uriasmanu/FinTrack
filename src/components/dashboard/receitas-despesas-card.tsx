@@ -3,15 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
-export function ReceitasDespesasCard() {
+interface ReceitasDespesasCardProps {
+  mes: number;
+  ano: number;
+}
+
+export function ReceitasDespesasCard({ mes }: ReceitasDespesasCardProps) {
   const { obterReceitasMes, obterDespesasMes } = useFinanceStore();
 
-  const mesAtual = new Date().getMonth();
-  const mesAnterior = mesAtual === 0 ? 11 : mesAtual - 1;
+  const mesAnterior = mes === 0 ? 11 : mes - 1;
 
-  const receitasAtual = obterReceitasMes(mesAtual);
+  const receitasAtual = obterReceitasMes(mes);
   const receitasAnterior = obterReceitasMes(mesAnterior);
-  const despesasAtual = obterDespesasMes(mesAtual);
+  const despesasAtual = obterDespesasMes(mes);
   const despesasAnterior = obterDespesasMes(mesAnterior);
 
   const variacaoReceitas =

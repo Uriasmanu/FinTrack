@@ -334,3 +334,69 @@
 **Data:** 03/08/2026
 **Contexto:** Usuário precisa ver saldo atual (confirmado) e saldo do mês (projetado).
 **Decisão:** Contas mostram dois saldos: "Saldo Hoje" (transações confirmadas até hoje) e "Saldo do Mês" (todas transações do mês).
+
+---
+
+## Data: 03/08/2026 - Ciclo 3: Correções de Data, Dashboard e Metas
+
+### 35. Data nova transação usa timezone local
+
+**Problema:** Ao criar nova transação, a data era definida com `new Date().toISOString().split("T")[0]` que pode gerar data no dia seguinte devido a diferença de timezone.
+
+**Solução:** Substituído por construção de data local: `new Date()`, `getFullYear()`, `getMonth()`, `getDate()`.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 36. Dashboard mostra Próximas Transações
+
+**Problema:** Dashboard exibia "Últimas Transações" em vez de transações próximas/futuras.
+
+**Solução:** Criado componente `ProximasTransacoes` que lista transações confirmadas e próximas do mês. Removido `UltimasTransacoes` do Dashboard.
+
+**Arquivos modificados:** `src/pages/Dashboard.tsx`, `src/components/dashboard/proximas-transacoes.tsx`
+
+### 37. Alertas de Metas removidos do Dashboard
+
+**Problema:** Dashboard exibia AlertaMetas que não era necessário.
+
+**Solução:** Removido import e uso do componente `AlertaMetas` do Dashboard.
+
+**Arquivos modificados:** `src/pages/Dashboard.tsx`
+
+### 38. Dashboard com navegação entre meses
+
+**Problema:** Dashboard não permitia transitar entre meses diferentes.
+
+**Solução:** Adicionado estado `mesSelecionado`/`anoSelecionado` com botões anterior/atual/seguinte. Todos os componentes filhos agora recebem props `mes`/`ano`.
+
+**Arquivos modificados:** `src/pages/Dashboard.tsx`, `src/components/dashboard/saldo-card.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`, `src/components/dashboard/resumo-mensal.tsx`, `src/components/dashboard/resumo-categorias.tsx`, `src/components/dashboard/proximas-transacoes.tsx`
+
+### 39. Alimentação auto-puxa ticket com permissão de troca
+
+**Problema:** Categoria Alimentação forçava conta ticket mesmo quando usuário queria usar outra conta.
+
+**Solução:** Alimentação auto-puxa ticket apenas quando não está editando, permitindo trocar para outra conta.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 40. Metas com seletor de receitas base
+
+**Problema:** Metas padrão usavam hardcoded `cat-007` (Salário) como base de cálculo.
+
+**Solução:** Adicionado campo `receitasBase` ao tipo Meta, componente Checkbox, seletor de categorias de receita no MetaForm, e MetasPredefinidas usa categorias selecionadas.
+
+**Arquivos modificados:** `src/types/index.ts`, `src/components/metas/meta-form.tsx`, `src/components/metas/metas-predefinidas.tsx`, `src/data/defaults.ts`, `src/components/ui/checkbox.tsx`
+
+### DDR-008 - Dashboard com Navegação de Meses
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário precisa visualizar dados de meses diferentes no dashboard.
+**Decisão:** Dashboard com estado de mês selecionado e botões de navegação. Componentes filhos recebem `mes`/`ano` como props.
+
+### DDR-009 - Metas com Receitas Base Configuráveis
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário pode ter múltiplas fontes de receita e quer escolher quais usar como base para cálculo de metas.
+**Decisão:** Campo `receitasBase: string[]` no tipo Meta. Se vazio, usa todas categorias de receita. Formulário inclui seletor de categorias.

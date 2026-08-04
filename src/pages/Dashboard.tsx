@@ -1,12 +1,14 @@
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SaldoCard } from "@/components/dashboard/saldo-card";
 import { ReceitasDespesasCard } from "@/components/dashboard/receitas-despesas-card";
 import { ResumoMensal } from "@/components/dashboard/resumo-mensal";
-import { UltimasTransacoes } from "@/components/dashboard/ultimas-transacoes";
+import { ProximasTransacoes } from "@/components/dashboard/proximas-transacoes";
 import { ResumoCategorias } from "@/components/dashboard/resumo-categorias";
-import { AlertaMetas } from "@/components/dashboard/alerta-metas";
 import { ObjetivosPersonalizados } from "@/components/dashboard/objetivos-personalizados";
 import { DespesasPorFinalidade } from "@/components/dashboard/despesas-por-finalidade";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import { Button } from "@/components/ui/button";
 
 const MESES = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -15,9 +17,33 @@ const MESES = [
 
 export function Dashboard() {
   const { dadosAno } = useFinanceStore();
-  const mesAtual = new Date().getMonth();
-  const nomeMes = MESES[mesAtual];
-  const anoAtual = new Date().getFullYear();
+  const hoje = new Date();
+  const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
+  const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
+
+  const nomeMes = MESES[mesSelecionado];
+  const isMesAtual = mesSelecionado === hoje.getMonth() && anoSelecionado === hoje.getFullYear();
+
+  function navegarMes(direcao: -1 | 1) {
+    let novoMes = mesSelecionado + direcao;
+    let novoAno = anoSelecionado;
+
+    if (novoMes < 0) {
+      novoMes = 11;
+      novoAno -= 1;
+    } else if (novoMes > 11) {
+      novoMes = 0;
+      novoAno += 1;
+    }
+
+    setMesSelecionado(novoMes);
+    setAnoSelecionado(novoAno);
+  }
+
+  function irParaMesAtual() {
+    setMesSelecionado(hoje.getMonth());
+    setAnoSelecionado(hoje.getFullYear());
+  }
 
   if (!dadosAno) {
     return (
@@ -29,26 +55,43 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-          {mesAtual + 1}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+            {mesSelecionado + 1}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">{nomeMes} {anoSelecionado}</h2>
+            <p className="text-sm text-muted-foreground">
+              {isMesAtual ? "Visão geral do mês atual" : "Visão geral do período"}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold">{nomeMes} {anoAtual}</h2>
-          <p className="text-sm text-muted-foreground">Visão geral do mês atual</p>
+
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => navegarMes(-1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          {!isMesAtual && (
+            <Button variant="outline" size="sm" onClick={irParaMesAtual}>
+              Hoje
+            </Button>
+          )}
+          <Button variant="outline" size="icon" onClick={() => navegarMes(1)}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <SaldoCard />
-        <ReceitasDespesasCard />
-        <ResumoMensal />
+        <SaldoCard mes={mesSelecionado} ano={anoSelecionado} />
+        <ReceitasDespesasCard mes={mesSelecionado} ano={anoSelecionado} />
+        <ResumoMensal mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <UltimasTransacoes />
-        <ResumoCategorias />
-        <AlertaMetas />
+        <ProximasTransacoes mes={mesSelecionado} ano={anoSelecionado} />
+        <ResumoCategorias mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

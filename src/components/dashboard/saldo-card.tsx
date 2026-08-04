@@ -3,16 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
-export function SaldoCard() {
+interface SaldoCardProps {
+  mes: number;
+  ano: number;
+}
+
+export function SaldoCard({ mes }: SaldoCardProps) {
   const { obterReceitasMes, obterDespesasMes } =
     useFinanceStore();
 
-  const mesAtual = new Date().getMonth();
-  const mesAnterior = mesAtual === 0 ? 11 : mesAtual - 1;
+  const mesAnterior = mes === 0 ? 11 : mes - 1;
 
-  const receitasMesAtual = obterReceitasMes(mesAtual);
+  const receitasMesAtual = obterReceitasMes(mes);
   const receitasMesAnterior = obterReceitasMes(mesAnterior);
-  const despesasMesAtual = obterDespesasMes(mesAtual);
+  const despesasMesAtual = obterDespesasMes(mes);
   const despesasMesAnterior = obterDespesasMes(mesAnterior);
 
   const saldoMesAtual = receitasMesAtual - despesasMesAtual;

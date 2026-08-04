@@ -31,6 +31,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
+      receitasBase: [],
     },
     {
       id: gerarId(),
@@ -46,6 +47,7 @@ export function obterMetasDefault(): Meta[] {
         .toISOString()
         .split("T")[0],
       status: "em_andamento",
+      receitasBase: [],
     },
     {
       id: gerarId(),
@@ -59,6 +61,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
+      receitasBase: [],
     },
     {
       id: gerarId(),
@@ -72,6 +75,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
+      receitasBase: [],
     },
     {
       id: gerarId(),
@@ -85,6 +89,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
+      receitasBase: [],
     },
   ];
 
