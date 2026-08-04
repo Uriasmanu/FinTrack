@@ -28,17 +28,32 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Crie as subcategorias de compras para casa (limpeza, comida, besteira, açougue, etc) pois quero saber quanto eu gasti com essas coisas nesse mes em relação ao mes passado
 
+### [aberto] Opção de ver extrato por conta
+**Comportamento atual:** Extrato mostra todas as transações de todas as contas misturadas.
+**Comportamento esperado:** Usuário deve poder filtrar extrato por conta bancária específica.
+**Escopo:** `src/pages/Transacoes.tsx`, `src/components/transacoes/filtros.tsx`
+
+### [aberto] Opção de ver gráficos por conta
+**Comportamento atual:** Gráficos mostram dados consolidados de todas as contas.
+**Comportamento esperado:** Usuário deve poder filtrar gráficos por conta bancária específica.
+**Escopo:** `src/pages/Graficos.tsx`
+
+### [aberto] Aviso de saldo negativo
+**Comportamento atual:** Sistema não avisa quando transação vai deixar saldo negativo.
+**Comportamento esperado:** Sistema deve exibir alerta quando transação for fazer com que saldo do dia ou saldo final do mês fique negativo.
+**Escopo:** `src/components/transacoes/transacao-form.tsx`, `src/stores/useFinanceStore.ts`
+
+### [aberto] Transações recorrentes não aparecem em meses futuros
+**Comportamento atual:** Apenas transações parceladas aparecem nos meses seguintes. Transações recorrentes só aparecem no mês de criação.
+**Comportamento esperado:** Transações com `tipoRecorrencia: "recorrente"` devem aparecer em todos os meses até 12 meses futuros.
+**Escopo:** `src/lib/transacoes.ts`, `src/stores/useFinanceStore.ts`
+
+### [aberto] Tom de vermelho no tema escuro
+**Comportamento atual:** Cores vermelhas no tema escuro estão apagadas/desbotadas.
+**Comportamento esperado:** Cores vermelhas devem ter contraste adequado no tema escuro.
+**Escopo:** `src/index.css`, variáveis CSS do tema escuro
+
 ## Histórico de Correções
-
-### [aberto] opção de ver extrato por conta
-
-### [aberto] opção de ver graficos por conta
-
-### [aberto] quero que avise quando uma transação vai fazer com que o saldo do dia fique negativo, ou o saldo final do mes fique negativo
-
-### [aberto] quero que todas as transações que são marcadas como recorrentes apareçam em todos os meses até 12 meses futuros. Só as parceladas estão prevalecendo
-
-### [aberto] Melhore os tons de vermelo no tema escuro, pois os vermelhos estão apagados
 
 ## Feature
 
