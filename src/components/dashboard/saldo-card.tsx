@@ -8,8 +8,8 @@ interface SaldoCardProps {
   ano: number;
 }
 
-export function SaldoCard({ mes }: SaldoCardProps) {
-  const { obterReceitasMes, obterDespesasMes } =
+export function SaldoCard({ mes, ano }: SaldoCardProps) {
+  const { obterReceitasMes, obterDespesasMes, obterSaldoInicialContas, obterSaldoAtualSemTicket, dadosAno } =
     useFinanceStore();
 
   const mesAnterior = mes === 0 ? 11 : mes - 1;
@@ -19,8 +19,28 @@ export function SaldoCard({ mes }: SaldoCardProps) {
   const despesasMesAtual = obterDespesasMes(mes);
   const despesasMesAnterior = obterDespesasMes(mesAnterior);
 
-  const saldoMesAtual = receitasMesAtual - despesasMesAtual;
-  const saldoMesAnterior = receitasMesAnterior - despesasMesAnterior;
+  const saldoInicialContas = obterSaldoInicialContas();
+
+  const transacoesAnteriores = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      const dataTransacao = new Date(t.data);
+      return dataTransacao.getFullYear() < ano || 
+             (dataTransacao.getFullYear() === ano && dataTransacao.getMonth() < mes);
+    })
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+
+  const saldoMesAtual = saldoInicialContas + transacoesAnteriores + receitasMesAtual - despesasMesAtual;
+  const saldoMesAnterior = saldoInicialContas + 
+    (dadosAno?.transacoes ?? [])
+      .filter((t) => {
+        const dataTransacao = new Date(t.data);
+        const mesRef = mesAnterior;
+        const anoRef = mesAnterior === 11 ? ano - 1 : ano;
+        return dataTransacao.getFullYear() < anoRef || 
+               (dataTransacao.getFullYear() === anoRef && dataTransacao.getMonth() < mesRef);
+      })
+      .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0) +
+    receitasMesAnterior - despesasMesAnterior;
 
   const variacao =
     saldoMesAnterior !== 0

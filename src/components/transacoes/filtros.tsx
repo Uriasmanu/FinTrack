@@ -112,7 +112,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
             <SelectItem value="todas">Todas contas</SelectItem>
             {contas.map((conta) => (
               <SelectItem key={conta.id} value={conta.id}>
-                {conta.banco}
+                {conta.banco} ({conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"})
               </SelectItem>
             ))}
           </SelectContent>

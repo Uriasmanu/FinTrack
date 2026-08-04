@@ -89,5 +89,12 @@
     "tipo": "ambos",
     "cor": "#8B5CF6",
     "icone": "ArrowLeftRight"
+  },
+  {
+    "id": "cat-014",
+    "nome": "Guardar",
+    "tipo": "ambos",
+    "cor": "#16A34A",
+    "icone": "PiggyBank"
   }
 ]

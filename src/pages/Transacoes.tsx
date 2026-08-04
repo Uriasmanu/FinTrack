@@ -68,9 +68,16 @@ export function Transacoes() {
 
   const temContas = (dadosAno?.contas.length ?? 0) > 0;
 
-  const saldoInicialContas = (dadosAno?.contas ?? [])
-    .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId)
-    .reduce((acc, c) => acc + (c.saldoInicial ?? 0), 0);
+  const contasFiltradas = (dadosAno?.contas ?? [])
+    .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId);
+
+  const saldoInicialContas = contasFiltradas
+    .reduce((acc, c) => {
+      const dataCriacao = c.dataCriacao ? new Date(c.dataCriacao) : null;
+      const primeiroDiaPeriodo = new Date(filtros.dataInicio || formatarDataISO(primeiroDiaMes));
+      if (dataCriacao && dataCriacao > primeiroDiaPeriodo) return acc;
+      return acc + (c.saldoInicial ?? 0);
+    }, 0);
 
   const transacoesAnteriores = (dadosAno?.transacoes ?? [])
     .filter((t) => {
@@ -130,6 +137,8 @@ export function Transacoes() {
     acc[t.data].push(t);
     return acc;
   }, {});
+
+  let saldoAcumuladoAnterior = saldoInicialContas + transacoesAnteriores;
 
   return (
     <div className="space-y-6">
@@ -221,39 +230,48 @@ export function Transacoes() {
             </p>
           ) : (
             <div className="space-y-4">
-              {Object.entries(transacoesPorDia).map(([data, transacoes]) => (
-                <div key={data} className="space-y-2">
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="font-medium text-sm">{formatarData(data)}</span>
-                    <div className="flex items-center gap-3">
-                      {transacoes.some((t) => !t.confirmada) && (
-                        <span className={`text-xs ${
-                          transacoes[transacoes.length - 1].saldoConfirmado >= 0
-                            ? "text-success/70"
-                            : "text-destructive/70"
-                        }`}>
-                          Efetivado: {formatarMoeda(transacoes[transacoes.length - 1].saldoConfirmado)}
+              {Object.entries(transacoesPorDia).map(([data, transacoes]) => {
+                const saldoInicioDia = saldoAcumuladoAnterior;
+                const saldoFimDia = transacoes[transacoes.length - 1].saldoAcumulado;
+                saldoAcumuladoAnterior = saldoFimDia;
+                
+                return (
+                  <div key={data} className="space-y-2">
+                    <div className="flex justify-between items-center py-2 border-b">
+                      <span className="font-medium text-sm">{formatarData(data)}</span>
+                      <div className="flex items-center gap-3">
+                        {transacoes.some((t) => !t.confirmada) && (
+                          <span className={`text-xs ${
+                            transacoes[transacoes.length - 1].saldoConfirmado >= 0
+                              ? "text-success/70"
+                              : "text-destructive/70"
+                          }`}>
+                            Efetivado: {formatarMoeda(transacoes[transacoes.length - 1].saldoConfirmado)}
+                          </span>
+                        )}
+                        <span className="text-xs text-muted-foreground">
+                          Início: {formatarMoeda(saldoInicioDia)}
                         </span>
-                      )}
-                      <span className={`text-sm font-medium ${
-                        transacoes[transacoes.length - 1].saldoAcumulado >= 0
-                          ? "text-success"
-                          : "text-destructive"
-                      }`}>
-                        Saldo do dia: {formatarMoeda(transacoes[transacoes.length - 1].saldoAcumulado)}
-                      </span>
+                        <span className={`text-sm font-medium ${
+                          saldoFimDia >= 0
+                            ? "text-success"
+                            : "text-destructive"
+                        }`}>
+                          Saldo do dia: {formatarMoeda(saldoFimDia)}
+                        </span>
+                      </div>
                     </div>
+                    {transacoes.map((transacao) => (
+                      <TransacaoItem
+                        key={transacao.id}
+                        transacao={transacao}
+                        saldoAcumulado={transacao.saldoAcumulado}
+                        onEditar={(id) => navigate(`/transacoes/${id}`)}
+                      />
+                    ))}
                   </div>
-                  {transacoes.map((transacao) => (
-                    <TransacaoItem
-                      key={transacao.id}
-                      transacao={transacao}
-                      saldoAcumulado={transacao.saldoAcumulado}
-                      onEditar={(id) => navigate(`/transacoes/${id}`)}
-                    />
-                  ))}
-                </div>
-              ))}
+                );
+              })}
               <div className="flex justify-between items-center pt-4 border-t mt-4">
                 <div className="space-y-1">
                   <span className="font-medium">Saldo Final</span>

@@ -154,7 +154,7 @@ export function Transferencia() {
                   <SelectContent>
                     {contas.map((conta) => (
                       <SelectItem key={conta.id} value={conta.id}>
-                        {conta.banco}
+                        {conta.banco} ({conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"})
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -176,7 +176,7 @@ export function Transferencia() {
                   <SelectContent>
                     {contas.map((conta) => (
                       <SelectItem key={conta.id} value={conta.id}>
-                        {conta.banco}
+                        {conta.banco} ({conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"})
                       </SelectItem>
                     ))}
                   </SelectContent>

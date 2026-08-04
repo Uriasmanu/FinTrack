@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -56,6 +57,17 @@ export function MetaForm({
       receitasBase: initialData?.receitasBase ?? [],
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        nome: initialData.nome ?? "",
+        valorAlvo: initialData.valorAlvo ?? 0,
+        meses: initialData.meses ?? 12,
+        receitasBase: initialData.receitasBase ?? [],
+      });
+    }
+  }, [initialData, reset]);
 
   const valorAlvo = watch("valorAlvo");
   const meses = watch("meses");

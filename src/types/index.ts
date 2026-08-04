@@ -40,6 +40,7 @@ export interface Conta {
   banco: string;
   saldoInicial: number;
   tipo: TipoConta;
+  dataCriacao?: string;
 }
 
 export interface Cartao {

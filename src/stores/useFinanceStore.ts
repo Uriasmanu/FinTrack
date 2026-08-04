@@ -46,6 +46,8 @@ interface FinanceState {
   obterUltimasTransacoes: (quantidade: number) => Transacao[];
   obterSaldoConta: (contaId: string) => number;
   obterFaturaCartao: (cartaoId: string) => number;
+  obterSaldoAtualSemTicket: () => number;
+  obterSaldoInicialContas: (contaId?: string) => number;
 }
 
 function salvar(state: DadosAno) {
@@ -466,5 +468,32 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     return state.transacoes
       .filter((t) => t.cartaoId === cartaoId && t.tipo === "despesa")
       .reduce((acc, t) => acc + t.valor, 0);
+  },
+
+  obterSaldoAtualSemTicket: () => {
+    const state = get().dadosAno;
+    if (!state) return 0;
+
+    const contaIdsTicket = state.contas
+      .filter((c) => c.tipo === "ticket")
+      .map((c) => c.id);
+
+    return state.transacoes
+      .filter((t) => !contaIdsTicket.includes(t.contaId))
+      .reduce((saldo, t) => {
+        return t.tipo === "receita" ? saldo + t.valor : saldo - t.valor;
+      }, 0);
+  },
+
+  obterSaldoInicialContas: (contaId?: string) => {
+    const state = get().dadosAno;
+    if (!state) return 0;
+
+    return state.contas
+      .filter((c) => {
+        if (contaId && c.id !== contaId) return false;
+        return true;
+      })
+      .reduce((acc, c) => acc + (c.saldoInicial ?? 0), 0);
   },
 }));
