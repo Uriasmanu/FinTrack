@@ -15,6 +15,17 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] Em transaçoes tambem tem que mostrar bem grande o mes atual - adicione  ao requisitos
+### [aberto] Em Contas tambem tem que mostrar bem grande o mes atual - adicione  ao requisitos
+### [aberto] Adicione a categoria de receita chamada VA/VR - adicione  ao requisitos
+### [aberto] Em Contas o saldo atual tem que ser o saldo de hoje - adicione  ao requisitos
+### [aberto] adicione a a feature de graficos, eles tem que ter a opção de trocar entre os 3 tipos de formato (pizza, barra e linhas) - adicione  ao requisitos
+### [aberto] Tema escuro continua sem salvar, crie um caixa de dialogo confirmando a mudança de tema e registre no JSON o tema escolhido
+### [aberto] Ao perguntar se quer alterar somente essa transação ou todaas, troque para (seguintes) pois se colocar todas da a entender que vai alterar as anteriores, sendo que eu so altero as seguintes sem mexer nas anteriores
+### [aberto] O limpar filtro não esta bem posicionado
+### [aberto] O Editar Transação não esta bem proprocional
+### [aberto] quando clico em Editar Conta ele não esta trazendo as informaçoes da conta selecionada para ser editada
+### [aberto] Últimas Transações em dashbord não esta refletido corretamente as alterações que eu fiz em transações
 
 ## Histórico de Correções
 
