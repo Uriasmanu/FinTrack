@@ -1,101 +1,616 @@
-# Requisitos — FinTrack
+# FinTrack - Documento de Requisitos
 
 ## Visão Geral
 
-O FinTrack é um aplicativo de controle financeiro pessoal que permite ao usuário gerenciar transações, contas, cartões, metas e visualizar dashboards e gráficos. Os dados são persistidos localmente no localStorage.
+O **FinTrack** é um aplicativo web desenvolvido em **React** para controle financeiro pessoal. O app permite ao usuário gerenciar receitas, despesas, contas bancárias, cartões e metas de economia, além de visualizar gráficos e exportar dados.
 
 ---
 
-## Requisitos Funcionais
+## Stack Tecnológica
 
-### RF-01: Inicialização e Persistência de Configuração
-
-- [x] RF-01.1: O sistema deve armazenar um timestamp `criadoEm` no objeto `config` quando o ano é criado pela primeira vez.
-- [x] RF-01.2: Na inicialização, o sistema deve verificar `config.criadoEm` para determinar se é um novo usuário.
-- [x] RF-01.3: Se `config.criadoEm` existir, o sistema NÃO deve sobrescrever nenhum campo do config.
-- [x] RF-01.4: Se `config.criadoEm` não existir (dados legados), o sistema deve preservar campos existentes e preencher apenas os ausentes com defaults.
-- [x] RF-01.5: O campo `salario === 0` não deve ser usado como critério de detecção de novo usuário.
-
-### RF-02: Gerenciamento de Transações
-
-- [ ] RF-02.1: O sistema deve permitir criar, editar e excluir transações.
-- [ ] RF-02.2: Transações devem ser classificadas como "receita" ou "despesa".
-- [ ] RF-02.3: Transações devem suportar recorrência (única, recorrente, parcelada).
-- [ ] RF-02.4: Transações recorrentes/parceladas devem permitir edição individual ou em grupo.
-
-### RF-03: Gerenciamento de Contas
-
-- [x] RF-03.1: O sistema deve permitir criar, editar e excluir contas.
-- [x] RF-03.2: Contas devem ter tipos: corrente, poupança, investimento, ticket.
-- [x] RF-03.3: Contas devem exibir saldo hoje (confirmado) e saldo do mês (projetado).
-- [x] RF-03.4: Contas devem ter campo `dataCriacao` opcional para controle de saldo inicial.
-
-### RF-04: Dashboard
-
-- [x] RF-04.1: Dashboard deve exibir saldo total do mês selecionado (incluindo saldoInicial e transações anteriores).
-- [x] RF-04.2: Dashboard deve permitir navegação entre meses.
-- [x] RF-04.3: Dashboard deve exibir próximas transações confirmadas.
-- [x] RF-04.4: Saldo total deve excluir contas ticket (vale-alimentação).
-
-### RF-05: Tema
-
-- [ ] RF-05.1: Tema (claro/escuro) deve ser persistido no localStorage.
-- [ ] RF-05.2: Tema deve ser aplicado imediatamente na inicialização (sem flash).
-- [x] RF-05.3: Tema não deve ser resetado ao recarregar a página.
-
-### RF-06: Extrato
-
-- [x] RF-06.1: Extrato deve mostrar saldo início e fim do dia.
-- [x] RF-06.2: Saldo inicial deve considerar data de criação da conta.
-- [x] RF-06.3: Saldo final do extrato deve ser exibido no rodapé.
-
-### RF-07: Transferência entre Contas
-
-- [x] RF-07.1: Sistema deve permitir transferir valores entre contas.
-- [x] RF-07.2: Transferências devem usar categoria "Guardar" ou "Transferencia".
-
-### RF-08: Exportação e Importação
-
-- [x] RF-08.1: Sistema deve permitir exportar dados em formato JSON.
-- [x] RF-08.2: Sistema deve permitir importar dados de arquivo JSON.
-- [x] RF-08.3: Importação deve solicitar confirmação antes de sobrescrever dados.
-
-### RF-09: Interface
-
-- [x] RF-09.1: Dropdowns de contas devem mostrar tipo entre parênteses (ex: "Nubank (Corrente)").
-- [x] RF-09.2: Formulário de metas deve trazer valores ao editar.
+| Camada | Tecnologia | Versão |
+|---|---|---|
+| Framework | React + Vite | 18.x / 5.x |
+| Linguagem | TypeScript | 5.x |
+| Estilização | Tailwind CSS | 3.4+ |
+| Componentes | shadcn/ui | latest |
+| Navegação | React Router | 6.x |
+| Gráficos | Recharts | 2.x |
+| Armazenamento Local | JSON por ano (localStorage) | — |
+| Geração de PDF | jsPDF + html2canvas | — |
+| Geração de CSV | papaparse | — |
+| Formulários | React Hook Form + Zod | latest |
+| Ícones | lucide-react | latest |
+| UUID | crypto.randomUUID() | nativo |
 
 ---
 
-## Requisitos Não-Funcionais
+## Dependências (package.json)
 
-### RNF-01: Performance
-
-- Carregamento inicial deve ocorrer em menos de 2 segundos.
-- Operações de CRUD devem ser instantâneas (< 100ms).
-
-### RNF-02: Compatibilidade
-
-- Suporte a navegadores modernos (Chrome, Firefox, Safari, Edge).
-- Layout responsivo: mobile (375px+), tablet (768px+), desktop (1280px+).
-
-### RNF-03: Persistência
-
-- Dados devem ser persistidos no localStorage.
-- Estrutura de dados deve ser versionável por ano.
+```json
+{
+  "name": "fintrack",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-router-dom": "^6.22.0",
+    "recharts": "^2.12.0",
+    "papaparse": "^5.4.0",
+    "jspdf": "^2.5.0",
+    "html2canvas": "^1.4.0",
+    "react-hook-form": "^7.50.0",
+    "zod": "^3.22.0",
+    "@hookform/resolvers": "^3.3.0",
+    "lucide-react": "^0.400.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss-animate": "^1.0.7",
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-tabs": "^1.0.0",
+    "@radix-ui/react-slot": "^1.0.0",
+    "@radix-ui/react-dropdown-menu": "^2.0.0",
+    "@radix-ui/react-progress": "^1.0.0",
+    "@radix-ui/react-tooltip": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/papaparse": "^5.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
+  }
+}
+```
 
 ---
 
-## Histórico de Alterações
+## Paleta de Cores
 
-| Data | Requisito | Alteração |
-|------|-----------|-----------|
-| 03/08/2026 | RF-01 | Criado — Requisitos de inicialização e persistência de configuração |
-| 03/08/2026 | RF-05.3 | Implementado — Tema não resetado ao recarregar |
-| 03/08/2026 | RF-03.4 | Implementado — Campo dataCriacao em Conta |
-| 03/08/2026 | RF-04.1 | Implementado — Saldo total considera saldoInicial e transações anteriores |
-| 03/08/2026 | RF-04.4 | Implementado — Saldo total exclui contas ticket |
-| 03/08/2026 | RF-06 | Implementado — Extrato com saldo início/fim do dia |
-| 03/08/2026 | RF-07 | Implementado — Transferência entre contas com categoria |
-| 03/08/2026 | RF-08 | Implementado — Exportação e importação JSON |
-| 03/08/2026 | RF-09 | Implementado — Interface com tipo de conta e metas |
+### Tema Claro
+
+| Elemento | Cor | Código |
+|---|---|---|
+| Fundo Principal | Branco | `#FFFFFF` |
+| Fundo Secundário | Cinza Claro | `#F8F9FA` |
+| Fundo Card | Branco | `#FFFFFF` |
+| Texto Principal | Cinza Escuro | `#1A1A2E` |
+| Texto Secundário | Cinza Médio | `#6C757D` |
+| Texto Suave | Cinza Claro | `#ADB5BD` |
+| Primária | Azul | `#2563EB` |
+| Primária Hover | Azul Escuro | `#1D4ED8` |
+| Sucesso / Receita | Verde | `#16A34A` |
+| Sucesso Fundo | Verde Claro | `#DCFCE7` |
+| Perigo / Despesa | Vermelho | `#DC2626` |
+| Perigo Fundo | Vermelho Claro | `#FEE2E2` |
+| Aviso | Amarelo | `#F59E0B` |
+| Aviso Fundo | Amarelo Claro | `#FEF3C7` |
+| Borda | Cinza Borda | `#E5E7EB` |
+
+### Tema Escuro
+
+| Elemento | Cor | Código |
+|---|---|---|
+| Fundo Principal | Preto | `#0A0A0A` |
+| Fundo Secundário | Cinza Escuro | `#1A1A2E` |
+| Fundo Card | Cinza Card | `#16213E` |
+| Texto Principal | Branco | `#F8F9FA` |
+| Texto Secundário | Cinza Claro | `#9CA3AF` |
+| Texto Suave | Cinza Médio | `#6B7280` |
+| Primária | Azul | `#3B82F6` |
+| Sucesso / Receita | Verde | `#22C55E` |
+| Perigo / Despesa | Vermelho | `#EF4444` |
+| Aviso | Amarelo | `#EAB308` |
+| Borda | Cinza Borda | `#2D2D3F` |
+
+### Cores de Categorias (Padrão)
+
+| Categoria | Cor |
+|---|---|
+| Alimentação | `#F97316` (Laranja) |
+| Transporte | `#3B82F6` (Azul) |
+| Moradia | `#8B5CF6` (Roxo) |
+| Lazer | `#EC4899` (Rosa) |
+| Saúde | `#10B981` (Verde) |
+| Educação | `#06B6D4` (Ciano) |
+| Salário | `#16A34A` (Verde) |
+| Investimentos | `#6366F1` (Índigo) |
+| Outros | `#6B7280` (Cinza) |
+
+---
+
+## Estrutura de Pastas
+
+```
+fintrack/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── main.tsx                    # Entry point
+│   ├── App.tsx                     # Router principal
+│   ├── index.css                   # Tailwind imports
+│   ├── components/
+│   │   ├── ui/                     # shadcn/ui components
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── tabs.tsx
+│   │   │   ├── progress.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── tooltip.tsx
+│   │   │   └── separator.tsx
+│   │   ├── layout/
+│   │   │   ├── sidebar.tsx
+│   │   │   ├── header.tsx
+│   │   │   └── layout.tsx
+│   │   ├── dashboard/
+│   │   │   ├── saldo-card.tsx
+│   │   │   ├── receitas-despesas-card.tsx
+│   │   │   └── resumo-mensal.tsx
+│   │   ├── transacoes/
+│   │   │   ├── transacao-item.tsx
+│   │   │   ├── transacao-form.tsx
+│   │   │   └── filtros.tsx
+│   │   ├── graficos/
+│   │   │   ├── barras-mensais.tsx
+│   │   │   ├── pizza-categorias.tsx
+│   │   │   └── linha-saldo.tsx
+│   │   └── metas/
+│   │       ├── meta-card.tsx
+│   │       └── progresso-meta.tsx
+│   ├── pages/
+│   │   ├── Dashboard.tsx
+│   │   ├── Transacoes.tsx
+│   │   ├── NovaTransacao.tsx
+│   │   ├── EditarTransacao.tsx
+│   │   ├── Categorias.tsx
+│   │   ├── Contas.tsx
+│   │   ├── Cartoes.tsx
+│   │   ├── Graficos.tsx
+│   │   ├── Metas.tsx
+│   │   ├── NovaMeta.tsx
+│   │   ├── Exportar.tsx
+│   │   └── Configuracoes.tsx
+│   ├── lib/
+│   │   ├── storage.ts              # Leitura/escrita localStorage
+│   │   ├── export.ts               # Exportação PDF/CSV
+│   │   ├── calculos.ts             # Cálculos financeiros
+│   │   └── cn.ts                   # Utility para classes
+│   ├── data/
+│   │   ├── categorias-default.json
+│   │   └── templates-metas.json
+│   ├── stores/
+│   │   └── useFinanceStore.ts      # Zustand store
+│   └── types/
+│       └── index.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── tsconfig.json
+├── vite.config.ts
+└── package.json
+```
+
+---
+
+## Funcionalidades
+
+### 1. Dashboard com Resumo Financeiro
+
+- Exibição do saldo total consolidado
+- Resumo de receitas e despesas do mês atual
+- Comparativo com o mês anterior
+- Cards com indicadores rápidos (saldo, receitas, despesas, economia)
+- Últimas 5 transações realizadas
+
+### 2. Receitas e Despesas
+
+- Cadastro de transações (receita ou despesa)
+- Campos: descrição, valor, data, categoria, conta associada
+- Edição e exclusão de transações
+- Listagem com filtros por período, categoria e tipo
+- Busca por descrição
+
+#### 2.0 Extrato com Saldo
+
+A listagem de transações funciona como um **extrato bancário**, exibindo o saldo após cada transação:
+
+- Cada linha mostra: data, descrição, valor (entrada/saída) e **saldo acumulado**
+- O saldo é calculado em tempo real conforme as transações são listadas
+- Transações futuras (parceladas ou recorrentes) também são consideradas no saldo
+- Formato visual: estilo extrato bancário com linhas alternadas
+- Saldo final = soma de todas as receitas - soma de todas as despesas
+
+**Exemplo de exibição:**
+
+| Data | Descrição | Valor | Saldo |
+|---|---|---|---|
+| 01/01 | Salário | +R$ 5.000,00 | R$ 5.000,00 |
+| 03/01 | Aluguel | -R$ 1.500,00 | R$ 3.500,00 |
+| 05/01 | Supermercado | -R$ 800,00 | R$ 2.700,00 |
+| 10/01 | Parcela Celular 3/12 | -R$ 250,00 | R$ 2.450,00 |
+| 15/01 | Freela | +R$ 1.200,00 | R$ 3.650,00 |
+
+#### 2.1 Tipo de Recorrência
+
+Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
+
+| Tipo | Descrição | Exemplo |
+|---|---|---|
+| **Única** | Transação única, sem repetição | Compra de um produto à vista |
+| **Recorrente** | Repete indefinidamente, sem prazo final | Aluguel, assinatura de streaming |
+| **Parcelado** | Repete por número definido de parcelas | Compra parcelada em 12x |
+
+**Transação Única:**
+- Sem campos adicionais
+- Gera apenas uma transação
+
+**Transação Recorrente (sem prazo final):**
+- Repete todo mês na mesma data
+- Sem número definido de parcelas
+- Pode ser cancelada a qualquer momento
+- Campo `tipoRecorrencia`: `"unica" | "recorrente" | "parcelado"`
+
+**Transação Parcelada:**
+- Campo adicional: `parcelaAtual` e `totalParcelas`
+- Título exibe progresso: "Netflix 5/36"
+- Parcela inicial pode começar de qualquer quantidade (ex: 1/36, 5/36, 12/36)
+- Cada parcela gera uma transação individual na data correspondente
+- Ao editar o total de parcelas, as parcelas futuras são recalculadas automaticamente
+- Exclusão de uma parcela exclui todas as parcelas futuras
+
+### 3. Categorias Personalizadas
+
+- Criação de categorias customizadas pelo usuário
+- Edição e exclusão de categorias
+- Ícones (lucide) e cores para identificação visual
+- Categorias padrão pré-definidas:
+  - Alimentação, Transporte, Moradia, Lazer
+  - Saúde, Educação, Salário, Investimentos, Outros
+
+### 4. Contas Bancárias e Cartões
+
+- Cadastro de contas bancárias (nome, saldo inicial, banco, tipo)
+- Cadastro de cartões de crédito (limite, data de fechamento, vencimento)
+- Associação de transações a contas/cartões
+- Edição e exclusão de contas e cartões
+- Resumo de saldo por conta e fatura por cartão
+
+### 5. Gráficos Mensais
+
+- Gráfico de barras: receitas vs despesas por mês (Recharts)
+- Gráfico de pizza: distribuição de despesas por categoria
+- Gráfico de linha: evolução do saldo ao longo do tempo
+- Seletor de período para análise
+- Dados atualizados em tempo real conforme cadastro de transações
+
+### 6. Metas de Economia
+
+- Criação de metas com valor alvo e prazo
+- Acompanhamento do progresso (porcentagem e valor acumulado)
+- Edição e exclusão de metas
+- Visualização de metas atingidas e pendentes
+
+#### 6.1 Regras de Metas (baseadas no salário)
+
+O usuário define seu salário mensal na configuração. Os multiplicadores definem objetivos a curto e longo prazo, e monitoram gastos por categoria. Todos podem ser editados em **Configurações > Objetivos**.
+
+**Metas predefinidas vêm habilitadas por padrão** ao criar a conta.
+
+Cada card de meta pré-definida possui um **menu de 3 pontinhos** (⋮) com as opções:
+- **Editar**: alterar o valor do multiplicador ou nome da meta
+- **Desabilitar**: oculta a meta do dashboard (dados são mantidos)
+
+**Objetivos de Longo Prazo** — Validar porcentagem acumulada:
+
+| Multiplicador | Fórmula | Descrição |
+|---|---|---|
+| Viver de Renda | `salário × 200` | Valor necessário para viver apenas de rendimentos passivos |
+| Reserva de Emergência | `salário × 6` | Cobertura de 6 meses de despesas |
+
+**Objetivo de Curto Prazo** — Validar se a categoria "Guarda" está sendo seguida:
+
+| Multiplicador | Fórmula | Descrição |
+|---|---|---|
+| Guardar por Mês | `salário × 0,1` | Meta mensal de economia (10% do salário). Mostra porcentagem do objetivo atingido |
+
+**Monitoramento de Gastos** — Verificar se o gasto por categoria está dentro da meta:
+
+| Multiplicador | Fórmula | Descrição |
+|---|---|---|
+| Conta Fixa | `salário × 0,6` | Limite máximo para despesas fixas (60% do salário). Mostra porcentagem gasta vs limite |
+| Lazer | `salário × 0,3` | Orçamento para lazer e entretenimento (30% do salário). Mostra porcentagem gasta vs limite |
+
+> **Nota**: Todos os multiplicadores podem ser ajustados em **Configurações > Objetivos**.
+
+#### 6.2 Objetivos Personalizados
+
+Além dos objetivos padrão, o usuário pode criar objetivos personalizados com valores e prazos definidos por ele.
+
+**Como funciona:**
+
+1. O usuário cadastra um objetivo com:
+   - Nome do objetivo (ex: "Comprar um carro", "Viagem internacional")
+   - Valor total alvo
+   - Prazo em meses
+
+2. O app calcula automaticamente:
+   - **Parcela mensal**: `valorTotal / meses`
+   - **Previsão de conclusão**: data baseada no prazo informado
+
+3. O usuário pode ajustar o slider de meses em tempo real:
+   - Objetivos podem levar meses ou anos (ex: 36, 60, 120 meses)
+   - Ao diminuir os meses, a parcela mensal aumenta
+   - Ao aumentar os meses, a parcela mensal diminui
+   - Pré-visualização instantânea do valor mensal até encontrar um valor acessível
+   - Exibição do prazo formatado em meses ou anos (ex: "3 anos e 6 meses")
+
+4. Acompanhamento do progresso:
+   - Barra de progresso com porcentagem acumulada
+   - Valor já economizado vs valor alvo
+   - Status: em andamento, concluído, atrasado
+
+5. Habilitar/Desabilitar objetivos:
+   - Objetivos podem serativados ou desativados a qualquer momento
+   - Objetivos desabilitados não aparecem no dashboard
+   - Dados são mantidos mesmo quando desabilitados
+   - Possibilita criar múltiplos objetivos e alternar entre eles conforme necessário
+
+**Exemplo de uso:**
+
+| Campo | Valor |
+|---|---|
+| Nome | Comprar um carro |
+| Valor alvo | R$ 45.000,00 |
+| Prazo | 24 meses (2 anos) |
+| **Parcela mensal** | **R$ 1.875,00** |
+
+> O usuário ajusta o slider de 24 para 60 meses e vê a parcela cair para R$ 750,00, encontrando um valor mais acessível com prazo de 5 anos.
+
+### 7. Exportação de Dados
+
+- **Exportar para PDF**: relatório mensal/anual com gráficos e tabelas (jsPDF + html2canvas)
+- **Exportar para CSV**: dados brutos para uso em planilhas (papaparse)
+- Seleção de período para exportação
+- Download direto no navegador
+
+### 8. Armazenamento Local (JSON por Ano)
+
+- Um único JSON por ano: `fintrack_2026.json`, `fintrack_2027.json`, etc.
+- O JSON do ano atual é o ativo (lido e escrito)
+- Ao mudar o ano, o app cria um novo JSON automaticamente
+- Todos os dados do ano ficam em um único arquivo
+- Backup e restauração de dados (importação/exportação do JSON)
+
+---
+
+## Estrutura de Dados (JSON por Ano)
+
+```json
+{
+  "ano": 2026,
+  "transacoes": [
+    {
+      "id": "uuid",
+      "tipo": "receita | despesa",
+      "tipoRecorrencia": "unica | recorrente | parcelado",
+      "descricao": "string",
+      "valor": 0.00,
+      "data": "YYYY-MM-DD",
+      "categoriaId": "uuid",
+      "contaId": "uuid",
+      "cartaoId": "uuid | null",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "grupoParcelaId": "uuid | null",
+      "criadoEm": "ISO timestamp",
+      "confirmada": false
+    }
+  ],
+  "categorias": [
+    {
+      "id": "uuid",
+      "nome": "string",
+      "cor": "#FFFFFF",
+      "icone": "string",
+      "tipo": "receita | despesa | ambos"
+    }
+  ],
+  "contas": [
+    {
+      "id": "uuid",
+      "banco": "string",
+      "saldoInicial": 0.00,
+      "tipo": "corrente | poupanca | investimento | ticket"
+    }
+  ],
+  "cartoes": [
+    {
+      "id": "uuid",
+      "nome": "string",
+      "bandeira": "string",
+      "limite": 0.00,
+      "diaFechamento": 1,
+      "diaVencimento": 10
+    }
+  ],
+  "metas": [
+    {
+      "id": "uuid",
+      "nome": "string",
+      "tipo": "padrao | personalizado",
+      "ativo": true,
+      "valorAlvo": 0.00,
+      "valorAtual": 0.00,
+      "meses": 12,
+      "parcelaMensal": 0.00,
+      "dataInicio": "YYYY-MM-DD",
+      "dataFim": "YYYY-MM-DD",
+      "status": "em_andamento | concluida | cancelada"
+    }
+  ],
+  "config": {
+    "salario": 0.00,
+    "tema": "claro | escuro",
+    "moeda": "BRL",
+    "multiplicadores": {
+      "viverDeRenda": 200,
+      "reservaEmergencia": 6,
+      "guardarPorMes": 0.1,
+      "contaFixa": 0.6,
+      "lazer": 0.3
+    }
+  }
+}
+```
+
+---
+
+## Rotas
+
+| Rota | Página | Descrição |
+|---|---|---|
+| `/` | Dashboard | Resumo financeiro e indicadores |
+| `/transacoes` | Transacoes | Lista com filtros e busca |
+| `/transacoes/nova` | NovaTransacao | Formulário de cadastro |
+| `/transacoes/:id` | EditarTransacao | Formulário de edição |
+| `/categorias` | Categorias | Gestão de categorias |
+| `/contas` | Contas | Gestão de contas bancárias |
+| `/cartoes` | Cartoes | Gestão de cartões de crédito |
+| `/graficos` | Graficos | Visualização gráfica dos dados |
+| `/metas` | Metas | Acompanhamento de metas de economia |
+| `/metas/nova` | NovaMeta | Cadastrar nova meta |
+| `/exportar` | Exportar | Opções de exportação PDF/CSV |
+| `/configuracoes` | Configuracoes | Preferências, salário, backup e objetivos (multiplicadores) |
+
+---
+
+## Configurações do Projeto
+
+### vite.config.ts
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
+```
+
+### tailwind.config.js
+
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
+```
+
+### tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+```
+
+---
+
+## Requisitos Não Funcionais
+
+- **Performance**: carregamento rápido das telas (< 2s)
+- **Usabilidade**: interface intuitiva e responsiva
+- **Segurança**: dados armazenados localmente (sem servidor externo)
+- **Acessibilidade**: suporte a leitores de tela e fontes escaláveis
+- **Responsividade**: layout adaptável para desktop e mobile
+- **Offline**: funcionamento completo sem conexão com a internet
+- **Navegadores**: Chrome, Firefox, Safari, Edge (últimas 2 versões)
