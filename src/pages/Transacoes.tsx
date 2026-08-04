@@ -8,11 +8,18 @@ import { Filtros, type FiltrosTransacao } from "@/components/transacoes/filtros"
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 
+const MESES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
 export function Transacoes() {
   const navigate = useNavigate();
   const { dadosAno } = useFinanceStore();
 
   const hoje = new Date();
+  const mesAtual = hoje.getMonth();
+  const nomeMes = MESES[mesAtual];
   const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
   const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
   const formatarDataISO = (d: Date) => d.toISOString().split("T")[0];
@@ -53,9 +60,13 @@ export function Transacoes() {
     .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
   let saldoAcumulado = 0;
+  let saldoConfirmado = 0;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
     saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
-    return { ...t, saldoAcumulado };
+    if (t.confirmada) {
+      saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;
+    }
+    return { ...t, saldoAcumulado, saldoConfirmado };
   });
 
   const transacoesPorDia = transacoesComSaldo.reduce<Record<string, typeof transacoesComSaldo>>((acc, t) => {
@@ -69,11 +80,16 @@ export function Transacoes() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Transações</h2>
-          <p className="text-muted-foreground">
-            Extrato bancário com saldo acumulado
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+            {mesAtual + 1}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Transações - {nomeMes}</h2>
+            <p className="text-muted-foreground">
+              Extrato bancário com saldo acumulado
+            </p>
+          </div>
         </div>
         <Button
           onClick={() => navigate("/transacoes/nova")}
@@ -133,13 +149,24 @@ export function Transacoes() {
                 <div key={data} className="space-y-2">
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="font-medium text-sm">{formatarData(data)}</span>
-                    <span className={`text-sm font-medium ${
-                      transacoes[transacoes.length - 1].saldoAcumulado >= 0
-                        ? "text-success"
-                        : "text-destructive"
-                    }`}>
-                      Saldo do dia: {formatarMoeda(transacoes[transacoes.length - 1].saldoAcumulado)}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      {transacoes.some((t) => !t.confirmada) && (
+                        <span className={`text-xs ${
+                          transacoes[transacoes.length - 1].saldoConfirmado >= 0
+                            ? "text-success/70"
+                            : "text-destructive/70"
+                        }`}>
+                          Efetivado: {formatarMoeda(transacoes[transacoes.length - 1].saldoConfirmado)}
+                        </span>
+                      )}
+                      <span className={`text-sm font-medium ${
+                        transacoes[transacoes.length - 1].saldoAcumulado >= 0
+                          ? "text-success"
+                          : "text-destructive"
+                      }`}>
+                        Saldo do dia: {formatarMoeda(transacoes[transacoes.length - 1].saldoAcumulado)}
+                      </span>
+                    </div>
                   </div>
                   {transacoes.map((transacao) => (
                     <TransacaoItem
@@ -152,14 +179,28 @@ export function Transacoes() {
                 </div>
               ))}
               <div className="flex justify-between items-center pt-4 border-t mt-4">
-                <span className="font-medium">Saldo Final</span>
-                <span
-                  className={`text-lg font-bold ${
-                    saldoAcumulado >= 0 ? "text-success" : "text-destructive"
-                  }`}
-                >
-                  {formatarMoeda(saldoAcumulado)}
-                </span>
+                <div className="space-y-1">
+                  <span className="font-medium">Saldo Final</span>
+                  <p className="text-xs text-muted-foreground">
+                    Projetado (todas transações)
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span
+                    className={`text-lg font-bold ${
+                      saldoAcumulado >= 0 ? "text-success" : "text-destructive"
+                    }`}
+                  >
+                    {formatarMoeda(saldoAcumulado)}
+                  </span>
+                  {saldoConfirmado !== saldoAcumulado && (
+                    <p className={`text-xs ${
+                      saldoConfirmado >= 0 ? "text-success/70" : "text-destructive/70"
+                    }`}>
+                      Efetivado: {formatarMoeda(saldoConfirmado)}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           )}

@@ -75,5 +75,12 @@
     "cor": "#DC2626",
     "icone": "AlertCircle",
     "tipo": "despesa"
+  },
+  {
+    "id": "cat-012",
+    "nome": "VA/VR",
+    "cor": "#059669",
+    "icone": "Utensils",
+    "tipo": "receita"
   }
 ]

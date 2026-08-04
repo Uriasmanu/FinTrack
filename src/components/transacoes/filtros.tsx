@@ -59,7 +59,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-end gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -119,7 +119,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
         </Select>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-end gap-3">
         <div>
           <label className="text-xs text-muted-foreground">Data início</label>
           <Input
@@ -141,8 +141,8 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
         </div>
 
         {temFiltroAtivo && (
-          <Button variant="ghost" size="sm" onClick={limparFiltros}>
-            <X className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" onClick={limparFiltros} className="h-[36px]">
+            <X className="mr-1 h-4 w-4" />
             Limpar filtros
           </Button>
         )}

@@ -89,7 +89,7 @@ export function EditarTransacao() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Editar Transação</h2>
         <p className="text-muted-foreground">
@@ -113,7 +113,7 @@ export function EditarTransacao() {
           <AlertDialogHeader>
             <AlertDialogTitle>Editar recurrence/parcela</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta transação faz parte de um grupo recorrente/parcelado. Deseja alterar apenas esta ocorrência ou todas?
+              Esta transação faz parte de um grupo recorrente/parcelado. Deseja alterar apenas esta ocorrência ou todas as seguintes?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -124,7 +124,7 @@ export function EditarTransacao() {
               Só esta
             </AlertDialogAction>
             <AlertDialogAction onClick={() => dadosPendentes && editarTodas(dadosPendentes)} className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Todas
+              Todas as seguintes
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

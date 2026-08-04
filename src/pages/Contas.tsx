@@ -5,12 +5,20 @@ import { ContaCard } from "@/components/contas/conta-card";
 import { ContaForm } from "@/components/contas/conta-form";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
+const MESES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
 export function Contas() {
   const { dadosAno, adicionarConta, editarConta } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const contas = dadosAno?.contas ?? [];
+  const hoje = new Date();
+  const mesAtual = hoje.getMonth();
+  const nomeMes = MESES[mesAtual];
 
   function handleEditar(id: string) {
     setEditingId(id);
@@ -28,6 +36,8 @@ export function Contas() {
     } else {
       adicionarConta(data);
     }
+    setOpen(false);
+    setEditingId(null);
   }
 
   const contaEditando = editingId
@@ -37,11 +47,16 @@ export function Contas() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Contas</h2>
-          <p className="text-muted-foreground">
-            Gerencie suas contas bancárias
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+            {mesAtual + 1}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Contas - {nomeMes}</h2>
+            <p className="text-muted-foreground">
+              Gerencie suas contas bancárias
+            </p>
+          </div>
         </div>
         <Button onClick={handleNovo}>
           <Plus className="mr-2 h-4 w-4" />

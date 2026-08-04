@@ -20,10 +20,29 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { excluirConta, dadosAno } = useFinanceStore();
 
+  const hoje = new Date();
+  const mesAtual = hoje.getMonth();
+  const anoAtual = hoje.getFullYear();
+
   const saldoAtual =
     (conta.saldoInicial ?? 0) +
     (dadosAno?.transacoes
-      .filter((t) => t.contaId === conta.id)
+      .filter((t) => {
+        if (t.contaId !== conta.id) return false;
+        if (!t.confirmada) return false;
+        const dataTransacao = new Date(t.data);
+        return dataTransacao <= hoje;
+      })
+      .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0) ?? 0);
+
+  const saldoMes =
+    (conta.saldoInicial ?? 0) +
+    (dadosAno?.transacoes
+      .filter((t) => {
+        if (t.contaId !== conta.id) return false;
+        const dataTransacao = new Date(t.data);
+        return dataTransacao.getMonth() === mesAtual && dataTransacao.getFullYear() === anoAtual;
+      })
       .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0) ?? 0);
 
   const transacoesNaConta = dadosAno?.transacoes.filter(
@@ -75,7 +94,18 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
           >
             {formatarMoeda(saldoAtual)}
           </p>
-          <p className="text-xs text-muted-foreground">Saldo atual</p>
+          <p className="text-xs text-muted-foreground">Saldo hoje</p>
+        </div>
+
+        <div className="text-right">
+          <p
+            className={`text-sm font-medium ${
+              saldoMes >= 0 ? "text-success" : "text-destructive"
+            }`}
+          >
+            {formatarMoeda(saldoMes)}
+          </p>
+          <p className="text-xs text-muted-foreground">Saldo do mês</p>
         </div>
 
         <DropdownMenu>

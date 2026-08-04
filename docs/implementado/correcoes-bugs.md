@@ -220,3 +220,117 @@
 **Data:** 03/08/2026
 **Contexto:** Sidebar ficava poluída com link de categorias que não é acessado frequentemente.
 **Decisão:** Mover gerenciamento de categorias para dentro de Configurações, mantendo a rota `/categorias` existente mas sem exibir na sidebar.
+
+---
+
+## Data: 03/08/2026 - Ciclo 3: UX, Gráficos e Correções
+
+### 23. Transações mostra mês atual no cabeçalho
+
+**Problema:** Página de transações não indicava qual mês estava sendo exibido.
+
+**Solução:** Adicionado cabeçalho com número do mês e nome do mês (ex: "3 - Março").
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### 24. Contas mostra mês atual no cabeçalho
+
+**Problema:** Página de contas não indicava qual mês estava sendo exibido.
+
+**Solução:** Adicionado cabeçalho com número do mês e nome do mês.
+
+**Arquivos modificados:** `src/pages/Contas.tsx`
+
+### 25. Categoria VA/VR adicionada
+
+**Problema:** Não existia categoria para vale alimentação/refeição.
+
+**Solução:** Adicionada categoria "VA/VR" (id: cat-012) com cor #059669 e ícone Utensils para receitas.
+
+**Arquivos modificados:** `src/data/categorias-default.json`
+
+### 26. Saldo de hoje em contas considera efetivadas
+
+**Problema:** Saldo da conta mostrava todas as transações sem considerar se foram confirmadas.
+
+**Solução:** Saldo "Hoje" considera apenas transações confirmadas até a data atual. Adicionado "Saldo do Mês" separado.
+
+**Arquivos modificados:** `src/components/contas/conta-card.tsx`
+
+### 27. Feature de gráficos implementada
+
+**Problema:** Página de gráficos era um placeholder.
+
+**Solução:** Implementada página de gráficos com Recharts. Tipos: Despesas por Categoria, Receitas por Categoria, Evolução Mensal. Formatos: Pizza, Barra e Linhas.
+
+**Arquivos modificados:** `src/pages/Graficos.tsx`
+
+### 28. Tema escuro com dialog de confirmação
+
+**Problema:** Mudança de tema era aplicada imediatamente sem confirmação.
+
+**Solução:** Adicionado AlertDialog confirmando mudança de tema. Tema é salvo no JSON apenas após confirmação.
+
+**Arquivos modificados:** `src/components/layout/layout.tsx`
+
+### 29. Dialog "Todas as seguintes"
+
+**Problema:** Botão "Todas" no dialog de edição dava a entender que transações anteriores seriam afetadas.
+
+**Solução:** Texto alterado para "Todas as seguintes" para indicar que apenas transações futuras são afetadas.
+
+**Arquivos modificados:** `src/pages/EditarTransacao.tsx`
+
+### 30. Limpar filtros melhor posicionado
+
+**Problema:** Botão "Limpar filtros" ficava desalinhado.
+
+**Solução:** Botão agora usa variante `outline`, alinhado à base com os inputs.
+
+**Arquivos modificados:** `src/components/transacoes/filtros.tsx`
+
+### 31. Editar Transação proporcional
+
+**Problema:** Página de edição de transação ficava estreita demais.
+
+**Solução:** Container alterado de `max-w-2xl` para `max-w-4xl`.
+
+**Arquivos modificados:** `src/pages/EditarTransacao.tsx`
+
+### 32. Editar Conta traz informações
+
+**Problema:** Ao clicar em Editar Conta, o formulário não trazia os dados da conta.
+
+**Solução:** Corrigido `handleSubmit` para fechar dialog e limpar `editingId` após submissão.
+
+**Arquivos modificados:** `src/pages/Contas.tsx`
+
+### 33. Últimas Transações reflete alterações
+
+**Problema:** Dashboard não refletia alterações feitas em transações.
+
+**Solução:** Mudei de `obterTransacoesMes` para filtrar diretamente do store, ordenando por `data` ao invés de `criadoEm`.
+
+**Arquivos modificados:** `src/components/dashboard/ultimas-transacoes.tsx`
+
+### 34. Saldo extrato considera efetivadas
+
+**Problema:** Saldo do dia no extrato não ajudava a prever se dá para concluir todas as transações.
+
+**Solução:** Extrato agora mostra dois saldos: "Efetivado" (apenas confirmadas) e "Saldo do dia" (todas).
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### DDR-006 - Gráficos com Recharts
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário precisa visualizar dados financeiros em gráficos.
+**Decisão:** Usar Recharts (já instalado) com 3 tipos de formato (pizza, barra, linhas) e 3 tipos de dados (despesas/receitas por categoria, evolução mensal).
+
+### DDR-007 - Saldo de Hoje vs Saldo do Mês
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário precisa ver saldo atual (confirmado) e saldo do mês (projetado).
+**Decisão:** Contas mostram dois saldos: "Saldo Hoje" (transações confirmadas até hoje) e "Saldo do Mês" (todas transações do mês).

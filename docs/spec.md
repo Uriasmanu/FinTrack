@@ -15,19 +15,56 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Em transaçoes tambem tem que mostrar bem grande o mes atual - adicione  ao requisitos
-### [aberto] Em Contas tambem tem que mostrar bem grande o mes atual - adicione  ao requisitos
-### [aberto] Adicione a categoria de receita chamada VA/VR - adicione  ao requisitos
-### [aberto] Em Contas o saldo atual tem que ser o saldo de hoje - adicione  ao requisitos
-### [aberto] adicione a a feature de graficos, eles tem que ter a opção de trocar entre os 3 tipos de formato (pizza, barra e linhas) - adicione  ao requisitos
-### [aberto] Tema escuro continua sem salvar, crie um caixa de dialogo confirmando a mudança de tema e registre no JSON o tema escolhido
-### [aberto] Ao perguntar se quer alterar somente essa transação ou todaas, troque para (seguintes) pois se colocar todas da a entender que vai alterar as anteriores, sendo que eu so altero as seguintes sem mexer nas anteriores
-### [aberto] O limpar filtro não esta bem posicionado
-### [aberto] O Editar Transação não esta bem proprocional
-### [aberto] quando clico em Editar Conta ele não esta trazendo as informaçoes da conta selecionada para ser editada
-### [aberto] Últimas Transações em dashbord não esta refletido corretamente as alterações que eu fiz em transações
 
 ## Histórico de Correções
+
+### [resolvido] 03/08/2026 - Transações mostrar mês atual grande
+**Arquivos afetados:** `src/pages/Transacoes.tsx`
+**Mudança:** Adicionado cabeçalho com indicador visual do mês atual (número + nome) na página de Transações.
+
+### [resolvido] 03/08/2026 - Contas mostrar mês atual grande
+**Arquivos afetados:** `src/pages/Contas.tsx`
+**Mudança:** Adicionado cabeçalho com indicador visual do mês atual na página de Contas.
+
+### [resolvido] 03/08/2026 - Adicionar categoria receita VA/VR
+**Arquivos afetados:** `src/data/categorias-default.json`
+**Mudança:** Adicionada categoria "VA/VR" (id: cat-012) com cor #059669 e ícone Utensils para receitas.
+
+### [resolvido] 03/08/2026 - Contas saldo atual = saldo de hoje (confirmadas)
+**Arquivos afetados:** `src/components/contas/conta-card.tsx`
+**Mudança:** Saldo "Hoje" considera apenas transações confirmadas até a data atual. Adicionado "Saldo do Mês" separado.
+
+### [resolvido] 03/08/2026 - Feature de gráficos (pizza, barra, linhas)
+**Arquivos afetados:** `src/pages/Graficos.tsx`
+**Mudança:** Página de gráficos implementada com Recharts. Opções: Despesas por Categoria, Receitas por Categoria, Evolução Mensal. Formatos: Pizza, Barra e Linhas.
+
+### [resolvido] 03/08/2026 - Tema escuro - dialog confirmação + salvar JSON
+**Arquivos afetados:** `src/components/layout/layout.tsx`
+**Mudança:** Adicionado AlertDialog confirmando mudança de tema. Tema é salvo no JSON apenas após confirmação.
+
+### [resolvido] 03/08/2026 - Trocar 'todas' por 'seguintes' no dialog
+**Arquivos afetados:** `src/pages/EditarTransacao.tsx`
+**Mudança:** Texto do dialog alterado de "Todas" para "Todas as seguintes" para indicar que apenas transações futuras são afetadas.
+
+### [resolvido] 03/08/2026 - Limpar filtro mal posicionado
+**Arquivos afetados:** `src/components/transacoes/filtros.tsx`
+**Mudança:** Botão "Limpar filtros" agora usa variante `outline`, alinhado à base com os inputs, e posicionado na mesma linha das datas.
+
+### [resolvido] 03/08/2026 - Editar Transação não proporcional
+**Arquivos afetados:** `src/pages/EditarTransacao.tsx`
+**Mudança:** Container alterado de `max-w-2xl` para `max-w-4xl` para melhor proporcionalidade.
+
+### [resolvido] 03/08/2026 - Editar Conta não traz informações
+**Arquivos afetados:** `src/pages/Contas.tsx`, `src/components/contas/conta-form.tsx`
+**Mudança:** Corrigido `handleSubmit` para fechar dialog e limpar `editingId` após submissão. Formulário usa `initialData` corretamente.
+
+### [resolvido] 03/08/2026 - Últimas Transações não reflete alterações
+**Arquivos afetados:** `src/components/dashboard/ultimas-transacoes.tsx`
+**Mudança:** Mudei de `obterTransacoesMes` para filtrar diretamente do store, ordenando por `data` ao invés de `criadoEm` para refletir alterações.
+
+### [resolvido] 03/08/2026 - Saldo extrato considera efetivadas
+**Arquivos afetados:** `src/pages/Transacoes.tsx`
+**Mudança:** Extrato agora mostra dois saldos: "Efetivado" (apenas transações confirmadas) e "Saldo do dia" (todas transações). Isso ajuda a prever se dá para concluir todas as transações.
 
 
 

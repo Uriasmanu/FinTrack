@@ -3,6 +3,16 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 function obterTemaInicial(): "claro" | "escuro" {
   try {
@@ -19,6 +29,8 @@ function obterTemaInicial(): "claro" | "escuro" {
 export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { dadosAno, atualizarConfig } = useFinanceStore();
+  const [dialogTemaAberto, setDialogTemaAberto] = useState(false);
+  const [temaPendente, setTemaPendente] = useState<"claro" | "escuro">("claro");
 
   const tema = dadosAno?.config.tema ?? obterTemaInicial();
 
@@ -33,7 +45,13 @@ export function Layout() {
 
   const handleTemaChange = () => {
     const novoTema = tema === "claro" ? "escuro" : "claro";
-    atualizarConfig({ tema: novoTema });
+    setTemaPendente(novoTema);
+    setDialogTemaAberto(true);
+  };
+
+  const confirmarTema = () => {
+    atualizarConfig({ tema: temaPendente });
+    setDialogTemaAberto(false);
   };
 
   return (
@@ -51,6 +69,23 @@ export function Layout() {
           <Outlet />
         </main>
       </div>
+
+      <AlertDialog open={dialogTemaAberto} onOpenChange={setDialogTemaAberto}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Alterar tema</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja alterar o tema para <strong>{temaPendente === "escuro" ? "escuro" : "claro"}</strong>? Esta preferência será salva.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmarTema}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
