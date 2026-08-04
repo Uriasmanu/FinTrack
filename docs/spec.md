@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] O saldono inicio do dia 4 em extrato, não esta coerente com o valor do saldo em conta. esta mostrando 1054,36 quando deveria estar mostrando 939,17
+### [aberto] O saldono inicio do dia 4 em extrato, não esta coerente com o valor do saldo em conta. esta mostrando 1054,36 quando deveria estar mostrando 939,17. é que o dia 3 (hoje) não esta levando em consideração o saldo na conta
 
 ### [aberto] o JSON do ano tem que ser armazenado fisicamente dentro de data
 
