@@ -54,7 +54,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Arquivo modificado:** `src/pages/Graficos.tsx`
 **Spec:** `docs/implementado/grafico-alimentacao-subtipos.md`
 
-### [aberto] A meta padrão Contas fixas e Lazer, não é uma meta de guardar e sim uma meta de limite de gasto, então ela usa como referencia todas as despesas que são recorrentes e parceladas
+### [resolvido] Meta padrão Lazer usa despesas recorrentes/parceladas como limite
+**Data resolução:** 04/08/2026
+**Solução:** A meta "Lazer" agora usa as despesas recorrentes e parceladas da categoria "Lazer" (cat-004) do mês atual como valor alvo, em vez de usar um multiplicador do salário. Se não houver despesas de lazer, usa o multiplicador como fallback. A meta "Conta Fixa" já usava despesas recorrentes/parceladas.
+**Arquivo modificado:** `src/components/metas/metas-predefinidas.tsx`
+**Spec:** `docs/implementado/meta-limite-gasto.md`
 
 ### [aberto] Quando eu clicar para editar uma meta (meta padrão tmabem) tem que trazer o valor original do card para eu alterar, atualmente não tras
 

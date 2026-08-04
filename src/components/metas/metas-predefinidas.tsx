@@ -44,6 +44,16 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     })
     .reduce((total, t) => total + t.valor, 0);
 
+  const despesasLazerMes = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      if (t.tipo !== "despesa") return false;
+      if (t.categoriaId !== "cat-004") return false;
+      if (t.tipoRecorrencia !== "recorrente" && t.tipoRecorrencia !== "parcelado") return false;
+      const data = new Date(t.data);
+      return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+    })
+    .reduce((total, t) => total + t.valor, 0);
+
   const metasComValores = metasPadrao.map((meta) => {
     const salarioMensal = obterSalarioMensal(meta);
     let valorAlvo = 0;
@@ -70,7 +80,9 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           parcelaMensal = valorAlvo;
           break;
         case "Lazer":
-          valorAlvo = salarioMensal * (dadosAno?.config?.multiplicadores?.lazer ?? 0.3);
+          valorAlvo = despesasLazerMes > 0
+            ? despesasLazerMes
+            : salarioMensal * (dadosAno?.config?.multiplicadores?.lazer ?? 0.3);
           parcelaMensal = valorAlvo;
           break;
       }
