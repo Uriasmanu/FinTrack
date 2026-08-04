@@ -92,7 +92,8 @@ export function TransacaoForm({
 
   const contaTicket = contas.find((c) => c.tipo === "ticket");
 
-  if (categoriaId === "cat-001" && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
+  const categoriasAutoTicket = ["cat-001", "cat-009", "cat-012"];
+  if (categoriasAutoTicket.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
     setValue("contaId", contaTicket.id);
   }
 
@@ -131,7 +132,15 @@ export function TransacaoForm({
           <label className="text-sm font-medium">Tipo</label>
           <Select
             value={watch("tipo")}
-            onValueChange={(v) => setValue("tipo", v as "receita" | "despesa")}
+            onValueChange={(v) => {
+              setValue("tipo", v as "receita" | "despesa");
+              const novasCategorias = (dadosAno?.categorias ?? []).filter(
+                (c) => c.tipo === v || c.tipo === "ambos"
+              );
+              if (novasCategorias.length > 0 && !novasCategorias.find((c) => c.id === watch("categoriaId"))) {
+                setValue("categoriaId", novasCategorias[0].id);
+              }
+            }}
           >
             <SelectTrigger>
               <SelectValue />

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/transacoes", label: "Transações", icon: ArrowLeftRight },
+  { path: "/transferencia", label: "Transferência", icon: ArrowLeftRight },
   { path: "/contas", label: "Contas", icon: Wallet },
   { path: "/cartoes", label: "Cartões", icon: CreditCard },
   { path: "/graficos", label: "Gráficos", icon: BarChart3 },

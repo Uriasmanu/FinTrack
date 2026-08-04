@@ -5,6 +5,7 @@ import {
   LineChart, Line,
   ResponsiveContainer,
 } from "recharts";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,8 +49,27 @@ export function Graficos() {
   const [tipoGrafico, setTipoGrafico] = useState<TipoGrafico>("pizza");
   const [tipoDado, setTipoDado] = useState<TipoDado>("despesas_categoria");
 
-  const mesAtual = new Date().getMonth();
-  const anoAtual = new Date().getFullYear();
+  const hoje = new Date();
+  const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
+  const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
+
+  const mesAtual = mesSelecionado;
+  const anoAtual = anoSelecionado;
+  const isMesAtual = mesSelecionado === hoje.getMonth() && anoSelecionado === hoje.getFullYear();
+
+  function navegarMes(direcao: -1 | 1) {
+    let novoMes = mesSelecionado + direcao;
+    let novoAno = anoSelecionado;
+    if (novoMes < 0) { novoMes = 11; novoAno -= 1; }
+    else if (novoMes > 11) { novoMes = 0; novoAno += 1; }
+    setMesSelecionado(novoMes);
+    setAnoSelecionado(novoAno);
+  }
+
+  function irParaMesAtual() {
+    setMesSelecionado(hoje.getMonth());
+    setAnoSelecionado(hoje.getFullYear());
+  }
 
   const dadosGrafico = useMemo(() => {
     if (!dadosAno) return [];
@@ -188,13 +208,28 @@ export function Graficos() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-          {mesAtual + 1}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+            {mesSelecionado + 1}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Gráficos - {MESES_COMPLETOS[mesSelecionado]} {anoSelecionado}</h2>
+            <p className="text-muted-foreground">Visualize seus dados financeiros</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold">Gráficos - {MESES_COMPLETOS[mesAtual]}</h2>
-          <p className="text-muted-foreground">Visualize seus dados financeiros</p>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => navegarMes(-1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          {!isMesAtual && (
+            <Button variant="outline" size="sm" onClick={irParaMesAtual}>
+              Hoje
+            </Button>
+          )}
+          <Button variant="outline" size="icon" onClick={() => navegarMes(1)}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 

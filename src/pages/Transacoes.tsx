@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, AlertTriangle } from "lucide-react";
+import { Plus, AlertTriangle, ChevronLeft, ChevronRight, ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TransacaoItem } from "@/components/transacoes/transacao-item";
@@ -18,11 +18,34 @@ export function Transacoes() {
   const { dadosAno } = useFinanceStore();
 
   const hoje = new Date();
-  const mesAtual = hoje.getMonth();
-  const nomeMes = MESES[mesAtual];
-  const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-  const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-  const formatarDataISO = (d: Date) => d.toISOString().split("T")[0];
+  const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
+  const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
+
+  const nomeMes = MESES[mesSelecionado];
+  const primeiroDiaMes = new Date(anoSelecionado, mesSelecionado, 1);
+  const ultimoDiaMes = new Date(anoSelecionado, mesSelecionado + 1, 0);
+  const formatarDataISO = (d: Date) => {
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0");
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  };
+
+  const isMesAtual = mesSelecionado === hoje.getMonth() && anoSelecionado === hoje.getFullYear();
+
+  function navegarMes(direcao: -1 | 1) {
+    let novoMes = mesSelecionado + direcao;
+    let novoAno = anoSelecionado;
+    if (novoMes < 0) { novoMes = 11; novoAno -= 1; }
+    else if (novoMes > 11) { novoMes = 0; novoAno += 1; }
+    setMesSelecionado(novoMes);
+    setAnoSelecionado(novoAno);
+  }
+
+  function irParaMesAtual() {
+    setMesSelecionado(hoje.getMonth());
+    setAnoSelecionado(hoje.getFullYear());
+  }
 
   const [filtros, setFiltros] = useState<FiltrosTransacao>({
     busca: "",
@@ -33,7 +56,38 @@ export function Transacoes() {
     dataFim: formatarDataISO(ultimoDiaMes),
   });
 
+  useEffect(() => {
+    const primeiroDia = new Date(anoSelecionado, mesSelecionado, 1);
+    const ultimoDia = new Date(anoSelecionado, mesSelecionado + 1, 0);
+    setFiltros((prev) => ({
+      ...prev,
+      dataInicio: formatarDataISO(primeiroDia),
+      dataFim: formatarDataISO(ultimoDia),
+    }));
+  }, [mesSelecionado, anoSelecionado]);
+
   const temContas = (dadosAno?.contas.length ?? 0) > 0;
+
+  const saldoInicialContas = (dadosAno?.contas ?? [])
+    .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId)
+    .reduce((acc, c) => acc + (c.saldoInicial ?? 0), 0);
+
+  const transacoesAnteriores = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
+      if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
+      return false;
+    })
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+
+  const saldoConfirmadoAnterior = (dadosAno?.transacoes ?? [])
+    .filter((t) => {
+      if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
+      if (!t.confirmada) return false;
+      if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
+      return false;
+    })
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
   const transacoesFiltradas = (dadosAno?.transacoes ?? [])
     .filter((t) => {
@@ -59,8 +113,8 @@ export function Transacoes() {
     })
     .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
-  let saldoAcumulado = 0;
-  let saldoConfirmado = 0;
+  let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
+  let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
     saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
     if (t.confirmada) {
@@ -82,23 +136,45 @@ export function Transacoes() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-            {mesAtual + 1}
+            {mesSelecionado + 1}
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Transações - {nomeMes}</h2>
+            <h2 className="text-2xl font-bold">Transações - {nomeMes} {anoSelecionado}</h2>
             <p className="text-muted-foreground">
               Extrato bancário com saldo acumulado
             </p>
           </div>
         </div>
-        <Button
-          onClick={() => navigate("/transacoes/nova")}
-          disabled={!temContas}
-          title={!temContas ? "Cadastre pelo menos 1 conta antes de criar transações" : undefined}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Nova Transação
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => navegarMes(-1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          {!isMesAtual && (
+            <Button variant="outline" size="sm" onClick={irParaMesAtual}>
+              Hoje
+            </Button>
+          )}
+          <Button variant="outline" size="icon" onClick={() => navegarMes(1)}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            onClick={() => navigate("/transferencia")}
+            disabled={!temContas}
+            title={!temContas ? "Cadastre pelo menos 1 conta antes de criar transferências" : undefined}
+            variant="outline"
+          >
+            <ArrowLeftRight className="mr-2 h-4 w-4" />
+            Transferir
+          </Button>
+          <Button
+            onClick={() => navigate("/transacoes/nova")}
+            disabled={!temContas}
+            title={!temContas ? "Cadastre pelo menos 1 conta antes de criar transações" : undefined}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Nova Transação
+          </Button>
+        </div>
       </div>
 
       {!temContas && (

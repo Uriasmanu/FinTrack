@@ -83,18 +83,18 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3">
         <SaldoCard mes={mesSelecionado} ano={anoSelecionado} />
         <ReceitasDespesasCard mes={mesSelecionado} ano={anoSelecionado} />
         <ResumoMensal mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <ProximasTransacoes mes={mesSelecionado} ano={anoSelecionado} />
         <ResumoCategorias mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <DespesasPorFinalidade />
         <ObjetivosPersonalizados />
       </div>

@@ -1,0 +1,40 @@
+{
+  "ano": 2026,
+  "transacoes": [],
+  "categorias": [
+    { "id": "cat-001", "nome": "Alimentacao", "tipo": "despesa", "cor": "#F97316", "icone": "UtensilsCrossed" },
+    { "id": "cat-002", "nome": "Transporte", "tipo": "despesa", "cor": "#3B82F6", "icone": "Car" },
+    { "id": "cat-003", "nome": "Moradia", "tipo": "despesa", "cor": "#8B5CF6", "icone": "Home" },
+    { "id": "cat-004", "nome": "Lazer", "tipo": "despesa", "cor": "#EC4899", "icone": "Gamepad2" },
+    { "id": "cat-005", "nome": "Saude", "tipo": "despesa", "cor": "#10B981", "icone": "Heart" },
+    { "id": "cat-006", "nome": "Educacao", "tipo": "despesa", "cor": "#06B6D4", "icone": "GraduationCap" },
+    { "id": "cat-007", "nome": "Salario", "tipo": "receita", "cor": "#16A34A", "icone": "Banknote" },
+    { "id": "cat-008", "nome": "Investimentos", "tipo": "receita", "cor": "#6366F1", "icone": "TrendingUp" },
+    { "id": "cat-009", "nome": "Ticket", "tipo": "receita", "cor": "#F59E0B", "icone": "Ticket" },
+    { "id": "cat-010", "nome": "Outros", "tipo": "ambos", "cor": "#6B7280", "icone": "MoreHorizontal" },
+    { "id": "cat-011", "nome": "Divida", "tipo": "despesa", "cor": "#DC2626", "icone": "AlertCircle" },
+    { "id": "cat-012", "nome": "VA/VR", "tipo": "receita", "cor": "#059669", "icone": "Utensils" },
+    { "id": "cat-013", "nome": "Transferencia", "tipo": "ambos", "cor": "#8B5CF6", "icone": "ArrowLeftRight" }
+  ],
+  "contas": [],
+  "cartoes": [],
+  "metas": [
+    { "id": "meta-001", "nome": "Viver de Renda", "tipo": "padrao", "ativo": true, "valorAlvo": 0, "valorAtual": 0, "meses": 120, "parcelaMensal": 0, "dataInicio": "2026-01-01", "dataFim": "2036-01-01", "status": "em_andamento", "receitasBase": [] },
+    { "id": "meta-002", "nome": "Reserva de Emergencia", "tipo": "padrao", "ativo": true, "valorAlvo": 0, "valorAtual": 0, "meses": 6, "parcelaMensal": 0, "dataInicio": "2026-01-01", "dataFim": "2026-07-01", "status": "em_andamento", "receitasBase": [] },
+    { "id": "meta-003", "nome": "Guardar por Mes", "tipo": "padrao", "ativo": true, "valorAlvo": 0, "valorAtual": 0, "meses": 1, "parcelaMensal": 0, "dataInicio": "2026-01-01", "dataFim": "2036-01-01", "status": "em_andamento", "receitasBase": [] },
+    { "id": "meta-004", "nome": "Conta Fixa", "tipo": "padrao", "ativo": true, "valorAlvo": 0, "valorAtual": 0, "meses": 1, "parcelaMensal": 0, "dataInicio": "2026-01-01", "dataFim": "2036-01-01", "status": "em_andamento", "receitasBase": [] },
+    { "id": "meta-005", "nome": "Lazer", "tipo": "padrao", "ativo": true, "valorAlvo": 0, "valorAtual": 0, "meses": 1, "parcelaMensal": 0, "dataInicio": "2026-01-01", "dataFim": "2036-01-01", "status": "em_andamento", "receitasBase": [] }
+  ],
+  "config": {
+    "salario": 0,
+    "tema": "claro",
+    "moeda": "BRL",
+    "multiplicadores": {
+      "viverDeRenda": 200,
+      "reservaEmergencia": 6,
+      "guardarPorMes": 0.1,
+      "contaFixa": 0.6,
+      "lazer": 0.3
+    }
+  }
+}

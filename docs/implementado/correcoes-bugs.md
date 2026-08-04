@@ -400,3 +400,77 @@
 **Data:** 03/08/2026
 **Contexto:** Usuário pode ter múltiplas fontes de receita e quer escolher quais usar como base para cálculo de metas.
 **Decisão:** Campo `receitasBase: string[]` no tipo Meta. Se vazio, usa todas categorias de receita. Formulário inclui seletor de categorias.
+
+---
+
+## Data: 03/08/2026 - Ciclo 4: Correções de Saldo, Navegação e Transferência
+
+### 41. Saldo extrato inclui saldoInicial e transações anteriores
+
+**Problema:** Extrato começava de zero, não incluía saldoInicial das contas nem transações anteriores ao período filtrado.
+
+**Solução:** Extrato agora calcula saldoInicial das contas filtradas e soma transações anteriores ao período. Saldo acumulado começa do saldo real.
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### 42. JSON do ano armazenado em data/
+
+**Problema:** Dados ficavam apenas no localStorage, sem estrutura física no projeto.
+
+**Solução:** Criado diretório `data/` com `fintrack_2026.json` contendo estrutura completa padrão.
+
+**Arquivos criados:** `data/fintrack_2026.json`
+
+### 43. Dashboard com distribuição melhorada de cards
+
+**Problema:** Cards do Dashboard tinham distribuição desequilibrada (3 cards em grid de 4).
+
+**Solução:** Grid ajustado para 3 colunas (topo) e 2 colunas (meio/fim).
+
+**Arquivos modificados:** `src/pages/Dashboard.tsx`
+
+### 44. Transações com navegação de meses
+
+**Problema:** Página de transações não permitia ver meses anteriores ou seguintes.
+
+**Solução:** Adicionado botões de navegação anterior/atual/seguinte. Filtros de data atualizam automaticamente.
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### 45. Gráficos com navegação de meses
+
+**Problema:** Página de gráficos não permitia ver meses anteriores ou seguintes.
+
+**Solução:** Adicionado botões de navegação anterior/atual/seguinte.
+
+**Arquivos modificados:** `src/pages/Graficos.tsx`
+
+### 46. Receitas com categorias ticket/VR/VA
+
+**Problema:** Ao criar receita, categorias ticket/VR/VA não eram atualizadas automaticamente ao trocar tipo.
+
+**Solução:** Ao trocar tipo, categorias são filtradas automaticamente. Categorias ticket/VR/VA (cat-009, cat-012) auto-selecionam conta ticket.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 47. Transferência entre contas
+
+**Problema:** Não existia forma de transferir dinheiro entre contas.
+
+**Solução:** Criada página `/transferencia` com formulário para conta origem/destino, valor e data. Cria duas transações vinculadas (despesa + receita). Adicionada categoria "Transferencia" (cat-013) e link na sidebar.
+
+**Arquivos criados/modificados:** `src/pages/Transferencia.tsx`, `src/App.tsx`, `src/components/layout/sidebar.tsx`, `src/data/categorias-default.json`
+
+### DDR-010 - Extrato com Saldo Real
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Extrato mostrava saldo zerado, não coerente com saldo real da conta.
+**Decisão:** Extrato inclui saldoInicial das contas e transações anteriores ao período filtrado para mostrar saldo real.
+
+### DDR-011 - Transferência entre Contas
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário precisa transferir dinheiro entre contas (ex: corrente para poupança).
+**Decisão:** Criar duas transações vinculadas (despesa na origem + receita no destino) com mesmo grupoParcelaId. Página dedicada com formulário simplificado.

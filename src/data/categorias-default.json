@@ -2,85 +2,92 @@
   {
     "id": "cat-001",
     "nome": "Alimentacao",
+    "tipo": "despesa",
     "cor": "#F97316",
-    "icone": "UtensilsCrossed",
-    "tipo": "despesa"
+    "icone": "UtensilsCrossed"
   },
   {
     "id": "cat-002",
     "nome": "Transporte",
+    "tipo": "despesa",
     "cor": "#3B82F6",
-    "icone": "Car",
-    "tipo": "despesa"
+    "icone": "Car"
   },
   {
     "id": "cat-003",
     "nome": "Moradia",
+    "tipo": "despesa",
     "cor": "#8B5CF6",
-    "icone": "Home",
-    "tipo": "despesa"
+    "icone": "Home"
   },
   {
     "id": "cat-004",
     "nome": "Lazer",
+    "tipo": "despesa",
     "cor": "#EC4899",
-    "icone": "Gamepad2",
-    "tipo": "despesa"
+    "icone": "Gamepad2"
   },
   {
     "id": "cat-005",
     "nome": "Saude",
+    "tipo": "despesa",
     "cor": "#10B981",
-    "icone": "Heart",
-    "tipo": "despesa"
+    "icone": "Heart"
   },
   {
     "id": "cat-006",
     "nome": "Educacao",
+    "tipo": "despesa",
     "cor": "#06B6D4",
-    "icone": "GraduationCap",
-    "tipo": "despesa"
+    "icone": "GraduationCap"
   },
   {
     "id": "cat-007",
     "nome": "Salario",
+    "tipo": "receita",
     "cor": "#16A34A",
-    "icone": "Banknote",
-    "tipo": "receita"
+    "icone": "Banknote"
   },
   {
     "id": "cat-008",
     "nome": "Investimentos",
+    "tipo": "receita",
     "cor": "#6366F1",
-    "icone": "TrendingUp",
-    "tipo": "receita"
+    "icone": "TrendingUp"
   },
   {
     "id": "cat-009",
     "nome": "Ticket",
+    "tipo": "receita",
     "cor": "#F59E0B",
-    "icone": "Ticket",
-    "tipo": "receita"
+    "icone": "Ticket"
   },
   {
     "id": "cat-010",
     "nome": "Outros",
+    "tipo": "ambos",
     "cor": "#6B7280",
-    "icone": "MoreHorizontal",
-    "tipo": "ambos"
+    "icone": "MoreHorizontal"
   },
   {
     "id": "cat-011",
     "nome": "Divida",
+    "tipo": "despesa",
     "cor": "#DC2626",
-    "icone": "AlertCircle",
-    "tipo": "despesa"
+    "icone": "AlertCircle"
   },
   {
     "id": "cat-012",
     "nome": "VA/VR",
+    "tipo": "receita",
     "cor": "#059669",
-    "icone": "Utensils",
-    "tipo": "receita"
+    "icone": "Utensils"
+  },
+  {
+    "id": "cat-013",
+    "nome": "Transferencia",
+    "tipo": "ambos",
+    "cor": "#8B5CF6",
+    "icone": "ArrowLeftRight"
   }
 ]

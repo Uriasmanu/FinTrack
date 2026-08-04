@@ -15,21 +15,54 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] O saldono inicio do dia 4 em extrato, não esta coerente com o valor do saldo em conta. esta mostrando 1054,36 quando deveria estar mostrando 939,17. é que o dia 3 (hoje) não esta levando em consideração o saldo na conta
+### [aberto] Editar metas não esta trazendo o valor do card selecionado para editar
 
-### [aberto] o JSON do ano tem que ser armazenado fisicamente dentro de data
+### [aberto] saldo inicial no dia 03/08 tem que considerar que a conta foi criada com o valor de 1036 e não Saldo do dia: R$ 914,17
 
-### [aberto] melhore as distribuição dos card em Dashboard
+### [aberto] O saldo do extrato sempre mostra o valor no inicio do dia o e o valor no final do dia
 
-### [aberto] Em transações tem que ter a possibilidade de alem de ver o mes atual, mostre o mes anterior e o proximo mes
+### [aberto] Saldo Total em dashbord não esta mostrando o valor corretamente
 
-### [aberto] Em graficos tem que ter a possibilidade de alem de ver o mes atual, mostre o mes anterior e o proximo mes
+### [aberto] em nova transação alem do nome do banco, tem que traser entre parenteses se é conta corrente ou poupança etc
 
-### [aberto] em Nova Transação em receitas tem que ter a categoria ticket/VR/VA
-
-### [aberto] Tem que ter um tipo de transação que é a movimentação entre contas, exemplo quero fazer uma tranferencia da conta corrrente para a poupança e chamar categorizar essa transferencia de guardar
+### [aberto] em Transferência entre Contas não esta aparecendo a categoria guardar
 
 ## Histórico de Correções
+
+### [resolvido] Saldo extrato não coerente com saldo conta
+**Ciclo:** 4
+**Arquivos afetados:** `src/pages/Transacoes.tsx`
+**Descrição:** Extrato agora inclui saldoInicial das contas e transações anteriores ao período filtrado. Saldo acumulado começa do saldo real da conta, não de zero.
+
+### [resolvido] JSON do ano armazenado fisicamente em data/
+**Ciclo:** 4
+**Arquivos afetados:** `data/fintrack_2026.json`
+**Descrição:** Criado diretório data/ com JSON padrão do ano contendo estrutura completa (categorias, contas, metas, config).
+
+### [resolvido] Melhorar distribuição dos cards no Dashboard
+**Ciclo:** 4
+**Arquivos afetados:** `src/pages/Dashboard.tsx`
+**Descrição:** Grid ajustado para 3 colunas (topo) e 2 colunas (meio/fim) para melhor aproveitamento do espaço.
+
+### [resolvido] Transações com navegação de meses
+**Ciclo:** 4
+**Arquivos afetados:** `src/pages/Transacoes.tsx`
+**Descrição:** Adicionado botões de navegação anterior/atual/seguinte na página de transações. Filtros de data atualizam automaticamente ao mudar mês.
+
+### [resolvido] Gráficos com navegação de meses
+**Ciclo:** 4
+**Arquivos afetados:** `src/pages/Graficos.tsx`
+**Descrição:** Adicionado botões de navegação anterior/atual/seguinte na página de gráficos.
+
+### [resolvido] Nova Transação em receitas com categoria ticket/VR/VA
+**Ciclo:** 4
+**Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`
+**Descrição:** Ao trocar tipo para receita, categorias são atualizadas automaticamente. Categorias ticket/VR/VA (cat-009, cat-012) agora auto-selecionam conta ticket.
+
+### [resolvido] Tipo de transação movimentação entre contas (transferência)
+**Ciclo:** 4
+**Arquivos afetados:** `src/pages/Transferencia.tsx`, `src/App.tsx`, `src/components/layout/sidebar.tsx`, `src/data/categorias-default.json`
+**Descrição:** Criada página de transferência com formulário para selecionar conta origem/destino, valor e data. Cria duas transações vinculadas (despesa + receita). Adicionada rota /transferencia e link na sidebar. Categoria "Transferencia" (cat-013) adicionada.
 
 
 
