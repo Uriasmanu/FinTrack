@@ -18,7 +18,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
-### [aberto] Quero pode efetiver uma transação em Próximas Transações no dashbord de forma pratica
+### [resolvido] Quero pode efetiver uma transação em Próximas Transações no dashbord de forma pratica
+**Data resolução:** 04/08/2026
+**Solução:** Adicionado botão de efetivar (ícone Check) ao lado de cada transação no card "Próximas Transações" do Dashboard. Ao clicar, a transação é marcada como `confirmada: true` e some do card.
+**Arquivo modificado:** `src/components/dashboard/proximas-transacoes.tsx`
+**Spec:** `docs/implementado/efetivar-transacao-dashboard.md`
 
 ### [aberto] Quando coloco uma despesa como recorrente e olho o mes seguinte ela não esta lá
 

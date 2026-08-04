@@ -255,11 +255,12 @@ fintrack/
 - Resumo de receitas e despesas do mês atual
 - Comparativo com o mês anterior (variação percentual)
 - Cards com indicadores rápidos (saldo, receitas, despesas, economia)
-- Próximas transações (pendentes/não confirmadas)
+- Próximas transações (pendentes/não confirmadas) com botão de efetivar
 - Top 3 categorias de despesa com barras de progresso
 - Despesas por finalidade (Gastos Fixos, Lazer, Educação)
 - Objetivos personalizados com toggle ativo/desativado
 - Navegação entre meses (anterior/próximo + botão "Hoje")
+- Botão de efetivar transação diretamente no card "Próximas Transações"
 - ✅ **Implementado**: `Dashboard.tsx` + 8 componentes em `components/dashboard/`
 
 ### 2. Receitas e Despesas ✅
@@ -639,6 +640,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 5 | Sem aviso de saldo negativo | Adicionar projeção e alerta |
 | 6 | Recorrentes não aparecem futuros | Gerar para 12 meses |
 | 7 | Faltavam categorias específicas | Adicionar 5 categorias novas |
+| 8 | Efetivar transação no Dashboard | Adicionar botão Check no card "Próximas Transações" |
 
 ### Componentes não utilizados
 
@@ -680,3 +682,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 03/08/2026 | Seção de pendências e não implementados adicionada |
 | 03/08/2026 | Correções de ciclo: saldo do dia, categorias, tema, gráficos, saldo negativo, recorrentes, categorias novas |
 | 03/08/2026 | Correções extras: comparação receitas/despesas, migração de categorias VA/VR |
+| 04/08/2026 | Feature: Efetivar transação no Dashboard (botão Check no card Próximas Transações) |

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { RefreshCw, Clock } from "lucide-react";
+import { RefreshCw, Clock, Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 
@@ -11,7 +12,7 @@ interface ProximasTransacoesProps {
 }
 
 export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
-  const { dadosAno } = useFinanceStore();
+  const { dadosAno, editarTransacao } = useFinanceStore();
   const hoje = new Date();
   const hojeStr = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
@@ -103,6 +104,15 @@ export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
                     {transacao.tipo === "receita" ? "+" : "-"}
                     {formatarMoeda(transacao.valor)}
                   </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-success hover:bg-success/10"
+                    onClick={() => editarTransacao(transacao.id, { confirmada: true })}
+                    title="Efetivar transação"
+                  >
+                    <Check className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             ))}
