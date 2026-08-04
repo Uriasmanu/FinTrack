@@ -114,3 +114,109 @@
 **Data:** 03/08/2026
 **Contexto:** Campo "nome" no formulário de contas era redundante com o campo "banco".
 **Decisão:** Remover campo "nome" completamente. Identificador da conta é o banco.
+
+---
+
+## Data: 03/08/2026 - Ciclo 2: Correções de UX e Funcionalidades
+
+### 12. Meta de despesa fixa considera despesas recorrentes
+
+**Problema:** A meta "Conta Fixa" usava apenas percentual do salário, sem considerar despesas reais recorrentes.
+
+**Solução:** Cálculo da meta "Conta Fixa" agora soma despesas recorrentes do mês atual. Se não houver despesas recorrentes, usa o percentual do salário como fallback.
+
+**Arquivos modificados:** `src/components/metas/metas-predefinidas.tsx`
+
+### 13. Detecção de duplicatas ao cadastrar transação
+
+**Problema:** Não havia aviso ao cadastrar transação com descrição, valor e data iguais a uma existente.
+
+**Solução:** Adicionada detecção de duplicatas no TransacaoForm. Quando há coincidência, exibe card de aviso com preview das transações existentes.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 14. Extrato mostra mês atual por padrão
+
+**Problema:** Filtros de transações iniciavam vazios, mostrando todas as transações.
+
+**Solução:** Filtros agora iniciam com dataInicio = 1º dia do mês atual e dataFim = último dia do mês atual. Limpar filtros também reseta para o mês atual.
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`, `src/components/transacoes/filtros.tsx`
+
+### 15. Editar recorrente/parcelada pergunta "só essa ou todas"
+
+**Problema:** Ao editar transação recorrente/parcelada, a alteração afetava apenas aquela transação.
+
+**Solução:** Ao alterar valor ou data de transação recorrente/parcelada, exibe dialog perguntando "Só esta ou todas?" com opções de edição individual ou em grupo.
+
+**Arquivos modificados:** `src/pages/EditarTransacao.tsx`
+
+### 16. Categoria "Divida" adicionada
+
+**Problema:** Não existia categoria para dívidas.
+
+**Solução:** Adicionada categoria "Divida" (id: cat-011) com cor #DC2626 e ícone AlertCircle.
+
+**Arquivos modificados:** `src/data/categorias-default.json`
+
+### 17. Saldo Total mostra mês atual
+
+**Problema:** SaldoCard exibia saldo total acumulado de todos os meses.
+
+**Solução:** SaldoCard agora exibe saldo do mês atual (receitas - despesas do mês).
+
+**Arquivos modificados:** `src/components/dashboard/saldo-card.tsx`
+
+### 18. Categorias movidas para Configurações
+
+**Problema:** Gerenciamento de categorias ficava na sidebar.
+
+**Solução:** Link "Categorias" removido da sidebar. Página Configuracoes implementada com gerenciamento completo de categorias.
+
+**Arquivos modificados:** `src/components/layout/sidebar.tsx`, `src/pages/Configuracoes.tsx`
+
+### 19. Modo escuro persiste ao recarregar
+
+**Problema:** Tema escuro reseta ao recarregar devido a timing na inicialização.
+
+**Solução:** Layout lê tema diretamente do localStorage na inicialização, evitando flash antes do store ser carregado.
+
+**Arquivos modificados:** `src/components/layout/layout.tsx`
+
+### 20. Últimas Transações mostra mês atual
+
+**Problema:** Dashboard exibia últimas 5 transações de todos os meses.
+
+**Solução:** UltimasTransacoes agora filtra por transações do mês atual antes de ordenar e pegar as 5 mais recentes.
+
+**Arquivos modificados:** `src/components/dashboard/ultimas-transacoes.tsx`
+
+### 21. Alertas de Metas aprimorados
+
+**Problema:** Cálculo de alertas de metas era básico e não mostrava informações úteis.
+
+**Solução:** Alertas aprimorados com status detalhado, cálculo de parcela mensal necessária para metas atrasadas, e proteção contra divisão por zero.
+
+**Arquivos modificados:** `src/components/dashboard/alerta-metas.tsx`
+
+### 22. Dashboard evidencia mês atual
+
+**Problema:** Dashboard não mostrava qual mês estava sendo exibido.
+
+**Solução:** Adicionado cabeçalho no Dashboard com indicador visual do mês atual (número + nome do mês + ano).
+
+**Arquivos modificados:** `src/pages/Dashboard.tsx`
+
+### DDR-004 - Dashboard Filtrado por Mês
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Usuário precisa ver dados do mês atual no dashboard, não o acumulado anual.
+**Decisão:** Dashboard mostra dados do mês atual por padrão. Componentes usam `obterReceitasMes`/`obterDespesasMes` ao invés de `obterSaldoAtual`.
+
+### DDR-005 - Categorias em Configurações
+
+**Status:** Aceito
+**Data:** 03/08/2026
+**Contexto:** Sidebar ficava poluída com link de categorias que não é acessado frequentemente.
+**Decisão:** Mover gerenciamento de categorias para dentro de Configurações, mantendo a rota `/categorias` existente mas sem exibir na sidebar.

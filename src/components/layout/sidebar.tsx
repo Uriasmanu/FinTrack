@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   ArrowLeftRight,
-  Tag,
   Wallet,
   CreditCard,
   BarChart3,
@@ -17,7 +16,6 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/transacoes", label: "Transações", icon: ArrowLeftRight },
-  { path: "/categorias", label: "Categorias", icon: Tag },
   { path: "/contas", label: "Contas", icon: Wallet },
   { path: "/cartoes", label: "Cartões", icon: CreditCard },
   { path: "/graficos", label: "Gráficos", icon: BarChart3 },

@@ -34,13 +34,18 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
   }
 
   function limparFiltros() {
+    const hoje = new Date();
+    const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    const formatarDataISO = (d: Date) => d.toISOString().split("T")[0];
+
     onFiltrosChange({
       busca: "",
       tipo: "todos",
       categoriaId: "todas",
       contaId: "todas",
-      dataInicio: "",
-      dataFim: "",
+      dataInicio: formatarDataISO(primeiroDiaMes),
+      dataFim: formatarDataISO(ultimoDiaMes),
     });
   }
 

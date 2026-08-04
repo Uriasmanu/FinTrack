@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFinanceStore } from "@/stores/useFinanceStore";
+import { formatarMoeda, formatarData } from "@/lib/calculos";
 import type { TipoRecorrencia } from "@/types";
 
 const transacaoSchema = z.object({
@@ -68,11 +70,22 @@ export function TransacaoForm({
   const tipo = watch("tipo");
   const tipoRecorrencia = watch("tipoRecorrencia");
   const categoriaId = watch("categoriaId");
+  const descricao = watch("descricao");
+  const valor = watch("valor");
+  const data = watch("data");
   const categorias = dadosAno?.categorias.filter(
     (c) => c.tipo === tipo || c.tipo === "ambos"
   ) ?? [];
   const contas = dadosAno?.contas ?? [];
   const cartoes = dadosAno?.cartoes ?? [];
+
+  const duplicatas = (dadosAno?.transacoes ?? []).filter((t) => {
+    if (isEditing) return false;
+    if (t.descricao.toLowerCase() !== descricao?.toLowerCase()) return false;
+    if (Math.abs(t.valor - (valor ?? 0)) > 0.01) return false;
+    if (data && t.data !== data) return false;
+    return true;
+  });
 
   const contaTicket = contas.find((c) => c.tipo === "ticket");
 
@@ -243,6 +256,36 @@ export function TransacaoForm({
           </p>
         </div>
       </div>
+
+      {duplicatas.length > 0 && (
+        <div className="border border-warning bg-warning/5 rounded-lg p-4 space-y-3">
+          <div className="flex items-center gap-2 text-warning">
+            <AlertTriangle className="h-5 w-5" />
+            <span className="font-medium">Possível transação duplicada</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Já existe {duplicatas.length} transação(ões) com esta mesma descrição e valor:
+          </p>
+          <div className="space-y-2">
+            {duplicatas.slice(0, 3).map((t) => (
+              <div key={t.id} className="flex items-center justify-between text-sm bg-background rounded p-2">
+                <div>
+                  <span className="font-medium">{t.descricao}</span>
+                  <span className="text-muted-foreground ml-2">
+                    {formatarData(t.data)}
+                  </span>
+                </div>
+                <span className={t.tipo === "receita" ? "text-success" : "text-destructive"}>
+                  {t.tipo === "receita" ? "+" : "-"}{formatarMoeda(t.valor)}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Tem certeza que deseja cadastrar duplicado?
+          </p>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2">
         <Button type="submit">

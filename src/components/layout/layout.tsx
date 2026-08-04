@@ -4,11 +4,23 @@ import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
+function obterTemaInicial(): "claro" | "escuro" {
+  try {
+    const chave = `fintrack_${new Date().getFullYear()}`;
+    const dados = localStorage.getItem(chave);
+    if (dados) {
+      const parse = JSON.parse(dados);
+      if (parse?.config?.tema === "escuro") return "escuro";
+    }
+  } catch {}
+  return "claro";
+}
+
 export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { dadosAno, atualizarConfig } = useFinanceStore();
 
-  const tema = dadosAno?.config.tema ?? "claro";
+  const tema = dadosAno?.config.tema ?? obterTemaInicial();
 
   useEffect(() => {
     const root = document.documentElement;

@@ -68,5 +68,12 @@
     "cor": "#6B7280",
     "icone": "MoreHorizontal",
     "tipo": "ambos"
+  },
+  {
+    "id": "cat-011",
+    "nome": "Divida",
+    "cor": "#DC2626",
+    "icone": "AlertCircle",
+    "tipo": "despesa"
   }
 ]

@@ -8,8 +8,16 @@ import { ObjetivosPersonalizados } from "@/components/dashboard/objetivos-person
 import { DespesasPorFinalidade } from "@/components/dashboard/despesas-por-finalidade";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
+const MESES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
 export function Dashboard() {
   const { dadosAno } = useFinanceStore();
+  const mesAtual = new Date().getMonth();
+  const nomeMes = MESES[mesAtual];
+  const anoAtual = new Date().getFullYear();
 
   if (!dadosAno) {
     return (
@@ -21,6 +29,16 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+          {mesAtual + 1}
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold">{nomeMes} {anoAtual}</h2>
+          <p className="text-sm text-muted-foreground">Visão geral do mês atual</p>
+        </div>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <SaldoCard />
         <ReceitasDespesasCard />

@@ -15,20 +15,56 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] a meta de despesa fixa deve levar em consideração as despesas recorrentes (atualize requisitos)
-### [aberto] pode adicionar uma despesa/receita repetida, porem tem que mostrar que ela ja existe só para garantir se tem certeza se quer cadastrar duplicado. tem que mostrar um previwer da despesa reseita que ja existe (atualize requisitos)
-### [aberto]  em transaçoes o extrato só mostra o mes atual por padrão , so mostra outros meses se colocar que quer
-### [aberto]  Nas recorrentes e parceladdas quando o valor ou a data é editada, tem que perguntar se é só essa ou todas
-### [aberto]  Categoria de transação tem que ter Divida
-### [aberto]  Saldo Total em dashbord tem que mostrar somente do mes atual
-### [aberto]  no sidebar não é o lugar das categorias e sim dentro de configurações
-### [aberto]  Modo escuro esta sando sempre que a tela recarrega
-### [aberto]  Últimas Transações em dashbord tem que mostrar somente do mes atual
-### [aberto]  tem que fazer calcular o Alertas de Metas
-### [aberto]  No dashbord sempre mostrar bem evidente o mes atual ou o mes que esta sendo exibido
-### [aberto] excluir só essa ou todas
 
 ## Histórico de Correções
+
+### [resolvido] 03/08/2026 - a meta de despesa fixa deve levar em consideração as despesas recorrentes
+**Arquivos afetados:** `src/components/metas/metas-predefinidas.tsx`
+**Mudança:** Cálculo da meta "Conta Fixa" agora considera despesas recorrentes do mês atual ao invés de apenas percentual do salário.
+
+### [resolvido] 03/08/2026 - pode adicionar uma despesa/receita repetida, porem tem que mostrar que ela ja existe
+**Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`
+**Mudança:** Adicionada detecção de duplicatas ao cadastrar transação. Quando descrição, valor e data coincidem com transação existente, exibe aviso com preview das transações duplicadas.
+
+### [resolvido] 03/08/2026 - em transaçoes o extrato só mostra o mes atual por padrão
+**Arquivos afetados:** `src/pages/Transacoes.tsx`, `src/components/transacoes/filtros.tsx`
+**Mudança:** Filtros agora iniciam com o mês atual (dataInicio = 1º dia, dataFim = último dia do mês). Limpar filtros também reseta para o mês atual.
+
+### [resolvido] 03/08/2026 - Nas recorrentes e parceladas quando o valor ou a data é editada, tem que perguntar se é só essa ou todas
+**Arquivos afetados:** `src/pages/EditarTransacao.tsx`
+**Mudança:** Ao editar valor ou data de transação recorrente/parcelada, exibe dialog perguntando "Só esta ou todas?" com opções de edição individual ou em grupo.
+
+### [resolvido] 03/08/2026 - Categoria de transação tem que ter Divida
+**Arquivos afetados:** `src/data/categorias-default.json`
+**Mudança:** Adicionada categoria "Divida" (id: cat-011) com cor #DC2626 e ícone AlertCircle.
+
+### [resolvido] 03/08/2026 - Saldo Total em dashbord tem que mostrar somente do mes atual
+**Arquivos afetados:** `src/components/dashboard/saldo-card.tsx`
+**Mudança:** SaldoCard agora exibe saldo do mês atual (receitas - despesas do mês) ao invés do saldo total acumulado.
+
+### [resolvido] 03/08/2026 - no sidebar não é o lugar das categorias e sim dentro de configurações
+**Arquivos afetados:** `src/components/layout/sidebar.tsx`, `src/pages/Configuracoes.tsx`
+**Mudança:** Link "Categorias" removido da sidebar. Página Configuracoes implementada com gerenciamento completo de categorias (listar, criar, editar, excluir).
+
+### [resolvido] 03/08/2026 - Modo escuro esta sando sempre que a tela recarrega
+**Arquivos afetados:** `src/components/layout/layout.tsx`
+**Mudança:** Layout agora lê o tema diretamente do localStorage na inicialização, evitando flash/flicker antes do store ser carregado.
+
+### [resolvido] 03/08/2026 - Últimas Transações em dashbord tem que mostrar somente do mes atual
+**Arquivos afetados:** `src/components/dashboard/ultimas-transacoes.tsx`
+**Mudança:** UltimasTransacoes agora filtra por transações do mês atual antes de ordenar e pegar as 5 mais recentes.
+
+### [resolvido] 03/08/2026 - tem que fazer calcular o Alertas de Metas
+**Arquivos afetados:** `src/components/dashboard/alerta-metas.tsx`
+**Mudança:** Alertas de metas aprimorados com status detalhado (Concluída, Adiantada, No prazo, Atrasada, Prazo encerrado), cálculo de parcela mensal necessária para metas atrasadas, e proteção contra divisão por zero.
+
+### [resolvido] 03/08/2026 - No dashbord sempre mostrar bem evidente o mes atual ou o mes que esta sendo exibido
+**Arquivos afetados:** `src/pages/Dashboard.tsx`
+**Mudança:** Adicionado cabeçalho no Dashboard com indicador visual do mês atual (número + nome do mês + ano) e subtítulo "Visão geral do mês atual".
+
+### [resolvido] 03/08/2026 - excluir só essa ou todas
+**Arquivos afetados:** `src/pages/EditarTransacao.tsx`
+**Mudança:** Mesma implementação do problema de edição - dialog "Só esta ou todas" é exibido ao editar transações recorrentes/parceladas.
 
 
 

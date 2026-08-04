@@ -11,13 +11,19 @@ import { formatarMoeda, formatarData } from "@/lib/calculos";
 export function Transacoes() {
   const navigate = useNavigate();
   const { dadosAno } = useFinanceStore();
+
+  const hoje = new Date();
+  const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+  const formatarDataISO = (d: Date) => d.toISOString().split("T")[0];
+
   const [filtros, setFiltros] = useState<FiltrosTransacao>({
     busca: "",
     tipo: "todos",
     categoriaId: "todas",
     contaId: "todas",
-    dataInicio: "",
-    dataFim: "",
+    dataInicio: formatarDataISO(primeiroDiaMes),
+    dataFim: formatarDataISO(ultimoDiaMes),
   });
 
   const temContas = (dadosAno?.contas.length ?? 0) > 0;

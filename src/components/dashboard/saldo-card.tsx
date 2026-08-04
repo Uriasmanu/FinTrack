@@ -4,13 +4,12 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
 export function SaldoCard() {
-  const { obterSaldoAtual, obterReceitasMes, obterDespesasMes } =
+  const { obterReceitasMes, obterDespesasMes } =
     useFinanceStore();
 
   const mesAtual = new Date().getMonth();
   const mesAnterior = mesAtual === 0 ? 11 : mesAtual - 1;
 
-  const saldo = obterSaldoAtual();
   const receitasMesAtual = obterReceitasMes(mesAtual);
   const receitasMesAnterior = obterReceitasMes(mesAnterior);
   const despesasMesAtual = obterDespesasMes(mesAtual);
@@ -24,7 +23,7 @@ export function SaldoCard() {
       ? ((saldoMesAtual - saldoMesAnterior) / Math.abs(saldoMesAnterior)) * 100
       : 0;
 
-  const isPositivo = saldo >= 0;
+  const isPositivo = saldoMesAtual >= 0;
   const variacaoPositiva = variacao >= 0;
 
   return (
@@ -53,7 +52,7 @@ export function SaldoCard() {
           }`}
         >
           {isPositivo ? "+" : ""}
-          {formatarMoeda(saldo)}
+          {formatarMoeda(saldoMesAtual)}
         </div>
         <p className="text-xs text-muted-foreground">
           {variacaoPositiva ? "Aumento" : "Redução"} em relação ao mês anterior

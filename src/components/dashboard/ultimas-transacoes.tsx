@@ -6,8 +6,12 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 
 export function UltimasTransacoes() {
-  const { obterUltimasTransacoes } = useFinanceStore();
-  const transacoes = obterUltimasTransacoes(5);
+  const { obterTransacoesMes } = useFinanceStore();
+  const mesAtual = new Date().getMonth();
+  const transacoesMes = obterTransacoesMes(mesAtual);
+  const transacoes = [...transacoesMes]
+    .sort((a, b) => new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime())
+    .slice(0, 5);
 
   return (
     <Card>
