@@ -79,6 +79,26 @@ Atualizado componente `DespesasPorFinalidade` para incluir essas categorias.
 
 ---
 
+### 8. Receitas vs Despesas - comparação com mês anterior
+
+**Problema:** Card comparava mês atual com mês anterior sem considerar ano. Em janeiro, comparava com dezembro do mesmo ano (inexistente).
+
+**Solução:** Adicionada verificação `mostrarComparacao = mes > 0`. Comparação só é exibida quando não estamos em janeiro.
+
+**Arquivos modificados:** `src/components/dashboard/receitas-despesas-card.tsx`
+
+---
+
+### 9. Categoria VA/VR não aparecia em transações
+
+**Problema:** Usuários com dados existentes não tinham as categorias padrão mais recentes (VA/VR, Guardar, etc.) porque a migração só carregava defaults quando a lista estava vazia.
+
+**Solução:** Alterada lógica de inicialização para adicionar categorias faltantes (merge por ID) em vez de substituir toda a lista.
+
+**Arquivos modificados:** `src/stores/useFinanceStore.ts`
+
+---
+
 ## Arquivos Modificados
 
 | Arquivo | Ação |
@@ -91,6 +111,8 @@ Atualizado componente `DespesasPorFinalidade` para incluir essas categorias.
 | `src/lib/transacoes.ts` | Gerar recorrentes para 12 meses |
 | `src/data/categorias-default.json` | Adicionar 5 categorias novas |
 | `src/components/dashboard/despesas-por-finalidade.tsx` | Incluir novas categorias |
+| `src/components/dashboard/receitas-despesas-card.tsx` | Corrigir comparação mês anterior |
+| `src/stores/useFinanceStore.ts` | Adicionar categorias faltantes na migração |
 
 ---
 
@@ -105,3 +127,5 @@ Atualizado componente `DespesasPorFinalidade` para incluir essas categorias.
 | 03/08/2026 | Sem aviso de saldo negativo | Adicionar projeção e alerta |
 | 03/08/2026 | Recorrentes não aparecem futuros | Gerar para 12 meses |
 | 03/08/2026 | Faltavam categorias específicas | Adicionar 5 categorias novas |
+| 03/08/2026 | Receitas vs Despesas comparação | Verificar mês > 0 antes de comparar |
+| 03/08/2026 | VA/VR não aparecia | Adicionar categorias faltantes na migração |

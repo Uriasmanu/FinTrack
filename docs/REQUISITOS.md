@@ -679,3 +679,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 03/08/2026 | Rotas atualizadas: adicionada `/transferencia` |
 | 03/08/2026 | Seção de pendências e não implementados adicionada |
 | 03/08/2026 | Correções de ciclo: saldo do dia, categorias, tema, gráficos, saldo negativo, recorrentes, categorias novas |
+| 03/08/2026 | Correções extras: comparação receitas/despesas, migração de categorias VA/VR |

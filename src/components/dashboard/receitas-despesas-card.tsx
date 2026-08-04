@@ -8,15 +8,18 @@ interface ReceitasDespesasCardProps {
   ano: number;
 }
 
-export function ReceitasDespesasCard({ mes }: ReceitasDespesasCardProps) {
+export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
   const { obterReceitasMes, obterDespesasMes } = useFinanceStore();
 
-  const mesAnterior = mes === 0 ? 11 : mes - 1;
-
   const receitasAtual = obterReceitasMes(mes);
-  const receitasAnterior = obterReceitasMes(mesAnterior);
   const despesasAtual = obterDespesasMes(mes);
-  const despesasAnterior = obterDespesasMes(mesAnterior);
+
+  const mostrarComparacao = mes > 0;
+  const mesAnterior = mes === 0 ? 11 : mes - 1;
+  const anoAnterior = mes === 0 ? ano - 1 : ano;
+
+  const receitasAnterior = mostrarComparacao ? obterReceitasMes(mesAnterior) : 0;
+  const despesasAnterior = mostrarComparacao ? obterDespesasMes(mesAnterior) : 0;
 
   const variacaoReceitas =
     receitasAnterior !== 0
@@ -45,7 +48,7 @@ export function ReceitasDespesasCard({ mes }: ReceitasDespesasCardProps) {
             <div className="text-lg font-bold text-success">
               {formatarMoeda(receitasAtual)}
             </div>
-            {variacaoReceitas !== 0 && (
+            {mostrarComparacao && variacaoReceitas !== 0 && (
               <div
                 className={`flex items-center gap-1 text-xs ${
                   variacaoReceitas >= 0 ? "text-success" : "text-destructive"
@@ -68,7 +71,7 @@ export function ReceitasDespesasCard({ mes }: ReceitasDespesasCardProps) {
             <div className="text-lg font-bold text-destructive">
               {formatarMoeda(despesasAtual)}
             </div>
-            {variacaoDespesas !== 0 && (
+            {mostrarComparacao && variacaoDespesas !== 0 && (
               <div
                 className={`flex items-center gap-1 text-xs ${
                   variacaoDespesas <= 0 ? "text-success" : "text-destructive"

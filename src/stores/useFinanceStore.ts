@@ -83,8 +83,12 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     let dados = storage.verificarOuCriarAnoAtual();
     dados = storage.migrarDadosSeNecessario(dados);
 
-    if (dados.categorias.length === 0) {
-      dados.categorias = obterCategoriasDefault();
+    const categoriasDefault = obterCategoriasDefault();
+    const categoriasExistentes = new Set(dados.categorias.map(c => c.id));
+    const novasCategorias = categoriasDefault.filter(c => !categoriasExistentes.has(c.id));
+    
+    if (novasCategorias.length > 0) {
+      dados.categorias = [...dados.categorias, ...novasCategorias];
     }
 
     const configDefault = obterConfigDefault();
