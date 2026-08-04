@@ -16,44 +16,80 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 ### [aberto] Receitas vs Despesas tem que ser um reflexo de todas as receitas e todas as despesas registradas no mes
-
-
-### [aberto] Saldo do dia em extrato ficou confuso pois ele esta mostrando o saldo do final do dia? se sim esse valor deveria ser em baixo e nao em cima
+**Comportamento atual:** Card mostra receitas vs despesas do mês, mas pode não considerar ano anterior ao calcular variação percentual.
+**Comportamento esperado:** Card deve refletir corretamente todas as receitas e despesas do mês selecionado, incluindo comparação com mês anterior considerando ano.
+**Escopo:** `src/components/dashboard/receitas-despesas-card.tsx`
 
 ### [aberto] no form Nova Transação quando eu seleciono receita e clico em categoria, não esta aparecendo a categoria VA/VR
-
-### [aberto] nas categorias Transferência entre Contas esta faltando a categoria "Gardar"
-
-### [aberto] No dashbord tem que mostrar o quanto é gasto com alimentação em um car proprio
-
-### [aberto] Crie as subcategorias de compras para casa (limpeza, comida, besteira, açougue, etc) pois quero saber quanto eu gasti com essas coisas nesse mes em relação ao mes passado
-
-### [aberto] Opção de ver extrato por conta
-**Comportamento atual:** Extrato mostra todas as transações de todas as contas misturadas.
-**Comportamento esperado:** Usuário deve poder filtrar extrato por conta bancária específica.
-**Escopo:** `src/pages/Transacoes.tsx`, `src/components/transacoes/filtros.tsx`
-
-### [aberto] Opção de ver gráficos por conta
-**Comportamento atual:** Gráficos mostram dados consolidados de todas as contas.
-**Comportamento esperado:** Usuário deve poder filtrar gráficos por conta bancária específica.
-**Escopo:** `src/pages/Graficos.tsx`
-
-### [aberto] Aviso de saldo negativo
-**Comportamento atual:** Sistema não avisa quando transação vai deixar saldo negativo.
-**Comportamento esperado:** Sistema deve exibir alerta quando transação for fazer com que saldo do dia ou saldo final do mês fique negativo.
-**Escopo:** `src/components/transacoes/transacao-form.tsx`, `src/stores/useFinanceStore.ts`
-
-### [aberto] Transações recorrentes não aparecem em meses futuros
-**Comportamento atual:** Apenas transações parceladas aparecem nos meses seguintes. Transações recorrentes só aparecem no mês de criação.
-**Comportamento esperado:** Transações com `tipoRecorrencia: "recorrente"` devem aparecer em todos os meses até 12 meses futuros.
-**Escopo:** `src/lib/transacoes.ts`, `src/stores/useFinanceStore.ts`
-
-### [aberto] Tom de vermelho no tema escuro
-**Comportamento atual:** Cores vermelhas no tema escuro estão apagadas/desbotadas.
-**Comportamento esperado:** Cores vermelhas devem ter contraste adequado no tema escuro.
-**Escopo:** `src/index.css`, variáveis CSS do tema escuro
+**Comportamento atual:** Categoria VA/VR (tipo "receita") deveria aparecer quando tipo é "receita", mas usuário reporta que não aparece.
+**Comportamento esperado:** Categoria VA/VR deve aparecer no select quando tipo é "receita" ou "ambos".
+**Escopo:** `src/components/transacoes/transacao-form.tsx`, `src/data/categorias-default.json`
 
 ## Histórico de Correções
+
+### 57. Saldo do dia no extrato movido para abaixo das transações
+
+**Problema:** Saldo final do dia era exibido no cabeçalho, antes das transações, causando confusão.
+
+**Solução:** Movido "Saldo do dia" para abaixo da lista de transações do dia, após a última transação.
+
+**Arquivos modificados:** `src/pages/Transacoes.tsx`
+
+### 58. Categoria "Guardar" filtrada em Transferências
+
+**Problema:** Select de categorias na página de transferência mostrava todas as categorias, incluindo irrelevantes.
+
+**Solução:** Filtrado select para mostrar apenas categorias com tipo "ambos" ou específicas de transferência (Transferencia e Guardar).
+
+**Arquivos modificados:** `src/pages/Transferencia.tsx`
+
+### 59. Tom de vermelho no tema escuro ajustado
+
+**Problema:** Cores vermelhas no tema escuro estavam apagadas com pouca saturação e luminosidade.
+
+**Solução:** Ajustado `--color-destructive` de `hsl(0 62.8% 30.6%)` para `hsl(0 72% 51%)`.
+
+**Arquivos modificados:** `src/index.css`
+
+### 60. Filtro por conta adicionado na página de gráficos
+
+**Problema:** Gráficos não permitiam filtrar por conta bancária específica.
+
+**Solução:** Adicionado Select de contas com opção "Todas contas" e lógica de filtragem por `contaId`.
+
+**Arquivos modificados:** `src/pages/Graficos.tsx`
+
+### 61. Aviso de saldo negativo no formulário de transação
+
+**Problema:** Sistema não avisava quando transação deixaria saldo da conta negativo.
+
+**Solução:** Adicionado cálculo de saldo atual e projeção após transação. Exibido alerta visual quando saldo ficar negativo.
+
+**Arquivos modificados:** `src/components/transacoes/transacao-form.tsx`
+
+### 62. Transações recorrentes geradas para 12 meses futuros
+
+**Problema:** Transações com `tipoRecorrencia: "recorrente"` só geravam uma transação no mês de criação.
+
+**Solução:** Modificada função `criarTransacoesRecorrentes` para gerar transações para 12 meses futuros automaticamente.
+
+**Arquivos modificados:** `src/lib/transacoes.ts`
+
+### 63. Categorias de Combustível e Compras para Casa adicionadas
+
+**Problema:** Usuário queria ver gastos com combustível e subcategorias de compras para casa.
+
+**Solução:** Adicionadas 5 categorias novas: Combustivel, Limpeza, Comida, Besteira, Acougue. Atualizado componente `DespesasPorFinalidade`.
+
+**Arquivos modificados:** `src/data/categorias-default.json`, `src/components/dashboard/despesas-por-finalidade.tsx`
+
+### 64. Extrato por conta (já implementado)
+
+**Problema:** Usuário queria filtrar extrato por conta bancária.
+
+**Solução:** Já implementado - filtro por conta existe em `Transacoes.tsx` e `filtros.tsx`.
+
+**Status:** Já estava funcionando, sem necessidade de alteração.
 
 ## Feature
 

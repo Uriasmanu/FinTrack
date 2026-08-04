@@ -48,6 +48,7 @@ export function Graficos() {
   const { dadosAno } = useFinanceStore();
   const [tipoGrafico, setTipoGrafico] = useState<TipoGrafico>("pizza");
   const [tipoDado, setTipoDado] = useState<TipoDado>("despesas_categoria");
+  const [contaId, setContaId] = useState<string>("todas");
 
   const hoje = new Date();
   const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
@@ -74,9 +75,14 @@ export function Graficos() {
   const dadosGrafico = useMemo(() => {
     if (!dadosAno) return [];
 
+    const filtrarPorConta = (t: { contaId: string }) => {
+      if (contaId === "todas") return true;
+      return t.contaId === contaId;
+    };
+
     if (tipoDado === "despesas_categoria") {
       const despesas = dadosAno.transacoes.filter(
-        (t) => t.tipo === "despesa" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual
+        (t) => t.tipo === "despesa" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t)
       );
       const porCategoria: Record<string, number> = {};
       despesas.forEach((t) => {
@@ -89,7 +95,7 @@ export function Graficos() {
 
     if (tipoDado === "receitas_categoria") {
       const receitas = dadosAno.transacoes.filter(
-        (t) => t.tipo === "receita" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual
+        (t) => t.tipo === "receita" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t)
       );
       const porCategoria: Record<string, number> = {};
       receitas.forEach((t) => {
@@ -103,17 +109,17 @@ export function Graficos() {
     if (tipoDado === "evolucao_mensal") {
       return MESES.map((mes, i) => {
         const receitas = dadosAno.transacoes
-          .filter((t) => t.tipo === "receita" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual)
+          .filter((t) => t.tipo === "receita" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t))
           .reduce((acc, t) => acc + t.valor, 0);
         const despesas = dadosAno.transacoes
-          .filter((t) => t.tipo === "despesa" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual)
+          .filter((t) => t.tipo === "despesa" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t))
           .reduce((acc, t) => acc + t.valor, 0);
         return { name: mes, receitas, despesas };
       });
     }
 
     return [];
-  }, [dadosAno, tipoDado, mesAtual, anoAtual]);
+  }, [dadosAno, tipoDado, mesAtual, anoAtual, contaId]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderGrafico = () => {
@@ -242,6 +248,20 @@ export function Graficos() {
             <SelectItem value="despesas_categoria">Despesas por Categoria</SelectItem>
             <SelectItem value="receitas_categoria">Receitas por Categoria</SelectItem>
             <SelectItem value="evolucao_mensal">Evolução Mensal</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={contaId} onValueChange={setContaId}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Todas contas" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todas">Todas contas</SelectItem>
+            {(dadosAno?.contas ?? []).map((conta) => (
+              <SelectItem key={conta.id} value={conta.id}>
+                {conta.banco} ({conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"})
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 

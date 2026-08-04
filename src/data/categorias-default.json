@@ -96,5 +96,40 @@
     "tipo": "ambos",
     "cor": "#16A34A",
     "icone": "PiggyBank"
+  },
+  {
+    "id": "cat-015",
+    "nome": "Combustivel",
+    "tipo": "despesa",
+    "cor": "#F59E0B",
+    "icone": "Fuel"
+  },
+  {
+    "id": "cat-016",
+    "nome": "Limpeza",
+    "tipo": "despesa",
+    "cor": "#06B6D4",
+    "icone": "Sparkles"
+  },
+  {
+    "id": "cat-017",
+    "nome": "Comida",
+    "tipo": "despesa",
+    "cor": "#10B981",
+    "icone": "ShoppingCart"
+  },
+  {
+    "id": "cat-018",
+    "nome": "Besteira",
+    "tipo": "despesa",
+    "cor": "#EC4899",
+    "icone": "Cookie"
+  },
+  {
+    "id": "cat-019",
+    "nome": "Acougue",
+    "tipo": "despesa",
+    "cor": "#DC2626",
+    "icone": "Beef"
   }
 ]

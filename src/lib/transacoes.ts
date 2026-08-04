@@ -80,22 +80,28 @@ export function criarTransacoesRecorrentes({
   }
 
   if (tipoRecorrencia === "recorrente") {
-    transacoes.push({
-      id: gerarId(),
-      tipo,
-      tipoRecorrencia: "recorrente",
-      descricao,
-      valor,
-      data: dataInicio,
-      categoriaId,
-      contaId,
-      cartaoId,
-      parcelaAtual: 1,
-      totalParcelas: 1,
-      grupoParcelaId: grupoId,
-      criadoEm: new Date().toISOString(),
-      confirmada: false,
-    });
+    const MESES_FUTUROS = 12;
+    for (let i = 0; i < MESES_FUTUROS; i++) {
+      const dataParcela = new Date(data);
+      dataParcela.setMonth(dataParcela.getMonth() + i);
+
+      transacoes.push({
+        id: gerarId(),
+        tipo,
+        tipoRecorrencia: "recorrente",
+        descricao,
+        valor,
+        data: dataParcela.toISOString().split("T")[0],
+        categoriaId,
+        contaId,
+        cartaoId,
+        parcelaAtual: 1,
+        totalParcelas: 1,
+        grupoParcelaId: grupoId,
+        criadoEm: new Date().toISOString(),
+        confirmada: false,
+      });
+    }
     return transacoes;
   }
 

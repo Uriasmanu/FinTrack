@@ -252,13 +252,6 @@ export function Transacoes() {
                         <span className="text-xs text-muted-foreground">
                           Início: {formatarMoeda(saldoInicioDia)}
                         </span>
-                        <span className={`text-sm font-medium ${
-                          saldoFimDia >= 0
-                            ? "text-success"
-                            : "text-destructive"
-                        }`}>
-                          Saldo do dia: {formatarMoeda(saldoFimDia)}
-                        </span>
                       </div>
                     </div>
                     {transacoes.map((transacao) => (
@@ -269,6 +262,15 @@ export function Transacoes() {
                         onEditar={(id) => navigate(`/transacoes/${id}`)}
                       />
                     ))}
+                    <div className="flex justify-end py-2 border-t">
+                      <span className={`text-sm font-medium ${
+                        saldoFimDia >= 0
+                          ? "text-success"
+                          : "text-destructive"
+                      }`}>
+                        Saldo do dia: {formatarMoeda(saldoFimDia)}
+                      </span>
+                    </div>
                   </div>
                 );
               })}

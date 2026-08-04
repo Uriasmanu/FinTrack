@@ -32,7 +32,9 @@ export function Transferencia() {
   const { dadosAno, adicionarTransacao } = useFinanceStore();
 
   const contas = dadosAno?.contas ?? [];
-  const categorias = dadosAno?.categorias ?? [];
+  const categorias = (dadosAno?.categorias ?? []).filter(
+    (cat) => cat.tipo === "ambos" || cat.id === "cat-013" || cat.id === "cat-014"
+  );
 
   const {
     register,

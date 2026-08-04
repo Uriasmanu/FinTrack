@@ -355,7 +355,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Cores para identificação visual (paleta de 10 cores)
 - Tipos: receita, despesa, ambos
 - Proteção contra exclusão de categorias com transações vinculadas
-- Categorias padrão pré-definidas (14 categorias):
+- Categorias padrão pré-definidas (19 categorias):
 
 | ID | Nome | Tipo | Cor |
 |----|------|------|-----|
@@ -373,6 +373,11 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | cat-012 | VA/VR | receita | #059669 |
 | cat-013 | Transferência | ambos | #8B5CF6 |
 | cat-014 | Guardar | ambos | #16A34A |
+| cat-015 | Combustível | despesa | #F59E0B |
+| cat-016 | Limpeza | despesa | #06B6D4 |
+| cat-017 | Comida | despesa | #10B981 |
+| cat-018 | Besteira | despesa | #EC4899 |
+| cat-019 | Açougue | despesa | #DC2626 |
 
 - ✅ **Implementado**: `Categorias.tsx`, `categoria-form.tsx`, `categoria-card.tsx`
 
@@ -623,6 +628,18 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 6 | Exportação CSV | ❌ Não implementado | `papaparse` instalado mas não utilizado |
 | 7 | Rota `/metas/nova` | ❌ Não existe | Links em `objetivos-personalizados.tsx` apontam para rota inexistente |
 
+### Funcionalidades corrigidas neste ciclo
+
+| # | Funcionalidade | Correção |
+|---|----------------|----------|
+| 1 | Saldo do dia no extrato | Movido para abaixo das transações |
+| 2 | Categoria Guardar em transferências | Filtrar categorias relevantes |
+| 3 | Vermelho no tema escuro | Aumentar luminosidade e saturação |
+| 4 | Gráficos sem filtro por conta | Adicionar Select de contas |
+| 5 | Sem aviso de saldo negativo | Adicionar projeção e alerta |
+| 6 | Recorrentes não aparecem futuros | Gerar para 12 meses |
+| 7 | Faltavam categorias específicas | Adicionar 5 categorias novas |
+
 ### Componentes não utilizados
 
 | Componente | Descrição |
@@ -657,7 +674,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 03/08/2026 | Stack tecnológica atualizada (React 19, TS 6, Vite 8, Tailwind 4, Router 7, Zustand 5, Recharts 3) |
 | 03/08/2026 | Estrutura de pastas reescrita conforme estrutura real do projeto |
 | 03/08/2026 | Funcionalidades: 25 completas, 4 parciais, 4 não implementadas, 13 extras documentadas |
-| 03/08/2026 | Categorias padrão expandidas de 9 para 14 |
+| 03/08/2026 | Categorias padrão expandidas de 14 para 19 |
 | 03/08/2026 | Estrutura de dados atualizada com campos `confirmada`, `dataCriacao`, `receitasBase`, `criadoEm` |
 | 03/08/2026 | Rotas atualizadas: adicionada `/transferencia` |
 | 03/08/2026 | Seção de pendências e não implementados adicionada |
+| 03/08/2026 | Correções de ciclo: saldo do dia, categorias, tema, gráficos, saldo negativo, recorrentes, categorias novas |

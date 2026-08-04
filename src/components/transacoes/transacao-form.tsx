@@ -42,7 +42,7 @@ export function TransacaoForm({
   onSubmit,
   isEditing = false,
 }: TransacaoFormProps) {
-  const { dadosAno } = useFinanceStore();
+  const { dadosAno, obterSaldoConta } = useFinanceStore();
 
   const {
     register,
@@ -91,6 +91,12 @@ export function TransacaoForm({
   });
 
   const contaTicket = contas.find((c) => c.tipo === "ticket");
+
+  const contaSelecionada = watch("contaId");
+  const saldoAtual = contaSelecionada ? obterSaldoConta(contaSelecionada) : 0;
+  const valorTransacao = valor ?? 0;
+  const saldoAposTransacao = tipo === "despesa" ? saldoAtual - valorTransacao : saldoAtual + valorTransacao;
+  const saldoNegativo = tipo === "despesa" && saldoAposTransacao < 0;
 
   const categoriasAutoTicket = ["cat-001", "cat-009", "cat-012"];
   if (categoriasAutoTicket.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
@@ -296,6 +302,30 @@ export function TransacaoForm({
           <p className="text-xs text-muted-foreground">
             Tem certeza que deseja cadastrar duplicado?
           </p>
+        </div>
+      )}
+
+      {saldoNegativo && contaSelecionada && (
+        <div className="border border-destructive bg-destructive/5 rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-5 w-5" />
+            <span className="font-medium">Saldo insuficiente</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Esta transação deixará o saldo da conta negativo.
+          </p>
+          <div className="flex justify-between text-sm">
+            <span>Saldo atual:</span>
+            <span className={saldoAtual >= 0 ? "text-success" : "text-destructive"}>
+              {formatarMoeda(saldoAtual)}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm font-medium">
+            <span>Saldo após transação:</span>
+            <span className="text-destructive">
+              {formatarMoeda(saldoAposTransacao)}
+            </span>
+          </div>
         </div>
       )}
 
