@@ -36,6 +36,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] quero que avise quando uma transação vai fazer com que o saldo do dia fique negativo, ou o saldo final do mes fique negativo
 
+### [aberto] quero que todas as transações que são marcadas como recorrentes apareçam em todos os meses até 12 meses futuros. Só as parceladas estão prevalecendo
+
+### [aberto] Melhore os tons de vermelo no tema escuro, pois os vermelhos estão apagados
+
 ## Feature
 
 # Guia de Spec para Implementação de Features
