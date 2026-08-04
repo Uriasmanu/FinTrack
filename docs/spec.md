@@ -15,6 +15,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] refaça a lógica de config padrão vem com "salario": 0. A intenção era: "se o usuário nunca configurou o salário, significa que o app acabou de ser criado, então carregue os defaults". Implemente um timestamp para ser colocado a cada alteração que é feita, ou seja quando eu crio a conta (que é a primeiro passo a ser feito na aplicação) isso gera um registro e se existe esse registro de timestamp significa que ja foi usado uma vez o sistema
+
 ### [aberto] Editar metas não esta trazendo o valor do card selecionado para editar
 
 ### [aberto] saldo inicial no dia 03/08 tem que considerar que a conta foi criada com o valor de 1036 e não Saldo do dia: R$ 914,17
@@ -27,42 +29,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] em Transferência entre Contas não esta aparecendo a categoria guardar
 
+### [aberto] Crie uma logica que leve em consideração que o saldo do ticket não pode ser usado paara pagar conta, então no balanço final ele não afeta tanto para mais ou para menos, tem que só mostra se no mes eu gastei todo saldo ou acumulo e quanto isso é em comparação ao mes passado
+
 ## Histórico de Correções
 
-### [resolvido] Saldo extrato não coerente com saldo conta
-**Ciclo:** 4
-**Arquivos afetados:** `src/pages/Transacoes.tsx`
-**Descrição:** Extrato agora inclui saldoInicial das contas e transações anteriores ao período filtrado. Saldo acumulado começa do saldo real da conta, não de zero.
-
-### [resolvido] JSON do ano armazenado fisicamente em data/
-**Ciclo:** 4
-**Arquivos afetados:** `data/fintrack_2026.json`
-**Descrição:** Criado diretório data/ com JSON padrão do ano contendo estrutura completa (categorias, contas, metas, config).
-
-### [resolvido] Melhorar distribuição dos cards no Dashboard
-**Ciclo:** 4
-**Arquivos afetados:** `src/pages/Dashboard.tsx`
-**Descrição:** Grid ajustado para 3 colunas (topo) e 2 colunas (meio/fim) para melhor aproveitamento do espaço.
-
-### [resolvido] Transações com navegação de meses
-**Ciclo:** 4
-**Arquivos afetados:** `src/pages/Transacoes.tsx`
-**Descrição:** Adicionado botões de navegação anterior/atual/seguinte na página de transações. Filtros de data atualizam automaticamente ao mudar mês.
-
-### [resolvido] Gráficos com navegação de meses
-**Ciclo:** 4
-**Arquivos afetados:** `src/pages/Graficos.tsx`
-**Descrição:** Adicionado botões de navegação anterior/atual/seguinte na página de gráficos.
-
-### [resolvido] Nova Transação em receitas com categoria ticket/VR/VA
-**Ciclo:** 4
-**Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`
-**Descrição:** Ao trocar tipo para receita, categorias são atualizadas automaticamente. Categorias ticket/VR/VA (cat-009, cat-012) agora auto-selecionam conta ticket.
-
-### [resolvido] Tipo de transação movimentação entre contas (transferência)
-**Ciclo:** 4
-**Arquivos afetados:** `src/pages/Transferencia.tsx`, `src/App.tsx`, `src/components/layout/sidebar.tsx`, `src/data/categorias-default.json`
-**Descrição:** Criada página de transferência com formulário para selecionar conta origem/destino, valor e data. Cria duas transações vinculadas (despesa + receita). Adicionada rota /transferencia e link na sidebar. Categoria "Transferencia" (cat-013) adicionada.
 
 
 
