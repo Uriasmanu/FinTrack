@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SaldoCard } from "@/components/dashboard/saldo-card";
 import { ReceitasDespesasCard } from "@/components/dashboard/receitas-despesas-card";
@@ -9,6 +9,7 @@ import { ObjetivosPersonalizados } from "@/components/dashboard/objetivos-person
 import { DespesasPorFinalidade } from "@/components/dashboard/despesas-por-finalidade";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 const MESES = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -20,6 +21,23 @@ export function Dashboard() {
   const hoje = new Date();
   const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
   const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
+
+  const [mostrarGraficos, setMostrarGraficos] = useState(() => {
+    const salvo = localStorage.getItem("fintrack_dashboard_mostrarGraficos");
+    return salvo !== null ? salvo === "true" : true;
+  });
+  const [mostrarMetas, setMostrarMetas] = useState(() => {
+    const salvo = localStorage.getItem("fintrack_dashboard_mostrarMetas");
+    return salvo !== null ? salvo === "true" : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("fintrack_dashboard_mostrarGraficos", String(mostrarGraficos));
+  }, [mostrarGraficos]);
+
+  useEffect(() => {
+    localStorage.setItem("fintrack_dashboard_mostrarMetas", String(mostrarMetas));
+  }, [mostrarMetas]);
 
   const nomeMes = MESES[mesSelecionado];
   const isMesAtual = mesSelecionado === hoje.getMonth() && anoSelecionado === hoje.getFullYear();
@@ -89,15 +107,45 @@ export function Dashboard() {
         <ResumoMensal mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
+      <div className="flex items-center gap-4 justify-end">
+        <div className="flex items-center gap-2">
+          <Switch
+            id="mostrar-graficos"
+            checked={mostrarGraficos}
+            onCheckedChange={setMostrarGraficos}
+          />
+          <label htmlFor="mostrar-graficos" className="text-sm text-muted-foreground cursor-pointer">
+            Gráficos
+          </label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch
+            id="mostrar-metas"
+            checked={mostrarMetas}
+            onCheckedChange={setMostrarMetas}
+          />
+          <label htmlFor="mostrar-metas" className="text-sm text-muted-foreground cursor-pointer">
+            Metas
+          </label>
+        </div>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2">
         <ProximasTransacoes mes={mesSelecionado} ano={anoSelecionado} />
         <ResumoCategorias mes={mesSelecionado} ano={anoSelecionado} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <DespesasPorFinalidade />
-        <ObjetivosPersonalizados />
-      </div>
+      {mostrarGraficos && (
+        <div className="grid gap-4 md:grid-cols-2">
+          <DespesasPorFinalidade />
+        </div>
+      )}
+
+      {mostrarMetas && (
+        <div className="grid gap-4 md:grid-cols-2">
+          <ObjetivosPersonalizados />
+        </div>
+      )}
     </div>
   );
 }

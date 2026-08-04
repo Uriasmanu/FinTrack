@@ -15,7 +15,7 @@ import type { Meta } from "@/types";
 
 interface MetaCardProps {
   meta: Meta;
-  onEditar: (id: string) => void;
+  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
 export function MetaCard({ meta, onEditar }: MetaCardProps) {

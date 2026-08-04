@@ -2,7 +2,7 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { MetaCard } from "./meta-card";
 
 interface MetasPredefinidasProps {
-  onEditar: (id: string) => void;
+  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
 export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
@@ -108,7 +108,11 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {metasComValores.map((meta) => (
-          <MetaCard key={meta.id} meta={meta} onEditar={onEditar} />
+          <MetaCard
+            key={meta.id}
+            meta={meta}
+            onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses })}
+          />
         ))}
       </div>
     </div>

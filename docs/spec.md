@@ -60,9 +60,19 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Arquivo modificado:** `src/components/metas/metas-predefinidas.tsx`
 **Spec:** `docs/implementado/meta-limite-gasto.md`
 
-### [aberto] Quando eu clicar para editar uma meta (meta padrão tmabem) tem que trazer o valor original do card para eu alterar, atualmente não tras
+### [resolvido] Editar meta padrão traz valor original do card
+**Data resolução:** 04/08/2026
+**Solução:** Modificado `MetasPredefinidas` para passar os valores calculados (`valorAlvo`, `meses`) ao chamar `onEditar`. O `Metas.tsx` armazena esses overrides e os passa ao `MetaForm` como `initialData`, garantindo que o formulário inicie com os valores exibidos no card.
+**Arquivos modificados:** `src/components/metas/metas-predefinidas.tsx`, `src/components/metas/meta-card.tsx`, `src/pages/Metas.tsx`
+**Spec:** `docs/implementado/editar-meta-valor-original.md`
 
-### [aberto] graficos e mestas tem a opção de ser exibido ou não na tela de dashbord
+### [resolvido] Toggle de visibilidade para Gráficos e Metas no Dashboard
+**Data resolução:** 04/08/2026
+**Solução:** Adicionados toggles (Switch) no Dashboard para mostrar/ocultar as seções de Gráficos (DespesasPorFinalidade) e Metas (ObjetivosPersonalizados). A preferência é salva no localStorage e persiste entre sessões.
+**Arquivo modificado:** `src/pages/Dashboard.tsx`
+**Spec:** `docs/implementado/toggle-dashboard.md`
+
+### [aberto] transaçoes que são alteradas de unicas para recorrentes ou parcelada tem que aparecer nos proximos meses tambem
 
 ## Feature
 

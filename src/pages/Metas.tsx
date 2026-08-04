@@ -10,16 +10,19 @@ export function Metas() {
   const { dadosAno, adicionarMeta, editarMeta } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingOverrides, setEditingOverrides] = useState<{ valorAlvo?: number; meses?: number } | null>(null);
 
   const metasPersonalizadas = dadosAno?.metas.filter((m) => m.tipo === "personalizado") ?? [];
 
-  function handleEditar(id: string) {
+  function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number }) {
     setEditingId(id);
+    setEditingOverrides(overrides ?? null);
     setOpen(true);
   }
 
   function handleNovo() {
     setEditingId(null);
+    setEditingOverrides(null);
     setOpen(true);
   }
 
@@ -58,7 +61,11 @@ export function Metas() {
   }
 
   const metaEditando = editingId
-    ? dadosAno?.metas.find((m) => m.id === editingId)
+    ? {
+        ...dadosAno?.metas.find((m) => m.id === editingId),
+        ...(editingOverrides?.valorAlvo !== undefined && { valorAlvo: editingOverrides.valorAlvo }),
+        ...(editingOverrides?.meses !== undefined && { meses: editingOverrides.meses }),
+      }
     : undefined;
 
   return (
