@@ -166,6 +166,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       valor: dados.valor,
       dataInicio: dados.data,
       categoriaId: dados.categoriaId,
+      subtipoId: dados.subtipoId,
       contaId: dados.contaId,
       cartaoId: dados.cartaoId,
       parcelaAtual: dados.parcelaAtual,

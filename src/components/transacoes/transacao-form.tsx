@@ -21,6 +21,7 @@ const transacaoSchema = z.object({
   data: z.string().min(1, "Data é obrigatória"),
   tipo: z.enum(["receita", "despesa"]),
   categoriaId: z.string().min(1, "Categoria é obrigatória"),
+  subtipoId: z.string().nullable(),
   contaId: z.string().min(1, "Conta é obrigatória"),
   cartaoId: z.string().nullable(),
   tipoRecorrencia: z.enum(["unica", "recorrente", "parcelado"]),
@@ -61,6 +62,7 @@ export function TransacaoForm({
       })(),
       tipo: initialData?.tipo ?? "despesa",
       categoriaId: initialData?.categoriaId ?? "",
+      subtipoId: initialData?.subtipoId ?? null,
       contaId: initialData?.contaId ?? "",
       cartaoId: initialData?.cartaoId ?? null,
       tipoRecorrencia: initialData?.tipoRecorrencia ?? "unica",
@@ -179,6 +181,30 @@ export function TransacaoForm({
             <p className="text-sm text-destructive">{errors.categoriaId.message}</p>
           )}
         </div>
+
+        {categoriaId === "cat-001" && (
+          <div>
+            <label className="text-sm font-medium">Subtipo</label>
+            <Select
+              value={watch("subtipoId") ?? ""}
+              onValueChange={(v) => setValue("subtipoId", v || null)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o subtipo..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Nenhum</SelectItem>
+                {(dadosAno?.categorias ?? [])
+                  .filter((c) => ["cat-016", "cat-017", "cat-018", "cat-019"].includes(c.id))
+                  .map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.nome}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         <div>
           <label className="text-sm font-medium">Conta</label>

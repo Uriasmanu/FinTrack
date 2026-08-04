@@ -18,6 +18,7 @@ export interface Transacao {
   valor: number;
   data: string;
   categoriaId: string;
+  subtipoId: string | null;
   contaId: string;
   cartaoId: string | null;
   parcelaAtual: number;

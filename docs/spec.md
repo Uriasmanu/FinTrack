@@ -24,15 +24,29 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Arquivo modificado:** `src/components/dashboard/proximas-transacoes.tsx`
 **Spec:** `docs/implementado/efetivar-transacao-dashboard.md`
 
-### [aberto] Quando coloco uma despesa como recorrente e olho o mes seguinte ela não esta lá
+### [resolvido] Transações recorrentes não apareciam no mês seguinte no Dashboard
+**Data resolução:** 04/08/2026
+**Solução:** O filtro em `proximas-transacoes.tsx` comparava `t.data >= hojeStr` usando comparação de strings, o que filtrava incorretamente transações com datas antes de hoje em meses futuros (ex: "2026-09-01" < "2026-08-04"). Corrigido para aplicar o filtro de data apenas no mês atual.
+**Arquivo modificado:** `src/components/dashboard/proximas-transacoes.tsx`
+**Spec:** `docs/implementado/correcao-transacoes-recorrentes-mes.md`
 
-### [aberto] em transação quero pode efetivar o pagamento pelos 3 pontinho tambem (adicione junto com o editar e apagar)
+### [resolvido] Efetivar transação pelo menu dos 3 pontinhos (dropdown)
+**Data resolução:** 04/08/2026
+**Solução:** Adicionada opção "Efetivar" (ícone Check) no DropdownMenu do componente `transacao-item.tsx`. A opção aparece apenas quando a transação não está confirmada. Ao clicar, a transação é marcada como `confirmada: true` via `editarTransacao`.
+**Arquivo modificado:** `src/components/transacoes/transacao-item.tsx`
+**Spec:** `docs/implementado/efetivar-pelo-dropdown.md`
 
 ### [aberto] Quando for categoria Alimentação no form de transação tem que aparecer a opção de selecionar o subtipo, nesse subtipo que vai as categorias que a gente compra no mercado
 
 ### [aberto] botão de fechar os forms
 
 ### [aberto] grafico da conta de cartão alimentação tem que ser com base nos subtipos
+
+### [aberto] A meta padrão Contas fixas e Lazer, não é uma meta de guardar e sim uma meta de limite de gasto, então ela usa como referencia todas as despesas que são recorrentes e parceladas
+
+### [aberto] Quando eu clicar para editar uma meta (meta padrão tmabem) tem que trazer o valor original do card para eu alterar, atualmente não tras
+
+### [aberto] graficos e mestas tem a opção de ser exibido ou não na tela de dashbord
 
 ## Feature
 

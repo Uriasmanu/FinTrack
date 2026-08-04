@@ -21,7 +21,11 @@ export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
       const data = new Date(t.data);
       const mesTransacao = data.getMonth();
       const anoTransacao = data.getFullYear();
-      return mesTransacao === mes && anoTransacao === ano && t.data >= hojeStr && !t.confirmada;
+      if (mesTransacao !== mes || anoTransacao !== ano) return false;
+      if (t.confirmada) return false;
+      const isMesAtual = mes === hoje.getMonth() && ano === hoje.getFullYear();
+      if (isMesAtual && t.data < hojeStr) return false;
+      return true;
     })
     .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
     .slice(0, 5);

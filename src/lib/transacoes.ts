@@ -7,6 +7,7 @@ interface CriarParcelasParams {
   valor: number;
   dataInicio: string;
   categoriaId: string;
+  subtipoId?: string | null;
   contaId: string;
   cartaoId: string | null;
   tipoRecorrencia: TipoRecorrencia;
@@ -20,6 +21,7 @@ export function criarTransacoesRecorrentes({
   valor,
   dataInicio,
   categoriaId,
+  subtipoId = null,
   contaId,
   cartaoId,
   tipoRecorrencia,
@@ -39,6 +41,7 @@ export function criarTransacoesRecorrentes({
       valor,
       data: dataInicio,
       categoriaId,
+      subtipoId,
       contaId,
       cartaoId,
       parcelaAtual: 1,
@@ -67,6 +70,7 @@ export function criarTransacoesRecorrentes({
         valor,
         data: dataParcela.toISOString().split("T")[0],
         categoriaId,
+        subtipoId,
         contaId,
         cartaoId,
         parcelaAtual: numParcela,
@@ -93,6 +97,7 @@ export function criarTransacoesRecorrentes({
         valor,
         data: dataParcela.toISOString().split("T")[0],
         categoriaId,
+        subtipoId,
         contaId,
         cartaoId,
         parcelaAtual: 1,
@@ -152,6 +157,7 @@ export function recalcularParcelas(
     valor: primeiraParcela.valor,
     dataInicio: primeiraParcela.data,
     categoriaId: primeiraParcela.categoriaId,
+    subtipoId: primeiraParcela.subtipoId,
     contaId: primeiraParcela.contaId,
     cartaoId: primeiraParcela.cartaoId,
     tipoRecorrencia: "parcelado",

@@ -24,7 +24,7 @@ export function TransacaoItem({
   onEditar,
 }: TransacaoItemProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { excluirTransacao, dadosAno } = useFinanceStore();
+  const { excluirTransacao, editarTransacao, dadosAno } = useFinanceStore();
 
   const categoria = dadosAno?.categorias.find(
     (c) => c.id === transacao.categoriaId
@@ -125,6 +125,12 @@ export function TransacaoItem({
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            {!transacao.confirmada && (
+              <DropdownMenuItem onClick={() => editarTransacao(transacao.id, { confirmada: true })}>
+                <Check className="mr-2 h-4 w-4" />
+                Efetivar
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onClick={() => onEditar(transacao.id)}>
               <Pencil className="mr-2 h-4 w-4" />
               Editar
