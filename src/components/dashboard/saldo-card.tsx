@@ -9,45 +9,41 @@ interface SaldoCardProps {
 }
 
 export function SaldoCard({ mes, ano }: SaldoCardProps) {
-  const { obterReceitasMes, obterDespesasMes, obterSaldoInicialContas, obterSaldoAtualSemTicket, dadosAno } =
+  const { obterSaldoInicialContas, dadosAno } =
     useFinanceStore();
 
   const mesAnterior = mes === 0 ? 11 : mes - 1;
 
-  const receitasMesAtual = obterReceitasMes(mes);
-  const receitasMesAnterior = obterReceitasMes(mesAnterior);
-  const despesasMesAtual = obterDespesasMes(mes);
-  const despesasMesAnterior = obterDespesasMes(mesAnterior);
+  const hoje = new Date();
+  const hojeStr = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
   const saldoInicialContas = obterSaldoInicialContas();
 
-  const transacoesAnteriores = (dadosAno?.transacoes ?? [])
+  const transacoesAteHoje = (dadosAno?.transacoes ?? [])
+    .filter((t) => t.data <= hojeStr)
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+
+  const saldoHoje = saldoInicialContas + transacoesAteHoje;
+
+  const transacoesAteMesAnterior = (dadosAno?.transacoes ?? [])
     .filter((t) => {
       const dataTransacao = new Date(t.data);
-      return dataTransacao.getFullYear() < ano || 
-             (dataTransacao.getFullYear() === ano && dataTransacao.getMonth() < mes);
+      const anoRef = mesAnterior === 11 ? ano - 1 : ano;
+      return t.data <= hojeStr && (
+        dataTransacao.getFullYear() < ano ||
+        (dataTransacao.getFullYear() === ano && dataTransacao.getMonth() < mes)
+      );
     })
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
-  const saldoMesAtual = saldoInicialContas + transacoesAnteriores + receitasMesAtual - despesasMesAtual;
-  const saldoMesAnterior = saldoInicialContas + 
-    (dadosAno?.transacoes ?? [])
-      .filter((t) => {
-        const dataTransacao = new Date(t.data);
-        const mesRef = mesAnterior;
-        const anoRef = mesAnterior === 11 ? ano - 1 : ano;
-        return dataTransacao.getFullYear() < anoRef || 
-               (dataTransacao.getFullYear() === anoRef && dataTransacao.getMonth() < mesRef);
-      })
-      .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0) +
-    receitasMesAnterior - despesasMesAnterior;
+  const saldoMesAnterior = saldoInicialContas + transacoesAteMesAnterior;
 
   const variacao =
     saldoMesAnterior !== 0
-      ? ((saldoMesAtual - saldoMesAnterior) / Math.abs(saldoMesAnterior)) * 100
+      ? ((saldoHoje - saldoMesAnterior) / Math.abs(saldoMesAnterior)) * 100
       : 0;
 
-  const isPositivo = saldoMesAtual >= 0;
+  const isPositivo = saldoHoje >= 0;
   const variacaoPositiva = variacao >= 0;
 
   return (
@@ -76,7 +72,7 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
           }`}
         >
           {isPositivo ? "+" : ""}
-          {formatarMoeda(saldoMesAtual)}
+          {formatarMoeda(saldoHoje)}
         </div>
         <p className="text-xs text-muted-foreground">
           {variacaoPositiva ? "Aumento" : "Redução"} em relação ao mês anterior

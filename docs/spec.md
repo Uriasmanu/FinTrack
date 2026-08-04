@@ -72,10 +72,17 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Arquivo modificado:** `src/pages/Dashboard.tsx`
 **Spec:** `docs/implementado/toggle-dashboard.md`
 
-### [aberto] transaçoes que são alteradas de unicas para recorrentes ou parcelada tem que aparecer nos proximos meses tambem
+### [resolvido] Converter transação única para recorrente/parcelada gera transações futuras
+**Data resolução:** 04/08/2026
+**Solução:** Ao editar uma transação e alterar o tipoRecorrencia de "unica" para "recorrente" ou "parcelado", o sistema exclui a transação original e gera as transações futuras usando `adicionarTransacoesRecorrentes`.
+**Arquivo modificado:** `src/pages/EditarTransacao.tsx`
+**Spec:** `docs/implementado/converter-unica-recorrente.md`
 
-
-### [aberto] em dashbord Saldo Total deve mostrar o saldo de hoje e em Receitas vs Despesas tem que ter um terceiro valor que é o que antes era exibido no saldo total
+### [resolvido] Dashboard Saldo Total mostra saldo de hoje e Receitas vs Despesas tem terceiro valor
+**Data resolução:** 04/08/2026
+**Solução:** O card "Saldo Total" agora mostra o saldo real de hoje (saldoInicial + todas transações até hoje). O card "Receitas vs Despesas" agora exibe 3 colunas: Receitas, Despesas e Saldo (receitas - despesas do mês).
+**Arquivos modificados:** `src/components/dashboard/saldo-card.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`
+**Spec:** `docs/implementado/saldo-dashboard.md`
 
 ## Feature
 
