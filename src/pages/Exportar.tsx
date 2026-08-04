@@ -85,7 +85,7 @@ export function Exportar() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <FileJson className="h-5 w-5" />
         </div>
         <div>
@@ -111,11 +111,13 @@ export function Exportar() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Download className="h-5 w-5" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
+                <Download className="h-4 w-4 text-success" />
+              </div>
               Exportar Dados
             </CardTitle>
           </CardHeader>
@@ -134,7 +136,9 @@ export function Exportar() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Upload className="h-5 w-5" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <Upload className="h-4 w-4 text-primary" />
+              </div>
               Importar Dados
             </CardTitle>
           </CardHeader>

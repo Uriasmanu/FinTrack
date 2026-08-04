@@ -96,37 +96,33 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 
 | Elemento | Cor | Código |
 |---|---|---|
-| Fundo Principal | Branco | `#FFFFFF` |
-| Fundo Secundário | Cinza Claro | `#F8F9FA` |
+| Fundo Principal | Creme | `#F2E8C4` |
+| Fundo Secundário | Creme Claro | `hsl(43 30% 94%)` |
 | Fundo Card | Branco | `#FFFFFF` |
-| Texto Principal | Cinza Escuro | `#1A1A2E` |
-| Texto Secundário | Cinza Médio | `#6C757D` |
-| Texto Suave | Cinza Claro | `#ADB5BD` |
-| Primária | Azul | `#2563EB` |
-| Primária Hover | Azul Escuro | `#1D4ED8` |
-| Sucesso / Receita | Verde | `#16A34A` |
-| Sucesso Fundo | Verde Claro | `#DCFCE7` |
-| Perigo / Despesa | Vermelho | `#DC2626` |
-| Perigo Fundo | Vermelho Claro | `#FEE2E2` |
-| Aviso | Amarelo | `#F59E0B` |
-| Aviso Fundo | Amarelo Claro | `#FEF3C7` |
-| Borda | Cinza Borda | `#E5E7EB` |
+| Texto Principal | Preto | `hsl(0 0% 8%)` |
+| Texto Secundário | Cinza Médio | `hsl(0 0% 45%)` |
+| Texto Suave | Cinza Claro | `hsl(0 0% 60%)` |
+| Primária | Verde-Água | `#3EC9A7` |
+| Primária Hover | Verde-Água Escuro | `hsl(174 55% 30%)` |
+| Sucesso / Receita | Verde | `hsl(142 50% 45%)` |
+| Perigo / Despesa | Vermelho | `hsl(0 72% 51%)` |
+| Aviso | Amarelo | `hsl(38 80% 50%)` |
+| Borda | Creme Borda | `hsl(43 20% 88%)` |
 
 ### Tema Escuro
 
 | Elemento | Cor | Código |
 |---|---|---|
-| Fundo Principal | Preto | `#0A0A0A` |
-| Fundo Secundário | Cinza Escuro | `#1A1A2E` |
-| Fundo Card | Cinza Card | `#16213E` |
-| Texto Principal | Branco | `#F8F9FA` |
-| Texto Secundário | Cinza Claro | `#9CA3AF` |
-| Texto Suave | Cinza Médio | `#6B7280` |
-| Primária | Azul | `#3B82F6` |
-| Sucesso / Receita | Verde | `#22C55E` |
-| Perigo / Despesa | Vermelho | `#EF4444` |
-| Aviso | Amarelo | `#EAB308` |
-| Borda | Cinza Borda | `#2D2D3F` |
+| Fundo Principal | Azul Escuro | `hsl(210 15% 10%)` |
+| Fundo Secundário | Azul Carta | `hsl(210 12% 14%)` |
+| Fundo Card | Azul Card | `hsl(210 12% 14%)` |
+| Texto Principal | Branco | `hsl(0 0% 92%)` |
+| Texto Secundário | Cinza Claro | `hsl(0 0% 60%)` |
+| Primária | Verde-Água | `hsl(174 55% 40%)` |
+| Sucesso / Receita | Verde | `hsl(142 50% 50%)` |
+| Perigo / Despesa | Vermelho | `hsl(0 65% 55%)` |
+| Aviso | Amarelo | `hsl(38 80% 55%)` |
+| Borda | Azul Borda | `hsl(210 10% 22%)` |
 
 ### Cores de Categorias (Padrão)
 
@@ -683,3 +679,12 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 03/08/2026 | Correções de ciclo: saldo do dia, categorias, tema, gráficos, saldo negativo, recorrentes, categorias novas |
 | 03/08/2026 | Correções extras: comparação receitas/despesas, migração de categorias VA/VR |
 | 04/08/2026 | Feature: Efetivar transação no Dashboard (botão Check no card Próximas Transações) |
+| 04/08/2026 | UI/UX: Paleta de cores atualizada (verde-água, creme, azul escuro) |
+| 04/08/2026 | UI/UX: Transições suaves em todos os componentes (hover, active, focus) |
+| 04/08/2026 | UI/UX: Responsividade melhorada em todas as telas (grid sm:grid-cols) |
+| 04/08/2026 | UI/UX: Cards com sombras e hover effects |
+| 04/08/2026 | UI/UX: Sidebar com animação suave e backdrop blur |
+| 04/08/2026 | UI/UX: Botões com escala active (scale 0.98) |
+| 04/08/2026 | UI/UX: Inputs com focus ring e border transition |
+| 04/08/2026 | UI/UX: Header com backdrop blur |
+| 04/08/2026 | UI/UX: Empty states com ícones e CTAs |
