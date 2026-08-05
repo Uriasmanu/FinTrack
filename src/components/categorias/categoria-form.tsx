@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -69,6 +70,17 @@ export function CategoriaForm({
       tipo: initialData?.tipo ?? "ambos",
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        nome: initialData.nome ?? "",
+        cor: initialData.cor ?? "#3B82F6",
+        icone: initialData.icone ?? "Circle",
+        tipo: initialData.tipo ?? "ambos",
+      });
+    }
+  }, [initialData, reset]);
 
   function handleFormSubmit(data: CategoriaFormData) {
     onSubmit(data);

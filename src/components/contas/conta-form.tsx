@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -54,6 +55,16 @@ export function ContaForm({
       tipo: initialData?.tipo ?? "corrente",
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        banco: initialData.banco ?? "",
+        saldoInicial: initialData.saldoInicial ?? 0,
+        tipo: initialData.tipo ?? "corrente",
+      });
+    }
+  }, [initialData, reset]);
 
   function handleFormSubmit(data: ContaFormData) {
     onSubmit(data);

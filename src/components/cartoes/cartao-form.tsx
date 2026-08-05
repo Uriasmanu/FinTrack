@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -58,6 +59,18 @@ export function CartaoForm({
       diaVencimento: initialData?.diaVencimento ?? 10,
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        nome: initialData.nome ?? "",
+        bandeira: initialData.bandeira ?? "Visa",
+        limite: initialData.limite ?? 0,
+        diaFechamento: initialData.diaFechamento ?? 1,
+        diaVencimento: initialData.diaVencimento ?? 10,
+      });
+    }
+  }, [initialData, reset]);
 
   function handleFormSubmit(data: CartaoFormData) {
     onSubmit(data);
