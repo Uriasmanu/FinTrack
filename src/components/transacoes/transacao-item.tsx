@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, RefreshCw, Check } from "lucide-react";
+import { Pencil, Trash2, RefreshCw, Check, Repeat } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -43,6 +43,17 @@ export function TransacaoItem({
     setDialogOpen(false);
   }
 
+  function tipoRecorrenciaLabel(tipo: string) {
+    switch (tipo) {
+      case "recorrente":
+        return { label: "Recorrente", variant: "default" as const };
+      case "parcelado":
+        return { label: "Parcelado", variant: "secondary" as const };
+      default:
+        return { label: "Única", variant: "outline" as const };
+    }
+  }
+
   return (
     <div className="flex items-center justify-between py-3 px-2 border-b last:border-b-0 hover:bg-accent/50 transition-colors duration-150 ease-in-out rounded-lg">
       <div className="flex items-center gap-3">
@@ -55,6 +66,14 @@ export function TransacaoItem({
         >
           {transacao.tipoRecorrencia === "recorrente" ? (
             <RefreshCw
+              className={`h-4 w-4 ${
+                transacao.tipo === "receita"
+                  ? "text-success"
+                  : "text-destructive"
+              }`}
+            />
+          ) : transacao.tipoRecorrencia === "parcelado" ? (
+            <Repeat
               className={`h-4 w-4 ${
                 transacao.tipo === "receita"
                   ? "text-success"
@@ -82,6 +101,9 @@ export function TransacaoItem({
                   {transacao.parcelaAtual}/{transacao.totalParcelas}
                 </Badge>
               )}
+            <Badge variant={tipoRecorrenciaLabel(transacao.tipoRecorrencia).variant} className="text-xs">
+              {tipoRecorrenciaLabel(transacao.tipoRecorrencia).label}
+            </Badge>
             {transacao.confirmada && (
               <Badge variant="success" className="text-xs">
                 <Check className="mr-1 h-3 w-3" />

@@ -58,6 +58,26 @@ export function EditarTransacao() {
       return;
     }
 
+    const mudouParaUnica = transacaoEncontrada.tipoRecorrencia !== "unica" && data.tipoRecorrencia === "unica";
+
+    if (mudouParaUnica && transacaoEncontrada.grupoParcelaId) {
+      const grupoTransacoes = (dadosAno?.transacoes ?? [])
+        .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
+
+      grupoTransacoes.forEach((t) => {
+        if (t.id !== transacaoEncontrada.id) {
+          excluirTransacao(t.id);
+        }
+      });
+
+      editarTransacao(transacaoEncontrada.id, {
+        ...data,
+        grupoParcelaId: null,
+      });
+      navigate("/transacoes");
+      return;
+    }
+
     if (isRecorrente && (data.valor !== transacaoEncontrada.valor || data.data !== transacaoEncontrada.data)) {
       setDadosPendentes(data as unknown as Record<string, unknown>);
       setDialogAberto(true);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, Building2 } from "lucide-react";
+import { Pencil, Trash2, Building2, AlertTriangle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 import type { Conta } from "@/types";
@@ -18,6 +19,7 @@ interface ContaCardProps {
 
 export function ContaCard({ conta, onEditar }: ContaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const { excluirConta, dadosAno } = useFinanceStore();
 
   const hoje = new Date();
@@ -49,9 +51,13 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
     (t) => t.contaId === conta.id
   ).length ?? 0;
 
+  const transacoesRecorrentesNaConta = dadosAno?.transacoes.filter(
+    (t) => t.contaId === conta.id && (t.tipoRecorrencia === "recorrente" || t.tipoRecorrencia === "parcelado")
+  ).length ?? 0;
+
   function handleExcluir() {
     if (transacoesNaConta > 0) {
-      alert("Não é possível excluir uma conta com transações vinculadas.");
+      setAlertDialogOpen(true);
       return;
     }
     setDialogOpen(true);
@@ -60,6 +66,7 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
   function confirmarExclusao() {
     excluirConta(conta.id);
     setDialogOpen(false);
+    setAlertDialogOpen(false);
   }
 
   const tipoLabel = {
@@ -131,6 +138,27 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir conta</AlertDialogTitle>
+            <AlertDialogDescription>
+              {transacoesRecorrentesNaConta > 0
+                ? "Esta conta possui transações recorrentes vinculadas. Ao excluir a conta, todas as transações vinculadas (incluindo as recorrentes) serão removidas."
+                : "Tem certeza que deseja excluir esta conta? Esta ação não pode ser desfeita."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setAlertDialogOpen(false)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmarExclusao} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <DeleteConfirmDialog
         open={dialogOpen}

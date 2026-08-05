@@ -15,13 +15,27 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Quando eu clicar para transforma uma transação de recorente para unica, tem que apagar as que foram geradas nos outros meses
+### [aberto]  O aviso de Saldo insuficiente no extrato, não esta levando em consideração o valor que esta previsto de estar na conta no fim do dia e esta mostrando incoretamente
 
-### [aberto] Quando for deletar uma conta recorrente, tem que perguntar se é só essa ou as seguintes
+### [resolvido] Converter transação recorrente para única deve apagar as geradas nos outros meses
+**Comportamento atual:** Ao mudar o tipo de recorrência de "recorrente"/"parcelado" para "única", as transações geradas nos outros meses não são removidas.
+**Comportamento esperado:** Ao converter para "única", todas as transações do grupo recorrente (exceto a atual) devem ser apagadas.
+**Escopo:** EditarTransacao.tsx
 
-### [aberto] em extrato trazer se uma transação é recorrente ou unica
+### [resolvido] Deletar conta com transações recorrentes deve perguntar se é só essa ou as seguintes
+**Comportamento atual:** Ao tentar deletar uma conta com transações vinculadas, o sistema bloqueia com um alert genérico sem explicar o que acontecerá com as transações recorrentes.
+**Comportamento esperado:** Ao deletar uma conta com transações recorrentes, o sistema deve mostrar um diálogo explicando que as transações recorrentes também serão removidas.
+**Escopo:** ContaCard.tsx
 
-### [aberto] Saldo da conta poupança não pode ser somado no extrato
+### [resolvido] Extrato deve indicar se uma transação é recorrente ou única
+**Comportamento atual:** No extrato, não há indicação visual de se uma transação é recorrente, parcelada ou única.
+**Comportamento esperado:** Cada transação no extrato deve exibir um badge ou indicador mostrando seu tipo de recorrência (Recorrente, Parcelado, Única).
+**Escopo:** TransacaoItem.tsx
+
+### [resolvido] Saldo da conta poupança não deve ser somado no extrato
+**Comportamento atual:** O saldo inicial de contas poupança é incluído no cálculo do saldo do extrato.
+**Comportamento esperado:** Contas poupança devem ser excluídas do cálculo de saldo no extrato.
+**Escopo:** Transacoes.tsx
 
 ### [resolvido] Formulários de edição não traziam valores originais ao alternar entre itens
 **Comportamento atual:** Ao abrir o diálogo de edição para um segundo item sem fechar o diálogo, o formulário ainda exibia os valores do item anteriormente editado.

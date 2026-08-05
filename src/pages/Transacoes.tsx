@@ -69,7 +69,12 @@ export function Transacoes() {
   const temContas = (dadosAno?.contas.length ?? 0) > 0;
 
   const contasFiltradas = (dadosAno?.contas ?? [])
-    .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId);
+    .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId)
+    .filter((c) => c.tipo !== "poupanca");
+
+  const poupancaIds = (dadosAno?.contas ?? [])
+    .filter((c) => c.tipo === "poupanca")
+    .map((c) => c.id);
 
   const saldoInicialContas = contasFiltradas
     .reduce((acc, c) => {
@@ -82,6 +87,7 @@ export function Transacoes() {
   const transacoesAnteriores = (dadosAno?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
+      if (poupancaIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
@@ -90,6 +96,7 @@ export function Transacoes() {
   const saldoConfirmadoAnterior = (dadosAno?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
+      if (poupancaIds.includes(t.contaId)) return false;
       if (!t.confirmada) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
@@ -110,6 +117,7 @@ export function Transacoes() {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) {
         return false;
       }
+      if (poupancaIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) {
         return false;
       }
