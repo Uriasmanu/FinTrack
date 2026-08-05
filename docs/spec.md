@@ -15,11 +15,26 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] Quando eu clicar para transforma uma transação de recorente para unica, tem que apagar as que foram geradas nos outros meses
+
+### [aberto] Quando for deletar uma conta recorrente, tem que perguntar se é só essa ou as seguintes
+
+### [aberto] em extrato trazer se uma transação é recorrente ou unica
+
+### [aberto] Saldo da conta poupança não pode ser somado no extrato
+
+### [resolvido] Formulários de edição não traziam valores originais ao alternar entre itens
+**Comportamento atual:** Ao abrir o diálogo de edição para um segundo item sem fechar o diálogo, o formulário ainda exibia os valores do item anteriormente editado.
+**Comportamento esperado:** O formulário deve sempre exibir os valores originais do item que está sendo editado, independentemente de qual item foi editado anteriormente.
+**Escopo:** ContaForm, CategoriaForm, CartaoForm (MetaForm já estava correto)
 
 ## Histórico de Correções
 
-
-
+### [corrigido] Formulários de edição não traziam valores originais ao alternar entre itens
+**Comportamento atual:** Ao abrir o diálogo de edição para um segundo item sem fechar o diálogo, o formulário ainda exibia os valores do item anteriormente editado.
+**Comportamento esperado:** O formulário deve sempre exibir os valores originais do item que está sendo editado, independentemente de qual item foi editado anteriormente.
+**Escopo:** ContaForm, CategoriaForm, CartaoForm (MetaForm já estava correto)
+**Correção:** Adicionado `useEffect` + `reset()` nos três form components para sincronizar com `initialData` quando este muda. Documentado em `implementado/editar-formulario-valor-original.md`.
 ## Feature
 
 # Guia de Spec para Implementação de Features
