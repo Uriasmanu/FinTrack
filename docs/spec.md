@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto]  O aviso de Saldo insuficiente no extrato, não esta levando em consideração o valor que esta previsto de estar na conta no fim do dia e esta mostrando incoretamente
+### [resolvido] O aviso de Saldo insuficiente no extrato não está levando em consideração o valor previsto de estar na conta no fim do dia e está mostrando incorretamente
 
 ### [resolvido] Converter transação recorrente para única deve apagar as geradas nos outros meses
 **Comportamento atual:** Ao mudar o tipo de recorrência de "recorrente"/"parcelado" para "única", as transações geradas nos outros meses não são removidas.
@@ -49,6 +49,36 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** O formulário deve sempre exibir os valores originais do item que está sendo editado, independentemente de qual item foi editado anteriormente.
 **Escopo:** ContaForm, CategoriaForm, CartaoForm (MetaForm já estava correto)
 **Correção:** Adicionado `useEffect` + `reset()` nos três form components para sincronizar com `initialData` quando este muda. Documentado em `implementado/editar-formulario-valor-original.md`.
+
+### [corrigido] Converter transação recorrente para única deve apagar as geradas nos outros meses
+**Comportamento atual:** Ao mudar o tipo de recorrência de "recorrente"/"parcelado" para "única", as transações geradas nos outros meses não são removidas.
+**Comportamento esperado:** Ao converter para "única", todas as transações do grupo recorrente (exceto a atual) devem ser apagadas.
+**Escopo:** EditarTransacao.tsx
+**Correção:** Adicionada lógica em `handleSubmit` para detectar a mudança para "única" e excluir todas as transações do grupo recorrente, mantendo apenas a atual.
+
+### [corrigido] Deletar conta com transações recorrentes deve perguntar se é só essa ou as seguintes
+**Comportamento atual:** Ao tentar deletar uma conta com transações vinculadas, o sistema bloqueia com um alert genérico sem explicar o que acontecerá com as transações recorrentes.
+**Comportamento esperado:** Ao deletar uma conta com transações recorrentes, o sistema deve mostrar um diálogo explicando que as transações recorrentes também serão removidas.
+**Escopo:** ContaCard.tsx
+**Correção:** Substituído o `alert()` por um `AlertDialog` que explica o que acontecerá com as transações recorrentes ao excluir a conta.
+
+### [corrigido] Extrato deve indicar se uma transação é recorrente ou única
+**Comportamento atual:** No extrato, não há indicação visual de se uma transação é recorrente, parcelada ou única.
+**Comportamento esperado:** Cada transação no extrato deve exibir um badge mostrando seu tipo de recorrência (Recorrente, Parcelado, Única).
+**Escopo:** TransacaoItem.tsx
+**Correção:** Adicionado badge de recorrência e ícone `Repeat` para transações parceladas no `TransacaoItem`.
+
+### [corrigido] Saldo da conta poupança não deve ser somado no extrato
+**Comportamento atual:** O saldo inicial de contas poupança é incluído no cálculo do saldo do extrato.
+**Comportamento esperado:** Contas poupança devem ser excluídas do cálculo de saldo no extrato.
+**Escopo:** Transacoes.tsx
+**Correção:** Adicionado filtro para excluir contas do tipo "poupanca" de todos os cálculos de saldo e da lista de transações no extrato.
+
+### [corrigido] Aviso de saldo insuficiente no extrato não considera o valor previsto no fim do dia
+**Comportamento atual:** O aviso de saldo insuficiente no formulário de transação não considera o valor da transação atual ao calcular o saldo previsto, mostrando incorretamente quando o usuário está editando uma transação existente.
+**Comportamento esperado:** O aviso de saldo insuficiente deve considerar o valor original da transação sendo editada para calcular corretamente o saldo previsto no fim do dia.
+**Escopo:** TransacaoForm.tsx
+**Correção:** Ajustado o cálculo de `saldoAposTransacao` para subtrair o valor original da transação (quando em modo de edição) antes de aplicar o novo valor, evitando dupla contagem.
 ## Feature
 
 # Guia de Spec para Implementação de Features

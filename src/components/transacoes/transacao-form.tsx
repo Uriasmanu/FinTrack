@@ -97,7 +97,9 @@ export function TransacaoForm({
   const contaSelecionada = watch("contaId");
   const saldoAtual = contaSelecionada ? obterSaldoConta(contaSelecionada) : 0;
   const valorTransacao = valor ?? 0;
-  const saldoAposTransacao = tipo === "despesa" ? saldoAtual - valorTransacao : saldoAtual + valorTransacao;
+  const valorTransacaoOriginal = isEditing && initialData?.valor ? initialData.valor : 0;
+  const saldoAjustado = tipo === "despesa" ? saldoAtual + valorTransacaoOriginal : saldoAtual - valorTransacaoOriginal;
+  const saldoAposTransacao = tipo === "despesa" ? saldoAjustado - valorTransacao : saldoAjustado + valorTransacao;
   const saldoNegativo = tipo === "despesa" && saldoAposTransacao < 0;
 
   const categoriasAutoTicket = ["cat-001", "cat-009", "cat-012"];
