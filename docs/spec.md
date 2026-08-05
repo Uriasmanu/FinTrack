@@ -16,8 +16,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-## Feature
-Exporta em formato de excel bem formatado com cores.Todas as receitas e despesas e contas. Cada mes em uma aba
+### [aberto] Exporta em formato de excel bem formatado com cores.Todas as receitas e despesas e contas. Cada mes em uma aba
+
+### [aberto] O aviso de saldo insuficiente esta calculando incorretamente, ele deve aparecer somente nas transaçoes que, dentro da logica de valor previsto para o fim do dia, com essa transação, tera o valor negativo.
 
 # Guia de Spec para Implementação de Features
 
