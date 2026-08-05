@@ -31,6 +31,62 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** A tag "Parcelado" não deve ser exibida separadamente, pois o indicador de recorrência já mostra o tipo da transação.
 **Escopo:** TransacaoItem.tsx
 
+## Histórico de Correções
+
+### [corrigido] Formulários de edição não traziam valores originais ao alternar entre itens
+**Comportamento atual:** Ao abrir o diálogo de edição para um segundo item sem fechar o diálogo, o formulário ainda exibia os valores do item anteriormente editado.
+**Comportamento esperado:** O formulário deve sempre exibir os valores originais do item que está sendo editado, independentemente de qual item foi editado anteriormente.
+**Escopo:** ContaForm, CategoriaForm, CartaoForm (MetaForm já estava correto)
+**Correção:** Adicionado `useEffect` + `reset()` nos três form components para sincronizar com `initialData` quando este muda. Documentado em `implementado/editar-formulario-valor-original.md`.
+
+### [corrigido] Converter transação recorrente para única deve apagar as geradas nos outros meses
+**Comportamento atual:** Ao mudar o tipo de recorrência de "recorrente"/"parcelado" para "única", as transações geradas nos outros meses não são removidas.
+**Comportamento esperado:** Ao converter para "única", todas as transações do grupo recorrente (exceto a atual) devem ser apagadas.
+**Escopo:** EditarTransacao.tsx
+**Correção:** Adicionada lógica em `handleSubmit` para detectar a mudança para "única" e excluir todas as transações do grupo recorrente, mantendo apenas a atual.
+
+### [corrigido] Deletar conta com transações recorrentes deve perguntar se é só essa ou as seguintes
+**Comportamento atual:** Ao tentar deletar uma conta com transações vinculadas, o sistema bloqueia com um alert genérico sem explicar o que acontecerá com as transações recorrentes.
+**Comportamento esperado:** Ao deletar uma conta com transações recorrentes, o sistema deve mostrar um diálogo explicando que as transações recorrentes também serão removidas.
+**Escopo:** ContaCard.tsx
+**Correção:** Substituído o `alert()` por um `AlertDialog` que explica o que acontecerá com as transações recorrentes ao excluir a conta.
+
+### [corrigido] Extrato deve indicar se uma transação é recorrente ou única
+**Comportamento atual:** No extrato, não há indicação visual de se uma transação é recorrente, parcelada ou única.
+**Comportamento esperado:** Cada transação no extrato deve exibir um badge mostrando seu tipo de recorrência (Recorrente, Parcelado, Única).
+**Escopo:** TransacaoItem.tsx
+**Correção:** Adicionado badge de recorrência no `TransacaoItem`.
+
+### [corrigido] Saldo da conta poupança não deve ser somado no extrato
+**Comportamento atual:** O saldo inicial de contas poupança é incluído no cálculo do saldo do extrato.
+**Comportamento esperado:** Contas poupança devem ser excluídas do cálculo de saldo no extrato.
+**Escopo:** Transacoes.tsx
+**Correção:** Adicionado filtro para excluir contas do tipo "poupanca" de todos os cálculos de saldo e da lista de transações no extrato.
+
+### [corrigido] Aviso de saldo insuficiente no extrato não considera o valor previsto no fim do dia
+**Comportamento atual:** O aviso de saldo insuficiente no formulário de transação não considera o valor da transação atual ao calcular o saldo previsto, mostrando incorretamente quando o usuário está editando uma transação existente.
+**Comportamento esperado:** O aviso de saldo insuficiente deve considerar o valor original da transação sendo editada para calcular corretamente o saldo previsto no fim do dia.
+**Escopo:** TransacaoForm.tsx
+**Correção:** Ajustado o cálculo de `saldoAposTransacao` para subtrair o valor original da transação (quando em modo de edição) antes de aplicar o novo valor, evitando dupla contagem. O aviso agora usa o saldo previsto para o fim do dia.
+
+### [corrigido] Exporta em formato de excel bem formatado com cores
+**Comportamento atual:** Não existe exportação para Excel formatada. Apenas exportação JSON está disponível.
+**Comportamento esperado:** Exportação para Excel com formatação colorida, incluindo todas as receitas, despesas e contas, com cada mês em uma aba separada.
+**Escopo:** Exportar.tsx
+**Correção:** Adicionada funcionalidade de exportação para Excel usando a biblioteca `xlsx`, com formatação colorida por tipo de transação e abas separadas por conta.
+
+### [corrigido] Tag parcelado removida do extrato
+**Comportamento atual:** A tag "Parcelado" era exibida no extrato para transações parceladas, mas era redundante já que a recorrência já era indicada.
+**Comportamento esperado:** A tag "Parcelado" não deve ser exibida separadamente, pois o indicador de recorrência já mostra o tipo da transação.
+**Escopo:** TransacaoItem.tsx
+**Correção:** Removida a tag "Parcelado" e o ícone `Repeat` do `TransacaoItem`, mantendo apenas o badge de recorrência.
+
+### [corrigido] Aviso de saldo insuficiente calcula corretamente
+**Comportamento atual:** O aviso de saldo insuficiente não levava em consideração o valor previsto de estar na conta no fim do dia e mostrava incorretamente.
+**Comportamento esperado:** O aviso de saldo insuficiente deve aparecer somente para transações que, dentro da lógica de valor previsto para o fim do dia, com essa transação, terá o valor negativo.
+**Escopo:** TransacaoForm.tsx
+**Correção:** O cálculo do saldo previsto para o fim do dia agora considera todas as transações do mesmo dia, e o aviso só é exibido quando o saldo previsto seria negativo.
+
 ### [aberto] se eu deletar uma transação parcelada tem que pergunta se é só essa ou todas as as seguintes tambem
 
 ### [aberto] transações recorrentes tem a opção de ser recorente sempre na mesma data (padrão) ou personalizado (se repete a cada 25 dias por exemplo.)
