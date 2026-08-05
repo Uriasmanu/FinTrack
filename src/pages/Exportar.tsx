@@ -1,10 +1,11 @@
 import { useState, useRef } from "react";
-import { Download, Upload, FileJson, CheckCircle, AlertCircle } from "lucide-react";
+import { Download, Upload, FileJson, FileSpreadsheet, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { storage } from "@/lib/storage";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
+import * as XLSX from "xlsx";
 
 export function Exportar() {
   const { dadosAno, inicializar } = useFinanceStore();
@@ -36,6 +37,129 @@ export function Exportar() {
       setMensagem({ tipo: "sucesso", texto: `Dados exportados com sucesso! Arquivo: fintrack_${anoAtual}.json` });
     } catch (error) {
       setMensagem({ tipo: "erro", texto: "Erro ao exportar dados" });
+    }
+  }
+
+  function handleExportarExcel() {
+    try {
+      if (!dadosAno) {
+        setMensagem({ tipo: "erro", texto: "Nenhum dado disponível para exportar" });
+        return;
+      }
+
+      const wb = XLSX.utils.book_new();
+
+      const meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+
+      const receitasColor = "198754";
+      const despesasColor = "DC2626";
+      const headerColor = "1E40AF";
+      const headerFontColor = "FFFFFF";
+      const contasColor = "6B7280";
+
+      dadosAno.contas.forEach((conta) => {
+        const wsData: (string | number)[][] = [
+          ["Conta", conta.banco],
+          ["Tipo", conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"],
+          ["Saldo Inicial", conta.saldoInicial],
+          [""],
+          ["Data", "Descrição", "Tipo", "Categoria", "Valor", "Confirmada"],
+        ];
+
+        const transacoesConta = dadosAno.transacoes
+          .filter((t) => t.contaId === conta.id)
+          .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+
+        transacoesConta.forEach((t) => {
+          const categoria = dadosAno.categorias.find((c) => c.id === t.categoriaId);
+          wsData.push([
+            t.data,
+            t.descricao,
+            t.tipo === "receita" ? "Receita" : "Despesa",
+            categoria?.nome ?? "",
+            t.valor,
+            t.confirmada ? "Sim" : "Não",
+          ]);
+        });
+
+        const totalReceitas = transacoesConta.filter((t) => t.tipo === "receita").reduce((acc, t) => acc + t.valor, 0);
+        const totalDespesas = transacoesConta.filter((t) => t.tipo === "despesa").reduce((acc, t) => acc + t.valor, 0);
+        wsData.push(["", "", "", "Total Receitas", totalReceitas]);
+        wsData.push(["", "", "", "Total Despesas", totalDespesas]);
+        wsData.push(["", "", "", "Saldo", totalReceitas - totalDespesas]);
+
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+        const headerFill = { fgColor: { rgb: headerColor } };
+        const headerFont = { color: { rgb: headerFontColor }, bold: true };
+        const receitasFill = { fgColor: { rgb: receitasColor } };
+        const despesasFill = { fgColor: { rgb: despesasColor } };
+
+        ws["A1"].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+        ws["A2"].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+        ws["A3"].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+
+        const headerRowIndex = 5;
+        for (let col = 1; col <= 6; col++) {
+          const cellRef = XLSX.utils.encode_cell({ r: headerRowIndex, c: col - 1 });
+          if (ws[cellRef]) {
+            ws[cellRef].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+          }
+        }
+
+        transacoesConta.forEach((t, idx) => {
+          const rowIndex = headerRowIndex + 1 + idx;
+          const tipoCol = 3;
+          const cellRef = XLSX.utils.encode_cell({ r: rowIndex, c: tipoCol - 1 });
+          if (ws[cellRef]) {
+            ws[cellRef].s = {
+              fill: { fgColor: { rgb: t.tipo === "receita" ? receitasColor : despesasColor } },
+              font: { color: { rgb: headerFontColor } },
+            };
+          }
+        });
+
+        XLSX.utils.book_append_sheet(wb, ws, conta.banco);
+      });
+
+      const resumoData: (string | number)[][] = [
+        ["Resumo Geral", ""],
+        ["", ""],
+        ["Conta", "Saldo Inicial", "Total Receitas", "Total Despesas", "Saldo Final"],
+      ];
+
+      dadosAno.contas.forEach((conta) => {
+        const transacoesConta = dadosAno.transacoes.filter((t) => t.contaId === conta.id);
+        const totalReceitas = transacoesConta.filter((t) => t.tipo === "receita").reduce((acc, t) => acc + t.valor, 0);
+        const totalDespesas = transacoesConta.filter((t) => t.tipo === "despesa").reduce((acc, t) => acc + t.valor, 0);
+        resumoData.push([
+          conta.banco,
+          conta.saldoInicial,
+          totalReceitas,
+          totalDespesas,
+          conta.saldoInicial + totalReceitas - totalDespesas,
+        ]);
+      });
+
+      const wsResumo = XLSX.utils.aoa_to_sheet(resumoData);
+      wsResumo["A1"].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+      for (let col = 1; col <= 5; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: 2, c: col - 1 });
+        if (wsResumo[cellRef]) {
+          wsResumo[cellRef].s = { fill: { fgColor: { rgb: headerColor } }, font: { color: { rgb: headerFontColor }, bold: true } };
+        }
+      }
+
+      XLSX.utils.book_append_sheet(wb, wsResumo, "Resumo");
+
+      XLSX.writeFile(wb, `fintrack_${anoAtual}.xlsx`);
+
+      setMensagem({ tipo: "sucesso", texto: `Excel exportado com sucesso! Arquivo: fintrack_${anoAtual}.xlsx` });
+    } catch (error) {
+      setMensagem({ tipo: "erro", texto: "Erro ao exportar para Excel" });
     }
   }
 
@@ -129,6 +253,10 @@ export function Exportar() {
             <Button onClick={handleExportar} className="w-full">
               <Download className="mr-2 h-4 w-4" />
               Exportar JSON ({anoAtual})
+            </Button>
+            <Button onClick={handleExportarExcel} className="w-full" variant="outline">
+              <FileSpreadsheet className="mr-2 h-4 w-4" />
+              Exportar Excel ({anoAtual})
             </Button>
           </CardContent>
         </Card>

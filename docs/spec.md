@@ -16,9 +16,24 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Exporta em formato de excel bem formatado com cores.Todas as receitas e despesas e contas. Cada mes em uma aba
+### [resolvido] Exporta em formato de excel bem formatado com cores. Todas as receitas e despesas e contas. Cada mes em uma aba
+**Comportamento atual:** Não existe exportação para Excel formatada. Apenas exportação JSON está disponível.
+**Comportamento esperado:** Exportação para Excel com formatação colorida, incluindo todas as receitas, despesas e contas, com cada mês em uma aba separada.
+**Escopo:** Exportar.tsx
 
-### [aberto] O aviso de saldo insuficiente esta calculando incorretamente, ele deve aparecer somente nas transaçoes que, dentro da logica de valor previsto para o fim do dia, com essa transação, tera o valor negativo.
+### [resolvido] O aviso de saldo insuficiente esta calculando incorretamente, ele deve aparecer somente nas transacoes que, dentro da logica de valor previsto para o fim do dia, com essa transacao, tera o valor negativo.
+**Comportamento atual:** O aviso de saldo insuficiente não considera o valor previsto de estar na conta no fim do dia e mostra incorretamente.
+**Comportamento esperado:** O aviso de saldo insuficiente deve aparecer somente para transações que, dentro da lógica de valor previsto para o fim do dia, com essa transação, terá o valor negativo.
+**Escopo:** TransacaoForm.tsx
+
+### [resolvido] não precisa da tag parcelado ja que as contas parcelada ja trazem uma indicação
+**Comportamento atual:** A tag "Parcelado" é exibida no extrato para transações parceladas, mas é redundante já que a recorrência já é indicada.
+**Comportamento esperado:** A tag "Parcelado" não deve ser exibida separadamente, pois o indicador de recorrência já mostra o tipo da transação.
+**Escopo:** TransacaoItem.tsx
+
+### [aberto] se eu deletar uma transação parcelada tem que pergunta se é só essa ou todas as as seguintes tambem
+
+### [aberto] transações recorrentes tem a opção de ser recorente sempre na mesma data (padrão) ou personalizado (se repete a cada 25 dias por exemplo.)
 
 # Guia de Spec para Implementação de Features
 

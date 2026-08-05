@@ -95,12 +95,24 @@ export function TransacaoForm({
   const contaTicket = contas.find((c) => c.tipo === "ticket");
 
   const contaSelecionada = watch("contaId");
+  const dataTransacao = watch("data");
   const saldoAtual = contaSelecionada ? obterSaldoConta(contaSelecionada) : 0;
   const valorTransacao = valor ?? 0;
   const valorTransacaoOriginal = isEditing && initialData?.valor ? initialData.valor : 0;
   const saldoAjustado = tipo === "despesa" ? saldoAtual + valorTransacaoOriginal : saldoAtual - valorTransacaoOriginal;
   const saldoAposTransacao = tipo === "despesa" ? saldoAjustado - valorTransacao : saldoAjustado + valorTransacao;
-  const saldoNegativo = tipo === "despesa" && saldoAposTransacao < 0;
+
+  const transacoesDoDia = dadosAno?.transacoes
+    .filter((t) => {
+      if (t.contaId !== contaSelecionada) return false;
+      if (t.data !== dataTransacao) return false;
+      if (isEditing && t.id === initialData?.id) return false;
+      return true;
+    })
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+
+  const saldoPrevistoFimDia = saldoAposTransacao + transacoesDoDia;
+  const saldoNegativo = tipo === "despesa" && saldoPrevistoFimDia < 0;
 
   const categoriasAutoTicket = ["cat-001", "cat-009", "cat-012"];
   if (categoriasAutoTicket.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
@@ -333,29 +345,29 @@ export function TransacaoForm({
         </div>
       )}
 
-      {saldoNegativo && contaSelecionada && (
-        <div className="border border-destructive bg-destructive/5 rounded-lg p-4 space-y-2">
-          <div className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-5 w-5" />
-            <span className="font-medium">Saldo insuficiente</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Esta transação deixará o saldo da conta negativo.
-          </p>
-          <div className="flex justify-between text-sm">
-            <span>Saldo atual:</span>
-            <span className={saldoAtual >= 0 ? "text-success" : "text-destructive"}>
-              {formatarMoeda(saldoAtual)}
-            </span>
-          </div>
-          <div className="flex justify-between text-sm font-medium">
-            <span>Saldo após transação:</span>
-            <span className="text-destructive">
-              {formatarMoeda(saldoAposTransacao)}
-            </span>
-          </div>
-        </div>
-      )}
+{saldoNegativo && contaSelecionada && (
+         <div className="border border-destructive bg-destructive/5 rounded-lg p-4 space-y-2">
+           <div className="flex items-center gap-2 text-destructive">
+             <AlertTriangle className="h-5 w-5" />
+             <span className="font-medium">Saldo insuficiente</span>
+           </div>
+           <p className="text-sm text-muted-foreground">
+             Esta transação deixará o saldo previsto para o fim do dia negativo.
+           </p>
+           <div className="flex justify-between text-sm">
+             <span>Saldo atual:</span>
+             <span className={saldoAtual >= 0 ? "text-success" : "text-destructive"}>
+               {formatarMoeda(saldoAtual)}
+             </span>
+           </div>
+           <div className="flex justify-between text-sm font-medium">
+             <span>Saldo previsto fim do dia:</span>
+             <span className="text-destructive">
+               {formatarMoeda(saldoPrevistoFimDia)}
+             </span>
+           </div>
+         </div>
+       )}
 
       <div className="flex justify-end gap-2">
         <Button type="submit">

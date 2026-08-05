@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, RefreshCw, Check, Repeat } from "lucide-react";
+import { Pencil, Trash2, RefreshCw, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -47,8 +47,6 @@ export function TransacaoItem({
     switch (tipo) {
       case "recorrente":
         return { label: "Recorrente", variant: "default" as const };
-      case "parcelado":
-        return { label: "Parcelado", variant: "secondary" as const };
       default:
         return { label: "Única", variant: "outline" as const };
     }
@@ -66,14 +64,6 @@ export function TransacaoItem({
         >
           {transacao.tipoRecorrencia === "recorrente" ? (
             <RefreshCw
-              className={`h-4 w-4 ${
-                transacao.tipo === "receita"
-                  ? "text-success"
-                  : "text-destructive"
-              }`}
-            />
-          ) : transacao.tipoRecorrencia === "parcelado" ? (
-            <Repeat
               className={`h-4 w-4 ${
                 transacao.tipo === "receita"
                   ? "text-success"
