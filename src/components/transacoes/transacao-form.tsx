@@ -115,7 +115,7 @@ export function TransacaoForm({
   const valorTransacao = valor ?? 0;
   const saldoAposTransacao = tipo === "despesa" ? saldoAtual - valorTransacao : saldoAtual + valorTransacao;
 
-  const transacoesDoDia = dados?.transacoes
+  const transacoesDoDia = (dados?.transacoes ?? [])
     .filter((t) => {
       if (t.contaId !== contaSelecionada) return false;
       if (t.data !== dataTransacao) return false;
