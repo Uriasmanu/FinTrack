@@ -172,11 +172,16 @@ export function Exportar() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = async (e) => {
+    reader.onload = (e) => {
       const conteudo = e.target?.result as string;
-      const dados = await storage.importarDados(conteudo);
-      
-      if (!dados) {
+
+      try {
+        const dados = JSON.parse(conteudo);
+        if (!dados || typeof dados !== "object" || !dados.ano || !Array.isArray(dados.transacoes)) {
+          setMensagem({ tipo: "erro", texto: "Arquivo JSON inválido ou corrompido" });
+          return;
+        }
+      } catch {
         setMensagem({ tipo: "erro", texto: "Arquivo JSON inválido ou corrompido" });
         return;
       }
