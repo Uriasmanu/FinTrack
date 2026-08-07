@@ -17,7 +17,7 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 | Navegação | React Router | 7.x |
 | Estado | Zustand | 5.x |
 | Gráficos | Recharts | 3.x |
-| Armazenamento Local | JSON por ano (localStorage) | — |
+| Armazenamento | Arquivo JSON único servido por backend Express (`data/fintrack.json`) | — |
 | Formulários | React Hook Form + Zod | latest |
 | Ícones | lucide-react | latest |
 | UUID | crypto.randomUUID() | nativo |
@@ -151,7 +151,7 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 fintrack/
 ├── public/
 ├── data/
-│   └── fintrack_2026.json
+│   └── fintrack.json
 ├── src/
 │   ├── main.tsx
 │   ├── App.tsx
@@ -463,14 +463,12 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - ❌ **Não implementado**: Exportação para PDF (dependências instaladas mas não utilizadas)
 - ❌ **Não implementado**: Exportação para CSV (dependência instalada mas não utilizada)
 
-### 9. Armazenamento Local (JSON por Ano) ✅
+### 9. Armazenamento em Arquivo JSON ✅
 
-- Um único JSON por ano: `fintrack_2026`, `fintrack_2027`, etc. (chave no localStorage)
-- O JSON do ano atual é o ativo (lido e escrito)
-- Ao mudar o ano, o app cria um novo JSON automaticamente
-- Todos os dados do ano ficam em um único objeto
+- Persistência física em arquivo JSON único: `data/fintrack.json` (nome derivado do `package.json`)
+- Criado automaticamente na inicialização do servidor como primeira ação, com as informações padrão do sistema
 - Backup e restauração de dados (importação/exportação do JSON)
-- ✅ **Implementado**: `storage.ts`
+- ✅ **Implementado**: `server.js`, `storage.ts`
 
 ---
 
@@ -589,9 +587,10 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Layout responsivo: sidebar colapsável em mobile, conteúdo adaptativo
 
 ### Persistência
-- Dados devem ser persistidos no localStorage com chave `fintrack_{ano}`
-- Estrutura de dados deve ser versionável por ano
-- Dados devem ser migrados automaticamente ao trocar de ano
+- Dados persistidos em arquivo JSON físico na pasta `data`, nomeado com o nome da aplicação (`fintrack.json`)
+- O arquivo JSON padrão é criado na inicialização do servidor como primeira ação, antes de aceitar requisições
+- Estrutura de dados deve ser versionável
+- Arquivos legados (`{nome-app}_{ano}.json`) são migrados automaticamente para o arquivo único
 
 ### Segurança
 - Sistema não deve permitir excluir entidade (conta, cartão, categoria) com transações vinculadas
@@ -688,3 +687,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 04/08/2026 | UI/UX: Inputs com focus ring e border transition |
 | 04/08/2026 | UI/UX: Header com backdrop blur |
 | 04/08/2026 | UI/UX: Empty states com ícones e CTAs |
+| 07/08/2026 | Persistência: JSON padrão criado na inicialização do servidor na pasta `data`, nome derivado do package.json |

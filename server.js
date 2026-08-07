@@ -10,7 +10,12 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DATA_DIR = join(__dirname, "data");
-const ARQUIVO_UNICO = join(DATA_DIR, "fintrack.json");
+
+const { name: NOME_APLICACAO } = JSON.parse(
+  readFileSync(join(__dirname, "package.json"), "utf-8")
+);
+const ARQUIVO_UNICO = join(DATA_DIR, `${NOME_APLICACAO}.json`);
+const PADRAO_ARQUIVOS_ANTIGOS = new RegExp(`^${NOME_APLICACAO}_\\d{4}\\.json$`);
 
 if (!existsSync(DATA_DIR)) {
   mkdirSync(DATA_DIR, { recursive: true });
@@ -47,7 +52,7 @@ function criarDadosNovos() {
 
 // Migra os arquivos antigos fintrack_YYYY.json para um único fintrack.json
 function migrarArquivosAntigos() {
-  const arquivos = readdirSync(DATA_DIR).filter((f) => /^fintrack_\d{4}\.json$/.test(f));
+  const arquivos = readdirSync(DATA_DIR).filter((f) => PADRAO_ARQUIVOS_ANTIGOS.test(f));
   if (arquivos.length === 0) return;
 
   const dados = criarDadosNovos();
@@ -116,6 +121,7 @@ function carregarOuCriar() {
 
   if (!existsSync(ARQUIVO_UNICO)) {
     writeFileSync(ARQUIVO_UNICO, JSON.stringify(criarDadosNovos(), null, 2), "utf-8");
+    console.log(`Arquivo padrão criado: ${ARQUIVO_UNICO}`);
   }
 
   const conteudo = readFileSync(ARQUIVO_UNICO, "utf-8");
@@ -208,6 +214,9 @@ app.use((req, res, next) => {
     if (erro) next();
   });
 });
+
+// Primeira ação da aplicação: garantir que o JSON padrão exista fisicamente na pasta data
+carregarOuCriar();
 
 app.listen(PORT, () => {
   console.log(`Servidor FinTrack rodando em http://localhost:${PORT}`);

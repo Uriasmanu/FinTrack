@@ -16,9 +16,13 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Analise requisitos. Quando eu inicio a aplicação a primeira coisa que ele deve fazer é criar o JSON com as informações padrões do sistema, o nome do JSON é o nome da aplicação e é armazenado fisicamente na pata data
-
 ## Histórico de Correções
+
+### [corrigido] Criar o JSON padrão do sistema como primeira ação da aplicação
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** O servidor criava o arquivo JSON com as informações padrão do sistema de forma preguiçosa (lazy) — somente quando o endpoint `GET /api/data` era acessado pela primeira vez. O nome do arquivo estava fixo no código (`fintrack.json`) e não derivava do nome real da aplicação.
+**Comportamento corrigido:** Ao iniciar a aplicação, a primeira ação é criar o arquivo JSON com as informações padrão do sistema. O nome do arquivo deriva do campo `name` do `package.json` (ex.: `fintrack.json`), e o arquivo é armazenado fisicamente na pasta `data`. A migração de arquivos legados `{nome-app}_{ano}.json` continua preservada.
+**RF/CA/Passos afetados:** RF-01 a RF-06 e CA-01 a CA-04 registrados em `docs/implementado/criar-json-padrao-inicializacao.md`.
 
 
 # Guia de Spec para Implementação de Features
