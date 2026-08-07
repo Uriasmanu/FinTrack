@@ -437,9 +437,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return 0;
 
-    return state.transacoes.reduce((saldo, t) => {
-      return t.tipo === "receita" ? saldo + t.valor : saldo - t.valor;
-    }, 0);
+    return state.transacoes
+      .filter((t) => t.confirmada)
+      .reduce((saldo, t) => {
+        return t.tipo === "receita" ? saldo + t.valor : saldo - t.valor;
+      }, 0);
   },
 
   obterReceitasMes: (mes, ano) => {
@@ -449,6 +451,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     return state.transacoes
       .filter(
         (t) =>
+          t.confirmada &&
           t.tipo === "receita" &&
           new Date(t.data).getMonth() === mes &&
           new Date(t.data).getFullYear() === ano
@@ -463,6 +466,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     return state.transacoes
       .filter(
         (t) =>
+          t.confirmada &&
           t.tipo === "despesa" &&
           new Date(t.data).getMonth() === mes &&
           new Date(t.data).getFullYear() === ano
@@ -475,6 +479,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     if (!state) return [];
 
     return state.transacoes.filter((t) => {
+      if (!t.confirmada) return false;
       const data = new Date(t.data);
       return data.getMonth() === mes && data.getFullYear() === ano;
     });
@@ -497,7 +502,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     if (!conta) return 0;
 
     const saldoTransacoes = state.transacoes
-      .filter((t) => t.contaId === contaId)
+      .filter((t) => t.contaId === contaId && t.confirmada)
       .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0);
 
     return conta.saldoInicial + saldoTransacoes;
@@ -508,7 +513,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     if (!state) return 0;
 
     return state.transacoes
-      .filter((t) => t.cartaoId === cartaoId && t.tipo === "despesa")
+      .filter((t) => t.cartaoId === cartaoId && t.tipo === "despesa" && t.confirmada)
       .reduce((acc, t) => acc + t.valor, 0);
   },
 
@@ -521,7 +526,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       .map((c) => c.id);
 
     return state.transacoes
-      .filter((t) => !contaIdsTicket.includes(t.contaId))
+      .filter((t) => !contaIdsTicket.includes(t.contaId) && t.confirmada)
       .reduce((saldo, t) => {
         return t.tipo === "receita" ? saldo + t.valor : saldo - t.valor;
       }, 0);

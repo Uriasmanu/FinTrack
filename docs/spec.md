@@ -15,12 +15,19 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] "Editar todas as seguintes" em transação recorrente/parcelada não aplica a alteração
-**Comportamento atual:** Ao editar uma transação recorrente/parcelada e escolher "Todas as seguintes" no dialog, nenhuma transação é alterada — nem a selecionada nem as futuras. A função `editarTodas` sombreia a variável `dados` do store com os dados do formulário (que não têm campo `transacoes`), fazendo o grupo ficar vazio; além disso, as chamadas assíncronas de edição/exclusão em loop sem `await` fazem o estado final conter apenas a última operação (race condition).
-**Comportamento esperado:** Ao escolher "Todas as seguintes", a transação selecionada e todas as transações futuras do mesmo `grupoParcelaId` devem ser editadas com o novo valor, preservando o intervalo de datas entre as ocorrências (offset de dias da data alterada).
-**Escopo:** `src/pages/EditarTransacao.tsx`
-### [aberto] saldo total em dashbord deve mostrar somente o que foi efetivado
 ## Histórico de Correções
+
+### [corrigido] "Editar todas as seguintes" em transação recorrente/parcelada não aplica a alteração
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** Ao editar uma transação recorrente/parcelada e escolher "Todas as seguintes" no dialog, nenhuma transação era alterada — nem a selecionada nem as futuras. A função `editarTodas` sombreava a variável `dados` do store com os dados do formulário (que não têm campo `transacoes`), fazendo o grupo ficar vazio; além disso, as chamadas assíncronas de edição/exclusão em loop sem `await` faziam o estado final conter apenas a última operação (race condition).
+**Comportamento corrigido:** `editarTodas` agora lê o estado atualizado via `useFinanceStore.getState()` a cada iteração, passa todos os campos obrigatórios da transação para `editarTransacao`, e os handlers do `AlertDialog` utilizam `await` para garantir a execução sequencial. `editarSomenteEssa` também foi corrigido para aguardar a gravação antes de navegar.
+**Escopo:** `src/pages/EditarTransacao.tsx`
+
+### [corrigido] Saldo total no dashboard deve mostrar somente o que foi efetivado
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** O saldo total, receitas, despesas e resumo mensal do dashboard incluíam transações não confirmadas (`confirmada: false`), distorcendo a visão financeira real do usuário.
+**Comportamento corrigido:** Todos os seletores do store (`obterSaldoAtual`, `obterReceitasMes`, `obterDespesasMes`, `obterTransacoesMes`, `obterSaldoConta`, `obterSaldoAtualSemTicket`, `obterFaturaCartao`) e os cálculos locais do `saldo-card.tsx` agora filtram por `t.confirmada === true`. Apenas transações efetivadas são consideradas nos totais do dashboard.
+**Escopo:** `src/stores/useFinanceStore.ts`, `src/components/dashboard/saldo-card.tsx`
 
 ### [corrigido] Não recriar/atualizar o fintrack.json quando ele já existir
 **Data da correção:** 07/08/2026

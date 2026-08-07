@@ -1,6 +1,6 @@
 # Implementado - Editar "Todas as Seguintes" em Transação Recorrente/Parcelada
 
-## Data: 07/08/2026
+## Data: 07/08/2026 (atualizado)
 
 ## 1. Contexto e Objetivo
 
@@ -32,6 +32,8 @@ para que o valor/vencimento se atualizem em toda a série sem eu precisar editar
 - [x] RF-03: Se a data for alterada, o sistema deve deslocar as datas das ocorrências futuras pelo mesmo offset de dias, preservando o intervalo entre elas
 - [x] RF-04: O `grupoParcelaId` e demais dados individuais (descrição, confirmada, etc.) de cada ocorrência devem ser preservados
 - [x] RF-05: As operações em loop devem ser aguardadas (await) para evitar perda de alterações por race condition
+- [x] RF-06: O estado atualizado deve ser lido via `useFinanceStore.getState()` a cada iteração do loop para evitar dados desatualizados
+- [x] RF-07: Todos os campos obrigatórios da transação devem ser passados para `editarTransacao` (não apenas valor/data)
 
 ## 5. Requisitos Não-Funcionais
 
@@ -42,7 +44,7 @@ para que o valor/vencimento se atualizem em toda a série sem eu precisar editar
 
 | Arquivo | Ação | Razão |
 |---------|------|-------|
-| `src/pages/EditarTransacao.tsx` | Modificar | Corrigir `editarTodas` para editar a ocorrência atual + futuras; aguardar chamadas assíncronas em loop |
+| `src/pages/EditarTransacao.tsx` | Modificar | Corrigir `editarTodas` para usar `getState()`, passar todos os campos; handlers com `await` |
 
 ## 7. Problemas e Impedimentos
 
@@ -51,6 +53,7 @@ para que o valor/vencimento se atualizem em toda a série sem eu precisar editar
 - Sombra de variável: `const dados = data` dentro de `editarTodas` escondia o store `dados`, tornando o filtro do grupo sempre vazio
 - Race condition: `editarTransacao`/`excluirTransacao` são assíncronas e lêem `get().dados` no início; chamadas em loop sem `await` fazem todas lerem o estado original e o último `set` sobrescrever os demais
 - O mesmo padrão de loop sem `await` existia no fluxo `mudouParaUnica` (exclusão dos irmãos do grupo), que também perdia alterações
+- `editarTodas` recebia apenas `{ valor, data }` do formulário, mas `editarTransacao` exige campos obrigatórios como `categoriaId`, `contaId`, `tipo`, etc.
 
 ### 7.2 Ambiguidades nos Requisitos
 
@@ -66,12 +69,13 @@ para que o valor/vencimento se atualizem em toda a série sem eu precisar editar
 - [x] CA-02: Dado que o usuário altera a data de uma ocorrência e escolhe "Todas as seguintes", quando salva, então todas as ocorrências futuras são deslocadas pelo mesmo número de dias
 - [x] CA-03: Dado que o usuário escolhe "Só esta", quando salva, então apenas a transação selecionada é alterada (comportamento existente preservado)
 - [x] CA-04: Dado que o usuário converte uma recorrência para "única", quando salva, então todas as ocorrências do grupo são excluídas (persistência confiável sem race condition)
+- [x] CA-05: Dado que o loop de edição roda, quando cada `editarTransacao` é chamada, então o estado lido é o mais atualizado (via `getState()`)
 
 ## 9. Plano de Implementação
 
 ```
 Passo 1: Reescrever editarTodas
-  - O que fazer: Usar o store dados (sem sombrear), filtrar grupo com data >= ocorrência atual, calcular offset de dias e aplicar valor + data via editarTransacao aguardando cada chamada
+  - O que fazer: Usar useFinanceStore.getState() para obter transacoes atuais, filtrar grupo com data >= ocorrência atual, calcular offset de dias e aplicar valor + data via editarTransacao aguardando cada chamada
   - Arquivo(s): src/pages/EditarTransacao.tsx
   - Como validar: Editar recorrência, mudar valor, escolher "Todas as seguintes" e conferir extrato
 
@@ -79,6 +83,11 @@ Passo 2: Corrigir race condition no fluxo mudouParaUnica
   - O que fazer: Tornar handleSubmit async e aguardar cada excluirTransacao antes de editar a atual
   - Arquivo(s): src/pages/EditarTransacao.tsx
   - Como validar: Converter recorrência para única e conferir que todas as outras ocorrências foram excluídas
+
+Passo 3: Adicionar await nos handlers do AlertDialog
+  - O que fazer: Tornar onClick dos botões "Só esta" e "Todas as seguintes" async com await
+  - Arquivo(s): src/pages/EditarTransacao.tsx
+  - Como validar: Clique nos botões e verificar que a navegação só ocorre após conclusão
 ```
 
 ## 10. Rollout e Observabilidade

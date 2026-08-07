@@ -99,8 +99,8 @@ export function EditarTransacao() {
     navigate("/transacoes");
   }
 
-  function editarSomenteEssa(data: Record<string, unknown>) {
-    editarTransacao(transacaoEncontrada.id, {
+  async function editarSomenteEssa(data: Record<string, unknown>) {
+    await editarTransacao(transacaoEncontrada.id, {
       ...(data as Parameters<typeof editarTransacao>[1]),
       grupoParcelaId: transacaoEncontrada.grupoParcelaId,
     });
@@ -109,10 +109,12 @@ export function EditarTransacao() {
 
   async function editarTodas(data: Record<string, unknown>) {
     const novosDados = data as { valor?: number; data?: string };
+    const grupoId = transacaoEncontrada.grupoParcelaId;
 
-    if (transacaoEncontrada.grupoParcelaId) {
-      const grupoTransacoes = (dados?.transacoes ?? [])
-        .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId)
+    if (grupoId) {
+      const transacoesAtuais = useFinanceStore.getState().dados?.transacoes ?? [];
+      const grupoTransacoes = transacoesAtuais
+        .filter((t) => t.grupoParcelaId === grupoId)
         .filter((t) => t.data >= transacaoEncontrada.data)
         .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
@@ -125,10 +127,23 @@ export function EditarTransacao() {
             )
           : 0;
 
+      const novoValor = novosDados.valor ?? transacaoEncontrada.valor;
+
       for (const t of grupoTransacoes) {
         await editarTransacao(t.id, {
-          valor: novosDados.valor ?? t.valor,
+          valor: novoValor,
           data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
+          categoriaId: t.categoriaId,
+          subtipoId: t.subtipoId,
+          contaId: t.contaId,
+          cartaoId: t.cartaoId,
+          tipo: t.tipo,
+          tipoRecorrencia: t.tipoRecorrencia,
+          descricao: t.descricao,
+          parcelaAtual: t.parcelaAtual,
+          totalParcelas: t.totalParcelas,
+          intervaloDias: t.intervaloDias,
+          confirmada: t.confirmada,
         });
       }
     }
@@ -173,10 +188,10 @@ export function EditarTransacao() {
             <AlertDialogCancel onClick={() => setDadosPendentes(null)}>
               Cancelar
             </AlertDialogCancel>
-            <AlertDialogAction onClick={() => dadosPendentes && editarSomenteEssa(dadosPendentes)}>
+            <AlertDialogAction onClick={async () => { if (dadosPendentes) await editarSomenteEssa(dadosPendentes); }}>
               Só esta
             </AlertDialogAction>
-            <AlertDialogAction onClick={() => dadosPendentes && editarTodas(dadosPendentes)} className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <AlertDialogAction onClick={async () => { if (dadosPendentes) await editarTodas(dadosPendentes); }} className="bg-primary text-primary-foreground hover:bg-primary/90">
               Todas as seguintes
             </AlertDialogAction>
           </AlertDialogFooter>

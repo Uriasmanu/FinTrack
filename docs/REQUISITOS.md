@@ -645,6 +645,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 9 | `fintrack.json` reescrito no load | Gravação seletiva no `inicializar()` — só grava em mudanças reais |
 | 10 | Tema não persistido | Tema gravado em `config.tema` no `fintrack.json` via `atualizarConfig` |
 | 11 | Contas sem timestamp | Adicionados `criadoEm`/`atualizadoEm` no CRUD de contas |
+| 12 | "Editar todas as seguintes" não aplicava alteração | `editarTodas` lê estado via `getState()`, passa todos os campos, handlers com `await` |
+| 13 | Saldo dashboard incluía não efetivadas | Seletores `obterSaldoAtual`, `obterReceitasMes`, `obterDespesasMes` etc. filtram por `confirmada: true` |
 
 ### Componentes não utilizados
 
@@ -700,3 +702,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 07/08/2026 | Persistência: arquivo `fintrack.json` existente não é reescrito na inicialização (gravação seletiva) |
 | 07/08/2026 | Persistência: tema claro/escuro persistido no `fintrack.json` (campo `config.tema`) |
 | 07/08/2026 | Estrutura de dados: campo `Conta` ganhou `criadoEm`/`atualizadoEm` (timestamps de criação/edição) |
+| 07/08/2026 | Correção: "Editar todas as seguintes" em transação recorrente/parcelada agora aplica alteração corretamente |
+| 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |

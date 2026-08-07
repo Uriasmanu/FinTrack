@@ -20,13 +20,14 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
   const saldoInicialContas = obterSaldoInicialContas();
 
   const transacoesAteHoje = (dados?.transacoes ?? [])
-    .filter((t) => t.data <= hojeStr)
+    .filter((t) => t.confirmada && t.data <= hojeStr)
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
   const saldoHoje = saldoInicialContas + transacoesAteHoje;
 
   const transacoesAteMesAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
+      if (!t.confirmada) return false;
       const dataTransacao = new Date(t.data);
       return t.data <= hojeStr && (
         dataTransacao.getFullYear() < ano ||
