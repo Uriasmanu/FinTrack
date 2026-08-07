@@ -450,10 +450,11 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 ### 7. Tema Claro/Escuro ✅
 
 - Toggle de tema no header com dialog de confirmação
-- Persistência no localStorage (campo `tema` na config)
+- Persistência no arquivo `fintrack.json` (campo `config.tema`) via `PUT /api/data`
+- Tema reaplicado ao recarregar a página (leitura do arquivo JSON)
 - CSS com variáveis para ambos os temas
-- Tema aplicado sem flash na inicialização (leitura direta do localStorage)
-- ✅ **Implementado**: `layout.tsx`, `header.tsx`, `index.css`
+- Tema aplicado sem flash na inicialização
+- ✅ **Implementado**: `layout.tsx`, `header.tsx`, `index.css`, `useFinanceStore.ts` (`atualizarConfig`)
 
 ### 8. Exportação de Dados ✅ (parcial)
 
@@ -467,8 +468,10 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 
 - Persistência física em arquivo JSON único: `data/fintrack.json` (nome derivado do `package.json`)
 - Criado automaticamente na inicialização do servidor como primeira ação, com as informações padrão do sistema
+- Se o arquivo já existir, não é recriado nem reescrito na inicialização; gravação ocorre apenas em mudanças reais (merge de defaults na primeira execução ou ações do usuário)
+- CRUD de contas grava no arquivo e registra timestamp (`criadoEm` na criação, `atualizadoEm` na edição)
 - Backup e restauração de dados (importação/exportação do JSON)
-- ✅ **Implementado**: `server.js`, `storage.ts`
+- ✅ **Implementado**: `server.js`, `storage.ts`, `useFinanceStore.ts`
 
 ---
 
@@ -510,7 +513,9 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
       "banco": "string",
       "saldoInicial": 0.00,
       "tipo": "corrente | poupanca | investimento | ticket",
-      "dataCriacao": "YYYY-MM-DD (opcional)"
+      "dataCriacao": "YYYY-MM-DD (opcional)",
+      "criadoEm": "ISO timestamp",
+      "atualizadoEm": "ISO timestamp"
     }
   ],
   "cartoes": [
@@ -589,6 +594,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 ### Persistência
 - Dados persistidos em arquivo JSON físico na pasta `data`, nomeado com o nome da aplicação (`fintrack.json`)
 - O arquivo JSON padrão é criado na inicialização do servidor como primeira ação, antes de aceitar requisições
+- Se o arquivo já existir, a inicialização não deve recriá-lo nem reescrevê-lo; gravação apenas em mudanças reais
 - Estrutura de dados deve ser versionável
 - Arquivos legados (`{nome-app}_{ano}.json`) são migrados automaticamente para o arquivo único
 
@@ -636,6 +642,9 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 6 | Recorrentes não aparecem futuros | Gerar para 12 meses |
 | 7 | Faltavam categorias específicas | Adicionar 5 categorias novas |
 | 8 | Efetivar transação no Dashboard | Adicionar botão Check no card "Próximas Transações" |
+| 9 | `fintrack.json` reescrito no load | Gravação seletiva no `inicializar()` — só grava em mudanças reais |
+| 10 | Tema não persistido | Tema gravado em `config.tema` no `fintrack.json` via `atualizarConfig` |
+| 11 | Contas sem timestamp | Adicionados `criadoEm`/`atualizadoEm` no CRUD de contas |
 
 ### Componentes não utilizados
 
@@ -688,3 +697,6 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 04/08/2026 | UI/UX: Header com backdrop blur |
 | 04/08/2026 | UI/UX: Empty states com ícones e CTAs |
 | 07/08/2026 | Persistência: JSON padrão criado na inicialização do servidor na pasta `data`, nome derivado do package.json |
+| 07/08/2026 | Persistência: arquivo `fintrack.json` existente não é reescrito na inicialização (gravação seletiva) |
+| 07/08/2026 | Persistência: tema claro/escuro persistido no `fintrack.json` (campo `config.tema`) |
+| 07/08/2026 | Estrutura de dados: campo `Conta` ganhou `criadoEm`/`atualizadoEm` (timestamps de criação/edição) |

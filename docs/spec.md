@@ -16,13 +16,22 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Se ja exisitr o fintrack.json na pasta data, não é para criar novament ou atualizar
-
-### [aberto] Quando eu escolher um tema, entre claro ou escuro, é para fazer um update em fintrack.json
-
-### [aberto] Quando eu criar, editar, excluir uma conta é para fazer um update em fintrack.json e adicionar o timestamp
-
 ## Histórico de Correções
+
+### [corrigido] Não recriar/atualizar o fintrack.json quando ele já existir
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** A inicialização do frontend (`inicializar()`) sempre chamava `salvar(dados)`, reescrevendo o arquivo a cada carregamento da página mesmo sem alterações do usuário.
+**Comportamento corrigido:** `inicializar()` agora só grava no `fintrack.json` quando há mudança real (merge de defaults na primeira execução). O servidor segue criando o arquivo apenas quando não existe. RF-01/RF-02 e CA-01/CA-02 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
+
+### [corrigido] Tema claro/escuro deve ser persistido no fintrack.json
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** A persistência do tema via `atualizarConfig` precisava de validação; a gravação desnecessária em `inicializar()` podia mascarar o fluxo.
+**Comportamento corrigido:** Confirmado que `atualizarConfig({ tema })` grava `config.tema` no `fintrack.json` via `PUT /api/data` e o tema é reaplicado após recarregar. RF-03/RF-04 e CA-03 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
+
+### [corrigido] CRUD de conta deve atualizar o fintrack.json e registrar timestamp
+**Data da correção:** 07/08/2026
+**Comportamento anterior:** As operações de conta atualizavam o arquivo, mas o registro `Conta` não possuía timestamp de criação/atualização.
+**Comportamento corrigido:** A interface `Conta` ganhou `criadoEm`/`atualizadoEm`. Ao criar, ambos são registrados; ao editar, `atualizadoEm` é atualizado; ao excluir, a remoção é gravada no arquivo. RF-05 a RF-07 e CA-04 a CA-06 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
 
 ### [corrigido] Criar o JSON padrão do sistema como primeira ação da aplicação
 **Data da correção:** 07/08/2026

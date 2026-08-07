@@ -111,6 +111,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
   inicializar: async () => {
     let dados = await storage.carregarDados();
+    let houveMudanca = false;
 
     const categoriasDefault = obterCategoriasDefault();
     const categoriasExistentes = new Set(dados.categorias.map(c => c.id));
@@ -118,6 +119,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     
     if (novasCategorias.length > 0) {
       dados.categorias = [...dados.categorias, ...novasCategorias];
+      houveMudanca = true;
     }
 
     const configDefault = obterConfigDefault();
@@ -129,13 +131,17 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         multiplicadores: dados.config.multiplicadores || configDefault.multiplicadores,
         criadoEm: dados.config.criadoEm || new Date().toISOString(),
       };
+      houveMudanca = true;
     }
 
     if (dados.metas.length === 0) {
       dados.metas = obterMetasDefault();
+      houveMudanca = true;
     }
 
-    await salvar(dados);
+    if (houveMudanca) {
+      await salvar(dados);
+    }
     set({ dados });
   },
 
@@ -291,7 +297,8 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return;
 
-    const novaConta: Conta = { ...dados, id: gerarId() };
+    const agora = new Date().toISOString();
+    const novaConta: Conta = { ...dados, id: gerarId(), criadoEm: agora, atualizadoEm: agora };
 
     const novoState: DadosApp = {
       ...state,
@@ -308,7 +315,10 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
     const novoState: DadosApp = {
       ...state,
-      contas: editarItemArray(state.contas, id, dados),
+      contas: editarItemArray(state.contas, id, {
+        ...dados,
+        atualizadoEm: new Date().toISOString(),
+      }),
     };
 
     await salvar(novoState);

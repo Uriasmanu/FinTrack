@@ -43,6 +43,8 @@ export interface Conta {
   saldoInicial: number;
   tipo: TipoConta;
   dataCriacao?: string;
+  criadoEm?: string;
+  atualizadoEm?: string;
 }
 
 export interface Cartao {
