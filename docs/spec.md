@@ -16,7 +16,6 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] o Delete transação funciona perguntando se eu quero deletar só essa, ou todas as futura
 
 ## Histórico de Correções
 
