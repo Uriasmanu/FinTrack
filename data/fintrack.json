@@ -6355,24 +6355,6 @@
       "confirmada": false
     },
     {
-      "id": "0606a66c-b8c9-40ea-a255-fc69a48e66c2",
-      "tipo": "despesa",
-      "tipoRecorrencia": "recorrente_personalizado",
-      "descricao": "anticoncepcional",
-      "valor": 25,
-      "data": "2026-08-04",
-      "categoriaId": "cat-005",
-      "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
-      "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "d2cd1641-d969-44be-8c23-784681518994",
-      "intervaloDias": 19,
-      "criadoEm": "2026-08-07T21:38:16.486Z",
-      "confirmada": false
-    },
-    {
       "id": "7a15d0c3-4ed8-4446-9dfa-8639ab442e1a",
       "tipo": "despesa",
       "tipoRecorrencia": "recorrente_personalizado",
