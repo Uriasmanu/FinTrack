@@ -135,7 +135,16 @@
       "icone": "Beef"
     }
   ],
-  "contas": [],
+  "contas": [
+    {
+      "banco": "Itau",
+      "saldoInicial": 2088,
+      "tipo": "corrente",
+      "id": "96701dd0-1088-4505-848e-4620a3696672",
+      "criadoEm": "2026-08-07T21:20:28.011Z",
+      "atualizadoEm": "2026-08-07T21:20:28.011Z"
+    }
+  ],
   "cartoes": [],
   "metas": [
     {
@@ -154,7 +163,7 @@
     },
     {
       "id": "27391c4a-f3bf-4db1-be1b-8ddc16a16be3",
-      "nome": "Reserva de Emergência",
+      "nome": "Reserva de Emerg�ncia",
       "tipo": "padrao",
       "ativo": true,
       "valorAlvo": 0,
@@ -168,7 +177,7 @@
     },
     {
       "id": "0a0d0ebb-dba8-4eb0-8075-fb568376273f",
-      "nome": "Guardar por Mês",
+      "nome": "Guardar por M�s",
       "tipo": "padrao",
       "ativo": true,
       "valorAlvo": 0,
@@ -214,7 +223,7 @@
   "dividendosFii": [],
   "config": {
     "salario": 0,
-    "tema": "claro",
+    "tema": "escuro",
     "moeda": "BRL",
     "multiplicadores": {
       "viverDeRenda": 200,
