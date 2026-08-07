@@ -123,7 +123,11 @@ async function importarDados(jsonString: string): Promise<DadosAno | null> {
     }
 
     const dadosAno = dados as DadosAno;
-    await salvarDadosAno(dadosAno);
+    const salvo = await salvarDadosAno(dadosAno);
+    if (!salvo) {
+      console.error("Falha ao salvar dados no servidor");
+      return null;
+    }
     return dadosAno;
   } catch (erro) {
     console.error("Erro ao importar dados:", erro);
