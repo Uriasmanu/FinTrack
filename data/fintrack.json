@@ -14246,7 +14246,7 @@
       "id": "2a6b247d-55c3-4202-a812-41543ddd52bb",
       "nome": "Viver de Renda",
       "tipo": "padrao",
-      "ativo": true,
+      "ativo": false,
       "valorAlvo": 0,
       "valorAtual": 0,
       "meses": 120,
@@ -14258,7 +14258,7 @@
     },
     {
       "id": "27391c4a-f3bf-4db1-be1b-8ddc16a16be3",
-      "nome": "Reserva de Emerg�ncia",
+      "nome": "Reserva de Emergencia",
       "tipo": "padrao",
       "ativo": true,
       "valorAlvo": 0,
@@ -14272,7 +14272,7 @@
     },
     {
       "id": "0a0d0ebb-dba8-4eb0-8075-fb568376273f",
-      "nome": "Guardar por M�s",
+      "nome": "Guardar por Mes",
       "tipo": "padrao",
       "ativo": true,
       "valorAlvo": 0,
