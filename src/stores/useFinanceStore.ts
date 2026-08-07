@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type {
-  DadosAno,
+  DadosApp,
   Transacao,
   Categoria,
   Conta,
@@ -23,8 +23,8 @@ import {
 } from "@/lib/transacoes";
 
 interface FinanceState {
-  dadosAno: DadosAno | null;
-  inicializar: (ano?: number) => Promise<void>;
+  dados: DadosApp | null;
+  inicializar: () => Promise<void>;
   adicionarTransacao: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
   adicionarTransacoesRecorrentes: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
   editarTransacao: (id: string, dados: Partial<Transacao>) => Promise<void>;
@@ -45,9 +45,9 @@ interface FinanceState {
   excluirMeta: (id: string) => Promise<void>;
   atualizarConfig: (dados: Partial<Config>) => Promise<void>;
   obterSaldoAtual: () => number;
-  obterReceitasMes: (mes: number) => number;
-  obterDespesasMes: (mes: number) => number;
-  obterTransacoesMes: (mes: number) => Transacao[];
+  obterReceitasMes: (mes: number, ano: number) => number;
+  obterDespesasMes: (mes: number, ano: number) => number;
+  obterTransacoesMes: (mes: number, ano: number) => Transacao[];
   obterUltimasTransacoes: (quantidade: number) => Transacao[];
   obterSaldoConta: (contaId: string) => number;
   obterFaturaCartao: (cartaoId: string) => number;
@@ -80,8 +80,8 @@ interface FinanceState {
   obterIndicadoresFii: (ativoFiiId: string) => IndicadoresFii;
 }
 
-async function salvar(state: DadosAno) {
-  await storage.salvarDadosAno(state);
+async function salvar(state: DadosApp) {
+  await storage.salvarDados(state);
 }
 
 function adicionarItensArray<T extends { id: string }>(
@@ -107,11 +107,10 @@ function excluirItemArray<T extends { id: string }>(
 }
 
 export const useFinanceStore = create<FinanceState>((set, get) => ({
-  dadosAno: null,
+  dados: null,
 
-  inicializar: async (ano?: number) => {
-    let dados = await storage.verificarOuCriarAnoAtual(ano);
-    dados = await storage.migrarDadosSeNecessario(dados);
+  inicializar: async () => {
+    let dados = await storage.carregarDados();
 
     const categoriasDefault = obterCategoriasDefault();
     const categoriasExistentes = new Set(dados.categorias.map(c => c.id));
@@ -137,11 +136,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     }
 
     await salvar(dados);
-    set({ dadosAno: dados });
+    set({ dados });
   },
 
   adicionarTransacao: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novaTransacao: Transacao = {
@@ -150,43 +149,43 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       criadoEm: new Date().toISOString(),
     };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: adicionarItensArray(state.transacoes, novaTransacao),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarTransacao: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: editarItemArray(state.transacoes, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirTransacao: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: excluirItemArray(state.transacoes, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarTransacoesRecorrentes: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novasTransacoes = criarTransacoesRecorrentes({
@@ -204,20 +203,20 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       intervaloDias: dados.intervaloDias ?? null,
     });
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: [...state.transacoes, ...novasTransacoes],
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirParcelasFuturas: async (grupoParcelaId, dataLimite) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: excluirParcelasFuturas(
         state.transacoes,
@@ -227,14 +226,14 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   recalcularParcelas: async (grupoParcelaId, novoTotal) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       transacoes: recalcularParcelas(
         state.transacoes,
@@ -244,188 +243,188 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarCategoria: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novaCategoria: Categoria = { ...dados, id: gerarId() };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       categorias: adicionarItensArray(state.categorias, novaCategoria),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarCategoria: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       categorias: editarItemArray(state.categorias, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirCategoria: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       categorias: excluirItemArray(state.categorias, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarConta: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novaConta: Conta = { ...dados, id: gerarId() };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       contas: adicionarItensArray(state.contas, novaConta),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarConta: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       contas: editarItemArray(state.contas, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirConta: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       contas: excluirItemArray(state.contas, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarCartao: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novoCartao: Cartao = { ...dados, id: gerarId() };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       cartoes: adicionarItensArray(state.cartoes, novoCartao),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarCartao: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       cartoes: editarItemArray(state.cartoes, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirCartao: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       cartoes: excluirItemArray(state.cartoes, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarMeta: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novaMeta: Meta = { ...dados, id: gerarId() };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       metas: adicionarItensArray(state.metas, novaMeta),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarMeta: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       metas: editarItemArray(state.metas, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirMeta: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       metas: excluirItemArray(state.metas, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   atualizarConfig: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       config: { ...state.config, ...dados },
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   obterSaldoAtual: () => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
 
     return state.transacoes.reduce((saldo, t) => {
@@ -433,49 +432,46 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     }, 0);
   },
 
-  obterReceitasMes: (mes) => {
-    const state = get().dadosAno;
+  obterReceitasMes: (mes, ano) => {
+    const state = get().dados;
     if (!state) return 0;
 
-    const anoAtual = state.ano;
     return state.transacoes
       .filter(
         (t) =>
           t.tipo === "receita" &&
           new Date(t.data).getMonth() === mes &&
-          new Date(t.data).getFullYear() === anoAtual
+          new Date(t.data).getFullYear() === ano
       )
       .reduce((total, t) => total + t.valor, 0);
   },
 
-  obterDespesasMes: (mes) => {
-    const state = get().dadosAno;
+  obterDespesasMes: (mes, ano) => {
+    const state = get().dados;
     if (!state) return 0;
 
-    const anoAtual = state.ano;
     return state.transacoes
       .filter(
         (t) =>
           t.tipo === "despesa" &&
           new Date(t.data).getMonth() === mes &&
-          new Date(t.data).getFullYear() === anoAtual
+          new Date(t.data).getFullYear() === ano
       )
       .reduce((total, t) => total + t.valor, 0);
   },
 
-  obterTransacoesMes: (mes) => {
-    const state = get().dadosAno;
+  obterTransacoesMes: (mes, ano) => {
+    const state = get().dados;
     if (!state) return [];
 
-    const anoAtual = state.ano;
     return state.transacoes.filter((t) => {
       const data = new Date(t.data);
-      return data.getMonth() === mes && data.getFullYear() === anoAtual;
+      return data.getMonth() === mes && data.getFullYear() === ano;
     });
   },
 
   obterUltimasTransacoes: (quantidade) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return [];
 
     return [...state.transacoes]
@@ -484,7 +480,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterSaldoConta: (contaId) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
 
     const conta = state.contas.find((c) => c.id === contaId);
@@ -498,7 +494,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterFaturaCartao: (cartaoId) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
 
     return state.transacoes
@@ -507,7 +503,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterSaldoAtualSemTicket: () => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
 
     const contaIdsTicket = state.contas
@@ -522,7 +518,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterSaldoInicialContas: (contaId?: string) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
 
     return state.contas
@@ -540,7 +536,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   dividendosFii: [],
 
   adicionarAtivoFii: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novoAtivo: AtivoFii = {
@@ -552,30 +548,30 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       criadoEm: new Date().toISOString(),
     };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       ativosFii: adicionarItensArray(state.ativosFii, novoAtivo),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarAtivoFii: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       ativosFii: editarItemArray(state.ativosFii, id, dados),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirAtivoFii: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const temOperacoes = state.operacoesFii.some((o) => o.ativoFiiId === id);
@@ -585,17 +581,17 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       throw new Error("Não é possível excluir ativo com operações ou dividendos vinculados");
     }
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       ativosFii: excluirItemArray(state.ativosFii, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarOperacaoFii: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const ativo = state.ativosFii.find((a) => a.id === dados.ativoFiiId);
@@ -634,31 +630,31 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       };
     });
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       operacoesFii: adicionarItensArray(state.operacoesFii, novaOperacao),
       ativosFii: novosAtivos,
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirOperacaoFii: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       operacoesFii: excluirItemArray(state.operacoesFii, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   adicionarDividendoFii: async (dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const novoDividendo: DividendoFii = {
@@ -668,17 +664,17 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       criadoEm: new Date().toISOString(),
     };
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       dividendosFii: adicionarItensArray(state.dividendosFii, novoDividendo),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   editarDividendoFii: async (id, dados) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
     const dividendosAtualizados = state.dividendosFii.map((d) => {
@@ -690,48 +686,48 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       return atualizado;
     });
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       dividendosFii: dividendosAtualizados,
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   excluirDividendoFii: async (id) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return;
 
-    const novoState: DadosAno = {
+    const novoState: DadosApp = {
       ...state,
       dividendosFii: excluirItemArray(state.dividendosFii, id),
     };
 
     await salvar(novoState);
-    set({ dadosAno: novoState });
+    set({ dados: novoState });
   },
 
   obterAtivosFiiAtivos: () => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return [];
     return state.ativosFii.filter((a) => a.ativo);
   },
 
   obterOperacoesFii: (ativoFiiId) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return [];
     return state.operacoesFii.filter((o) => o.ativoFiiId === ativoFiiId);
   },
 
   obterDividendosFii: (ativoFiiId) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return [];
     return state.dividendosFii.filter((d) => d.ativoFiiId === ativoFiiId);
   },
 
   obterDividendosFiiMes: (mes, ano) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return [];
     return state.dividendosFii.filter((d) => {
       const data = new Date(d.dataPagamento);
@@ -740,7 +736,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterTotalDividendosAno: (ano) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) return 0;
     return state.dividendosFii
       .filter((d) => new Date(d.dataPagamento).getFullYear() === ano)
@@ -748,7 +744,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   obterIndicadoresFii: (ativoFiiId) => {
-    const state = get().dadosAno;
+    const state = get().dados;
     if (!state) {
       return {
         pVp: 0,

@@ -11,11 +11,11 @@ const MESES = [
 ];
 
 export function Contas() {
-  const { dadosAno, adicionarConta, editarConta } = useFinanceStore();
+  const { dados, adicionarConta, editarConta } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const contas = dadosAno?.contas ?? [];
+  const contas = dados?.contas ?? [];
   const hoje = new Date();
   const mesAtual = hoje.getMonth();
   const nomeMes = MESES[mesAtual];

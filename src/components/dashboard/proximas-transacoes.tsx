@@ -12,11 +12,11 @@ interface ProximasTransacoesProps {
 }
 
 export function ProximasTransacoes({ mes, ano }: ProximasTransacoesProps) {
-  const { dadosAno, editarTransacao } = useFinanceStore();
+  const { dados, editarTransacao } = useFinanceStore();
   const hoje = new Date();
   const hojeStr = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
-  const proximasTransacoes = (dadosAno?.transacoes ?? [])
+  const proximasTransacoes = (dados?.transacoes ?? [])
     .filter((t) => {
       const data = new Date(t.data);
       const mesTransacao = data.getMonth();

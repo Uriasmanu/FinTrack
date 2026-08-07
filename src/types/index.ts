@@ -169,8 +169,7 @@ export interface IndicadoresFii {
   lucroPrejuizoPercentual: number;
 }
 
-export interface DadosAno {
-  ano: number;
+export interface DadosApp {
   transacoes: Transacao[];
   categorias: Categoria[];
   contas: Conta[];

@@ -6,11 +6,11 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 
 export function UltimasTransacoes() {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
   const mesAtual = new Date().getMonth();
   const anoAtual = new Date().getFullYear();
 
-  const transacoesMes = (dadosAno?.transacoes ?? []).filter((t) => {
+  const transacoesMes = (dados?.transacoes ?? []).filter((t) => {
     const data = new Date(t.data);
     return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
   });

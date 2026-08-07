@@ -6,11 +6,11 @@ import { CartaoForm } from "@/components/cartoes/cartao-form";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
 export function Cartoes() {
-  const { dadosAno, adicionarCartao, editarCartao } = useFinanceStore();
+  const { dados, adicionarCartao, editarCartao } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const cartoes = dadosAno?.cartoes ?? [];
+  const cartoes = dados?.cartoes ?? [];
 
   function handleEditar(id: string) {
     setEditingId(id);

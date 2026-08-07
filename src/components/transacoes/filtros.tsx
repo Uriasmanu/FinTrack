@@ -25,9 +25,9 @@ interface FiltrosProps {
 }
 
 export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
-  const { dadosAno } = useFinanceStore();
-  const categorias = dadosAno?.categorias ?? [];
-  const contas = dadosAno?.contas ?? [];
+  const { dados } = useFinanceStore();
+  const categorias = dados?.categorias ?? [];
+  const contas = dados?.contas ?? [];
 
   function atualizarFiltro(campo: keyof FiltrosTransacao, valor: string) {
     onFiltrosChange({ ...filtros, [campo]: valor });

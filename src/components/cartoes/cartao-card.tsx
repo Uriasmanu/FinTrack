@@ -19,10 +19,10 @@ interface CartaoCardProps {
 
 export function CartaoCard({ cartao, onEditar }: CartaoCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { excluirCartao, dadosAno } = useFinanceStore();
+  const { excluirCartao, dados } = useFinanceStore();
 
   const faturaAtual =
-    dadosAno?.transacoes
+    dados?.transacoes
       .filter((t) => t.cartaoId === cartao.id && t.tipo === "despesa")
       .reduce((acc, t) => acc + t.valor, 0) ?? 0;
 
@@ -30,7 +30,7 @@ export function CartaoCard({ cartao, onEditar }: CartaoCardProps) {
     ? (faturaAtual / cartao.limite) * 100
     : 0;
 
-  const transacoesNoCartao = dadosAno?.transacoes.filter(
+  const transacoesNoCartao = dados?.transacoes.filter(
     (t) => t.cartaoId === cartao.id
   ).length ?? 0;
 

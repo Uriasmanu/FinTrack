@@ -8,11 +8,11 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarPrazo } from "@/lib/calculos";
 
 export function ObjetivosPersonalizados() {
-  const { dadosAno, editarMeta } = useFinanceStore();
+  const { dados, editarMeta } = useFinanceStore();
 
-  if (!dadosAno) return null;
+  if (!dados) return null;
 
-  const objetivos = dadosAno.metas.filter((m) => m.tipo === "personalizado");
+  const objetivos = dados.metas.filter((m) => m.tipo === "personalizado");
   const objetivosAtivos = objetivos.filter((m) => m.ativo);
 
   const handleToggleAtivo = (id: string, ativo: boolean) => {

@@ -38,8 +38,8 @@ export function MetaForm({
   initialData,
   onSubmit,
 }: MetaFormProps) {
-  const { dadosAno } = useFinanceStore();
-  const categoriasReceita = dadosAno?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+  const { dados } = useFinanceStore();
+  const categoriasReceita = dados?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
 
   const {
     register,

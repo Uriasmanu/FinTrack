@@ -17,9 +17,9 @@ import {
 export function EditarTransacao() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { dadosAno, editarTransacao, excluirTransacao, excluirParcelasFuturas, recalcularParcelas, adicionarTransacoesRecorrentes } = useFinanceStore();
+  const { dados, editarTransacao, excluirTransacao, excluirParcelasFuturas, recalcularParcelas, adicionarTransacoesRecorrentes } = useFinanceStore();
 
-  const transacao = dadosAno?.transacoes.find((t) => t.id === id);
+  const transacao = dados?.transacoes.find((t) => t.id === id);
   const [dialogAberto, setDialogAberto] = useState(false);
   const [dadosPendentes, setDadosPendentes] = useState<Record<string, unknown> | null>(null);
 
@@ -63,7 +63,7 @@ export function EditarTransacao() {
     const mudouParaUnica = transacaoEncontrada.tipoRecorrencia !== "unica" && data.tipoRecorrencia === "unica";
 
     if (mudouParaUnica && transacaoEncontrada.grupoParcelaId) {
-      const grupoTransacoes = (dadosAno?.transacoes ?? [])
+      const grupoTransacoes = (dados?.transacoes ?? [])
         .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
 
       grupoTransacoes.forEach((t) => {
@@ -107,7 +107,7 @@ export function EditarTransacao() {
     if (transacaoEncontrada.grupoParcelaId) {
       excluirParcelasFuturas(transacaoEncontrada.grupoParcelaId, transacaoEncontrada.data);
 
-      const grupoTransacoes = (dadosAno?.transacoes ?? [])
+      const grupoTransacoes = (dados?.transacoes ?? [])
         .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId)
         .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 

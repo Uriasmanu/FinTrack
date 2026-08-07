@@ -7,11 +7,11 @@ import { CategoriaForm } from "@/components/categorias/categoria-form";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
 export function Configuracoes() {
-  const { dadosAno, adicionarCategoria, editarCategoria } = useFinanceStore();
+  const { dados, adicionarCategoria, editarCategoria } = useFinanceStore();
   const [dialogAberto, setDialogAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
 
-  const categorias = dadosAno?.categorias ?? [];
+  const categorias = dados?.categorias ?? [];
 
   function handleEditar(id: string) {
     setEditandoId(id);

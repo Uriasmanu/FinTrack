@@ -97,8 +97,8 @@ interface FiiFormProps {
 }
 
 export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormProps) {
-  const { dadosAno } = useFinanceStore();
-  const ativosExistentes = dadosAno?.ativosFii ?? [];
+  const { dados } = useFinanceStore();
+  const ativosExistentes = dados?.ativosFii ?? [];
 
   const {
     register,

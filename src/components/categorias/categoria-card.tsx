@@ -17,9 +17,9 @@ interface CategoriaCardProps {
 
 export function CategoriaCard({ categoria, onEditar }: CategoriaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { excluirCategoria, dadosAno } = useFinanceStore();
+  const { excluirCategoria, dados } = useFinanceStore();
 
-  const transacoesNaCategoria = dadosAno?.transacoes.filter(
+  const transacoesNaCategoria = dados?.transacoes.filter(
     (t) => t.categoriaId === categoria.id
   ).length ?? 0;
 

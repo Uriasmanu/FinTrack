@@ -44,7 +44,7 @@ export function TransacaoForm({
   onSubmit,
   isEditing = false,
 }: TransacaoFormProps) {
-  const { dadosAno, obterSaldoConta } = useFinanceStore();
+  const { dados, obterSaldoConta } = useFinanceStore();
 
   const {
     register,
@@ -80,13 +80,13 @@ export function TransacaoForm({
   const descricao = watch("descricao");
   const valor = watch("valor");
   const data = watch("data");
-  const categorias = dadosAno?.categorias.filter(
+  const categorias = dados?.categorias.filter(
     (c) => c.tipo === tipo || c.tipo === "ambos"
   ) ?? [];
-  const contas = dadosAno?.contas ?? [];
-  const cartoes = dadosAno?.cartoes ?? [];
+  const contas = dados?.contas ?? [];
+  const cartoes = dados?.cartoes ?? [];
 
-  const duplicatas = (dadosAno?.transacoes ?? []).filter((t) => {
+  const duplicatas = (dados?.transacoes ?? []).filter((t) => {
     if (isEditing) return false;
     if (t.descricao.toLowerCase() !== descricao?.toLowerCase()) return false;
     if (Math.abs(t.valor - (valor ?? 0)) > 0.01) return false;
@@ -104,7 +104,7 @@ export function TransacaoForm({
   const saldoAjustado = tipo === "despesa" ? saldoAtual + valorTransacaoOriginal : saldoAtual - valorTransacaoOriginal;
   const saldoAposTransacao = tipo === "despesa" ? saldoAjustado - valorTransacao : saldoAjustado + valorTransacao;
 
-  const transacoesDoDia = dadosAno?.transacoes
+  const transacoesDoDia = dados?.transacoes
     .filter((t) => {
       if (t.contaId !== contaSelecionada) return false;
       if (t.data !== dataTransacao) return false;
@@ -158,7 +158,7 @@ export function TransacaoForm({
             value={watch("tipo")}
             onValueChange={(v) => {
               setValue("tipo", v as "receita" | "despesa");
-              const novasCategorias = (dadosAno?.categorias ?? []).filter(
+              const novasCategorias = (dados?.categorias ?? []).filter(
                 (c) => c.tipo === v || c.tipo === "ambos"
               );
               if (novasCategorias.length > 0 && !novasCategorias.find((c) => c.id === watch("categoriaId"))) {
@@ -210,7 +210,7 @@ export function TransacaoForm({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Nenhum</SelectItem>
-                {(dadosAno?.categorias ?? [])
+                {(dados?.categorias ?? [])
                   .filter((c) => ["cat-016", "cat-017", "cat-018", "cat-019"].includes(c.id))
                   .map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>

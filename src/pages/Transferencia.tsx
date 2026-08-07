@@ -29,10 +29,10 @@ type TransferenciaFormData = z.infer<typeof transferenciaSchema>;
 
 export function Transferencia() {
   const navigate = useNavigate();
-  const { dadosAno, adicionarTransacao } = useFinanceStore();
+  const { dados, adicionarTransacao } = useFinanceStore();
 
-  const contas = dadosAno?.contas ?? [];
-  const categorias = (dadosAno?.categorias ?? []).filter(
+  const contas = dados?.contas ?? [];
+  const categorias = (dados?.categorias ?? []).filter(
     (cat) => cat.tipo === "ambos" || cat.id === "cat-013" || cat.id === "cat-014"
   );
 

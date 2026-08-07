@@ -45,7 +45,7 @@ const tooltipStyle = {
 };
 
 export function Graficos() {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
   const [tipoGrafico, setTipoGrafico] = useState<TipoGrafico>("pizza");
   const [tipoDado, setTipoDado] = useState<TipoDado>("despesas_categoria");
   const [contaId, setContaId] = useState<string>("todas");
@@ -73,7 +73,7 @@ export function Graficos() {
   }
 
   const dadosGrafico = useMemo(() => {
-    if (!dadosAno) return [];
+    if (!dados) return [];
 
     const filtrarPorConta = (t: { contaId: string }) => {
       if (contaId === "todas") return true;
@@ -81,17 +81,17 @@ export function Graficos() {
     };
 
     if (tipoDado === "despesas_categoria") {
-      const despesas = dadosAno.transacoes.filter(
+      const despesas = dados.transacoes.filter(
         (t) => t.tipo === "despesa" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t)
       );
       const porCategoria: Record<string, number> = {};
       despesas.forEach((t) => {
         let nome: string;
         if (t.categoriaId === "cat-001" && t.subtipoId) {
-          const subtipo = dadosAno.categorias.find((c) => c.id === t.subtipoId);
+          const subtipo = dados.categorias.find((c) => c.id === t.subtipoId);
           nome = subtipo?.nome ?? "Alimentação";
         } else {
-          const cat = dadosAno.categorias.find((c) => c.id === t.categoriaId);
+          const cat = dados.categorias.find((c) => c.id === t.categoriaId);
           nome = cat?.nome ?? "Sem categoria";
         }
         porCategoria[nome] = (porCategoria[nome] ?? 0) + t.valor;
@@ -100,12 +100,12 @@ export function Graficos() {
     }
 
     if (tipoDado === "receitas_categoria") {
-      const receitas = dadosAno.transacoes.filter(
+      const receitas = dados.transacoes.filter(
         (t) => t.tipo === "receita" && new Date(t.data).getMonth() === mesAtual && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t)
       );
       const porCategoria: Record<string, number> = {};
       receitas.forEach((t) => {
-        const cat = dadosAno.categorias.find((c) => c.id === t.categoriaId);
+        const cat = dados.categorias.find((c) => c.id === t.categoriaId);
         const nome = cat?.nome ?? "Sem categoria";
         porCategoria[nome] = (porCategoria[nome] ?? 0) + t.valor;
       });
@@ -114,10 +114,10 @@ export function Graficos() {
 
     if (tipoDado === "evolucao_mensal") {
       return MESES.map((mes, i) => {
-        const receitas = dadosAno.transacoes
+        const receitas = dados.transacoes
           .filter((t) => t.tipo === "receita" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t))
           .reduce((acc, t) => acc + t.valor, 0);
-        const despesas = dadosAno.transacoes
+        const despesas = dados.transacoes
           .filter((t) => t.tipo === "despesa" && new Date(t.data).getMonth() === i && new Date(t.data).getFullYear() === anoAtual && filtrarPorConta(t))
           .reduce((acc, t) => acc + t.valor, 0);
         return { name: mes, receitas, despesas };
@@ -125,7 +125,7 @@ export function Graficos() {
     }
 
     return [];
-  }, [dadosAno, tipoDado, mesAtual, anoAtual, contaId]);
+  }, [dados, tipoDado, mesAtual, anoAtual, contaId]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderGrafico = () => {
@@ -263,7 +263,7 @@ export function Graficos() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="todas">Todas contas</SelectItem>
-            {(dadosAno?.contas ?? []).map((conta) => (
+            {(dados?.contas ?? []).map((conta) => (
               <SelectItem key={conta.id} value={conta.id}>
                 {conta.banco} ({conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"})
               </SelectItem>

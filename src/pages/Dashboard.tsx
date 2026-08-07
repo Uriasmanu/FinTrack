@@ -17,7 +17,7 @@ const MESES = [
 ];
 
 export function Dashboard() {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
   const hoje = new Date();
   const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
   const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
@@ -63,7 +63,7 @@ export function Dashboard() {
     setAnoSelecionado(hoje.getFullYear());
   }
 
-  if (!dadosAno) {
+  if (!dados) {
     return (
       <div className="flex items-center justify-center h-64">
         <p className="text-muted-foreground">Carregando...</p>

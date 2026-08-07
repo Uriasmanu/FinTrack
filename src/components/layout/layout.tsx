@@ -20,11 +20,11 @@ function obterTemaInicial(): "claro" | "escuro" {
 
 export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { dadosAno, atualizarConfig } = useFinanceStore();
+  const { dados, atualizarConfig } = useFinanceStore();
   const [dialogTemaAberto, setDialogTemaAberto] = useState(false);
   const [temaPendente, setTemaPendente] = useState<"claro" | "escuro">("claro");
 
-  const tema = dadosAno?.config.tema ?? obterTemaInicial();
+  const tema = dados?.config.tema ?? obterTemaInicial();
 
   useEffect(() => {
     const root = document.documentElement;

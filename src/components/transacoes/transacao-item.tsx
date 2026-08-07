@@ -35,15 +35,15 @@ export function TransacaoItem({
 }: TransacaoItemProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [parcelaDialogOpen, setParcelaDialogOpen] = useState(false);
-  const { excluirTransacao, excluirParcelasFuturas, editarTransacao, dadosAno } = useFinanceStore();
+  const { excluirTransacao, excluirParcelasFuturas, editarTransacao, dados } = useFinanceStore();
 
-  const categoria = dadosAno?.categorias.find(
+  const categoria = dados?.categorias.find(
     (c) => c.id === transacao.categoriaId
   );
   const subtipo = transacao.subtipoId
-    ? dadosAno?.categorias.find((c) => c.id === transacao.subtipoId)
+    ? dados?.categorias.find((c) => c.id === transacao.subtipoId)
     : null;
-  const conta = dadosAno?.contas.find((c) => c.id === transacao.contaId);
+  const conta = dados?.contas.find((c) => c.id === transacao.contaId);
 
   const isParcelada = transacao.grupoParcelaId !== null;
 

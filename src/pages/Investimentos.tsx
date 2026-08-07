@@ -9,7 +9,7 @@ import type { AtivoFii } from "@/types";
 
 export function Investimentos() {
   const {
-    dadosAno,
+    dados,
     adicionarAtivoFii,
     editarAtivoFii,
     excluirAtivoFii,
@@ -20,12 +20,12 @@ export function Investimentos() {
   const [deleteAtivo, setDeleteAtivo] = useState<AtivoFii | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  const ativos = dadosAno?.ativosFii ?? [];
+  const ativos = dados?.ativosFii ?? [];
 
   function temVinculos(ativoId: string): boolean {
-    if (!dadosAno) return false;
-    const temOperacoes = dadosAno.operacoesFii.some((o) => o.ativoFiiId === ativoId);
-    const temDividendos = dadosAno.dividendosFii.some((d) => d.ativoFiiId === ativoId);
+    if (!dados) return false;
+    const temOperacoes = dados.operacoesFii.some((o) => o.ativoFiiId === ativoId);
+    const temDividendos = dados.dividendosFii.some((d) => d.ativoFiiId === ativoId);
     return temOperacoes || temDividendos;
   }
 

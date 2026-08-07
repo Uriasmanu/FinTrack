@@ -11,15 +11,15 @@ interface ReceitasDespesasCardProps {
 export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
   const { obterReceitasMes, obterDespesasMes } = useFinanceStore();
 
-  const receitasAtual = obterReceitasMes(mes);
-  const despesasAtual = obterDespesasMes(mes);
+  const receitasAtual = obterReceitasMes(mes, ano);
+  const despesasAtual = obterDespesasMes(mes, ano);
   const saldoMes = receitasAtual - despesasAtual;
 
   const mostrarComparacao = mes > 0;
   const mesAnterior = mes === 0 ? 11 : mes - 1;
 
-  const receitasAnterior = mostrarComparacao ? obterReceitasMes(mesAnterior) : 0;
-  const despesasAnterior = mostrarComparacao ? obterDespesasMes(mesAnterior) : 0;
+  const receitasAnterior = mostrarComparacao ? obterReceitasMes(mesAnterior, ano) : 0;
+  const despesasAnterior = mostrarComparacao ? obterDespesasMes(mesAnterior, ano) : 0;
   const saldoMesAnterior = receitasAnterior - despesasAnterior;
 
   const variacaoReceitas =

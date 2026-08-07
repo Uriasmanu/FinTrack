@@ -12,16 +12,17 @@ const CATEGORIA_BESTEIRA = "cat-018";
 const CATEGORIA_ACOUGUE = "cat-019";
 
 export function DespesasPorFinalidade() {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
   const mesAtual = new Date().getMonth();
+  const anoAtual = new Date().getFullYear();
 
-  if (!dadosAno) return null;
+  if (!dados) return null;
 
-  const despesasMes = dadosAno.transacoes.filter((t) => {
+  const despesasMes = dados.transacoes.filter((t) => {
     if (t.tipo !== "despesa") return false;
     const data = new Date(t.data);
-    return data.getMonth() === mesAtual && data.getFullYear() === dadosAno.ano;
+    return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
   });
 
   const totalDespesas = despesasMes.reduce((acc, t) => acc + t.valor, 0);

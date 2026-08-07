@@ -6,22 +6,22 @@ interface MetasPredefinidasProps {
 }
 
 export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
-  const metasPadrao = dadosAno?.metas.filter((m) => m.tipo === "padrao") ?? [];
+  const metasPadrao = dados?.metas.filter((m) => m.tipo === "padrao") ?? [];
 
   if (metasPadrao.length === 0) {
     return null;
   }
 
-  const categoriasReceita = dadosAno?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+  const categoriasReceita = dados?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
 
   function obterReceitasMeta(meta: typeof metasPadrao[0]) {
     const categoriasBase = meta.receitasBase && meta.receitasBase.length > 0
       ? meta.receitasBase
       : categoriasReceita.map((c) => c.id);
 
-    return (dadosAno?.transacoes ?? [])
+    return (dados?.transacoes ?? [])
       .filter((t) => categoriasBase.includes(t.categoriaId) && t.tipo === "receita");
   }
 
@@ -33,9 +33,9 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
   }
 
   const mesAtual = new Date().getMonth();
-  const anoAtual = dadosAno?.ano ?? new Date().getFullYear();
+  const anoAtual = new Date().getFullYear();
 
-  const despesasRecorrentesMes = (dadosAno?.transacoes ?? [])
+  const despesasRecorrentesMes = (dados?.transacoes ?? [])
     .filter((t) => {
       if (t.tipo !== "despesa") return false;
       if (t.tipoRecorrencia !== "recorrente" && t.tipoRecorrencia !== "parcelado") return false;
@@ -44,7 +44,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     })
     .reduce((total, t) => total + t.valor, 0);
 
-  const despesasLazerMes = (dadosAno?.transacoes ?? [])
+  const despesasLazerMes = (dados?.transacoes ?? [])
     .filter((t) => {
       if (t.tipo !== "despesa") return false;
       if (t.categoriaId !== "cat-004") return false;
@@ -62,27 +62,27 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     if (salarioMensal > 0) {
       switch (meta.nome) {
         case "Viver de Renda":
-          valorAlvo = salarioMensal * (dadosAno?.config?.multiplicadores?.viverDeRenda ?? 200);
+          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.viverDeRenda ?? 200);
           parcelaMensal = valorAlvo / meta.meses;
           break;
         case "Reserva de Emergência":
-          valorAlvo = salarioMensal * (dadosAno?.config?.multiplicadores?.reservaEmergencia ?? 6);
+          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.reservaEmergencia ?? 6);
           parcelaMensal = valorAlvo / meta.meses;
           break;
         case "Guardar por Mês":
-          valorAlvo = salarioMensal * (dadosAno?.config?.multiplicadores?.guardarPorMes ?? 0.1);
+          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1);
           parcelaMensal = valorAlvo;
           break;
         case "Conta Fixa":
           valorAlvo = despesasRecorrentesMes > 0
             ? despesasRecorrentesMes
-            : salarioMensal * (dadosAno?.config?.multiplicadores?.contaFixa ?? 0.6);
+            : salarioMensal * (dados?.config?.multiplicadores?.contaFixa ?? 0.6);
           parcelaMensal = valorAlvo;
           break;
         case "Lazer":
           valorAlvo = despesasLazerMes > 0
             ? despesasLazerMes
-            : salarioMensal * (dadosAno?.config?.multiplicadores?.lazer ?? 0.3);
+            : salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3);
           parcelaMensal = valorAlvo;
           break;
       }

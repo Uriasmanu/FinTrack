@@ -9,9 +9,9 @@ interface ResumoCategoriasProps {
 }
 
 export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
-  const despesasMes = (dadosAno?.transacoes ?? [])
+  const despesasMes = (dados?.transacoes ?? [])
     .filter((t) => {
       if (t.tipo !== "despesa") return false;
       const data = new Date(t.data);
@@ -19,7 +19,7 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
     })
     .reduce((total, t) => total + t.valor, 0);
 
-  if (!dadosAno || despesasMes === 0) {
+  if (!dados || despesasMes === 0) {
     return (
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -36,7 +36,7 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
     );
   }
 
-  const despesasPorCategoria = dadosAno.transacoes
+  const despesasPorCategoria = dados.transacoes
     .filter((t) => {
       if (t.tipo !== "despesa") return false;
       const data = new Date(t.data);
@@ -49,7 +49,7 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
 
   const categoriasOrdenadas = Object.entries(despesasPorCategoria)
     .map(([categoriaId, valor]) => {
-      const categoria = dadosAno.categorias.find((c) => c.id === categoriaId);
+      const categoria = dados.categorias.find((c) => c.id === categoriaId);
       return {
         id: categoriaId,
         nome: categoria?.nome ?? "Sem categoria",

@@ -5,11 +5,11 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
 export function AlertaMetas() {
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
-  if (!dadosAno) return null;
+  if (!dados) return null;
 
-  const metasAtivas = dadosAno.metas.filter((m) => m.status === "em_andamento");
+  const metasAtivas = dados.metas.filter((m) => m.status === "em_andamento");
 
   if (metasAtivas.length === 0) {
     return (

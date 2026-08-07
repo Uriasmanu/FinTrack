@@ -1,10 +1,9 @@
-import type { DadosAno } from "@/types";
+import type { DadosApp } from "@/types";
 
 const API_BASE = "/api";
 
-function criarDadosAnoNovo(ano: number): DadosAno {
+function criarDadosNovos(): DadosApp {
   return {
-    ano,
     transacoes: [],
     categorias: [],
     contas: [],
@@ -29,23 +28,21 @@ function criarDadosAnoNovo(ano: number): DadosAno {
   };
 }
 
-async function carregarDadosAno(ano?: number): Promise<DadosAno> {
+async function carregarDados(): Promise<DadosApp> {
   try {
-    const anoFinal = ano ?? new Date().getFullYear();
-    const res = await fetch(`${API_BASE}/data/${anoFinal}`);
+    const res = await fetch(`${API_BASE}/data`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const dados = await res.json();
-    return dados as DadosAno;
+    return dados as DadosApp;
   } catch (erro) {
     console.error("Erro ao carregar dados:", erro);
-    const novoAno = ano ?? new Date().getFullYear();
-    return criarDadosAnoNovo(novoAno);
+    return criarDadosNovos();
   }
 }
 
-async function salvarDadosAno(dados: DadosAno): Promise<boolean> {
+async function salvarDados(dados: DadosApp): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE}/data/${dados.ano}`, {
+    const res = await fetch(`${API_BASE}/data`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados),
@@ -56,24 +53,6 @@ async function salvarDadosAno(dados: DadosAno): Promise<boolean> {
     console.error("Erro ao salvar dados:", erro);
     return false;
   }
-}
-
-async function verificarOuCriarAnoAtual(ano?: number): Promise<DadosAno> {
-  const anoFinal = ano ?? new Date().getFullYear();
-  return carregarDadosAno(anoFinal);
-}
-
-async function migrarDadosSeNecessario(dadosAtuais: DadosAno): Promise<DadosAno> {
-  const anoAtual = new Date().getFullYear();
-
-  if (dadosAtuais.ano === anoAtual) {
-    return dadosAtuais;
-  }
-
-  const novosDados = criarDadosAnoNovo(anoAtual);
-  novosDados.ativosFii = (dadosAtuais.ativosFii ?? []).filter((a) => a.ativo);
-  await salvarDadosAno(novosDados);
-  return novosDados;
 }
 
 async function listarAnosDisponiveis(): Promise<number[]> {
@@ -87,9 +66,9 @@ async function listarAnosDisponiveis(): Promise<number[]> {
   }
 }
 
-async function excluirDadosAno(ano: number): Promise<boolean> {
+async function excluirDados(): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE}/data/${ano}`, { method: "DELETE" });
+    const res = await fetch(`${API_BASE}/data`, { method: "DELETE" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return true;
   } catch (erro) {
@@ -98,9 +77,9 @@ async function excluirDadosAno(ano: number): Promise<boolean> {
   }
 }
 
-async function exportarDados(ano: number): Promise<string | null> {
+async function exportarDados(): Promise<string | null> {
   try {
-    const dados = await carregarDadosAno(ano);
+    const dados = await carregarDados();
     return JSON.stringify(dados, null, 2);
   } catch (erro) {
     console.error("Erro ao exportar dados:", erro);
@@ -108,27 +87,22 @@ async function exportarDados(ano: number): Promise<string | null> {
   }
 }
 
-async function importarDados(jsonString: string): Promise<DadosAno | null> {
+async function importarDados(jsonString: string): Promise<DadosApp | null> {
   try {
     const dados = JSON.parse(jsonString);
 
-    if (!dados || typeof dados !== "object") {
-      console.error("Dados inválidos");
-      return null;
-    }
-
-    if (!dados.ano || !Array.isArray(dados.transacoes)) {
+    if (!dados || typeof dados !== "object" || !Array.isArray(dados.transacoes)) {
       console.error("Estrutura de dados inválida");
       return null;
     }
 
-    const dadosAno = dados as DadosAno;
-    const salvo = await salvarDadosAno(dadosAno);
+    const dadosApp = dados as DadosApp;
+    const salvo = await salvarDados(dadosApp);
     if (!salvo) {
       console.error("Falha ao salvar dados no servidor");
       return null;
     }
-    return dadosAno;
+    return dadosApp;
   } catch (erro) {
     console.error("Erro ao importar dados:", erro);
     return null;
@@ -136,13 +110,11 @@ async function importarDados(jsonString: string): Promise<DadosAno | null> {
 }
 
 export const storage = {
-  criarDadosAnoNovo,
-  carregarDadosAno,
-  salvarDadosAno,
-  verificarOuCriarAnoAtual,
-  migrarDadosSeNecessario,
+  criarDadosNovos,
+  carregarDados,
+  salvarDados,
   listarAnosDisponiveis,
-  excluirDadosAno,
+  excluirDados,
   exportarDados,
   importarDados,
 };

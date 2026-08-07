@@ -9,7 +9,7 @@ interface SaldoCardProps {
 }
 
 export function SaldoCard({ mes, ano }: SaldoCardProps) {
-  const { obterSaldoInicialContas, dadosAno } =
+  const { obterSaldoInicialContas, dados } =
     useFinanceStore();
 
   const mesAnterior = mes === 0 ? 11 : mes - 1;
@@ -19,13 +19,13 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
 
   const saldoInicialContas = obterSaldoInicialContas();
 
-  const transacoesAteHoje = (dadosAno?.transacoes ?? [])
+  const transacoesAteHoje = (dados?.transacoes ?? [])
     .filter((t) => t.data <= hojeStr)
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
   const saldoHoje = saldoInicialContas + transacoesAteHoje;
 
-  const transacoesAteMesAnterior = (dadosAno?.transacoes ?? [])
+  const transacoesAteMesAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
       const dataTransacao = new Date(t.data);
       return t.data <= hojeStr && (

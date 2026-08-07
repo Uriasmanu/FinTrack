@@ -12,9 +12,9 @@ export function ResumoMensal({ mes, ano }: ResumoMensalProps) {
   const { obterTransacoesMes, obterReceitasMes, obterDespesasMes } =
     useFinanceStore();
 
-  const transacoes = obterTransacoesMes(mes);
-  const receitas = obterReceitasMes(mes);
-  const despesas = obterDespesasMes(mes);
+  const transacoes = obterTransacoesMes(mes, ano);
+  const receitas = obterReceitasMes(mes, ano);
+  const despesas = obterDespesasMes(mes, ano);
 
   const hoje = new Date();
   const isMesAtual = mes === hoje.getMonth() && ano === hoje.getFullYear();

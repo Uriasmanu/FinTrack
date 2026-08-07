@@ -20,7 +20,7 @@ interface ContaCardProps {
 export function ContaCard({ conta, onEditar }: ContaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
-  const { excluirConta, dadosAno } = useFinanceStore();
+  const { excluirConta, dados } = useFinanceStore();
 
   const hoje = new Date();
   const mesAtual = hoje.getMonth();
@@ -28,7 +28,7 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
 
   const saldoAtual =
     (conta.saldoInicial ?? 0) +
-    (dadosAno?.transacoes
+    (dados?.transacoes
       .filter((t) => {
         if (t.contaId !== conta.id) return false;
         if (!t.confirmada) return false;
@@ -39,7 +39,7 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
 
   const saldoMes =
     (conta.saldoInicial ?? 0) +
-    (dadosAno?.transacoes
+    (dados?.transacoes
       .filter((t) => {
         if (t.contaId !== conta.id) return false;
         const dataTransacao = new Date(t.data);
@@ -47,11 +47,11 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
       })
       .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0) ?? 0);
 
-  const transacoesNaConta = dadosAno?.transacoes.filter(
+  const transacoesNaConta = dados?.transacoes.filter(
     (t) => t.contaId === conta.id
   ).length ?? 0;
 
-  const transacoesRecorrentesNaConta = dadosAno?.transacoes.filter(
+  const transacoesRecorrentesNaConta = dados?.transacoes.filter(
     (t) => t.contaId === conta.id && (t.tipoRecorrencia === "recorrente" || t.tipoRecorrencia === "parcelado")
   ).length ?? 0;
 

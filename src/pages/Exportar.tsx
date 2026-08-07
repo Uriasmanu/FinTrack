@@ -8,17 +8,15 @@ import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import * as XLSX from "xlsx";
 
 export function Exportar() {
-  const { dadosAno, inicializar } = useFinanceStore();
+  const { dados, inicializar } = useFinanceStore();
   const [mensagem, setMensagem] = useState<{ tipo: "sucesso" | "erro"; texto: string } | null>(null);
   const [dialogImportOpen, setDialogImportOpen] = useState(false);
   const [dadosImportacao, setDadosImportacao] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const anoAtual = dadosAno?.ano ?? new Date().getFullYear();
-
   async function handleExportar() {
     try {
-      const json = await storage.exportarDados(anoAtual);
+      const json = await storage.exportarDados();
       if (!json) {
         setMensagem({ tipo: "erro", texto: "Erro ao exportar dados" });
         return;
@@ -28,13 +26,13 @@ export function Exportar() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `fintrack_${anoAtual}.json`;
+      a.download = `fintrack.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      setMensagem({ tipo: "sucesso", texto: `Dados exportados com sucesso! Arquivo: fintrack_${anoAtual}.json` });
+      setMensagem({ tipo: "sucesso", texto: "Dados exportados com sucesso! Arquivo: fintrack.json" });
     } catch (error) {
       setMensagem({ tipo: "erro", texto: "Erro ao exportar dados" });
     }
@@ -42,7 +40,7 @@ export function Exportar() {
 
   function handleExportarExcel() {
     try {
-      if (!dadosAno) {
+      if (!dados) {
         setMensagem({ tipo: "erro", texto: "Nenhum dado disponível para exportar" });
         return;
       }
@@ -60,7 +58,7 @@ export function Exportar() {
       const headerFontColor = "FFFFFF";
       const contasColor = "6B7280";
 
-      dadosAno.contas.forEach((conta) => {
+      dados.contas.forEach((conta) => {
         const wsData: (string | number)[][] = [
           ["Conta", conta.banco],
           ["Tipo", conta.tipo === "corrente" ? "Corrente" : conta.tipo === "poupanca" ? "Poupança" : conta.tipo === "investimento" ? "Investimento" : "Ticket"],
@@ -69,12 +67,12 @@ export function Exportar() {
           ["Data", "Descrição", "Tipo", "Categoria", "Valor", "Confirmada"],
         ];
 
-        const transacoesConta = dadosAno.transacoes
+        const transacoesConta = dados.transacoes
           .filter((t) => t.contaId === conta.id)
           .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
         transacoesConta.forEach((t) => {
-          const categoria = dadosAno.categorias.find((c) => c.id === t.categoriaId);
+          const categoria = dados.categorias.find((c) => c.id === t.categoriaId);
           wsData.push([
             t.data,
             t.descricao,
@@ -131,8 +129,8 @@ export function Exportar() {
         ["Conta", "Saldo Inicial", "Total Receitas", "Total Despesas", "Saldo Final"],
       ];
 
-      dadosAno.contas.forEach((conta) => {
-        const transacoesConta = dadosAno.transacoes.filter((t) => t.contaId === conta.id);
+      dados.contas.forEach((conta) => {
+        const transacoesConta = dados.transacoes.filter((t) => t.contaId === conta.id);
         const totalReceitas = transacoesConta.filter((t) => t.tipo === "receita").reduce((acc, t) => acc + t.valor, 0);
         const totalDespesas = transacoesConta.filter((t) => t.tipo === "despesa").reduce((acc, t) => acc + t.valor, 0);
         resumoData.push([
@@ -155,9 +153,9 @@ export function Exportar() {
 
       XLSX.utils.book_append_sheet(wb, wsResumo, "Resumo");
 
-      XLSX.writeFile(wb, `fintrack_${anoAtual}.xlsx`);
+      XLSX.writeFile(wb, `fintrack.xlsx`);
 
-      setMensagem({ tipo: "sucesso", texto: `Excel exportado com sucesso! Arquivo: fintrack_${anoAtual}.xlsx` });
+      setMensagem({ tipo: "sucesso", texto: "Excel exportado com sucesso! Arquivo: fintrack.xlsx" });
     } catch (error) {
       setMensagem({ tipo: "erro", texto: "Erro ao exportar para Excel" });
     }
@@ -177,7 +175,7 @@ export function Exportar() {
 
       try {
         const dados = JSON.parse(conteudo);
-        if (!dados || typeof dados !== "object" || !dados.ano || !Array.isArray(dados.transacoes)) {
+        if (!dados || typeof dados !== "object" || !Array.isArray(dados.transacoes)) {
           setMensagem({ tipo: "erro", texto: "Arquivo JSON inválido ou corrompido" });
           return;
         }
@@ -201,8 +199,8 @@ export function Exportar() {
 
     const dados = await storage.importarDados(dadosImportacao);
     if (dados) {
-      await inicializar(dados.ano);
-      setMensagem({ tipo: "sucesso", texto: `Dados importados com sucesso! Ano: ${dados.ano}` });
+      await inicializar();
+      setMensagem({ tipo: "sucesso", texto: "Dados importados com sucesso!" });
     } else {
       setMensagem({ tipo: "erro", texto: "Erro ao importar dados" });
     }
@@ -252,16 +250,16 @@ export function Exportar() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Exporte todos os seus dados financeiros do ano <strong>{anoAtual}</strong> em formato JSON.
-              O arquivo inclui transações, contas, cartões, metas e configurações.
+              Exporte todos os seus dados financeiros de todos os anos e meses em formato JSON.
+              O arquivo inclui transações, contas, cartões, metas, investimentos e configurações.
             </p>
             <Button onClick={handleExportar} className="w-full">
               <Download className="mr-2 h-4 w-4" />
-              Exportar JSON ({anoAtual})
+              Exportar JSON (fintrack.json)
             </Button>
             <Button onClick={handleExportarExcel} className="w-full" variant="outline">
               <FileSpreadsheet className="mr-2 h-4 w-4" />
-              Exportar Excel ({anoAtual})
+              Exportar Excel (fintrack.xlsx)
             </Button>
           </CardContent>
         </Card>

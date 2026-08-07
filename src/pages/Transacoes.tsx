@@ -15,7 +15,7 @@ const MESES = [
 
 export function Transacoes() {
   const navigate = useNavigate();
-  const { dadosAno } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
   const hoje = new Date();
   const [mesSelecionado, setMesSelecionado] = useState(hoje.getMonth());
@@ -66,13 +66,13 @@ export function Transacoes() {
     }));
   }, [mesSelecionado, anoSelecionado]);
 
-  const temContas = (dadosAno?.contas.length ?? 0) > 0;
+  const temContas = (dados?.contas.length ?? 0) > 0;
 
-  const contasFiltradas = (dadosAno?.contas ?? [])
+  const contasFiltradas = (dados?.contas ?? [])
     .filter((c) => filtros.contaId === "todas" || c.id === filtros.contaId)
     .filter((c) => c.tipo !== "poupanca");
 
-  const poupancaIds = (dadosAno?.contas ?? [])
+  const poupancaIds = (dados?.contas ?? [])
     .filter((c) => c.tipo === "poupanca")
     .map((c) => c.id);
 
@@ -84,7 +84,7 @@ export function Transacoes() {
       return acc + (c.saldoInicial ?? 0);
     }, 0);
 
-  const transacoesAnteriores = (dadosAno?.transacoes ?? [])
+  const transacoesAnteriores = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId)) return false;
@@ -93,7 +93,7 @@ export function Transacoes() {
     })
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
-  const saldoConfirmadoAnterior = (dadosAno?.transacoes ?? [])
+  const saldoConfirmadoAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId)) return false;
@@ -103,7 +103,7 @@ export function Transacoes() {
     })
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
-  const transacoesFiltradas = (dadosAno?.transacoes ?? [])
+  const transacoesFiltradas = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.busca && !t.descricao.toLowerCase().includes(filtros.busca.toLowerCase())) {
         return false;
