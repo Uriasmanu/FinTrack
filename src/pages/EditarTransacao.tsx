@@ -14,10 +14,16 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+function adicionarDias(dataISO: string, dias: number): string {
+  const d = new Date(dataISO + "T00:00:00");
+  d.setDate(d.getDate() + dias);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export function EditarTransacao() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { dados, editarTransacao, excluirTransacao, excluirParcelasFuturas, recalcularParcelas, adicionarTransacoesRecorrentes } = useFinanceStore();
+  const { dados, editarTransacao, excluirTransacao, adicionarTransacoesRecorrentes } = useFinanceStore();
 
   const transacao = dados?.transacoes.find((t) => t.id === id);
   const [dialogAberto, setDialogAberto] = useState(false);
@@ -34,13 +40,13 @@ export function EditarTransacao() {
   const transacaoEncontrada = transacao;
   const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "recorrente_personalizado" || transacaoEncontrada.tipoRecorrencia === "parcelado";
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
+  async function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
     const mudouParaRecorrente = transacaoEncontrada.tipoRecorrencia === "unica" &&
       (data.tipoRecorrencia === "recorrente" || data.tipoRecorrencia === "recorrente_personalizado" || data.tipoRecorrencia === "parcelado");
 
     if (mudouParaRecorrente) {
-      excluirTransacao(transacaoEncontrada.id);
-      adicionarTransacoesRecorrentes({
+      await excluirTransacao(transacaoEncontrada.id);
+      await adicionarTransacoesRecorrentes({
         tipo: data.tipo,
         tipoRecorrencia: data.tipoRecorrencia,
         descricao: data.descricao,
@@ -66,13 +72,13 @@ export function EditarTransacao() {
       const grupoTransacoes = (dados?.transacoes ?? [])
         .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
 
-      grupoTransacoes.forEach((t) => {
+      for (const t of grupoTransacoes) {
         if (t.id !== transacaoEncontrada.id) {
-          excluirTransacao(t.id);
+          await excluirTransacao(t.id);
         }
-      });
+      }
 
-      editarTransacao(transacaoEncontrada.id, {
+      await editarTransacao(transacaoEncontrada.id, {
         ...data,
         grupoParcelaId: null,
       });
@@ -101,32 +107,28 @@ export function EditarTransacao() {
     navigate("/transacoes");
   }
 
-  function editarTodas(data: Record<string, unknown>) {
-    const dados = data as { valor: number; data: string; [key: string]: unknown };
+  async function editarTodas(data: Record<string, unknown>) {
+    const novosDados = data as { valor?: number; data?: string };
 
     if (transacaoEncontrada.grupoParcelaId) {
-      excluirParcelasFuturas(transacaoEncontrada.grupoParcelaId, transacaoEncontrada.data);
-
       const grupoTransacoes = (dados?.transacoes ?? [])
         .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId)
+        .filter((t) => t.data >= transacaoEncontrada.data)
         .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
-      if (grupoTransacoes.length > 1) {
-        const novoTotal = grupoTransacoes.length;
+      const diffDias =
+        novosDados.data && novosDados.data !== transacaoEncontrada.data
+          ? Math.round(
+              (new Date(novosDados.data + "T00:00:00").getTime() -
+                new Date(transacaoEncontrada.data + "T00:00:00").getTime()) /
+                86400000
+            )
+          : 0;
 
-        recalcularParcelas(transacaoEncontrada.grupoParcelaId, novoTotal);
-
-        grupoTransacoes.forEach((t) => {
-          editarTransacao(t.id, {
-            valor: dados.valor,
-          });
-        });
-      } else {
-        grupoTransacoes.forEach((t) => {
-          editarTransacao(t.id, {
-            valor: dados.valor,
-            data: dados.data,
-          });
+      for (const t of grupoTransacoes) {
+        await editarTransacao(t.id, {
+          valor: novosDados.valor ?? t.valor,
+          data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
         });
       }
     }

@@ -15,7 +15,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Editar só essa ou todas as seguintes em transação, tem que, quando eu escolhe todas as seguintes tem que editar a que eu escolhi e as seguintes.
+### [aberto] "Editar todas as seguintes" em transação recorrente/parcelada não aplica a alteração
+**Comportamento atual:** Ao editar uma transação recorrente/parcelada e escolher "Todas as seguintes" no dialog, nenhuma transação é alterada — nem a selecionada nem as futuras. A função `editarTodas` sombreia a variável `dados` do store com os dados do formulário (que não têm campo `transacoes`), fazendo o grupo ficar vazio; além disso, as chamadas assíncronas de edição/exclusão em loop sem `await` fazem o estado final conter apenas a última operação (race condition).
+**Comportamento esperado:** Ao escolher "Todas as seguintes", a transação selecionada e todas as transações futuras do mesmo `grupoParcelaId` devem ser editadas com o novo valor, preservando o intervalo de datas entre as ocorrências (offset de dias da data alterada).
+**Escopo:** `src/pages/EditarTransacao.tsx`
 ### [aberto] saldo total em dashbord deve mostrar somente o que foi efetivado
 ## Histórico de Correções
 

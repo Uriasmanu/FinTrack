@@ -34,7 +34,7 @@ const transacaoSchema = z.object({
 type TransacaoFormData = z.infer<typeof transacaoSchema>;
 
 interface TransacaoFormProps {
-  initialData?: Partial<TransacaoFormData>;
+  initialData?: Partial<TransacaoFormData> & { id?: string };
   onSubmit: (data: TransacaoFormData) => void;
   isEditing?: boolean;
 }
