@@ -16,7 +16,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Quando eu inicio a aplicação a primeira coisa que ele deve fazer é criar o JSON com as informações padrões do sistema, o nome do JSON é o nome da aplicação e é armazenado fisicamente na pata data
+### [aberto] Analise requisitos. Quando eu inicio a aplicação a primeira coisa que ele deve fazer é criar o JSON com as informações padrões do sistema, o nome do JSON é o nome da aplicação e é armazenado fisicamente na pata data
 
 ## Histórico de Correções
 
