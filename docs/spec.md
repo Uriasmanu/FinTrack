@@ -16,6 +16,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
+### [aberto] Se ja exisitr o fintrack.json na pasta data, não é para criar novament ou atualizar
+
+### [aberto] Quando eu escolher um tema, entre claro ou escuro, é para fazer um update em fintrack.json
+
+### [aberto] Quando eu criar, editar, excluir uma conta é para fazer um update em fintrack.json e adicionar o timestamp
+
 ## Histórico de Correções
 
 ### [corrigido] Criar o JSON padrão do sistema como primeira ação da aplicação
