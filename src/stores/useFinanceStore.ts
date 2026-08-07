@@ -7,6 +7,11 @@ import type {
   Cartao,
   Meta,
   Config,
+  AtivoFii,
+  OperacaoFii,
+  DividendoFii,
+  IndicadoresFii,
+  StatusPrecoFii,
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
@@ -48,6 +53,31 @@ interface FinanceState {
   obterFaturaCartao: (cartaoId: string) => number;
   obterSaldoAtualSemTicket: () => number;
   obterSaldoInicialContas: (contaId?: string) => number;
+
+  // Ativos FII
+  ativosFii: AtivoFii[];
+  operacoesFii: OperacaoFii[];
+  dividendosFii: DividendoFii[];
+  adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "cotasAtuais" | "precoMedioCompra" | "ativo">) => void;
+  editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => void;
+  excluirAtivoFii: (id: string) => void;
+
+  // Operações FII
+  adicionarOperacaoFii: (dados: Omit<OperacaoFii, "id" | "criadoEm">) => void;
+  excluirOperacaoFii: (id: string) => void;
+
+  // Dividendos FII
+  adicionarDividendoFii: (dados: Omit<DividendoFii, "id" | "criadoEm" | "totalRecebido">) => void;
+  editarDividendoFii: (id: string, dados: Partial<DividendoFii>) => void;
+  excluirDividendoFii: (id: string) => void;
+
+  // Seletores FII
+  obterAtivosFiiAtivos: () => AtivoFii[];
+  obterOperacoesFii: (ativoFiiId: string) => OperacaoFii[];
+  obterDividendosFii: (ativoFiiId: string) => DividendoFii[];
+  obterDividendosFiiMes: (mes: number, ano: number) => DividendoFii[];
+  obterTotalDividendosAno: (ano: number) => number;
+  obterIndicadoresFii: (ativoFiiId: string) => IndicadoresFii;
 }
 
 function salvar(state: DadosAno) {
@@ -501,5 +531,320 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         return true;
       })
       .reduce((acc, c) => acc + (c.saldoInicial ?? 0), 0);
+  },
+
+  // ==================== FII ====================
+
+  ativosFii: [],
+  operacoesFii: [],
+  dividendosFii: [],
+
+  adicionarAtivoFii: (dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoAtivo: AtivoFii = {
+      ...dados,
+      id: gerarId(),
+      cotasAtuais: 0,
+      precoMedioCompra: 0,
+      ativo: true,
+      criadoEm: new Date().toISOString(),
+    };
+
+    const novoState: DadosAno = {
+      ...state,
+      ativosFii: adicionarItensArray(state.ativosFii, novoAtivo),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  editarAtivoFii: (id, dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoState: DadosAno = {
+      ...state,
+      ativosFii: editarItemArray(state.ativosFii, id, dados),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  excluirAtivoFii: (id) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const temOperacoes = state.operacoesFii.some((o) => o.ativoFiiId === id);
+    const temDividendos = state.dividendosFii.some((d) => d.ativoFiiId === id);
+
+    if (temOperacoes || temDividendos) {
+      throw new Error("Não é possível excluir ativo com operações ou dividendos vinculados");
+    }
+
+    const novoState: DadosAno = {
+      ...state,
+      ativosFii: excluirItemArray(state.ativosFii, id),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  adicionarOperacaoFii: (dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const ativo = state.ativosFii.find((a) => a.id === dados.ativoFiiId);
+    if (!ativo) throw new Error("Ativo FII não encontrado");
+
+    const novaOperacao: OperacaoFii = {
+      ...dados,
+      id: gerarId(),
+      criadoEm: new Date().toISOString(),
+    };
+
+    let novasCotasAtuais = ativo.cotasAtuais;
+    let novoPrecoMedio = ativo.precoMedioCompra;
+
+    if (dados.tipo === "compra") {
+      const custoTotal = dados.precoUnitario * dados.quantidade + (dados.taxaB3 ?? 0);
+      novasCotasAtuais = ativo.cotasAtuais + dados.quantidade;
+      novoPrecoMedio =
+        novasCotasAtuais > 0
+          ? (ativo.precoMedioCompra * ativo.cotasAtuais + custoTotal) / novasCotasAtuais
+          : 0;
+    } else {
+      if (dados.quantidade > ativo.cotasAtuais) {
+        throw new Error("Quantidade vendida maior que cotas disponíveis");
+      }
+      novasCotasAtuais = ativo.cotasAtuais - dados.quantidade;
+    }
+
+    const novosAtivos = state.ativosFii.map((a) => {
+      if (a.id !== dados.ativoFiiId) return a;
+      return {
+        ...a,
+        cotasAtuais: novasCotasAtuais,
+        precoMedioCompra: dados.tipo === "compra" ? novoPrecoMedio : a.precoMedioCompra,
+        ativo: novasCotasAtuais > 0,
+      };
+    });
+
+    const novoState: DadosAno = {
+      ...state,
+      operacoesFii: adicionarItensArray(state.operacoesFii, novaOperacao),
+      ativosFii: novosAtivos,
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  excluirOperacaoFii: (id) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoState: DadosAno = {
+      ...state,
+      operacoesFii: excluirItemArray(state.operacoesFii, id),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  adicionarDividendoFii: (dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoDividendo: DividendoFii = {
+      ...dados,
+      id: gerarId(),
+      totalRecebido: dados.valorPorCota * dados.quantidadeCotas,
+      criadoEm: new Date().toISOString(),
+    };
+
+    const novoState: DadosAno = {
+      ...state,
+      dividendosFii: adicionarItensArray(state.dividendosFii, novoDividendo),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  editarDividendoFii: (id, dados) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const dividendosAtualizados = state.dividendosFii.map((d) => {
+      if (d.id !== id) return d;
+      const atualizado = { ...d, ...dados };
+      if (dados.valorPorCota !== undefined || dados.quantidadeCotas !== undefined) {
+        atualizado.totalRecebido = atualizado.valorPorCota * atualizado.quantidadeCotas;
+      }
+      return atualizado;
+    });
+
+    const novoState: DadosAno = {
+      ...state,
+      dividendosFii: dividendosAtualizados,
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  excluirDividendoFii: (id) => {
+    const state = get().dadosAno;
+    if (!state) return;
+
+    const novoState: DadosAno = {
+      ...state,
+      dividendosFii: excluirItemArray(state.dividendosFii, id),
+    };
+
+    salvar(novoState);
+    set({ dadosAno: novoState });
+  },
+
+  obterAtivosFiiAtivos: () => {
+    const state = get().dadosAno;
+    if (!state) return [];
+    return state.ativosFii.filter((a) => a.ativo);
+  },
+
+  obterOperacoesFii: (ativoFiiId) => {
+    const state = get().dadosAno;
+    if (!state) return [];
+    return state.operacoesFii.filter((o) => o.ativoFiiId === ativoFiiId);
+  },
+
+  obterDividendosFii: (ativoFiiId) => {
+    const state = get().dadosAno;
+    if (!state) return [];
+    return state.dividendosFii.filter((d) => d.ativoFiiId === ativoFiiId);
+  },
+
+  obterDividendosFiiMes: (mes, ano) => {
+    const state = get().dadosAno;
+    if (!state) return [];
+    return state.dividendosFii.filter((d) => {
+      const data = new Date(d.dataPagamento);
+      return data.getMonth() === mes && data.getFullYear() === ano;
+    });
+  },
+
+  obterTotalDividendosAno: (ano) => {
+    const state = get().dadosAno;
+    if (!state) return 0;
+    return state.dividendosFii
+      .filter((d) => new Date(d.dataPagamento).getFullYear() === ano)
+      .reduce((total, d) => total + d.totalRecebido, 0);
+  },
+
+  obterIndicadoresFii: (ativoFiiId) => {
+    const state = get().dadosAno;
+    if (!state) {
+      return {
+        pVp: 0,
+        precoTeto: 0,
+        dyMensal: 0,
+        dyAnual: 0,
+        yieldOnCost: 0,
+        statusPreco: "justo",
+        alertaVenda: false,
+        alertaGanhoNaoRecorrente: false,
+        lucroPrejuizoValor: 0,
+        lucroPrejuizoPercentual: 0,
+      };
+    }
+
+    const ativo = state.ativosFii.find((a) => a.id === ativoFiiId);
+    if (!ativo) {
+      return {
+        pVp: 0,
+        precoTeto: 0,
+        dyMensal: 0,
+        dyAnual: 0,
+        yieldOnCost: 0,
+        statusPreco: "justo",
+        alertaVenda: false,
+        alertaGanhoNaoRecorrente: false,
+        lucroPrejuizoValor: 0,
+        lucroPrejuizoPercentual: 0,
+      };
+    }
+
+    const dividendosAtivo = state.dividendosFii.filter((d) => d.ativoFiiId === ativoFiiId);
+    const ultimos12Meses = dividendosAtivo.filter((d) => {
+      const data = new Date(d.dataPagamento);
+      const agora = new Date();
+      const hace12Meses = new Date();
+      hace12Meses.setMonth(hace12Meses.getMonth() - 12);
+      return data >= hace12Meses && data <= agora;
+    });
+
+    const totalDividendos12Meses = ultimos12Meses.reduce((acc, d) => acc + d.totalRecebido, 0);
+    const dividendosMesAtual = dividendosAtivo.filter((d) => {
+      const data = new Date(d.dataPagamento);
+      const agora = new Date();
+      return data.getMonth() === agora.getMonth() && data.getFullYear() === agora.getFullYear();
+    });
+    const dividendosMesAtualTotal = dividendosMesAtual.reduce((acc, d) => acc + d.totalRecebido, 0);
+
+    const pVp = ativo.valorPatrimonialCota > 0
+      ? ativo.precoAtualMercado / ativo.valorPatrimonialCota
+      : 0;
+
+    const precoTeto = ativo.valorPatrimonialCota * 1.0;
+
+    const dyMensal = ativo.precoAtualMercado > 0
+      ? (dividendosMesAtualTotal / ativo.precoAtualMercado) * 100
+      : 0;
+
+    const dyAnual = ativo.precoAtualMercado > 0
+      ? (totalDividendos12Meses / ativo.precoAtualMercado) * 100
+      : 0;
+
+    const yieldOnCost = ativo.precoMedioCompra > 0
+      ? (totalDividendos12Meses / ativo.precoMedioCompra) * 100
+      : 0;
+
+    let statusPreco: StatusPrecoFii = "justo";
+    if (pVp < 0.9) statusPreco = "desconto";
+    else if (pVp <= 1.05) statusPreco = "justo";
+    else if (pVp <= 1.2) statusPreco = "agio_moderado";
+    else statusPreco = "agio_excessivo";
+
+    const alertaVenda = pVp > 1.2 || dyAnual < 6;
+
+    const ganhosNaoRecorrentes = dividendosAtivo.filter((d) => !d.recorrente);
+    const alertaGanhoNaoRecorrente = ganhosNaoRecorrentes.length > 0;
+
+    const lucroPrejuizoValor = ativo.cotasAtuais > 0
+      ? (ativo.precoAtualMercado - ativo.precoMedioCompra) * ativo.cotasAtuais
+      : 0;
+
+    const lucroPrejuizoPercentual = ativo.precoMedioCompra > 0
+      ? ((ativo.precoAtualMercado - ativo.precoMedioCompra) / ativo.precoMedioCompra) * 100
+      : 0;
+
+    return {
+      pVp,
+      precoTeto,
+      dyMensal,
+      dyAnual,
+      yieldOnCost,
+      statusPreco,
+      alertaVenda,
+      alertaGanhoNaoRecorrente,
+      lucroPrejuizoValor,
+      lucroPrejuizoPercentual,
+    };
   },
 }));

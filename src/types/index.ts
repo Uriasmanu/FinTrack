@@ -85,6 +85,90 @@ export interface Config {
   criadoEm?: string;
 }
 
+export type TipoFii =
+  | "tijolo"
+  | "papel"
+  | "fof"
+  | "misto"
+  | "fiagro"
+  | "desenvolvimento";
+
+export type SegmentoFii =
+  | "logistico"
+  | "lajes"
+  | "shopping"
+  | "varejo"
+  | "hospitalar"
+  | "educacional"
+  | "hotel"
+  | "agropecuario"
+  | "outro";
+
+export type PerfilRiscoFii = "high_grade" | "high_yield";
+export type IndexadorFii = "ipca" | "cdi" | "prefixado" | "outro";
+export type TipoOperacaoFii = "compra" | "venda";
+export type StatusPrecoFii = "desconto" | "justo" | "agio_moderado" | "agio_excessivo";
+
+export interface AtivoFii {
+  id: string;
+  ticker: string;
+  nome: string;
+  tipo: TipoFii;
+  segmento?: SegmentoFii | null;
+  perfilRisco?: PerfilRiscoFii | null;
+  indexador?: IndexadorFii | null;
+  taxaAdm?: number;
+  cotasAtuais: number;
+  precoMedioCompra: number;
+  precoAtualMercado: number;
+  valorPatrimonialCota: number;
+  taxaRetornoDesejada: number;
+  observacoes?: string;
+  ativo: boolean;
+  criadoEm: string;
+}
+
+export interface OperacaoFii {
+  id: string;
+  ativoFiiId: string;
+  tipo: TipoOperacaoFii;
+  data: string;
+  quantidade: number;
+  precoUnitario: number;
+  taxaB3?: number;
+  corretora?: string;
+  observacoes?: string;
+  criadoEm: string;
+}
+
+export interface DividendoFii {
+  id: string;
+  ativoFiiId: string;
+  competencia: string;
+  dataPagamento: string;
+  valorPorCota: number;
+  quantidadeCotas: number;
+  totalRecebido: number;
+  recorrente: boolean;
+  tipo?: string;
+  observacoes?: string;
+  criadoEm: string;
+}
+
+export interface IndicadoresFii {
+  pVp: number;
+  precoTeto: number;
+  dyMensal: number;
+  dyAnual: number;
+  yieldOnCost: number;
+  capRate?: number;
+  statusPreco: StatusPrecoFii;
+  alertaVenda: boolean;
+  alertaGanhoNaoRecorrente: boolean;
+  lucroPrejuizoValor: number;
+  lucroPrejuizoPercentual: number;
+}
+
 export interface DadosAno {
   ano: number;
   transacoes: Transacao[];
@@ -93,4 +177,7 @@ export interface DadosAno {
   cartoes: Cartao[];
   metas: Meta[];
   config: Config;
+  ativosFii: AtivoFii[];
+  operacoesFii: OperacaoFii[];
+  dividendosFii: DividendoFii[];
 }

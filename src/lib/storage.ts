@@ -15,6 +15,9 @@ function criarDadosAnoNovo(ano: number): DadosAno {
     contas: [],
     cartoes: [],
     metas: [],
+    ativosFii: [],
+    operacoesFii: [],
+    dividendosFii: [],
     config: {
       salario: 0,
       tema: "claro",
@@ -53,7 +56,12 @@ function carregarDadosAno(ano?: number): DadosAno {
       return criarDadosAnoNovo(novoAno);
     }
 
-    return dadosParseados as DadosAno;
+    return {
+      ...dadosParseados,
+      ativosFii: dadosParseados.ativosFii ?? [],
+      operacoesFii: dadosParseados.operacoesFii ?? [],
+      dividendosFii: dadosParseados.dividendosFii ?? [],
+    } as DadosAno;
   } catch (erro) {
     console.error("Erro ao carregar dados:", erro);
     const novoAno = ano ?? new Date().getFullYear();
@@ -92,6 +100,7 @@ function migrarDadosSeNecessario(dadosAtuais: DadosAno): DadosAno {
   }
 
   const novosDados = criarDadosAnoNovo(anoAtual);
+  novosDados.ativosFii = (dadosAtuais.ativosFii ?? []).filter((a) => a.ativo);
   salvarDadosAno(novosDados);
   return novosDados;
 }
