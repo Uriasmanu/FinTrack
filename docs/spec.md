@@ -87,9 +87,27 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** TransacaoForm.tsx
 **Correção:** O cálculo do saldo previsto para o fim do dia agora considera todas as transações do mesmo dia, e o aviso só é exibido quando o saldo previsto seria negativo.
 
-### [aberto] se eu deletar uma transação parcelada tem que pergunta se é só essa ou todas as as seguintes tambem
+### [corrigido] Excluir transação parcelada mostra diálogo com opções de escopo
+**Comportamento atual:** Ao excluir uma transação que faz parte de um grupo parcelado, apenas aquela parcela era removida sem oferecer a opção de excluir as parcelas seguintes do mesmo grupo.
+**Comportamento esperado:** Ao excluir uma transação parcelada, o sistema deve exibir um diálogo com as opções "Só esta", "Todas as seguintes" e "Cancelar", permitindo ao usuário decidir o escopo da exclusão.
+**Escopo:** TransacaoItem.tsx
+**Correção:** Adicionado AlertDialog com 3 opções ao excluir transações com `grupoParcelaId`. "Só esta" exclui apenas a selecionada; "Todas as seguintes" chama `excluirParcelasFuturas`; "Cancelar" fecha o diálogo. Documentado em `implementado/deletar-transacao-parcelada-dialog.md`.
 
-### [aberto] transações recorrentes tem a opção de ser recorente sempre na mesma data (padrão) ou personalizado (se repete a cada 25 dias por exemplo.)
+### [corrigido] Transações recorrentes suportam intervalo personalizado em dias
+**Comportamento atual:** Transações recorrentes só podiam ser configuradas para repetir mensalmente na mesma data, sem opção de intervalo diferente.
+**Comportamento esperado:** Transações recorrentes devem oferecer a opção "Recorrente (personalizado)" com campo para definir o intervalo em dias (ex: a cada 25 dias), gerando transações automaticamente com a frequência definida.
+**Escopo:** types/index.ts, lib/transacoes.ts, TransacaoForm.tsx, NovaTransacao.tsx, EditarTransacao.tsx, useFinanceStore.ts
+**Correção:** Adicionado tipo "recorrente_personalizado" ao `TipoRecorrencia`, campo `intervaloDias` à interface `Transacao`, caso "recorrente_personalizado" em `criarTransacoesRecorrentes` que gera transações a cada N dias por 12 meses, e campo de entrada no formulário. Documentado em `implementado/recorrencia-intervalo-personalizado.md`.
+
+### [resolvido] se eu deletar uma transação parcelada tem que pergunta se é só essa ou todas as as seguintes tambem
+**Comportamento atual:** Ao excluir uma transação que faz parte de um grupo parcelado, apenas aquela parcela é removida sem oferecer a opção de excluir as parcelas seguintes do mesmo grupo.
+**Comportamento esperado:** Ao excluir uma transação parcelada, o sistema deve exibir um diálogo com as opções "Só esta", "Todas as seguintes" e "Cancelar", permitindo ao usuário decidir o escopo da exclusão.
+**Escopo:** TransacaoItem.tsx
+
+### [resolvido] transações recorrentes tem a opção de ser recorente sempre na mesma data (padrão) ou personalizado (se repete a cada 25 dias por exemplo.)
+**Comportamento atual:** Transações recorrentes só podem ser configuradas para repetir mensalmente na mesma data. Não há opção de intervalo personalizado.
+**Comportamento esperado:** Transações recorrentes devem oferecer a opção "Recorrente (personalizado)" com campo para definir o intervalo em dias (ex: a cada 25 dias), gerando transações automaticamente com a frequência definida.
+**Escopo:** types/index.ts, lib/transacoes.ts, TransacaoForm.tsx
 
 # Guia de Spec para Implementação de Features
 

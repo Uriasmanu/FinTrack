@@ -8,6 +8,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 import type { Transacao } from "@/types";
@@ -24,7 +34,8 @@ export function TransacaoItem({
   onEditar,
 }: TransacaoItemProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { excluirTransacao, editarTransacao, dadosAno } = useFinanceStore();
+  const [parcelaDialogOpen, setParcelaDialogOpen] = useState(false);
+  const { excluirTransacao, excluirParcelasFuturas, editarTransacao, dadosAno } = useFinanceStore();
 
   const categoria = dadosAno?.categorias.find(
     (c) => c.id === transacao.categoriaId
@@ -34,8 +45,14 @@ export function TransacaoItem({
     : null;
   const conta = dadosAno?.contas.find((c) => c.id === transacao.contaId);
 
+  const isParcelada = transacao.grupoParcelaId !== null;
+
   function handleExcluir() {
-    setDialogOpen(true);
+    if (isParcelada) {
+      setParcelaDialogOpen(true);
+    } else {
+      setDialogOpen(true);
+    }
   }
 
   function confirmarExclusao() {
@@ -43,9 +60,23 @@ export function TransacaoItem({
     setDialogOpen(false);
   }
 
+  function confirmarExclusaoSimples() {
+    excluirTransacao(transacao.id);
+    setParcelaDialogOpen(false);
+  }
+
+  function confirmarExclusaoTodasSeguintes() {
+    if (transacao.grupoParcelaId) {
+      excluirParcelasFuturas(transacao.grupoParcelaId, transacao.data);
+    }
+    setParcelaDialogOpen(false);
+  }
+
   function tipoRecorrenciaLabel(tipo: string) {
     switch (tipo) {
       case "recorrente":
+        return { label: "Recorrente", variant: "default" as const };
+      case "recorrente_personalizado":
         return { label: "Recorrente", variant: "default" as const };
       default:
         return { label: "Única", variant: "outline" as const };
@@ -62,7 +93,7 @@ export function TransacaoItem({
               : "bg-destructive/10"
           }`}
         >
-          {transacao.tipoRecorrencia === "recorrente" ? (
+          {transacao.tipoRecorrencia === "recorrente" || transacao.tipoRecorrencia === "recorrente_personalizado" ? (
             <RefreshCw
               className={`h-4 w-4 ${
                 transacao.tipo === "receita"
@@ -171,6 +202,29 @@ export function TransacaoItem({
         title="Excluir transação"
         description="Tem certeza que deseja excluir esta transação? Esta ação não pode ser desfeita."
       />
+
+      <AlertDialog open={parcelaDialogOpen} onOpenChange={setParcelaDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir transação parcelada</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta transação faz parte de um grupo parcelado. O que deseja fazer?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col gap-2 sm:flex-row">
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmarExclusaoTodasSeguintes}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Todas as seguintes
+            </AlertDialogAction>
+            <AlertDialogAction onClick={confirmarExclusaoSimples}>
+              Só esta
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

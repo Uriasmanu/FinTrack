@@ -32,11 +32,11 @@ export function EditarTransacao() {
   }
 
   const transacaoEncontrada = transacao;
-  const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "parcelado";
+  const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "recorrente_personalizado" || transacaoEncontrada.tipoRecorrencia === "parcelado";
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "parcelado"; parcelaAtual: number; totalParcelas: number; confirmada: boolean }) {
+  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
     const mudouParaRecorrente = transacaoEncontrada.tipoRecorrencia === "unica" &&
-      (data.tipoRecorrencia === "recorrente" || data.tipoRecorrencia === "parcelado");
+      (data.tipoRecorrencia === "recorrente" || data.tipoRecorrencia === "recorrente_personalizado" || data.tipoRecorrencia === "parcelado");
 
     if (mudouParaRecorrente) {
       excluirTransacao(transacaoEncontrada.id);
@@ -52,6 +52,8 @@ export function EditarTransacao() {
         cartaoId: data.cartaoId,
         parcelaAtual: data.parcelaAtual,
         totalParcelas: data.totalParcelas,
+        intervaloDias: data.intervaloDias,
+        grupoParcelaId: null,
         confirmada: data.confirmada,
       });
       navigate("/transacoes");

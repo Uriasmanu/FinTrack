@@ -171,6 +171,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       cartaoId: dados.cartaoId,
       parcelaAtual: dados.parcelaAtual,
       totalParcelas: dados.totalParcelas,
+      intervaloDias: dados.intervaloDias ?? null,
     });
 
     const novoState: DadosAno = {

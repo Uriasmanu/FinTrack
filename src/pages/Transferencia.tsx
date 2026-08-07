@@ -75,11 +75,13 @@ export function Transferencia() {
       valor: data.valor,
       data: data.data,
       categoriaId: data.categoriaId || "cat-013",
+      subtipoId: null,
       contaId: data.contaOrigemId,
       cartaoId: null,
       parcelaAtual: 1,
       totalParcelas: 1,
       grupoParcelaId: grupoId,
+      intervaloDias: null,
       confirmada: true,
     });
 
@@ -90,11 +92,13 @@ export function Transferencia() {
       valor: data.valor,
       data: data.data,
       categoriaId: data.categoriaId || "cat-013",
+      subtipoId: null,
       contaId: data.contaDestinoId,
       cartaoId: null,
       parcelaAtual: 1,
       totalParcelas: 1,
       grupoParcelaId: grupoId,
+      intervaloDias: null,
       confirmada: true,
     });
 

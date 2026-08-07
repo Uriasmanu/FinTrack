@@ -1,6 +1,6 @@
 export type TipoTransacao = "receita" | "despesa";
 
-export type TipoRecorrencia = "unica" | "recorrente" | "parcelado";
+export type TipoRecorrencia = "unica" | "recorrente" | "recorrente_personalizado" | "parcelado";
 
 export type TipoConta = "corrente" | "poupanca" | "investimento" | "ticket";
 
@@ -24,6 +24,7 @@ export interface Transacao {
   parcelaAtual: number;
   totalParcelas: number;
   grupoParcelaId: string | null;
+  intervaloDias: number | null;
   criadoEm: string;
   confirmada: boolean;
 }

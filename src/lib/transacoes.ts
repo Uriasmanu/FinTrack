@@ -13,6 +13,7 @@ interface CriarParcelasParams {
   tipoRecorrencia: TipoRecorrencia;
   parcelaAtual?: number;
   totalParcelas?: number;
+  intervaloDias?: number | null;
 }
 
 export function criarTransacoesRecorrentes({
@@ -27,6 +28,7 @@ export function criarTransacoesRecorrentes({
   tipoRecorrencia,
   parcelaAtual = 1,
   totalParcelas = 1,
+  intervaloDias = null,
 }: CriarParcelasParams): Transacao[] {
   const transacoes: Transacao[] = [];
   const data = new Date(dataInicio);
@@ -47,6 +49,7 @@ export function criarTransacoesRecorrentes({
       parcelaAtual: 1,
       totalParcelas: 1,
       grupoParcelaId: null,
+      intervaloDias: null,
       criadoEm: new Date().toISOString(),
       confirmada: false,
     });
@@ -76,6 +79,7 @@ export function criarTransacoesRecorrentes({
         parcelaAtual: numParcela,
         totalParcelas,
         grupoParcelaId: grupoId,
+        intervaloDias: null,
         criadoEm: new Date().toISOString(),
         confirmada: false,
       });
@@ -103,6 +107,37 @@ export function criarTransacoesRecorrentes({
         parcelaAtual: 1,
         totalParcelas: 1,
         grupoParcelaId: grupoId,
+        intervaloDias: null,
+        criadoEm: new Date().toISOString(),
+        confirmada: false,
+      });
+    }
+    return transacoes;
+  }
+
+  if (tipoRecorrencia === "recorrente_personalizado") {
+    const dias = intervaloDias && intervaloDias > 0 ? intervaloDias : 30;
+    const MESES_FUTUROS = 12;
+    const totalDias = 365 * MESES_FUTUROS;
+    for (let i = 0; i <= totalDias; i += dias) {
+      const dataParcela = new Date(data);
+      dataParcela.setDate(dataParcela.getDate() + i);
+
+      transacoes.push({
+        id: gerarId(),
+        tipo,
+        tipoRecorrencia: "recorrente_personalizado",
+        descricao,
+        valor,
+        data: dataParcela.toISOString().split("T")[0],
+        categoriaId,
+        subtipoId,
+        contaId,
+        cartaoId,
+        parcelaAtual: 1,
+        totalParcelas: 1,
+        grupoParcelaId: grupoId,
+        intervaloDias: dias,
         criadoEm: new Date().toISOString(),
         confirmada: false,
       });

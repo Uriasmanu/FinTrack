@@ -24,9 +24,10 @@ const transacaoSchema = z.object({
   subtipoId: z.string().nullable(),
   contaId: z.string().min(1, "Conta é obrigatória"),
   cartaoId: z.string().nullable(),
-  tipoRecorrencia: z.enum(["unica", "recorrente", "parcelado"]),
+  tipoRecorrencia: z.enum(["unica", "recorrente", "recorrente_personalizado", "parcelado"]),
   parcelaAtual: z.number().min(1),
   totalParcelas: z.number().min(1),
+  intervaloDias: z.number().nullable(),
   confirmada: z.boolean(),
 });
 
@@ -68,6 +69,7 @@ export function TransacaoForm({
       tipoRecorrencia: initialData?.tipoRecorrencia ?? "unica",
       parcelaAtual: initialData?.parcelaAtual ?? 1,
       totalParcelas: initialData?.totalParcelas ?? 1,
+      intervaloDias: initialData?.intervaloDias ?? null,
       confirmada: initialData?.confirmada ?? false,
     },
   });
@@ -273,7 +275,8 @@ export function TransacaoForm({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="unica">Única</SelectItem>
-              <SelectItem value="recorrente">Recorrente</SelectItem>
+              <SelectItem value="recorrente">Recorrente (mensal)</SelectItem>
+              <SelectItem value="recorrente_personalizado">Recorrente (personalizado)</SelectItem>
               <SelectItem value="parcelado">Parcelado</SelectItem>
             </SelectContent>
           </Select>
@@ -298,6 +301,18 @@ export function TransacaoForm({
               />
             </div>
           </>
+        )}
+
+        {tipoRecorrencia === "recorrente_personalizado" && (
+          <div>
+            <label className="text-sm font-medium">Repetir a cada (dias)</label>
+            <Input
+              type="number"
+              min="1"
+              {...register("intervaloDias", { valueAsNumber: true })}
+              placeholder="Ex: 25"
+            />
+          </div>
         )}
 
         <div className="col-span-2">
