@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-
+### [aberto] Editar só essa ou todas as seguintes em transação, tem que, quando eu escolhe todas as seguintes tem que editar a que eu escolhi e as seguintes.
 
 ## Histórico de Correções
 
