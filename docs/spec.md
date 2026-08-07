@@ -16,7 +16,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 ### [aberto] Editar só essa ou todas as seguintes em transação, tem que, quando eu escolhe todas as seguintes tem que editar a que eu escolhi e as seguintes.
-
+### [aberto] saldo total em dashbord deve mostrar somente o que foi efetivado
 ## Histórico de Correções
 
 ### [corrigido] Não recriar/atualizar o fintrack.json quando ele já existir
