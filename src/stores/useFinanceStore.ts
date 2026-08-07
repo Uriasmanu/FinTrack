@@ -24,7 +24,7 @@ import {
 
 interface FinanceState {
   dadosAno: DadosAno | null;
-  inicializar: () => Promise<void>;
+  inicializar: (ano?: number) => Promise<void>;
   adicionarTransacao: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
   adicionarTransacoesRecorrentes: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
   editarTransacao: (id: string, dados: Partial<Transacao>) => Promise<void>;
@@ -109,8 +109,8 @@ function excluirItemArray<T extends { id: string }>(
 export const useFinanceStore = create<FinanceState>((set, get) => ({
   dadosAno: null,
 
-  inicializar: async () => {
-    let dados = await storage.verificarOuCriarAnoAtual();
+  inicializar: async (ano?: number) => {
+    let dados = await storage.verificarOuCriarAnoAtual(ano);
     dados = await storage.migrarDadosSeNecessario(dados);
 
     const categoriasDefault = obterCategoriasDefault();

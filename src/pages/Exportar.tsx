@@ -201,7 +201,7 @@ export function Exportar() {
 
     const dados = await storage.importarDados(dadosImportacao);
     if (dados) {
-      await inicializar();
+      await inicializar(dados.ano);
       setMensagem({ tipo: "sucesso", texto: `Dados importados com sucesso! Ano: ${dados.ano}` });
     } else {
       setMensagem({ tipo: "erro", texto: "Erro ao importar dados" });

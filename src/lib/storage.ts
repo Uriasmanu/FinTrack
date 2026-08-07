@@ -58,9 +58,9 @@ async function salvarDadosAno(dados: DadosAno): Promise<boolean> {
   }
 }
 
-async function verificarOuCriarAnoAtual(): Promise<DadosAno> {
-  const anoAtual = new Date().getFullYear();
-  return carregarDadosAno(anoAtual);
+async function verificarOuCriarAnoAtual(ano?: number): Promise<DadosAno> {
+  const anoFinal = ano ?? new Date().getFullYear();
+  return carregarDadosAno(anoFinal);
 }
 
 async function migrarDadosSeNecessario(dadosAtuais: DadosAno): Promise<DadosAno> {
