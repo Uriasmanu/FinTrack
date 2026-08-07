@@ -24,26 +24,26 @@ import {
 
 interface FinanceState {
   dadosAno: DadosAno | null;
-  inicializar: () => void;
-  adicionarTransacao: (dados: Omit<Transacao, "id" | "criadoEm">) => void;
-  adicionarTransacoesRecorrentes: (dados: Omit<Transacao, "id" | "criadoEm">) => void;
-  editarTransacao: (id: string, dados: Partial<Transacao>) => void;
-  excluirTransacao: (id: string) => void;
-  excluirParcelasFuturas: (grupoParcelaId: string, dataLimite: string) => void;
-  recalcularParcelas: (grupoParcelaId: string, novoTotal: number) => void;
-  adicionarCategoria: (dados: Omit<Categoria, "id">) => void;
-  editarCategoria: (id: string, dados: Partial<Categoria>) => void;
-  excluirCategoria: (id: string) => void;
-  adicionarConta: (dados: Omit<Conta, "id">) => void;
-  editarConta: (id: string, dados: Partial<Conta>) => void;
-  excluirConta: (id: string) => void;
-  adicionarCartao: (dados: Omit<Cartao, "id">) => void;
-  editarCartao: (id: string, dados: Partial<Cartao>) => void;
-  excluirCartao: (id: string) => void;
-  adicionarMeta: (dados: Omit<Meta, "id">) => void;
-  editarMeta: (id: string, dados: Partial<Meta>) => void;
-  excluirMeta: (id: string) => void;
-  atualizarConfig: (dados: Partial<Config>) => void;
+  inicializar: () => Promise<void>;
+  adicionarTransacao: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
+  adicionarTransacoesRecorrentes: (dados: Omit<Transacao, "id" | "criadoEm">) => Promise<void>;
+  editarTransacao: (id: string, dados: Partial<Transacao>) => Promise<void>;
+  excluirTransacao: (id: string) => Promise<void>;
+  excluirParcelasFuturas: (grupoParcelaId: string, dataLimite: string) => Promise<void>;
+  recalcularParcelas: (grupoParcelaId: string, novoTotal: number) => Promise<void>;
+  adicionarCategoria: (dados: Omit<Categoria, "id">) => Promise<void>;
+  editarCategoria: (id: string, dados: Partial<Categoria>) => Promise<void>;
+  excluirCategoria: (id: string) => Promise<void>;
+  adicionarConta: (dados: Omit<Conta, "id">) => Promise<void>;
+  editarConta: (id: string, dados: Partial<Conta>) => Promise<void>;
+  excluirConta: (id: string) => Promise<void>;
+  adicionarCartao: (dados: Omit<Cartao, "id">) => Promise<void>;
+  editarCartao: (id: string, dados: Partial<Cartao>) => Promise<void>;
+  excluirCartao: (id: string) => Promise<void>;
+  adicionarMeta: (dados: Omit<Meta, "id">) => Promise<void>;
+  editarMeta: (id: string, dados: Partial<Meta>) => Promise<void>;
+  excluirMeta: (id: string) => Promise<void>;
+  atualizarConfig: (dados: Partial<Config>) => Promise<void>;
   obterSaldoAtual: () => number;
   obterReceitasMes: (mes: number) => number;
   obterDespesasMes: (mes: number) => number;
@@ -58,18 +58,18 @@ interface FinanceState {
   ativosFii: AtivoFii[];
   operacoesFii: OperacaoFii[];
   dividendosFii: DividendoFii[];
-  adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "cotasAtuais" | "precoMedioCompra" | "ativo">) => void;
-  editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => void;
-  excluirAtivoFii: (id: string) => void;
+  adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "cotasAtuais" | "precoMedioCompra" | "ativo">) => Promise<void>;
+  editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => Promise<void>;
+  excluirAtivoFii: (id: string) => Promise<void>;
 
   // Operações FII
-  adicionarOperacaoFii: (dados: Omit<OperacaoFii, "id" | "criadoEm">) => void;
-  excluirOperacaoFii: (id: string) => void;
+  adicionarOperacaoFii: (dados: Omit<OperacaoFii, "id" | "criadoEm">) => Promise<void>;
+  excluirOperacaoFii: (id: string) => Promise<void>;
 
   // Dividendos FII
-  adicionarDividendoFii: (dados: Omit<DividendoFii, "id" | "criadoEm" | "totalRecebido">) => void;
-  editarDividendoFii: (id: string, dados: Partial<DividendoFii>) => void;
-  excluirDividendoFii: (id: string) => void;
+  adicionarDividendoFii: (dados: Omit<DividendoFii, "id" | "criadoEm" | "totalRecebido">) => Promise<void>;
+  editarDividendoFii: (id: string, dados: Partial<DividendoFii>) => Promise<void>;
+  excluirDividendoFii: (id: string) => Promise<void>;
 
   // Seletores FII
   obterAtivosFiiAtivos: () => AtivoFii[];
@@ -80,8 +80,8 @@ interface FinanceState {
   obterIndicadoresFii: (ativoFiiId: string) => IndicadoresFii;
 }
 
-function salvar(state: DadosAno) {
-  storage.salvarDadosAno(state);
+async function salvar(state: DadosAno) {
+  await storage.salvarDadosAno(state);
 }
 
 function adicionarItensArray<T extends { id: string }>(
@@ -109,9 +109,9 @@ function excluirItemArray<T extends { id: string }>(
 export const useFinanceStore = create<FinanceState>((set, get) => ({
   dadosAno: null,
 
-  inicializar: () => {
-    let dados = storage.verificarOuCriarAnoAtual();
-    dados = storage.migrarDadosSeNecessario(dados);
+  inicializar: async () => {
+    let dados = await storage.verificarOuCriarAnoAtual();
+    dados = await storage.migrarDadosSeNecessario(dados);
 
     const categoriasDefault = obterCategoriasDefault();
     const categoriasExistentes = new Set(dados.categorias.map(c => c.id));
@@ -136,11 +136,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       dados.metas = obterMetasDefault();
     }
 
-    salvar(dados);
+    await salvar(dados);
     set({ dadosAno: dados });
   },
 
-  adicionarTransacao: (dados) => {
+  adicionarTransacao: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -155,11 +155,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       transacoes: adicionarItensArray(state.transacoes, novaTransacao),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarTransacao: (id, dados) => {
+  editarTransacao: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -168,11 +168,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       transacoes: editarItemArray(state.transacoes, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirTransacao: (id) => {
+  excluirTransacao: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -181,11 +181,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       transacoes: excluirItemArray(state.transacoes, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarTransacoesRecorrentes: (dados) => {
+  adicionarTransacoesRecorrentes: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -209,11 +209,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       transacoes: [...state.transacoes, ...novasTransacoes],
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirParcelasFuturas: (grupoParcelaId, dataLimite) => {
+  excluirParcelasFuturas: async (grupoParcelaId, dataLimite) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -226,11 +226,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  recalcularParcelas: (grupoParcelaId, novoTotal) => {
+  recalcularParcelas: async (grupoParcelaId, novoTotal) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -243,11 +243,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarCategoria: (dados) => {
+  adicionarCategoria: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -258,11 +258,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       categorias: adicionarItensArray(state.categorias, novaCategoria),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarCategoria: (id, dados) => {
+  editarCategoria: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -271,11 +271,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       categorias: editarItemArray(state.categorias, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirCategoria: (id) => {
+  excluirCategoria: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -284,11 +284,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       categorias: excluirItemArray(state.categorias, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarConta: (dados) => {
+  adicionarConta: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -299,11 +299,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       contas: adicionarItensArray(state.contas, novaConta),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarConta: (id, dados) => {
+  editarConta: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -312,11 +312,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       contas: editarItemArray(state.contas, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirConta: (id) => {
+  excluirConta: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -325,11 +325,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       contas: excluirItemArray(state.contas, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarCartao: (dados) => {
+  adicionarCartao: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -340,11 +340,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       cartoes: adicionarItensArray(state.cartoes, novoCartao),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarCartao: (id, dados) => {
+  editarCartao: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -353,11 +353,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       cartoes: editarItemArray(state.cartoes, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirCartao: (id) => {
+  excluirCartao: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -366,11 +366,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       cartoes: excluirItemArray(state.cartoes, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarMeta: (dados) => {
+  adicionarMeta: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -381,11 +381,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       metas: adicionarItensArray(state.metas, novaMeta),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarMeta: (id, dados) => {
+  editarMeta: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -394,11 +394,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       metas: editarItemArray(state.metas, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirMeta: (id) => {
+  excluirMeta: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -407,11 +407,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       metas: excluirItemArray(state.metas, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  atualizarConfig: (dados) => {
+  atualizarConfig: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -420,7 +420,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       config: { ...state.config, ...dados },
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
@@ -539,7 +539,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   operacoesFii: [],
   dividendosFii: [],
 
-  adicionarAtivoFii: (dados) => {
+  adicionarAtivoFii: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -557,11 +557,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ativosFii: adicionarItensArray(state.ativosFii, novoAtivo),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarAtivoFii: (id, dados) => {
+  editarAtivoFii: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -570,11 +570,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ativosFii: editarItemArray(state.ativosFii, id, dados),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirAtivoFii: (id) => {
+  excluirAtivoFii: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -590,11 +590,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ativosFii: excluirItemArray(state.ativosFii, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarOperacaoFii: (dados) => {
+  adicionarOperacaoFii: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -640,11 +640,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       ativosFii: novosAtivos,
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirOperacaoFii: (id) => {
+  excluirOperacaoFii: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -653,11 +653,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       operacoesFii: excluirItemArray(state.operacoesFii, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  adicionarDividendoFii: (dados) => {
+  adicionarDividendoFii: async (dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -673,11 +673,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       dividendosFii: adicionarItensArray(state.dividendosFii, novoDividendo),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  editarDividendoFii: (id, dados) => {
+  editarDividendoFii: async (id, dados) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -695,11 +695,11 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       dividendosFii: dividendosAtualizados,
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 
-  excluirDividendoFii: (id) => {
+  excluirDividendoFii: async (id) => {
     const state = get().dadosAno;
     if (!state) return;
 
@@ -708,7 +708,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       dividendosFii: excluirItemArray(state.dividendosFii, id),
     };
 
-    salvar(novoState);
+    await salvar(novoState);
     set({ dadosAno: novoState });
   },
 

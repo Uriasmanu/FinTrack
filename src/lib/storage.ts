@@ -1,11 +1,6 @@
 import type { DadosAno } from "@/types";
 
-const PREFIXO = "fintrack";
-
-function obterChaveAno(ano?: number): string {
-  const anoAtual = ano ?? new Date().getFullYear();
-  return `${PREFIXO}_${anoAtual}`;
-}
+const API_BASE = "/api";
 
 function criarDadosAnoNovo(ano: number): DadosAno {
   return {
@@ -34,34 +29,13 @@ function criarDadosAnoNovo(ano: number): DadosAno {
   };
 }
 
-function carregarDadosAno(ano?: number): DadosAno {
+async function carregarDadosAno(ano?: number): Promise<DadosAno> {
   try {
-    const chave = obterChaveAno(ano);
-    const dados = localStorage.getItem(chave);
-
-    if (!dados) {
-      const novoAno = ano ?? new Date().getFullYear();
-      return criarDadosAnoNovo(novoAno);
-    }
-
-    const dadosParseados = JSON.parse(dados);
-
-    if (!dadosParseados || typeof dadosParseados !== "object") {
-      const novoAno = ano ?? new Date().getFullYear();
-      return criarDadosAnoNovo(novoAno);
-    }
-
-    if (!dadosParseados.ano || !Array.isArray(dadosParseados.transacoes)) {
-      const novoAno = ano ?? new Date().getFullYear();
-      return criarDadosAnoNovo(novoAno);
-    }
-
-    return {
-      ...dadosParseados,
-      ativosFii: dadosParseados.ativosFii ?? [],
-      operacoesFii: dadosParseados.operacoesFii ?? [],
-      dividendosFii: dadosParseados.dividendosFii ?? [],
-    } as DadosAno;
+    const anoFinal = ano ?? new Date().getFullYear();
+    const res = await fetch(`${API_BASE}/data/${anoFinal}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const dados = await res.json();
+    return dados as DadosAno;
   } catch (erro) {
     console.error("Erro ao carregar dados:", erro);
     const novoAno = ano ?? new Date().getFullYear();
@@ -69,17 +43,14 @@ function carregarDadosAno(ano?: number): DadosAno {
   }
 }
 
-function salvarDadosAno(dados: DadosAno): boolean {
+async function salvarDadosAno(dados: DadosAno): Promise<boolean> {
   try {
-    const chave = obterChaveAno(dados.ano);
-    const dadosString = JSON.stringify(dados);
-
-    if (!dadosString) {
-      console.error("Erro ao serializar dados");
-      return false;
-    }
-
-    localStorage.setItem(chave, dadosString);
+    const res = await fetch(`${API_BASE}/data/${dados.ano}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return true;
   } catch (erro) {
     console.error("Erro ao salvar dados:", erro);
@@ -87,12 +58,12 @@ function salvarDadosAno(dados: DadosAno): boolean {
   }
 }
 
-function verificarOuCriarAnoAtual(): DadosAno {
+async function verificarOuCriarAnoAtual(): Promise<DadosAno> {
   const anoAtual = new Date().getFullYear();
   return carregarDadosAno(anoAtual);
 }
 
-function migrarDadosSeNecessario(dadosAtuais: DadosAno): DadosAno {
+async function migrarDadosSeNecessario(dadosAtuais: DadosAno): Promise<DadosAno> {
   const anoAtual = new Date().getFullYear();
 
   if (dadosAtuais.ano === anoAtual) {
@@ -101,34 +72,25 @@ function migrarDadosSeNecessario(dadosAtuais: DadosAno): DadosAno {
 
   const novosDados = criarDadosAnoNovo(anoAtual);
   novosDados.ativosFii = (dadosAtuais.ativosFii ?? []).filter((a) => a.ativo);
-  salvarDadosAno(novosDados);
+  await salvarDadosAno(novosDados);
   return novosDados;
 }
 
-function listarAnosDisponiveis(): number[] {
-  const anos: number[] = [];
-
+async function listarAnosDisponiveis(): Promise<number[]> {
   try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const chave = localStorage.key(i);
-      if (chave?.startsWith(`${PREFIXO}_`)) {
-        const ano = parseInt(chave.replace(`${PREFIXO}_`, ""), 10);
-        if (!isNaN(ano)) {
-          anos.push(ano);
-        }
-      }
-    }
+    const res = await fetch(`${API_BASE}/years`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
   } catch (erro) {
     console.error("Erro ao listar anos:", erro);
+    return [];
   }
-
-  return anos.sort((a, b) => b - a);
 }
 
-function excluirDadosAno(ano: number): boolean {
+async function excluirDadosAno(ano: number): Promise<boolean> {
   try {
-    const chave = obterChaveAno(ano);
-    localStorage.removeItem(chave);
+    const res = await fetch(`${API_BASE}/data/${ano}`, { method: "DELETE" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return true;
   } catch (erro) {
     console.error("Erro ao excluir dados:", erro);
@@ -136,9 +98,9 @@ function excluirDadosAno(ano: number): boolean {
   }
 }
 
-function exportarDados(ano: number): string | null {
+async function exportarDados(ano: number): Promise<string | null> {
   try {
-    const dados = carregarDadosAno(ano);
+    const dados = await carregarDadosAno(ano);
     return JSON.stringify(dados, null, 2);
   } catch (erro) {
     console.error("Erro ao exportar dados:", erro);
@@ -146,7 +108,7 @@ function exportarDados(ano: number): string | null {
   }
 }
 
-function importarDados(jsonString: string): DadosAno | null {
+async function importarDados(jsonString: string): Promise<DadosAno | null> {
   try {
     const dados = JSON.parse(jsonString);
 
@@ -161,7 +123,7 @@ function importarDados(jsonString: string): DadosAno | null {
     }
 
     const dadosAno = dados as DadosAno;
-    salvarDadosAno(dadosAno);
+    await salvarDadosAno(dadosAno);
     return dadosAno;
   } catch (erro) {
     console.error("Erro ao importar dados:", erro);
@@ -170,7 +132,6 @@ function importarDados(jsonString: string): DadosAno | null {
 }
 
 export const storage = {
-  obterChaveAno,
   criarDadosAnoNovo,
   carregarDadosAno,
   salvarDadosAno,

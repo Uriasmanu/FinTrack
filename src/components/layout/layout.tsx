@@ -15,14 +15,6 @@ import {
 } from "@/components/ui/alert-dialog";
 
 function obterTemaInicial(): "claro" | "escuro" {
-  try {
-    const chave = `fintrack_${new Date().getFullYear()}`;
-    const dados = localStorage.getItem(chave);
-    if (dados) {
-      const parse = JSON.parse(dados);
-      if (parse?.config?.tema === "escuro") return "escuro";
-    }
-  } catch {}
   return "claro";
 }
 

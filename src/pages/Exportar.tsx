@@ -16,9 +16,9 @@ export function Exportar() {
 
   const anoAtual = dadosAno?.ano ?? new Date().getFullYear();
 
-  function handleExportar() {
+  async function handleExportar() {
     try {
-      const json = storage.exportarDados(anoAtual);
+      const json = await storage.exportarDados(anoAtual);
       if (!json) {
         setMensagem({ tipo: "erro", texto: "Erro ao exportar dados" });
         return;
@@ -167,14 +167,14 @@ export function Exportar() {
     fileInputRef.current?.click();
   }
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const conteudo = e.target?.result as string;
-      const dados = storage.importarDados(conteudo);
+      const dados = await storage.importarDados(conteudo);
       
       if (!dados) {
         setMensagem({ tipo: "erro", texto: "Arquivo JSON inválido ou corrompido" });
@@ -191,12 +191,12 @@ export function Exportar() {
     }
   }
 
-  function confirmarImportacao() {
+  async function confirmarImportacao() {
     if (!dadosImportacao) return;
 
-    const dados = storage.importarDados(dadosImportacao);
+    const dados = await storage.importarDados(dadosImportacao);
     if (dados) {
-      inicializar();
+      await inicializar();
       setMensagem({ tipo: "sucesso", texto: `Dados importados com sucesso! Ano: ${dados.ano}` });
     } else {
       setMensagem({ tipo: "erro", texto: "Erro ao importar dados" });
