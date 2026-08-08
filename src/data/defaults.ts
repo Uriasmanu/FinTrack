@@ -11,12 +11,20 @@ export function obterConfigDefault(): Config {
   return configDefault as Config;
 }
 
+function obterIdsCategoriasReceita(): string[] {
+  return (categoriasDefault as Categoria[])
+    .filter((c) => c.tipo === "receita" || c.tipo === "ambos")
+    .map((c) => c.id);
+}
+
 export function obterMetasDefault(): Meta[] {
   const hoje = new Date();
   const dataInicio = hoje.toISOString().split("T")[0];
   const dataFim = new Date(hoje.getFullYear() + 10, hoje.getMonth(), hoje.getDate())
     .toISOString()
     .split("T")[0];
+
+  const receitasBase = obterIdsCategoriasReceita();
 
   const metas: Meta[] = [
     {
@@ -31,7 +39,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
-      receitasBase: [],
+      receitasBase,
     },
     {
       id: gerarId(),
@@ -47,7 +55,7 @@ export function obterMetasDefault(): Meta[] {
         .toISOString()
         .split("T")[0],
       status: "em_andamento",
-      receitasBase: [],
+      receitasBase,
     },
     {
       id: gerarId(),
@@ -61,7 +69,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
-      receitasBase: [],
+      receitasBase,
     },
     {
       id: gerarId(),
@@ -75,7 +83,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
-      receitasBase: [],
+      receitasBase,
     },
     {
       id: gerarId(),
@@ -89,7 +97,7 @@ export function obterMetasDefault(): Meta[] {
       dataInicio,
       dataFim,
       status: "em_andamento",
-      receitasBase: [],
+      receitasBase,
     },
   ];
 

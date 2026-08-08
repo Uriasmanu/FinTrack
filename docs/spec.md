@@ -16,13 +16,14 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] As metas padroes sempre tem que pegar inicialmente todas as receitas
-
-### [aberto] O valor alvo das metas padroes tambem tem que se inicialmente com base em todas as receitas
-
-### [aberto] Ao editar a meta padrao, mostra todas as receitas que foram selecionadas, e eu posso tirar a seleção isso gera um recalculo
-
 ## Histórico de Correções
+
+### 08/08/2026 - Inicialização de receitasBase em Metas Padrão
+- **Problema:** As metas padrão tinham `receitasBase: []` vazio, criando ambiguidade entre o fallback no código e a exibição no formulário
+- **Solução:** Atualizado `defaults.ts` para inicializar `receitasBase` com IDs de categorias de receita/tipo "ambos". Fallback mantido em `metas-predefinidas.tsx` para dados existentes
+- **Arquivos afetados:** `src/data/defaults.ts`, `docs/implementado/metas-receitasbase-inicializacao.md`
+- **RF afetados:** RF-01, RF-02, RF-03, RF-04, RF-05 (todos implementados)
+- **CA afetados:** CA-01, CA-02, CA-03, CA-04 (todos implementados)
 
 
 # Guia de Spec para Implementação de Features
