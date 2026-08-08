@@ -88,6 +88,7 @@ export function Transacoes() {
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
+      if (t.categoriaId === "cat-014") return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
@@ -97,6 +98,7 @@ export function Transacoes() {
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
+      if (t.categoriaId === "cat-014") return false;
       if (!t.confirmada) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
@@ -131,9 +133,11 @@ export function Transacoes() {
   let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
   let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
-    saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
-    if (t.confirmada) {
-      saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;
+    if (t.categoriaId !== "cat-014") {
+      saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
+      if (t.confirmada) {
+        saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;
+      }
     }
     return { ...t, saldoAcumulado, saldoConfirmado };
   });

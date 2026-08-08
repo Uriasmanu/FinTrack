@@ -19,8 +19,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 ## Histórico de Correções
 
 ### 08/08/2026 - Guardar no extrato e exclusão do cálculo de salário
-- **Problemas:** (1) transações de receita em contas poupança não apareciam no extrato porque o filtro excluía todas as transações de poupança, (2) categoria Guardar (cat-014, tipo "ambos") era incluída no cálculo de salário das metas
-- **Solução:** Filtro de poupança em Transacoes.tsx agora exclui apenas despesas de poupança (receitas aparecem). Excluído cat-014 de `categoriasReceita` em metas-predefinidas.tsx
+- **Problemas:** (1) transações de receita em contas poupança não apareciam no extrato porque o filtro excluía todas as transações de poupança, (2) categoria Guardar (cat-014, tipo "ambos") era incluída no cálculo de salário das metas, (3) Guardar era considerada no saldo do dia no extrato
+- **Solução:** Filtro de poupança em Transacoes.tsx agora exclui apenas despesas de poupança (receitas aparecem). Excluído cat-014 de `categoriasReceita` em metas-predefinidas.tsx. Guardar excluído dos cálculos de saldo acumulado e saldo confirmado no extrato
 - **Arquivos afetados:** `src/pages/Transacoes.tsx`, `src/components/metas/metas-predefinidas.tsx`
 
 ### 08/08/2026 - Progresso e breakdown nas metas padrão

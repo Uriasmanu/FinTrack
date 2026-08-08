@@ -14,12 +14,14 @@
 - [x] RF-01: Transações de receita em contas poupança aparecem no extrato
 - [x] RF-02: Transações de despesa em contas poupança continuam excluídas do extrato
 - [x] RF-03: Categoria Guardar (cat-014) não é considerada no cálculo de salário das metas
+- [x] RF-04: Guardar (cat-014) não afeta o saldo acumulado e saldo confirmado no extrato
 
 ## 3. Critérios de Aceite
 
 - [x] CA-01: Dado que há uma receita de R$ 22 "dividendos" em conta poupança, quando o extrato é exibido, então a transação aparece
 - [x] CA-02: Dado que há uma despesa de R$ 570 "Apartamento" em conta poupança, quando o extrato é exibido, então a transação NÃO aparece
 - [x] CA-03: Dado que há receitas Guardar de R$ 150, quando a meta "Guardar por Mês" calcula salário-base, então R$ 150 NÃO é incluído
+- [x] CA-04: Dado que há uma transação Guardar de R$ 150, quando o extrato calcula saldo do dia, então R$ 150 NÃO é somado/subtraído do saldo
 
 ## 4. Arquivos Envolvidos
 

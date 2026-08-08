@@ -708,4 +708,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 08/08/2026 | Metas: progresso baseado em dados reais (saldo poupança, despesas mês, guardar), breakdown da receita nos cards |
 | 08/08/2026 | Extrato: receitas de contas poupança agora aparecem (antes eram excluídas junto com despesas) |
 | 08/08/2026 | Metas: categoria Guardar (cat-014) excluída do cálculo de salário-base |
+| 08/08/2026 | Extrato: Guardar (cat-014) excluída do saldo acumulado e saldo confirmado do dia |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |
