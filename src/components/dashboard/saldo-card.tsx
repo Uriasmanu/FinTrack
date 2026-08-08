@@ -9,7 +9,7 @@ interface SaldoCardProps {
 }
 
 export function SaldoCard({ mes, ano }: SaldoCardProps) {
-  const { obterSaldoInicialContas, dados } =
+  const { dados } =
     useFinanceStore();
 
   const mesAnterior = mes === 0 ? 11 : mes - 1;
@@ -17,17 +17,24 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
   const hoje = new Date();
   const hojeStr = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
-  const saldoInicialContas = obterSaldoInicialContas();
+  const contasCorrenteIds = (dados?.contas ?? [])
+    .filter((c) => c.tipo === "corrente")
+    .map((c) => c.id);
+
+  const saldoInicialCorrente = (dados?.contas ?? [])
+    .filter((c) => c.tipo === "corrente")
+    .reduce((acc, c) => acc + (c.saldoInicial ?? 0), 0);
 
   const transacoesAteHoje = (dados?.transacoes ?? [])
-    .filter((t) => t.confirmada && t.data <= hojeStr)
+    .filter((t) => t.confirmada && t.data <= hojeStr && contasCorrenteIds.includes(t.contaId))
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
-  const saldoHoje = saldoInicialContas + transacoesAteHoje;
+  const saldoHoje = saldoInicialCorrente + transacoesAteHoje;
 
   const transacoesAteMesAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
       if (!t.confirmada) return false;
+      if (!contasCorrenteIds.includes(t.contaId)) return false;
       const dataTransacao = new Date(t.data);
       return t.data <= hojeStr && (
         dataTransacao.getFullYear() < ano ||
@@ -36,7 +43,7 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
     })
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
-  const saldoMesAnterior = saldoInicialContas + transacoesAteMesAnterior;
+  const saldoMesAnterior = saldoInicialCorrente + transacoesAteMesAnterior;
 
   const variacao =
     saldoMesAnterior !== 0
@@ -49,7 +56,7 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-br from-primary/5 to-transparent">
-        <CardTitle className="text-sm font-medium text-muted-foreground">Saldo Total</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">Saldo Conta Corrente</CardTitle>
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
           <Wallet className="h-4 w-4 text-primary" />
         </div>
