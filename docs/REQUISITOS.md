@@ -710,4 +710,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 08/08/2026 | Metas: categoria Guardar (cat-014) excluída do cálculo de salário-base |
 | 08/08/2026 | Extrato: Guardar (cat-014) excluída do saldo acumulado e saldo confirmado do dia |
 | 08/08/2026 | Dashboard: card Receitas vs Despesas agora exibe "Guardado" com valor e % da receita |
+| 08/08/2026 | Dashboard: Saldo Total renomeado para "Saldo Conta Corrente" e filtra apenas contas corrente |
+| 08/08/2026 | Dashboard: layout Receitas vs Despesas ajustado (2 cols mobile, 4 cols desktop) |
+| 08/08/2026 | Gráficos: textos de eixos, legendas e labels agora usam `muted-foreground` (legível no tema escuro) |
+| 08/08/2026 | Metas: editar Guardar/Lazer/Conta Fixa agora mostra slider de percentual em vez de prazo |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |

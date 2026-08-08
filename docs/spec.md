@@ -16,17 +16,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Nos graficos tem que mostrar quantos porcento tem da categoria guardado
-
-### [aberto] a meta Guardar por Mes, Lazer e Conta Fixa quando clico para editar mostra a opção de editar prazo quando deveria ser porcentagem
-
-### [aberto] Receitas vs Despesas não esta bem distribuido visualmente no dashbord
-
-### [aberto] em dashbord Saldo Total deve mostrar apenas o saldo da conta corrente
-
-### [aberto] graficos de linhas e barras tem textos de cor preta no fundo escurro, corrija para branco
-
 ## Histórico de Correções
+
+### 08/08/2026 - Correções dashboard (3 itens)
+- **Problemas:** (1) Receitas vs Despesas com distribuição visual ruim, (2) Saldo Total mostrava todas as contas em vez de apenas corrente, (3) Textos dos gráficos de barras/linhas pretos no tema escuro
+- **Solução:** (1) Grid do card ajustado para 2 cols mobile / 4 cols desktop, (2) SaldoCard filtra apenas contas corrente e renomeado para "Saldo Conta Corrente", (3) Adicionado `axisTextStyle` com `fill: hsl(var(--muted-foreground))` nos eixos, legendas e labels dos gráficos recharts
+- **Arquivos afetados:** `src/components/dashboard/receitas-despesas-card.tsx`, `src/components/dashboard/saldo-card.tsx`, `src/pages/Graficos.tsx`
 
 
 # Guia de Spec para Implementação de Features
