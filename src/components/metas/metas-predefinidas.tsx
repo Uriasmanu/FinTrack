@@ -29,13 +29,6 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     const receitas = obterReceitasMeta(meta);
     if (receitas.length === 0) return 0;
 
-    const mesesUnicos = new Set(
-      receitas.map((t) => {
-        const d = new Date(t.data);
-        return `${d.getFullYear()}-${d.getMonth()}`;
-      })
-    );
-
     const receitaPorMes = receitas.reduce((acc, t) => {
       const d = new Date(t.data);
       const chave = `${d.getFullYear()}-${d.getMonth()}`;
@@ -44,9 +37,8 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     }, {} as Record<string, number>);
 
     const valoresMeses = Object.values(receitaPorMes);
-    return valoresMeses.length > 0
-      ? Math.max(...valoresMeses)
-      : 0;
+    const soma = valoresMeses.reduce((total, v) => total + v, 0);
+    return Math.round(soma / valoresMeses.length * 100) / 100;
   }
 
   const metasComValores = metasPadrao.map((meta) => {
