@@ -5,6 +5,10 @@ interface MetasPredefinidasProps {
   onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
+function arredondar2(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
 export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
   const { dados } = useFinanceStore();
 
@@ -38,7 +42,22 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
 
     const valoresMeses = Object.values(receitaPorMes);
     const soma = valoresMeses.reduce((total, v) => total + v, 0);
-    return Math.round(soma / valoresMeses.length * 100) / 100;
+    return arredondar2(soma / valoresMeses.length);
+  }
+
+  function obterDespesasMesAtual(categoriaIds?: string[]) {
+    const mesAtual = new Date().getMonth();
+    const anoAtual = new Date().getFullYear();
+
+    return (dados?.transacoes ?? [])
+      .filter((t) => {
+        if (t.tipo !== "despesa") return false;
+        if (t.tipoRecorrencia !== "recorrente" && t.tipoRecorrencia !== "parcelado") return false;
+        if (categoriaIds && !categoriaIds.includes(t.categoriaId)) return false;
+        const data = new Date(t.data);
+        return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+      })
+      .reduce((total, t) => total + t.valor, 0);
   }
 
   const metasComValores = metasPadrao.map((meta) => {
@@ -46,30 +65,40 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     let valorAlvo = 0;
     let parcelaMensal = 0;
     let percentualReceita: number | null = null;
+    let valorGastoMes: number | null = null;
+    let extrapolou: boolean | null = null;
 
     if (salarioMensal > 0) {
       switch (meta.nome) {
         case "Viver de Renda":
-          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.viverDeRenda ?? 200);
-          parcelaMensal = valorAlvo / meta.meses;
+          valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.viverDeRenda ?? 200));
+          parcelaMensal = arredondar2(valorAlvo / meta.meses);
           break;
         case "Reserva de Emergencia":
-          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.reservaEmergencia ?? 6);
-          parcelaMensal = valorAlvo / meta.meses;
+          valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.reservaEmergencia ?? 6));
+          parcelaMensal = arredondar2(valorAlvo / meta.meses);
           break;
         case "Guardar por Mes":
           percentualReceita = (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1) * 100;
-          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1);
+          valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1));
           parcelaMensal = valorAlvo;
           break;
-        case "Conta Fixa":
-          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.contaFixa ?? 0.6);
+        case "Conta Fixa": {
+          percentualReceita = (dados?.config?.multiplicadores?.contaFixa ?? 0.6) * 100;
+          valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.contaFixa ?? 0.6));
           parcelaMensal = valorAlvo;
+          valorGastoMes = arredondar2(obterDespesasMesAtual());
+          extrapolou = valorGastoMes > valorAlvo;
           break;
-        case "Lazer":
-          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3);
+        }
+        case "Lazer": {
+          percentualReceita = (dados?.config?.multiplicadores?.lazer ?? 0.3) * 100;
+          valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3));
           parcelaMensal = valorAlvo;
+          valorGastoMes = arredondar2(obterDespesasMesAtual(["cat-004"]));
+          extrapolou = valorGastoMes > valorAlvo;
           break;
+        }
       }
     }
 
@@ -79,6 +108,8 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       parcelaMensal,
       salarioMensal,
       percentualReceita,
+      valorGastoMes,
+      extrapolou,
     };
   });
 
@@ -98,6 +129,8 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
             key={meta.id}
             meta={meta}
             percentualReceita={meta.percentualReceita}
+            valorGastoMes={meta.valorGastoMes}
+            extrapolou={meta.extrapolou}
             onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses })}
           />
         ))}

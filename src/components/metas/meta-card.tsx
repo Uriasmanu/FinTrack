@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, Power, PowerOff, Target } from "lucide-react";
+import { Pencil, Trash2, Power, PowerOff, Target, AlertTriangle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,10 +16,12 @@ import type { Meta } from "@/types";
 interface MetaCardProps {
   meta: Meta;
   percentualReceita?: number | null;
+  valorGastoMes?: number | null;
+  extrapolou?: boolean | null;
   onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
-export function MetaCard({ meta, percentualReceita, onEditar }: MetaCardProps) {
+export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, onEditar }: MetaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { editarMeta, excluirMeta } = useFinanceStore();
 
@@ -127,6 +129,22 @@ export function MetaCard({ meta, percentualReceita, onEditar }: MetaCardProps) {
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Prazo</span>
           <span className="font-medium">{formatarPrazo(meta.meses)}</span>
+        </div>
+      )}
+
+      {valorGastoMes != null && extrapolou != null && (
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Gasto no mês</span>
+          <span className={`font-medium ${extrapolou ? "text-destructive" : ""}`}>
+            {formatarMoeda(valorGastoMes)}
+          </span>
+        </div>
+      )}
+
+      {extrapolou === true && (
+        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg px-3 py-2">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>Extrapolou o limite de {formatarMoeda(meta.valorAlvo)}</span>
         </div>
       )}
 

@@ -16,15 +16,15 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] valor alvo deve se limitar a 2 digitos depois da virgula
-
-### [aberto] Lazer e gastos fixos são metas de limite de gasto, o objetivo delas tambem é medir em porcentagem do salario que eu quero gastar, porem se extrapolar o valor alvo isso é ruim
-
-### [aberto] Contas fixas é calculada com base em todas as depesas parceladas e recorrentes
-
-### [aberto] Lazer é calculado somente com a categoria lazer
+### [aberto] Exiba nos cards qual o valor que esta sendo usado para fazer o calculo das metas (1177 + 400)
+### [aberto] Progresso de lazer e contas fixas tem que mostrar quanto ja foi gasto, ele esta em 0%
 
 ## Histórico de Correções
+
+### 08/08/2026 - 4 correções nas metas padrão
+- **Problemas:** (1) valores com mais de 2 casas decimais, (2) Conta Fixa usava % fixo em vez de despesas reais, (3) Lazer usava % fixo em vez de despesas reais, (4) sem alerta quando gasto extrapolava limite
+- **Solução:** Adicionado `arredondar2()`, `obterDespesasMesAtual()`, cálculo de `extrapolou`, alerta visual com ícone AlertTriangle
+- **Arquivos afetados:** `src/components/metas/metas-predefinidas.tsx`, `src/components/metas/meta-card.tsx`, `docs/implementado/metas-correcoes-ciclo.md`
 
 ### 08/08/2026 - Meta "Guardar por Mês" exibia "Prazo: 1 mês" em vez de "% da receita"
 - **Problema:** A meta "Guardar por Mês" exibia "Prazo: 1 mês" e "Parcela mensal: R$ 157,70", mas o usuário não entendia que significava 10% do salário
