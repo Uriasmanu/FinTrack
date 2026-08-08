@@ -165,8 +165,8 @@ export function Graficos() {
           {/* @ts-ignore recharts type mismatch */}
           <BarChart data={dadosGrafico}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => formatarMoeda(v)} />
+            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tick={{ fill: "white" }} />
+            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => formatarMoeda(v)} tick={{ fill: "white" }} />
             <Tooltip contentStyle={tooltipStyle} formatter={(value) => formatarMoeda(Number(value))} />
             <Legend />
             {tipoDado === "evolucao_mensal" ? (
@@ -192,8 +192,8 @@ export function Graficos() {
           {/* @ts-ignore recharts type mismatch */}
           <LineChart data={dadosGrafico}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => formatarMoeda(v)} />
+            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tick={{ fill: "white" }} />
+            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => formatarMoeda(v)} tick={{ fill: "white" }} />
             <Tooltip contentStyle={tooltipStyle} formatter={(value) => formatarMoeda(Number(value))} />
             <Legend />
             {tipoDado === "evolucao_mensal" ? (
