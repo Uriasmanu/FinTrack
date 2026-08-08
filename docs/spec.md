@@ -16,12 +16,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Exiba nos cards qual o valor que esta sendo usado para fazer o calculo das metas (1177 + 400)
-### [aberto] Progresso de lazer e contas fixas tem que mostrar quanto ja foi gasto, ele esta em 0% quando o Gasto no mês ja mostra algo, ele tem que usar as despesas do mes para medir o progresso
-### [aberto] Guardar mes, tem que pegar o valor das trransaçoes da categoria guarda para medir o progresso
-### [aberto] reserva de emergencia e viver de renda tem que usar o saldo de contas com categoria poupança para medir o progresso
-
 ## Histórico de Correções
+
+### 08/08/2026 - Progresso e breakdown nas metas padrão
+- **Problemas:** (1) cards não exibiam o valor base do cálculo do salário, (2) progresso de Lazer/Conta Fixa sempre mostrava 0% apesar de "Gasto no mês" ter valor, (3) Guardar por Mês não media progresso com transações reais, (4) Reserva/Viver de Renda não usavam saldo de poupança para progresso
+- **Solução:** Adicionado `obterBreakdownReceita()` (badges com nome+valor por categoria), `obterSaldoPoupanca()` (saldo total de contas poupança), `obterValorGuardadoMes()` (soma transações cat-014 no mês). Progresso agora usa `valorAtualCalculado` em vez de `meta.valorAtual`
+- **Arquivos afetados:** `src/components/metas/metas-predefinidas.tsx`, `src/components/metas/meta-card.tsx`, `docs/implementado/metas-progresso-breakdown.md`
 
 ### 08/08/2026 - 4 correções nas metas padrão
 - **Problemas:** (1) valores com mais de 2 casas decimais, (2) Conta Fixa usava % fixo em vez de despesas reais, (3) Lazer usava % fixo em vez de despesas reais, (4) sem alerta quando gasto extrapolava limite

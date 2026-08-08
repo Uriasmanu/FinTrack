@@ -29,6 +29,34 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       .filter((t) => categoriasBase.includes(t.categoriaId) && t.tipo === "receita");
   }
 
+  function obterBreakdownReceita(meta: typeof metasPadrao[0]) {
+    const categoriasBase = meta.receitasBase && meta.receitasBase.length > 0
+      ? meta.receitasBase
+      : categoriasReceita.map((c) => c.id);
+
+    const receitas = (dados?.transacoes ?? [])
+      .filter((t) => categoriasBase.includes(t.categoriaId) && t.tipo === "receita");
+
+    const porCategoria = receitas.reduce((acc, t) => {
+      const cat = dados?.categorias.find((c) => c.id === t.categoriaId);
+      const nome = cat?.nome ?? t.categoriaId;
+      acc[nome] = (acc[nome] || 0) + t.valor;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const meses = new Set(receitas.map((t) => {
+      const d = new Date(t.data);
+      return `${d.getFullYear()}-${d.getMonth()}`;
+    }));
+
+    const numMeses = meses.size || 1;
+
+    return Object.entries(porCategoria)
+      .map(([nome, total]) => ({ nome, valor: arredondar2(total / numMeses) }))
+      .filter((item) => item.valor > 0)
+      .sort((a, b) => b.valor - a.valor);
+  }
+
   function obterSalarioMensal(meta: typeof metasPadrao[0]) {
     const receitas = obterReceitasMeta(meta);
     if (receitas.length === 0) return 0;
@@ -60,28 +88,57 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       .reduce((total, t) => total + t.valor, 0);
   }
 
+  function obterSaldoPoupanca(): number {
+    if (!dados) return 0;
+    const contasPoupanca = dados.contas.filter((c) => c.tipo === "poupanca");
+    return contasPoupanca.reduce((total, conta) => {
+      const saldoTransacoes = dados.transacoes
+        .filter((t) => t.contaId === conta.id && t.confirmada)
+        .reduce((acc, t) => (t.tipo === "receita" ? acc + t.valor : acc - t.valor), 0);
+      return total + conta.saldoInicial + saldoTransacoes;
+    }, 0);
+  }
+
+  function obterValorGuardadoMes(): number {
+    const mesAtual = new Date().getMonth();
+    const anoAtual = new Date().getFullYear();
+
+    return (dados?.transacoes ?? [])
+      .filter((t) => {
+        if (t.categoriaId !== "cat-014") return false;
+        const data = new Date(t.data);
+        return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+      })
+      .reduce((total, t) => total + t.valor, 0);
+  }
+
   const metasComValores = metasPadrao.map((meta) => {
     const salarioMensal = obterSalarioMensal(meta);
+    const breakdown = obterBreakdownReceita(meta);
     let valorAlvo = 0;
     let parcelaMensal = 0;
     let percentualReceita: number | null = null;
     let valorGastoMes: number | null = null;
     let extrapolou: boolean | null = null;
+    let valorAtualCalculado: number | null = null;
 
     if (salarioMensal > 0) {
       switch (meta.nome) {
         case "Viver de Renda":
           valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.viverDeRenda ?? 200));
           parcelaMensal = arredondar2(valorAlvo / meta.meses);
+          valorAtualCalculado = obterSaldoPoupanca();
           break;
         case "Reserva de Emergencia":
           valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.reservaEmergencia ?? 6));
           parcelaMensal = arredondar2(valorAlvo / meta.meses);
+          valorAtualCalculado = obterSaldoPoupanca();
           break;
         case "Guardar por Mes":
           percentualReceita = (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1) * 100;
           valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1));
           parcelaMensal = valorAlvo;
+          valorAtualCalculado = obterValorGuardadoMes();
           break;
         case "Conta Fixa": {
           percentualReceita = (dados?.config?.multiplicadores?.contaFixa ?? 0.6) * 100;
@@ -89,6 +146,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           parcelaMensal = valorAlvo;
           valorGastoMes = arredondar2(obterDespesasMesAtual());
           extrapolou = valorGastoMes > valorAlvo;
+          valorAtualCalculado = valorGastoMes;
           break;
         }
         case "Lazer": {
@@ -97,6 +155,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           parcelaMensal = valorAlvo;
           valorGastoMes = arredondar2(obterDespesasMesAtual(["cat-004"]));
           extrapolou = valorGastoMes > valorAlvo;
+          valorAtualCalculado = valorGastoMes;
           break;
         }
       }
@@ -110,6 +169,8 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       percentualReceita,
       valorGastoMes,
       extrapolou,
+      breakdown,
+      valorAtualCalculado,
     };
   });
 
@@ -131,6 +192,8 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
             percentualReceita={meta.percentualReceita}
             valorGastoMes={meta.valorGastoMes}
             extrapolou={meta.extrapolou}
+            breakdown={meta.breakdown}
+            valorAtualCalculado={meta.valorAtualCalculado}
             onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses })}
           />
         ))}

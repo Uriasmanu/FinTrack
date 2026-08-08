@@ -18,15 +18,17 @@ interface MetaCardProps {
   percentualReceita?: number | null;
   valorGastoMes?: number | null;
   extrapolou?: boolean | null;
+  breakdown?: { nome: string; valor: number }[];
+  valorAtualCalculado?: number | null;
   onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
-export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, onEditar }: MetaCardProps) {
+export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, breakdown, valorAtualCalculado, onEditar }: MetaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { editarMeta, excluirMeta } = useFinanceStore();
 
   const percentual = meta.valorAlvo > 0
-    ? Math.min((meta.valorAtual / meta.valorAlvo) * 100, 100)
+    ? Math.min(((valorAtualCalculado ?? meta.valorAtual) / meta.valorAlvo) * 100, 100)
     : 0;
 
   const statusLabel = {
@@ -109,7 +111,7 @@ export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, o
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Progresso</span>
           <span className="font-medium">
-            {formatarMoeda(meta.valorAtual)} / {formatarMoeda(meta.valorAlvo)}
+            {formatarMoeda(valorAtualCalculado ?? meta.valorAtual)} / {formatarMoeda(meta.valorAlvo)}
           </span>
         </div>
         <div className="relative">
@@ -152,6 +154,19 @@ export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, o
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Parcela mensal</span>
           <span className="font-medium">{formatarMoeda(meta.parcelaMensal)}</span>
+        </div>
+      )}
+
+      {breakdown && breakdown.length > 0 && (
+        <div className="space-y-1">
+          <span className="text-xs text-muted-foreground">Base do cálculo</span>
+          <div className="flex flex-wrap gap-1">
+            {breakdown.map((item) => (
+              <Badge key={item.nome} variant="secondary" className="text-xs font-normal">
+                {item.nome}: {formatarMoeda(item.valor)}
+              </Badge>
+            ))}
+          </div>
         </div>
       )}
 

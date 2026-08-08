@@ -705,4 +705,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 07/08/2026 | Correção: "Editar todas as seguintes" em transação recorrente/parcelada agora aplica alteração corretamente |
 | 08/08/2026 | Metas: correção de cálculo de salário (soma por média de 12 meses), nomes sem acento, meta "Guardar por Mês" exibe "% da receita" |
 | 08/08/2026 | Metas: arredondamento 2 casas decimais, Conta Fixa/Lazer usam despesas reais do mês, alerta visual de extrapolação |
+| 08/08/2026 | Metas: progresso baseado em dados reais (saldo poupança, despesas mês, guardar), breakdown da receita nos cards |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |
