@@ -20,7 +20,7 @@ interface MetaCardProps {
   extrapolou?: boolean | null;
   breakdown?: { nome: string; valor: number }[];
   valorAtualCalculado?: number | null;
-  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
+  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) => void;
 }
 
 export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, breakdown, valorAtualCalculado, onEditar }: MetaCardProps) {

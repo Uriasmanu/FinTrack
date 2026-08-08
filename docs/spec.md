@@ -18,6 +18,14 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Nos graficos tem que mostrar quantos porcento tem da categoria guardado
 
+### [aberto] a meta Guardar por Mes, Lazer e Conta Fixa quando clico para editar mostra a opção de editar prazo quando deveria ser porcentagem
+
+### [aberto] Receitas vs Despesas não esta bem distribuido visualmente no dashbord
+
+### [aberto] em dashbord Saldo Total deve mostrar apenas o saldo da conta corrente
+
+### [aberto] graficos de linhas e barras tem textos de cor preta no fundo escurro, corrija para branco
+
 ## Histórico de Correções
 
 

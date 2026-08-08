@@ -21,6 +21,7 @@ const metaSchema = z.object({
   valorAlvo: z.number().min(0.01, "Valor deve ser maior que zero"),
   meses: z.number().min(1, "Mínimo 1 mês"),
   receitasBase: z.array(z.string()).default([]),
+  percentual: z.number().min(0).max(100).optional(),
 });
 
 type MetaFormData = z.infer<typeof metaSchema>;
@@ -29,6 +30,7 @@ interface MetaFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: { id: string } & Partial<MetaFormData>;
+  metaName?: string;
   onSubmit: (data: MetaFormData) => void;
 }
 
@@ -36,10 +38,13 @@ export function MetaForm({
   open,
   onOpenChange,
   initialData,
+  metaName,
   onSubmit,
 }: MetaFormProps) {
   const { dados } = useFinanceStore();
   const categoriasReceita = dados?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+
+  const usaPercentual = metaName === "Guardar por Mes" || metaName === "Conta Fixa" || metaName === "Lazer";
 
   const {
     register,
@@ -55,6 +60,7 @@ export function MetaForm({
       valorAlvo: initialData?.valorAlvo ?? 0,
       meses: initialData?.meses ?? 12,
       receitasBase: initialData?.receitasBase ?? [],
+      percentual: initialData?.percentual ?? 0,
     },
   });
 
@@ -65,6 +71,7 @@ export function MetaForm({
         valorAlvo: initialData.valorAlvo ?? 0,
         meses: initialData.meses ?? 12,
         receitasBase: initialData.receitasBase ?? [],
+        percentual: initialData.percentual ?? 0,
       });
     }
   }, [initialData, reset]);
@@ -72,6 +79,7 @@ export function MetaForm({
   const valorAlvo = watch("valorAlvo");
   const meses = watch("meses");
   const receitasBase = watch("receitasBase");
+  const percentual = watch("percentual");
   const parcelaMensal = calcularParcelaMensal(valorAlvo || 0, meses || 1);
 
   function handleFormSubmit(data: MetaFormData) {
@@ -120,20 +128,39 @@ export function MetaForm({
 
           <div>
             <label className="text-sm font-medium">
-              Prazo: {formatarPrazo(meses)}
+              {usaPercentual ? `Percentual: ${percentual ?? 0}%` : `Prazo: ${formatarPrazo(meses)}`}
             </label>
-            <Slider
-              value={[meses]}
-              onValueChange={(v) => setValue("meses", v[0])}
-              min={1}
-              max={120}
-              step={1}
-              className="mt-2"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>1 mês</span>
-              <span>10 anos</span>
-            </div>
+            {usaPercentual ? (
+              <>
+                <Slider
+                  value={[percentual ?? 0]}
+                  onValueChange={(v) => setValue("percentual", v[0])}
+                  min={1}
+                  max={100}
+                  step={1}
+                  className="mt-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>1%</span>
+                  <span>100%</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <Slider
+                  value={[meses]}
+                  onValueChange={(v) => setValue("meses", v[0])}
+                  min={1}
+                  max={120}
+                  step={1}
+                  className="mt-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>1 mês</span>
+                  <span>10 anos</span>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="p-4 bg-muted rounded-lg">

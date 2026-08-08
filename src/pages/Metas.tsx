@@ -10,13 +10,15 @@ export function Metas() {
   const { dados, adicionarMeta, editarMeta } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingOverrides, setEditingOverrides] = useState<{ valorAlvo?: number; meses?: number } | null>(null);
+  const [editingOverrides, setEditingOverrides] = useState<{ valorAlvo?: number; meses?: number; percentual?: number | null } | null>(null);
+  const [editingMetaName, setEditingMetaName] = useState<string | undefined>(undefined);
 
   const metasPersonalizadas = dados?.metas.filter((m) => m.tipo === "personalizado") ?? [];
 
-  function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number }) {
+  function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) {
     setEditingId(id);
     setEditingOverrides(overrides ?? null);
+    setEditingMetaName(metaName);
     setOpen(true);
   }
 
@@ -65,6 +67,7 @@ export function Metas() {
         ...dados?.metas.find((m) => m.id === editingId),
         ...(editingOverrides?.valorAlvo !== undefined && { valorAlvo: editingOverrides.valorAlvo }),
         ...(editingOverrides?.meses !== undefined && { meses: editingOverrides.meses }),
+        ...(editingOverrides?.percentual !== undefined && { percentual: editingOverrides.percentual }),
       }
     : undefined;
 
@@ -113,6 +116,7 @@ export function Metas() {
         open={open}
         onOpenChange={setOpen}
         initialData={metaEditando}
+        metaName={editingMetaName}
         onSubmit={handleSubmit}
       />
     </div>

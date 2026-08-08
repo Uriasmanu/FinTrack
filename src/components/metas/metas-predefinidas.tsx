@@ -2,7 +2,7 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { MetaCard } from "./meta-card";
 
 interface MetasPredefinidasProps {
-  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
+  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) => void;
 }
 
 function arredondar2(value: number): number {
@@ -194,7 +194,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
             extrapolou={meta.extrapolou}
             breakdown={meta.breakdown}
             valorAtualCalculado={meta.valorAtualCalculado}
-            onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses })}
+            onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
           />
         ))}
       </div>

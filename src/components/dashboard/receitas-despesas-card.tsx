@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, TrendingDown, PiggyBank } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
@@ -9,11 +9,21 @@ interface ReceitasDespesasCardProps {
 }
 
 export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
-  const { obterReceitasMes, obterDespesasMes } = useFinanceStore();
+  const { obterReceitasMes, obterDespesasMes, dados } = useFinanceStore();
 
   const receitasAtual = obterReceitasMes(mes, ano);
   const despesasAtual = obterDespesasMes(mes, ano);
   const saldoMes = receitasAtual - despesasAtual;
+
+  const guardarMes = (dados?.transacoes ?? [])
+    .filter((t) => {
+      if (t.categoriaId !== "cat-014") return false;
+      const data = new Date(t.data);
+      return data.getMonth() === mes && data.getFullYear() === ano;
+    })
+    .reduce((total, t) => total + t.valor, 0);
+
+  const percentualGuardado = receitasAtual > 0 ? (guardarMes / receitasAtual) * 100 : 0;
 
   const mostrarComparacao = mes > 0;
   const mesAnterior = mes === 0 ? 11 : mes - 1;
@@ -45,7 +55,7 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success/10">
@@ -120,6 +130,20 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
                 {Math.abs(variacaoSaldo).toFixed(1)}%
               </div>
             )}
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-warning/10">
+                <PiggyBank className="h-3 w-3 text-warning" />
+              </div>
+              <span className="text-xs text-muted-foreground">Guardado</span>
+            </div>
+            <div className="text-lg font-bold text-warning">
+              {formatarMoeda(guardarMes)}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {percentualGuardado.toFixed(1)}% da receita
+            </div>
           </div>
         </div>
       </CardContent>
