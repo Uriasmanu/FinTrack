@@ -15,6 +15,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+
+### [aberto] As metas padroes sempre tem que pegar de todas as receitas
+
+### [aberto] Ao editar a meta, mostra todas as receitas que foram selecionadas, e eu posso tirar a seleção
+
 ## Histórico de Correções
 
 
