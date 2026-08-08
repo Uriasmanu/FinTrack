@@ -714,4 +714,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 08/08/2026 | Dashboard: layout Receitas vs Despesas ajustado (2 cols mobile, 4 cols desktop) |
 | 08/08/2026 | Gráficos: textos de eixos, legendas e labels agora usam `muted-foreground` (legível no tema escuro) |
 | 08/08/2026 | Metas: editar Guardar/Lazer/Conta Fixa agora mostra slider de percentual em vez de prazo |
+| 08/08/2026 | Transações: editar categoria/subtipo de recorrente/parcelada pergunta "só esta ou todas as seguintes" |
+| 08/08/2026 | Gráficos: Alimentação aparece como categoria (subtipos não substituem o nome) |
+| 08/08/2026 | Formulário: subtipos de Alimentação filtrados da lista de categorias, aparecem só ao selecionar Alimentação |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |

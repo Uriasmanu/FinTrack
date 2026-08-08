@@ -16,6 +16,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
+### [aberto] troque todos os ids para uuids
+
 ## Histórico de Correções
 
 ### 08/08/2026 - Edição de categoria em transação recorrente/parcelada
