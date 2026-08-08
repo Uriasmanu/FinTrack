@@ -17,7 +17,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 -->
 
 ### [aberto] Exiba nos cards qual o valor que esta sendo usado para fazer o calculo das metas (1177 + 400)
-### [aberto] Progresso de lazer e contas fixas tem que mostrar quanto ja foi gasto, ele esta em 0%
+### [aberto] Progresso de lazer e contas fixas tem que mostrar quanto ja foi gasto, ele esta em 0% quando o Gasto no mês ja mostra algo, ele tem que usar as despesas do mes para medir o progresso
+### [aberto] Guardar mes, tem que pegar o valor das trransaçoes da categoria guarda para medir o progresso
+### [aberto] reserva de emergencia e viver de renda tem que usar o saldo de contas com categoria poupança para medir o progresso
 
 ## Histórico de Correções
 
