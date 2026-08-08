@@ -9,18 +9,23 @@ interface ReceitasDespesasCardProps {
 }
 
 export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
-  const { obterReceitasMes, obterDespesasMes, dados } = useFinanceStore();
+  const { dados } = useFinanceStore();
 
-  const receitasAtual = obterReceitasMes(mes, ano);
-  const despesasAtual = obterDespesasMes(mes, ano);
-  const saldoMes = receitasAtual - despesasAtual;
+  const transacoesMes = (dados?.transacoes ?? []).filter((t) => {
+    const data = new Date(t.data);
+    return data.getMonth() === mes && data.getFullYear() === ano;
+  });
 
-  const guardarMes = (dados?.transacoes ?? [])
-    .filter((t) => {
-      if (t.categoriaId !== "cat-014") return false;
-      const data = new Date(t.data);
-      return data.getMonth() === mes && data.getFullYear() === ano;
-    })
+  const receitasAtual = transacoesMes
+    .filter((t) => t.tipo === "receita")
+    .reduce((total, t) => total + t.valor, 0);
+
+  const despesasAtual = transacoesMes
+    .filter((t) => t.tipo === "despesa")
+    .reduce((total, t) => total + t.valor, 0);
+
+  const guardarMes = transacoesMes
+    .filter((t) => t.categoriaId === "cat-014")
     .reduce((total, t) => total + t.valor, 0);
 
   const percentualGuardado = receitasAtual > 0 ? (guardarMes / receitasAtual) * 100 : 0;
@@ -28,9 +33,17 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
   const mostrarComparacao = mes > 0;
   const mesAnterior = mes === 0 ? 11 : mes - 1;
 
-  const receitasAnterior = mostrarComparacao ? obterReceitasMes(mesAnterior, ano) : 0;
-  const despesasAnterior = mostrarComparacao ? obterDespesasMes(mesAnterior, ano) : 0;
-  const saldoMesAnterior = receitasAnterior - despesasAnterior;
+  const transacoesAnterior = (dados?.transacoes ?? []).filter((t) => {
+    const data = new Date(t.data);
+    return data.getMonth() === mesAnterior && data.getFullYear() === ano;
+  });
+
+  const receitasAnterior = mostrarComparacao
+    ? transacoesAnterior.filter((t) => t.tipo === "receita").reduce((total, t) => total + t.valor, 0)
+    : 0;
+  const despesasAnterior = mostrarComparacao
+    ? transacoesAnterior.filter((t) => t.tipo === "despesa").reduce((total, t) => total + t.valor, 0)
+    : 0;
 
   const variacaoReceitas =
     receitasAnterior !== 0
@@ -42,11 +55,6 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
       ? ((despesasAtual - despesasAnterior) / despesasAnterior) * 100
       : 0;
 
-  const variacaoSaldo =
-    saldoMesAnterior !== 0
-      ? ((saldoMes - saldoMesAnterior) / Math.abs(saldoMesAnterior)) * 100
-      : 0;
-
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-br from-primary/5 to-transparent">
@@ -55,7 +63,7 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success/10">
@@ -103,31 +111,6 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
                   <ArrowUp className="h-3 w-3" />
                 )}
                 {Math.abs(variacaoDespesas).toFixed(1)}%
-              </div>
-            )}
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <div className={`flex h-6 w-6 items-center justify-center rounded-full ${saldoMes >= 0 ? "bg-primary/10" : "bg-destructive/10"}`}>
-                <div className={`h-3 w-3 rounded-full ${saldoMes >= 0 ? "bg-primary" : "bg-destructive"}`} />
-              </div>
-              <span className="text-xs text-muted-foreground">Saldo</span>
-            </div>
-            <div className={`text-lg font-bold ${saldoMes >= 0 ? "text-success" : "text-destructive"}`}>
-              {saldoMes >= 0 ? "+" : ""}{formatarMoeda(saldoMes)}
-            </div>
-            {mostrarComparacao && variacaoSaldo !== 0 && (
-              <div
-                className={`flex items-center gap-1 text-xs ${
-                  variacaoSaldo >= 0 ? "text-success" : "text-destructive"
-                }`}
-              >
-                {variacaoSaldo >= 0 ? (
-                  <ArrowUp className="h-3 w-3" />
-                ) : (
-                  <ArrowDown className="h-3 w-3" />
-                )}
-                {Math.abs(variacaoSaldo).toFixed(1)}%
               </div>
             )}
           </div>
