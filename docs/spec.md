@@ -16,9 +16,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] As metas padroes sempre tem que pegar de todas as receitas
+### [aberto] As metas padroes sempre tem que pegar inicialmente todas as receitas
 
-### [aberto] Ao editar a meta, mostra todas as receitas que foram selecionadas, e eu posso tirar a seleção
+### [aberto] O valor alvo das metas padroes tambem tem que se inicialmente com base em todas as receitas
+
+### [aberto] Ao editar a meta padrao, mostra todas as receitas que foram selecionadas, e eu posso tirar a seleção isso gera um recalculo
 
 ## Histórico de Correções
 
