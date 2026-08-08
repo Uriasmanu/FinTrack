@@ -16,7 +16,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] A meta Guarda por mes e lazer, deveriam seguir a logica, de quantos porcento eu vou guarda/gastar por mes
+### [aberto] A meta Guarda por mes e lazer, deveriam seguir a logica, de quantos porcento eu vou guarda/gastar por mes, ela inicialmente segue os valores padrões, porem pode ser editado
 
 ## Histórico de Correções
 
