@@ -86,7 +86,12 @@ export function EditarTransacao() {
       return;
     }
 
-    if (isRecorrente && (data.valor !== transacaoEncontrada.valor || data.data !== transacaoEncontrada.data)) {
+    if (isRecorrente && (
+      data.valor !== transacaoEncontrada.valor ||
+      data.data !== transacaoEncontrada.data ||
+      data.categoriaId !== transacaoEncontrada.categoriaId ||
+      data.subtipoId !== transacaoEncontrada.subtipoId
+    )) {
       setDadosPendentes(data as unknown as Record<string, unknown>);
       setDialogAberto(true);
       return;
@@ -108,7 +113,7 @@ export function EditarTransacao() {
   }
 
   async function editarTodas(data: Record<string, unknown>) {
-    const novosDados = data as { valor?: number; data?: string };
+    const novosDados = data as { valor?: number; data?: string; categoriaId?: string; subtipoId?: string | null };
     const grupoId = transacaoEncontrada.grupoParcelaId;
 
     if (grupoId) {
@@ -128,13 +133,15 @@ export function EditarTransacao() {
           : 0;
 
       const novoValor = novosDados.valor ?? transacaoEncontrada.valor;
+      const novaCategoria = novosDados.categoriaId ?? transacaoEncontrada.categoriaId;
+      const novoSubtipo = novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId;
 
       for (const t of grupoTransacoes) {
         await editarTransacao(t.id, {
           valor: novoValor,
           data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
-          categoriaId: t.categoriaId,
-          subtipoId: t.subtipoId,
+          categoriaId: novaCategoria,
+          subtipoId: novoSubtipo,
           contaId: t.contaId,
           cartaoId: t.cartaoId,
           tipo: t.tipo,

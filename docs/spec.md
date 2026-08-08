@@ -16,11 +16,22 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] editar a categoria de uma transação recorrente ou parccelada, deve pergunta se quer alterar só essa ou todas as seguintes
-
-### [aberto] Alimentação deveria aparecer no grafico
-
 ## Histórico de Correções
+
+### 08/08/2026 - Edição de categoria em transação recorrente/parcelada
+- **Problema:** Ao editar categoria/subtipo de transação recorrente ou parcelada, o dialog "só esta / todas as seguintes" só aparecia para valor e data
+- **Solução:** Condição do dialog expandida para incluir `categoriaId` e `subtipoId`. `editarTodas` agora propaga mudanças de categoria e subtipo para todas as transações do grupo
+- **Arquivos afetados:** `src/pages/EditarTransacao.tsx`
+
+### 08/08/2026 - Alimentação aparece no gráfico
+- **Problema:** Gráficos mostravam nome do subtipo (Limpeza, Comida etc) em vez de "Alimentação"
+- **Solução:** Gráfico agora usa sempre o nome da categoria pai (`t.categoriaId`), ignorando `subtipoId`
+- **Arquivos afetados:** `src/pages/Graficos.tsx`
+
+### 08/08/2026 - Subtipos de Alimentação no formulário
+- **Problema:** Subtipos (Limpeza, Comida, Besteira, Acougue) apareciam na lista de categorias
+- **Solução:** Subtipos filtrados da lista principal via `SUBTIPO_IDS`. Select de subtipo aparece apenas ao escolher "Alimentação"
+- **Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`
 
 
 # Guia de Spec para Implementação de Features
