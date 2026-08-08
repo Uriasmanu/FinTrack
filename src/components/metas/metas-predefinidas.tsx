@@ -27,32 +27,27 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
 
   function obterSalarioMensal(meta: typeof metasPadrao[0]) {
     const receitas = obterReceitasMeta(meta);
-    return receitas.length > 0
-      ? Math.max(...receitas.map((t) => t.valor))
+    if (receitas.length === 0) return 0;
+
+    const mesesUnicos = new Set(
+      receitas.map((t) => {
+        const d = new Date(t.data);
+        return `${d.getFullYear()}-${d.getMonth()}`;
+      })
+    );
+
+    const receitaPorMes = receitas.reduce((acc, t) => {
+      const d = new Date(t.data);
+      const chave = `${d.getFullYear()}-${d.getMonth()}`;
+      acc[chave] = (acc[chave] || 0) + t.valor;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const valoresMeses = Object.values(receitaPorMes);
+    return valoresMeses.length > 0
+      ? Math.max(...valoresMeses)
       : 0;
   }
-
-  const mesAtual = new Date().getMonth();
-  const anoAtual = new Date().getFullYear();
-
-  const despesasRecorrentesMes = (dados?.transacoes ?? [])
-    .filter((t) => {
-      if (t.tipo !== "despesa") return false;
-      if (t.tipoRecorrencia !== "recorrente" && t.tipoRecorrencia !== "parcelado") return false;
-      const data = new Date(t.data);
-      return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
-    })
-    .reduce((total, t) => total + t.valor, 0);
-
-  const despesasLazerMes = (dados?.transacoes ?? [])
-    .filter((t) => {
-      if (t.tipo !== "despesa") return false;
-      if (t.categoriaId !== "cat-004") return false;
-      if (t.tipoRecorrencia !== "recorrente" && t.tipoRecorrencia !== "parcelado") return false;
-      const data = new Date(t.data);
-      return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
-    })
-    .reduce((total, t) => total + t.valor, 0);
 
   const metasComValores = metasPadrao.map((meta) => {
     const salarioMensal = obterSalarioMensal(meta);
@@ -65,24 +60,20 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.viverDeRenda ?? 200);
           parcelaMensal = valorAlvo / meta.meses;
           break;
-        case "Reserva de Emergência":
+        case "Reserva de Emergencia":
           valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.reservaEmergencia ?? 6);
           parcelaMensal = valorAlvo / meta.meses;
           break;
-        case "Guardar por Mês":
+        case "Guardar por Mes":
           valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1);
           parcelaMensal = valorAlvo;
           break;
         case "Conta Fixa":
-          valorAlvo = despesasRecorrentesMes > 0
-            ? despesasRecorrentesMes
-            : salarioMensal * (dados?.config?.multiplicadores?.contaFixa ?? 0.6);
+          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.contaFixa ?? 0.6);
           parcelaMensal = valorAlvo;
           break;
         case "Lazer":
-          valorAlvo = despesasLazerMes > 0
-            ? despesasLazerMes
-            : salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3);
+          valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3);
           parcelaMensal = valorAlvo;
           break;
       }

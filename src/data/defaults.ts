@@ -43,7 +43,7 @@ export function obterMetasDefault(): Meta[] {
     },
     {
       id: gerarId(),
-      nome: "Reserva de Emergência",
+      nome: "Reserva de Emergencia",
       tipo: "padrao",
       ativo: true,
       valorAlvo: 0,
@@ -59,7 +59,7 @@ export function obterMetasDefault(): Meta[] {
     },
     {
       id: gerarId(),
-      nome: "Guardar por Mês",
+      nome: "Guardar por Mes",
       tipo: "padrao",
       ativo: true,
       valorAlvo: 0,
