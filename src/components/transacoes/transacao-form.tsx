@@ -209,30 +209,6 @@ export function TransacaoForm({
           )}
         </div>
 
-        {categoriaId === "cat-001" && (
-          <div>
-            <label className="text-sm font-medium">Subtipo</label>
-            <Select
-              value={watch("subtipoId") ?? ""}
-              onValueChange={(v) => setValue("subtipoId", v || null)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o subtipo..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Nenhum</SelectItem>
-                {(dados?.categorias ?? [])
-                  .filter((c) => ["cat-016", "cat-017", "cat-018", "cat-019"].includes(c.id))
-                  .map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      {cat.nome}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
-
         <div>
           <label className="text-sm font-medium">Conta</label>
           <Select

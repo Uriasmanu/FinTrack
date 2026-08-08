@@ -86,14 +86,8 @@ export function Graficos() {
       );
       const porCategoria: Record<string, number> = {};
       despesas.forEach((t) => {
-        let nome: string;
-        if (t.categoriaId === "cat-001" && t.subtipoId) {
-          const subtipo = dados.categorias.find((c) => c.id === t.subtipoId);
-          nome = subtipo?.nome ?? "Alimentação";
-        } else {
-          const cat = dados.categorias.find((c) => c.id === t.categoriaId);
-          nome = cat?.nome ?? "Sem categoria";
-        }
+        const cat = dados.categorias.find((c) => c.id === t.categoriaId);
+        const nome = cat?.nome ?? "Sem categoria";
         porCategoria[nome] = (porCategoria[nome] ?? 0) + t.valor;
       });
       return Object.entries(porCategoria).map(([name, value]) => ({ name, value }));
