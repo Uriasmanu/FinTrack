@@ -16,9 +16,20 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] troque todos os ids para uuids
+### [resolvido] Trocar IDs sequenciais das categorias padrão para UUIDs
+
+**Comportamento atual:** As 19 categorias padrão usam IDs hardcoded (`cat-001` a `cat-019`), enquanto todas as outras entidades já usam UUIDs via `crypto.randomUUID()`. Existem ~40 referências hardcoded em 7 arquivos fonte, cada componente redefine suas próprias constantes de ID.
+
+**Comportamento esperado:** Todas as categorias padrão devem usar UUIDs fixos pré-definidos, centralizados em um único arquivo de constantes (`src/lib/categorias-ids.ts`). Os dados existentes devem ser migrados automaticamente no startup.
+
+**Escopo:** Apenas categorias padrão. Categorias criadas pelo usuário já usam UUIDs.
 
 ## Histórico de Correções
+
+### 08/08/2026 - Trocar IDs sequenciais das categorias padrão para UUIDs
+- **Problema:** 19 categorias padrão usavam IDs hardcoded (`cat-001` a `cat-019`), com ~40 referências espalhadas em 7 arquivos fonte, cada componente redefinindo suas próprias constantes
+- **Solução:** Criado arquivo `src/lib/categorias-ids.ts` com UUIDs fixos. Atualizado `categorias-default.json`. Substituídas todas as referências hardcoded. Adicionada migração automática no `server.js` para dados existentes
+- **Arquivos afetados:** `src/lib/categorias-ids.ts` (novo), `src/data/categorias-default.json`, `src/components/transacoes/transacao-form.tsx`, `src/components/dashboard/despesas-por-finalidade.tsx`, `src/components/metas/metas-predefinidas.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`, `src/pages/Transacoes.tsx`, `src/pages/Transferencia.tsx`, `server.js`
 
 ### 08/08/2026 - Edição de categoria em transação recorrente/parcelada
 - **Problema:** Ao editar categoria/subtipo de transação recorrente ou parcelada, o dialog "só esta / todas as seguintes" só aparecia para valor e data

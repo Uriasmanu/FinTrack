@@ -7,6 +7,7 @@ import { TransacaoItem } from "@/components/transacoes/transacao-item";
 import { Filtros, type FiltrosTransacao } from "@/components/transacoes/filtros";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
+import { CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
 
 const MESES = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -88,7 +89,7 @@ export function Transacoes() {
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
-      if (t.categoriaId === "cat-014") return false;
+      if (t.categoriaId === CATEGORIA_GUARDAR) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
@@ -98,7 +99,7 @@ export function Transacoes() {
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
-      if (t.categoriaId === "cat-014") return false;
+      if (t.categoriaId === CATEGORIA_GUARDAR) return false;
       if (!t.confirmada) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
@@ -133,7 +134,7 @@ export function Transacoes() {
   let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
   let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
-    if (t.categoriaId !== "cat-014") {
+    if (t.categoriaId !== CATEGORIA_GUARDAR) {
       saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
       if (t.confirmada) {
         saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { gerarId } from "@/lib/uuid";
+import { CATEGORIA_TRANSFERENCIA, CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
 
 const transferenciaSchema = z.object({
   valor: z.number().min(0.01, "Valor deve ser maior que zero"),
@@ -33,7 +34,7 @@ export function Transferencia() {
 
   const contas = dados?.contas ?? [];
   const categorias = (dados?.categorias ?? []).filter(
-    (cat) => cat.tipo === "ambos" || cat.id === "cat-013" || cat.id === "cat-014"
+    (cat) => cat.tipo === "ambos" || cat.id === CATEGORIA_TRANSFERENCIA || cat.id === CATEGORIA_GUARDAR
   );
 
   const {
@@ -52,7 +53,7 @@ export function Transferencia() {
       })(),
       contaOrigemId: "",
       contaDestinoId: "",
-      categoriaId: "cat-013",
+      categoriaId: CATEGORIA_TRANSFERENCIA,
       descricao: "Transferência entre contas",
     },
   });
@@ -74,7 +75,7 @@ export function Transferencia() {
       descricao: data.descricao || "Transferência entre contas",
       valor: data.valor,
       data: data.data,
-      categoriaId: data.categoriaId || "cat-013",
+      categoriaId: data.categoriaId || CATEGORIA_TRANSFERENCIA,
       subtipoId: null,
       contaId: data.contaOrigemId,
       cartaoId: null,
@@ -91,7 +92,7 @@ export function Transferencia() {
       descricao: data.descricao || "Transferência entre contas",
       valor: data.valor,
       data: data.data,
-      categoriaId: data.categoriaId || "cat-013",
+      categoriaId: data.categoriaId || CATEGORIA_TRANSFERENCIA,
       subtipoId: null,
       contaId: data.contaDestinoId,
       cartaoId: null,

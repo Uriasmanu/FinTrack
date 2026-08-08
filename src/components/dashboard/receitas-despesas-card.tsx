@@ -2,6 +2,7 @@ import { ArrowUp, ArrowDown, TrendingUp, TrendingDown, PiggyBank } from "lucide-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
+import { CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
 
 interface ReceitasDespesasCardProps {
   mes: number;
@@ -25,7 +26,7 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
     .reduce((total, t) => total + t.valor, 0);
 
   const guardarMes = transacoesMes
-    .filter((t) => t.categoriaId === "cat-014")
+    .filter((t) => t.categoriaId === CATEGORIA_GUARDAR)
     .reduce((total, t) => total + t.valor, 0);
 
   const percentualGuardado = receitasAtual > 0 ? (guardarMes / receitasAtual) * 100 : 0;

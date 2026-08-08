@@ -3,13 +3,15 @@ import { Progress } from "@/components/ui/progress";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
 
-const CATEGORIA_LAZER = "cat-004";
-const CATEGORIA_EDUCACAO = "cat-006";
-const CATEGORIA_COMBUSTIVEL = "cat-015";
-const CATEGORIA_LIMPEZA = "cat-016";
-const CATEGORIA_COMIDA = "cat-017";
-const CATEGORIA_BESTEIRA = "cat-018";
-const CATEGORIA_ACOUGUE = "cat-019";
+import {
+  CATEGORIA_LAZER,
+  CATEGORIA_EDUCACAO,
+  CATEGORIA_COMBUSTIVEL,
+  CATEGORIA_LIMPEZA,
+  CATEGORIA_COMIDA,
+  CATEGORIA_BESTEIRA,
+  CATEGORIA_ACOUGUE,
+} from "@/lib/categorias-ids";
 
 export function DespesasPorFinalidade() {
   const { dados } = useFinanceStore();

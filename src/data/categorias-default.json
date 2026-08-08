@@ -1,132 +1,132 @@
 [
   {
-    "id": "cat-001",
+    "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
     "nome": "Alimentacao",
     "tipo": "despesa",
     "cor": "#F97316",
     "icone": "UtensilsCrossed"
   },
   {
-    "id": "cat-002",
+    "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
     "nome": "Transporte",
     "tipo": "despesa",
     "cor": "#3B82F6",
     "icone": "Car"
   },
   {
-    "id": "cat-003",
+    "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
     "nome": "Moradia",
     "tipo": "despesa",
     "cor": "#8B5CF6",
     "icone": "Home"
   },
   {
-    "id": "cat-004",
+    "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
     "nome": "Lazer",
     "tipo": "despesa",
     "cor": "#EC4899",
     "icone": "Gamepad2"
   },
   {
-    "id": "cat-005",
+    "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
     "nome": "Saude",
     "tipo": "despesa",
     "cor": "#10B981",
     "icone": "Heart"
   },
   {
-    "id": "cat-006",
+    "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8091a2",
     "nome": "Educacao",
     "tipo": "despesa",
     "cor": "#06B6D4",
     "icone": "GraduationCap"
   },
   {
-    "id": "cat-007",
+    "id": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
     "nome": "Salario",
     "tipo": "receita",
     "cor": "#16A34A",
     "icone": "Banknote"
   },
   {
-    "id": "cat-008",
+    "id": "b8c9d0e1-f2a3-4b4c-5d6e-7f8091a2b3c4",
     "nome": "Investimentos",
     "tipo": "receita",
     "cor": "#6366F1",
     "icone": "TrendingUp"
   },
   {
-    "id": "cat-009",
+    "id": "c9d0e1f2-a3b4-4c5d-6e7f-8091a2b3c4d5",
     "nome": "Ticket",
     "tipo": "receita",
     "cor": "#F59E0B",
     "icone": "Ticket"
   },
   {
-    "id": "cat-010",
+    "id": "d0e1f2a3-b4c5-4d6e-7f80-91a2b3c4d5e6",
     "nome": "Outros",
     "tipo": "ambos",
     "cor": "#6B7280",
     "icone": "MoreHorizontal"
   },
   {
-    "id": "cat-011",
+    "id": "e1f2a3b4-c5d6-4e7f-8091-a2b3c4d5e6f7",
     "nome": "Divida",
     "tipo": "despesa",
     "cor": "#DC2626",
     "icone": "AlertCircle"
   },
   {
-    "id": "cat-012",
+    "id": "f2a3b4c5-d6e7-4f80-91a2-b3c4d5e6f708",
     "nome": "VA/VR",
     "tipo": "receita",
     "cor": "#059669",
     "icone": "Utensils"
   },
   {
-    "id": "cat-013",
+    "id": "a3b4c5d6-e7f8-4091-a2b3-c4d5e6f70819",
     "nome": "Transferencia",
     "tipo": "ambos",
     "cor": "#8B5CF6",
     "icone": "ArrowLeftRight"
   },
   {
-    "id": "cat-014",
+    "id": "b4c5d6e7-f809-41a2-b3c4-d5e6f7081920",
     "nome": "Guardar",
     "tipo": "ambos",
     "cor": "#16A34A",
     "icone": "PiggyBank"
   },
   {
-    "id": "cat-015",
+    "id": "c5d6e7f8-091a-42b3-c4d5-e6f708192031",
     "nome": "Combustivel",
     "tipo": "despesa",
     "cor": "#F59E0B",
     "icone": "Fuel"
   },
   {
-    "id": "cat-016",
+    "id": "d6e7f809-1a2b-43c4-d5e6-f70819203142",
     "nome": "Limpeza",
     "tipo": "despesa",
     "cor": "#06B6D4",
     "icone": "Sparkles"
   },
   {
-    "id": "cat-017",
+    "id": "e7f80919-2a3b-44d5-e6f7-081920314253",
     "nome": "Comida",
     "tipo": "despesa",
     "cor": "#10B981",
     "icone": "ShoppingCart"
   },
   {
-    "id": "cat-018",
+    "id": "f8091a20-3b4c-45e6-f708-192031425364",
     "nome": "Besteira",
     "tipo": "despesa",
     "cor": "#EC4899",
     "icone": "Cookie"
   },
   {
-    "id": "cat-019",
+    "id": "091a2031-4c5d-46f7-0819-203142536475",
     "nome": "Acougue",
     "tipo": "despesa",
     "cor": "#DC2626",

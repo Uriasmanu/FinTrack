@@ -15,8 +15,11 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 import type { TipoRecorrencia } from "@/types";
 
-const SUBTIPO_IDS = ["cat-016", "cat-017", "cat-018", "cat-019"];
-const CATEGORIA_ALIMENTACAO = "cat-001";
+import {
+  SUBTIPO_IDS,
+  CATEGORIA_ALIMENTACAO,
+  CATEGORIAS_AUTO_TICKET,
+} from "@/lib/categorias-ids";
 
 const transacaoSchema = z.object({
   descricao: z.string().min(1, "Descrição é obrigatória"),
@@ -130,8 +133,7 @@ export function TransacaoForm({
   const saldoPrevistoFimDia = saldoAposTransacao + transacoesDoDia;
   const saldoNegativo = tipo === "despesa" && saldoPrevistoFimDia < 0;
 
-  const categoriasAutoTicket = ["cat-001", "cat-009", "cat-012"];
-  if (categoriasAutoTicket.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
+  if (CATEGORIAS_AUTO_TICKET.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
     setValue("contaId", contaTicket.id);
   }
 

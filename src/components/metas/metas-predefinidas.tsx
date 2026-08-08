@@ -1,5 +1,6 @@
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { MetaCard } from "./meta-card";
+import { CATEGORIA_GUARDAR, CATEGORIA_LAZER } from "@/lib/categorias-ids";
 
 interface MetasPredefinidasProps {
   onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) => void;
@@ -18,7 +19,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     return null;
   }
 
-  const categoriasReceita = dados?.categorias.filter((c) => (c.tipo === "receita" || c.tipo === "ambos") && c.id !== "cat-014") ?? [];
+  const categoriasReceita = dados?.categorias.filter((c) => (c.tipo === "receita" || c.tipo === "ambos") && c.id !== CATEGORIA_GUARDAR) ?? [];
 
   function obterReceitasMeta(meta: typeof metasPadrao[0]) {
     const categoriasBase = meta.receitasBase && meta.receitasBase.length > 0
@@ -105,7 +106,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
 
     return (dados?.transacoes ?? [])
       .filter((t) => {
-        if (t.categoriaId !== "cat-014") return false;
+        if (t.categoriaId !== CATEGORIA_GUARDAR) return false;
         const data = new Date(t.data);
         return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
       })
@@ -153,7 +154,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           percentualReceita = (dados?.config?.multiplicadores?.lazer ?? 0.3) * 100;
           valorAlvo = arredondar2(salarioMensal * (dados?.config?.multiplicadores?.lazer ?? 0.3));
           parcelaMensal = valorAlvo;
-          valorGastoMes = arredondar2(obterDespesasMesAtual(["cat-004"]));
+          valorGastoMes = arredondar2(obterDespesasMesAtual([CATEGORIA_LAZER]));
           extrapolou = valorGastoMes > valorAlvo;
           valorAtualCalculado = valorGastoMes;
           break;
