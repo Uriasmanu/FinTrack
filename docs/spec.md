@@ -16,6 +16,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
+### [aberto] A meta Guarda por mes, deveria mostra que é 10% do salario e não 1 mes como esta exibindo atualmente. O objetivo dessa meta é escolher quantos porcento da receita eu quero guarda por mes
+
 ## Histórico de Correções
 
 ### 08/08/2026 - Inicialização de receitasBase em Metas Padrão
