@@ -15,10 +15,11 @@ import type { Meta } from "@/types";
 
 interface MetaCardProps {
   meta: Meta;
+  percentualReceita?: number | null;
   onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number }) => void;
 }
 
-export function MetaCard({ meta, onEditar }: MetaCardProps) {
+export function MetaCard({ meta, percentualReceita, onEditar }: MetaCardProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { editarMeta, excluirMeta } = useFinanceStore();
 
@@ -117,10 +118,17 @@ export function MetaCard({ meta, onEditar }: MetaCardProps) {
         </p>
       </div>
 
-      <div className="flex justify-between text-sm">
-        <span className="text-muted-foreground">Prazo</span>
-        <span className="font-medium">{formatarPrazo(meta.meses)}</span>
-      </div>
+      {percentualReceita != null ? (
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Meta mensal</span>
+          <span className="font-medium">{percentualReceita}% da receita</span>
+        </div>
+      ) : (
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Prazo</span>
+          <span className="font-medium">{formatarPrazo(meta.meses)}</span>
+        </div>
+      )}
 
       {meta.parcelaMensal > 0 && (
         <div className="flex justify-between text-sm">

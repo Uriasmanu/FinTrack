@@ -703,4 +703,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 07/08/2026 | Persistência: tema claro/escuro persistido no `fintrack.json` (campo `config.tema`) |
 | 07/08/2026 | Estrutura de dados: campo `Conta` ganhou `criadoEm`/`atualizadoEm` (timestamps de criação/edição) |
 | 07/08/2026 | Correção: "Editar todas as seguintes" em transação recorrente/parcelada agora aplica alteração corretamente |
+| 08/08/2026 | Metas: correção de cálculo de salário (soma por média de 12 meses), nomes sem acento, meta "Guardar por Mês" exibe "% da receita" |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |

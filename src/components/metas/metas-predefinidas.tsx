@@ -45,6 +45,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     const salarioMensal = obterSalarioMensal(meta);
     let valorAlvo = 0;
     let parcelaMensal = 0;
+    let percentualReceita: number | null = null;
 
     if (salarioMensal > 0) {
       switch (meta.nome) {
@@ -57,6 +58,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           parcelaMensal = valorAlvo / meta.meses;
           break;
         case "Guardar por Mes":
+          percentualReceita = (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1) * 100;
           valorAlvo = salarioMensal * (dados?.config?.multiplicadores?.guardarPorMes ?? 0.1);
           parcelaMensal = valorAlvo;
           break;
@@ -76,6 +78,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
       valorAlvo,
       parcelaMensal,
       salarioMensal,
+      percentualReceita,
     };
   });
 
@@ -94,6 +97,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           <MetaCard
             key={meta.id}
             meta={meta}
+            percentualReceita={meta.percentualReceita}
             onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses })}
           />
         ))}

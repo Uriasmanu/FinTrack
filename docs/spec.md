@@ -16,9 +16,22 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] A meta Guarda por mes e lazer, deveriam seguir a logica, de quantos porcento eu vou guarda/gastar por mes, ela inicialmente segue os valores padrões, porem pode ser editado
+### [aberto] valor alvo deve se limitar a 2 digitos depois da virgula
+
+### [aberto] Lazer e gastos fixos são metas de limite de gasto, o objetivo delas tambem é medir em porcentagem do salario que eu quero gastar, porem se extrapolar o valor alvo isso é ruim
+
+### [aberto] Contas fixas é calculada com base em todas as depesas parceladas e recorrentes
+
+### [aberto] Lazer é calculado somente com a categoria lazer
 
 ## Histórico de Correções
+
+### 08/08/2026 - Meta "Guardar por Mês" exibia "Prazo: 1 mês" em vez de "% da receita"
+- **Problema:** A meta "Guardar por Mês" exibia "Prazo: 1 mês" e "Parcela mensal: R$ 157,70", mas o usuário não entendia que significava 10% do salário
+- **Solução:** Adicionado campo `percentualReceita` no card para metas mensais. Agora exibe "10% da receita" em vez de "Prazo: 1 mês"
+- **Arquivos afetados:** `src/components/metas/meta-card.tsx`, `src/components/metas/metas-predefinidas.tsx`, `docs/implementado/metas-guardar-por-mes.md`
+- **RF afetados:** RF-01, RF-02, RF-03, RF-04, RF-05
+- **CA afetados:** CA-01, CA-02, CA-03
 
 ### 08/08/2026 - Inicialização de receitasBase em Metas Padrão
 - **Problema:** As metas padrão tinham `receitasBase: []` vazio, criando ambiguidade entre o fallback no código e a exibição no formulário
