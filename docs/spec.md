@@ -18,6 +18,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] editar a categoria de uma transação recorrente ou parccelada, deve pergunta se quer alterar só essa ou todas as seguintes
 
+### [aberto] Alimentação deveria aparecer no grafico
+
 ## Histórico de Correções
 
 
