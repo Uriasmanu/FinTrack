@@ -16,12 +16,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-## Histórico de Correções
+### [aberto] editar a categoria de uma transação recorrente ou parccelada, deve pergunta se quer alterar só essa ou todas as seguintes
 
-### 08/08/2026 - Correções dashboard (3 itens)
-- **Problemas:** (1) Receitas vs Despesas com distribuição visual ruim, (2) Saldo Total mostrava todas as contas em vez de apenas corrente, (3) Textos dos gráficos de barras/linhas pretos no tema escuro
-- **Solução:** (1) Grid do card ajustado para 2 cols mobile / 4 cols desktop, (2) SaldoCard filtra apenas contas corrente e renomeado para "Saldo Conta Corrente", (3) Adicionado `axisTextStyle` com `fill: hsl(var(--muted-foreground))` nos eixos, legendas e labels dos gráficos recharts
-- **Arquivos afetados:** `src/components/dashboard/receitas-despesas-card.tsx`, `src/components/dashboard/saldo-card.tsx`, `src/pages/Graficos.tsx`
+## Histórico de Correções
 
 
 # Guia de Spec para Implementação de Features

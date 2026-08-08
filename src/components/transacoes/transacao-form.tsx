@@ -15,6 +15,9 @@ import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
 import type { TipoRecorrencia } from "@/types";
 
+const SUBTIPO_IDS = ["cat-016", "cat-017", "cat-018", "cat-019"];
+const CATEGORIA_ALIMENTACAO = "cat-001";
+
 const transacaoSchema = z.object({
   descricao: z.string().min(1, "Descrição é obrigatória"),
   valor: z.number().min(0.01, "Valor deve ser maior que zero"),
@@ -81,7 +84,7 @@ export function TransacaoForm({
   const valor = watch("valor");
   const data = watch("data");
   const categorias = dados?.categorias.filter(
-    (c) => c.tipo === tipo || c.tipo === "ambos"
+    (c) => (c.tipo === tipo || c.tipo === "ambos") && !SUBTIPO_IDS.includes(c.id)
   ) ?? [];
   const contas = dados?.contas ?? [];
   const cartoes = dados?.cartoes ?? [];
@@ -208,6 +211,30 @@ export function TransacaoForm({
             <p className="text-sm text-destructive">{errors.categoriaId.message}</p>
           )}
         </div>
+
+        {categoriaId === CATEGORIA_ALIMENTACAO && (
+          <div>
+            <label className="text-sm font-medium">Subtipo</label>
+            <Select
+              value={watch("subtipoId") ?? ""}
+              onValueChange={(v) => setValue("subtipoId", v || null)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o subtipo..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Nenhum</SelectItem>
+                {(dados?.categorias ?? [])
+                  .filter((c) => SUBTIPO_IDS.includes(c.id))
+                  .map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.nome}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         <div>
           <label className="text-sm font-medium">Conta</label>
