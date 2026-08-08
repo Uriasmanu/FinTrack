@@ -706,4 +706,6 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 08/08/2026 | Metas: correção de cálculo de salário (soma por média de 12 meses), nomes sem acento, meta "Guardar por Mês" exibe "% da receita" |
 | 08/08/2026 | Metas: arredondamento 2 casas decimais, Conta Fixa/Lazer usam despesas reais do mês, alerta visual de extrapolação |
 | 08/08/2026 | Metas: progresso baseado em dados reais (saldo poupança, despesas mês, guardar), breakdown da receita nos cards |
+| 08/08/2026 | Extrato: receitas de contas poupança agora aparecem (antes eram excluídas junto com despesas) |
+| 08/08/2026 | Metas: categoria Guardar (cat-014) excluída do cálculo de salário-base |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |

@@ -14561,6 +14561,24 @@
       "intervaloDias": null,
       "criadoEm": "2026-08-08T15:09:25.892Z",
       "confirmada": false
+    },
+    {
+      "descricao": "dividendos",
+      "valor": 22,
+      "data": "2026-08-08",
+      "tipo": "receita",
+      "categoriaId": "cat-014",
+      "subtipoId": null,
+      "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": false,
+      "grupoParcelaId": null,
+      "id": "27f156bc-ce6b-4317-9f1e-299eb8292d4b",
+      "criadoEm": "2026-08-08T16:11:44.479Z"
     }
   ],
   "categorias": [
@@ -14706,6 +14724,14 @@
       "id": "96701dd0-1088-4505-848e-4620a3696672",
       "criadoEm": "2026-08-07T21:20:28.011Z",
       "atualizadoEm": "2026-08-07T21:20:28.011Z"
+    },
+    {
+      "banco": "Itau",
+      "saldoInicial": 122,
+      "tipo": "poupanca",
+      "id": "ae5007ae-43da-4c98-b18e-03089670ac2a",
+      "criadoEm": "2026-08-08T16:09:54.611Z",
+      "atualizadoEm": "2026-08-08T16:11:16.361Z"
     }
   ],
   "cartoes": [],

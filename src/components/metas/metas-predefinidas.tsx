@@ -18,7 +18,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     return null;
   }
 
-  const categoriasReceita = dados?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+  const categoriasReceita = dados?.categorias.filter((c) => (c.tipo === "receita" || c.tipo === "ambos") && c.id !== "cat-014") ?? [];
 
   function obterReceitasMeta(meta: typeof metasPadrao[0]) {
     const categoriasBase = meta.receitasBase && meta.receitasBase.length > 0

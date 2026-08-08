@@ -18,6 +18,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
+### 08/08/2026 - Guardar no extrato e exclusão do cálculo de salário
+- **Problemas:** (1) transações de receita em contas poupança não apareciam no extrato porque o filtro excluía todas as transações de poupança, (2) categoria Guardar (cat-014, tipo "ambos") era incluída no cálculo de salário das metas
+- **Solução:** Filtro de poupança em Transacoes.tsx agora exclui apenas despesas de poupança (receitas aparecem). Excluído cat-014 de `categoriasReceita` em metas-predefinidas.tsx
+- **Arquivos afetados:** `src/pages/Transacoes.tsx`, `src/components/metas/metas-predefinidas.tsx`
+
 ### 08/08/2026 - Progresso e breakdown nas metas padrão
 - **Problemas:** (1) cards não exibiam o valor base do cálculo do salário, (2) progresso de Lazer/Conta Fixa sempre mostrava 0% apesar de "Gasto no mês" ter valor, (3) Guardar por Mês não media progresso com transações reais, (4) Reserva/Viver de Renda não usavam saldo de poupança para progresso
 - **Solução:** Adicionado `obterBreakdownReceita()` (badges com nome+valor por categoria), `obterSaldoPoupanca()` (saldo total de contas poupança), `obterValorGuardadoMes()` (soma transações cat-014 no mês). Progresso agora usa `valorAtualCalculado` em vez de `meta.valorAtual`
