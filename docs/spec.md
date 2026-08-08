@@ -17,39 +17,6 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 -->
 ## Histórico de Correções
 
-### [corrigido] "Editar todas as seguintes" em transação recorrente/parcelada não aplica a alteração
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** Ao editar uma transação recorrente/parcelada e escolher "Todas as seguintes" no dialog, nenhuma transação era alterada — nem a selecionada nem as futuras. A função `editarTodas` sombreava a variável `dados` do store com os dados do formulário (que não têm campo `transacoes`), fazendo o grupo ficar vazio; além disso, as chamadas assíncronas de edição/exclusão em loop sem `await` faziam o estado final conter apenas a última operação (race condition).
-**Comportamento corrigido:** `editarTodas` agora lê o estado atualizado via `useFinanceStore.getState()` a cada iteração, passa todos os campos obrigatórios da transação para `editarTransacao`, e os handlers do `AlertDialog` utilizam `await` para garantir a execução sequencial. `editarSomenteEssa` também foi corrigido para aguardar a gravação antes de navegar.
-**Escopo:** `src/pages/EditarTransacao.tsx`
-
-### [corrigido] Saldo total no dashboard deve mostrar somente o que foi efetivado
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** O saldo total, receitas, despesas e resumo mensal do dashboard incluíam transações não confirmadas (`confirmada: false`), distorcendo a visão financeira real do usuário.
-**Comportamento corrigido:** Todos os seletores do store (`obterSaldoAtual`, `obterReceitasMes`, `obterDespesasMes`, `obterTransacoesMes`, `obterSaldoConta`, `obterSaldoAtualSemTicket`, `obterFaturaCartao`) e os cálculos locais do `saldo-card.tsx` agora filtram por `t.confirmada === true`. Apenas transações efetivadas são consideradas nos totais do dashboard.
-**Escopo:** `src/stores/useFinanceStore.ts`, `src/components/dashboard/saldo-card.tsx`
-
-### [corrigido] Não recriar/atualizar o fintrack.json quando ele já existir
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** A inicialização do frontend (`inicializar()`) sempre chamava `salvar(dados)`, reescrevendo o arquivo a cada carregamento da página mesmo sem alterações do usuário.
-**Comportamento corrigido:** `inicializar()` agora só grava no `fintrack.json` quando há mudança real (merge de defaults na primeira execução). O servidor segue criando o arquivo apenas quando não existe. RF-01/RF-02 e CA-01/CA-02 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
-
-### [corrigido] Tema claro/escuro deve ser persistido no fintrack.json
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** A persistência do tema via `atualizarConfig` precisava de validação; a gravação desnecessária em `inicializar()` podia mascarar o fluxo.
-**Comportamento corrigido:** Confirmado que `atualizarConfig({ tema })` grava `config.tema` no `fintrack.json` via `PUT /api/data` e o tema é reaplicado após recarregar. RF-03/RF-04 e CA-03 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
-
-### [corrigido] CRUD de conta deve atualizar o fintrack.json e registrar timestamp
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** As operações de conta atualizavam o arquivo, mas o registro `Conta` não possuía timestamp de criação/atualização.
-**Comportamento corrigido:** A interface `Conta` ganhou `criadoEm`/`atualizadoEm`. Ao criar, ambos são registrados; ao editar, `atualizadoEm` é atualizado; ao excluir, a remoção é gravada no arquivo. RF-05 a RF-07 e CA-04 a CA-06 em `docs/implementado/persistencia-fintrack-json-timestamps.md`.
-
-### [corrigido] Criar o JSON padrão do sistema como primeira ação da aplicação
-**Data da correção:** 07/08/2026
-**Comportamento anterior:** O servidor criava o arquivo JSON com as informações padrão do sistema de forma preguiçosa (lazy) — somente quando o endpoint `GET /api/data` era acessado pela primeira vez. O nome do arquivo estava fixo no código (`fintrack.json`) e não derivava do nome real da aplicação.
-**Comportamento corrigido:** Ao iniciar a aplicação, a primeira ação é criar o arquivo JSON com as informações padrão do sistema. O nome do arquivo deriva do campo `name` do `package.json` (ex.: `fintrack.json`), e o arquivo é armazenado fisicamente na pasta `data`. A migração de arquivos legados `{nome-app}_{ano}.json` continua preservada.
-**RF/CA/Passos afetados:** RF-01 a RF-06 e CA-01 a CA-04 registrados em `docs/implementado/criar-json-padrao-inicializacao.md`.
-
 
 # Guia de Spec para Implementação de Features
 
