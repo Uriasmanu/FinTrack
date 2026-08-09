@@ -26,6 +26,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
+### 09/08/2026 - Feature Investimentos FII completa
+- **Problema:** Feature parcialmente implementada — faltavam funções de cálculo, dashboard, operações de compra/venda, dividendos, detalhes e calculadora de preço teto
+- **Solução:** Implementadas todas as 12 fases: calculos-fii.ts, fii-dashboard.tsx, fii-card.tsx completo, fii-operacao-form.tsx, fii-historico-operacoes.tsx, fii-dividendo-form.tsx, fii-historico-dividendos.tsx, fii-detalhes.tsx, fii-preco-teto-calc.tsx. Página Investimentos.tsx aprimorada com dashboard e abas
+- **Arquivos afetados:** `src/lib/calculos-fii.ts` (novo), `src/components/investimentos/fii-dashboard.tsx` (novo), `src/components/investimentos/fii-operacao-form.tsx` (novo), `src/components/investimentos/fii-dividendo-form.tsx` (novo), `src/components/investimentos/fii-historico-operacoes.tsx` (novo), `src/components/investimentos/fii-historico-dividendos.tsx` (novo), `src/components/investimentos/fii-detalhes.tsx` (novo), `src/components/investimentos/fii-preco-teto-calc.tsx` (novo), `src/components/investimentos/fii-form.tsx`, `src/components/investimentos/fii-card.tsx`, `src/pages/Investimentos.tsx`
+
 ### 08/08/2026 - Trocar IDs sequenciais das categorias padrão para UUIDs
 - **Problema:** 19 categorias padrão usavam IDs hardcoded (`cat-001` a `cat-019`), com ~40 referências espalhadas em 7 arquivos fonte, cada componente redefinindo suas próprias constantes
 - **Solução:** Criado arquivo `src/lib/categorias-ids.ts` com UUIDs fixos. Atualizado `categorias-default.json`. Substituídas todas as referências hardcoded. Adicionada migração automática no `server.js` para dados existentes

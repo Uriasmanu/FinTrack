@@ -32,6 +32,7 @@ const fiiSchema = z
     indexador: z.string().optional().nullable(),
     taxaAdm: z.number().min(0).optional().nullable(),
     valorPatrimonialCota: z.number().min(0.01, "VP deve ser maior que 0"),
+    precoAtualMercado: z.number().min(0.01, "Preço de mercado deve ser maior que 0"),
     taxaRetornoDesejada: z.number().min(0.01, "Taxa deve ser maior que 0"),
     observacoes: z.string().optional(),
   })
@@ -118,6 +119,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
       indexador: initialData?.indexador ?? null,
       taxaAdm: initialData?.taxaAdm ?? null,
       valorPatrimonialCota: initialData?.valorPatrimonialCota ?? 0,
+      precoAtualMercado: initialData?.precoAtualMercado ?? 0,
       taxaRetornoDesejada: initialData?.taxaRetornoDesejada ?? 0,
       observacoes: initialData?.observacoes ?? "",
     },
@@ -134,6 +136,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
         indexador: initialData?.indexador ?? null,
         taxaAdm: initialData?.taxaAdm ?? null,
         valorPatrimonialCota: initialData?.valorPatrimonialCota ?? 0,
+        precoAtualMercado: initialData?.precoAtualMercado ?? 0,
         taxaRetornoDesejada: initialData?.taxaRetornoDesejada ?? 0,
         observacoes: initialData?.observacoes ?? "",
       });
@@ -147,11 +150,12 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
       ticker: data.ticker.toUpperCase(),
       nome: data.nome,
       tipo: data.tipo,
-      segmento: data.segmento ?? null,
-      perfilRisco: data.perfilRisco ?? null,
-      indexador: data.indexador ?? null,
-      taxaAdm: data.taxaAdm ?? null,
+      segmento: (data.segmento as AtivoFii["segmento"]) ?? undefined,
+      perfilRisco: (data.perfilRisco as AtivoFii["perfilRisco"]) ?? undefined,
+      indexador: (data.indexador as AtivoFii["indexador"]) ?? undefined,
+      taxaAdm: data.taxaAdm ?? undefined,
       valorPatrimonialCota: data.valorPatrimonialCota,
+      precoAtualMercado: data.precoAtualMercado,
       taxaRetornoDesejada: data.taxaRetornoDesejada,
       observacoes: data.observacoes,
     });
@@ -313,6 +317,18 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
             />
             {errors.valorPatrimonialCota && (
               <p className="text-sm text-destructive">{errors.valorPatrimonialCota.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Preço de Mercado Atual (R$)</label>
+            <Input
+              type="number"
+              step="0.01"
+              {...register("precoAtualMercado", { valueAsNumber: true })}
+            />
+            {errors.precoAtualMercado && (
+              <p className="text-sm text-destructive">{errors.precoAtualMercado.message}</p>
             )}
           </div>
 
