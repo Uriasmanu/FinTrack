@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { readFileSync, writeFileSync, readdirSync, unlinkSync, existsSync, mkdirSync } from "fs";
+import { writeFile } from "fs/promises";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -212,7 +213,7 @@ app.get("/api/data", (_req, res) => {
 });
 
 // PUT /api/data - Salvar todos os dados
-app.put("/api/data", (req, res) => {
+app.put("/api/data", async (req, res) => {
   try {
     const dados = req.body;
     if (!dados || typeof dados !== "object") {
@@ -223,7 +224,7 @@ app.put("/api/data", (req, res) => {
     dados.operacoesFii = dados.operacoesFii ?? [];
     dados.dividendosFii = dados.dividendosFii ?? [];
 
-    writeFileSync(ARQUIVO_UNICO, JSON.stringify(dados, null, 2), "utf-8");
+    await writeFile(ARQUIVO_UNICO, JSON.stringify(dados, null, 2), "utf-8");
     res.json({ ok: true });
   } catch (erro) {
     console.error("Erro ao salvar dados:", erro);

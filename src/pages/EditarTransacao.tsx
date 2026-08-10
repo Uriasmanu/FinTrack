@@ -72,16 +72,22 @@ export function EditarTransacao() {
       const grupoTransacoes = (dados?.transacoes ?? [])
         .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
 
-      for (const t of grupoTransacoes) {
-        if (t.id !== transacaoEncontrada.id) {
-          await excluirTransacao(t.id);
-        }
-      }
+      const idsParaExcluir = new Set(
+        grupoTransacoes.filter((t) => t.id !== transacaoEncontrada.id).map((t) => t.id)
+      );
 
-      await editarTransacao(transacaoEncontrada.id, {
-        ...data,
-        grupoParcelaId: null,
+      const transacoesAtualizadas = dados!.transacoes
+        .filter((t) => !idsParaExcluir.has(t.id))
+        .map((t) =>
+          t.id === transacaoEncontrada.id
+            ? { ...t, ...data, grupoParcelaId: null }
+            : t
+        );
+
+      useFinanceStore.setState({
+        dados: { ...dados!, transacoes: transacoesAtualizadas },
       });
+      await useFinanceStore.getState().salvarEstado();
       navigate("/transacoes");
       return;
     }
@@ -97,7 +103,7 @@ export function EditarTransacao() {
       return;
     }
 
-    editarTransacao(transacaoEncontrada.id, {
+    await editarTransacao(transacaoEncontrada.id, {
       ...data,
       grupoParcelaId: transacaoEncontrada.grupoParcelaId,
     });
@@ -136,23 +142,22 @@ export function EditarTransacao() {
       const novaCategoria = novosDados.categoriaId ?? transacaoEncontrada.categoriaId;
       const novoSubtipo = novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId;
 
-      for (const t of grupoTransacoes) {
-        await editarTransacao(t.id, {
+      const idsSet = new Set(grupoTransacoes.map((t) => t.id));
+      const transacoesAtualizadas = transacoesAtuais.map((t) => {
+        if (!idsSet.has(t.id)) return t;
+        return {
+          ...t,
           valor: novoValor,
           data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
           categoriaId: novaCategoria,
           subtipoId: novoSubtipo,
-          contaId: t.contaId,
-          cartaoId: t.cartaoId,
-          tipo: t.tipo,
-          tipoRecorrencia: t.tipoRecorrencia,
-          descricao: t.descricao,
-          parcelaAtual: t.parcelaAtual,
-          totalParcelas: t.totalParcelas,
-          intervaloDias: t.intervaloDias,
-          confirmada: t.confirmada,
-        });
-      }
+        };
+      });
+
+      useFinanceStore.setState({
+        dados: { ...useFinanceStore.getState().dados!, transacoes: transacoesAtualizadas },
+      });
+      await useFinanceStore.getState().salvarEstado();
     }
 
     navigate("/transacoes");

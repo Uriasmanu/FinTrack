@@ -61,7 +61,7 @@ export function Transferencia() {
   const contaOrigemId = watch("contaOrigemId");
   const contaDestinoId = watch("contaDestinoId");
 
-  function handleTransferencia(data: TransferenciaFormData) {
+  async function handleTransferencia(data: TransferenciaFormData) {
     if (data.contaOrigemId === data.contaDestinoId) {
       alert("A conta de origem e destino devem ser diferentes.");
       return;
@@ -69,7 +69,7 @@ export function Transferencia() {
 
     const grupoId = gerarId();
 
-    adicionarTransacao({
+    await adicionarTransacao({
       tipo: "despesa",
       tipoRecorrencia: "unica",
       descricao: data.descricao || "Transferência entre contas",
@@ -86,7 +86,7 @@ export function Transferencia() {
       confirmada: true,
     });
 
-    adicionarTransacao({
+    await adicionarTransacao({
       tipo: "receita",
       tipoRecorrencia: "unica",
       descricao: data.descricao || "Transferência entre contas",

@@ -57,7 +57,7 @@ export function TransacaoForm({
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<TransacaoFormData>({
     resolver: zodResolver(transacaoSchema),
     defaultValues: {
@@ -401,8 +401,8 @@ export function TransacaoForm({
        )}
 
       <div className="flex justify-end gap-2">
-        <Button type="submit">
-          {isEditing ? "Salvar Alterações" : "Cadastrar Transação"}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Salvando..." : isEditing ? "Salvar Alterações" : "Cadastrar Transação"}
         </Button>
       </div>
     </form>

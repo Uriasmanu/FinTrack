@@ -7,16 +7,16 @@ export function NovaTransacao() {
   const navigate = useNavigate();
   const { adicionarTransacao, adicionarTransacoesRecorrentes } = useFinanceStore();
 
-  function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
+  async function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
     const dadosComGrupo = {
       ...data,
       grupoParcelaId: null,
     };
 
     if (data.tipoRecorrencia === "unica") {
-      adicionarTransacao(dadosComGrupo);
+      await adicionarTransacao(dadosComGrupo);
     } else {
-      adicionarTransacoesRecorrentes(dadosComGrupo);
+      await adicionarTransacoesRecorrentes(dadosComGrupo);
     }
     navigate("/transacoes");
   }
