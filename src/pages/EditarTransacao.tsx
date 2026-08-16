@@ -28,6 +28,7 @@ export function EditarTransacao() {
   const transacao = dados?.transacoes.find((t) => t.id === id);
   const [dialogAberto, setDialogAberto] = useState(false);
   const [dadosPendentes, setDadosPendentes] = useState<Record<string, unknown> | null>(null);
+  const [erroSalvar, setErroSalvar] = useState<string | null>(null);
 
   if (!transacao) {
     return (
@@ -41,126 +42,141 @@ export function EditarTransacao() {
   const isRecorrente = transacaoEncontrada.tipoRecorrencia === "recorrente" || transacaoEncontrada.tipoRecorrencia === "recorrente_personalizado" || transacaoEncontrada.tipoRecorrencia === "parcelado";
 
   async function handleSubmit(data: { descricao: string; valor: number; data: string; tipo: "receita" | "despesa"; categoriaId: string; subtipoId: string | null; contaId: string; cartaoId: string | null; tipoRecorrencia: "unica" | "recorrente" | "recorrente_personalizado" | "parcelado"; parcelaAtual: number; totalParcelas: number; intervaloDias: number | null; confirmada: boolean }) {
+    setErroSalvar(null);
     const mudouParaRecorrente = transacaoEncontrada.tipoRecorrencia === "unica" &&
       (data.tipoRecorrencia === "recorrente" || data.tipoRecorrencia === "recorrente_personalizado" || data.tipoRecorrencia === "parcelado");
 
-    if (mudouParaRecorrente) {
-      await excluirTransacao(transacaoEncontrada.id);
-      await adicionarTransacoesRecorrentes({
-        tipo: data.tipo,
-        tipoRecorrencia: data.tipoRecorrencia,
-        descricao: data.descricao,
-        valor: data.valor,
-        data: data.data,
-        categoriaId: data.categoriaId,
-        subtipoId: data.subtipoId,
-        contaId: data.contaId,
-        cartaoId: data.cartaoId,
-        parcelaAtual: data.parcelaAtual,
-        totalParcelas: data.totalParcelas,
-        intervaloDias: data.intervaloDias,
-        grupoParcelaId: null,
-        confirmada: data.confirmada,
-      });
-      navigate("/transacoes");
-      return;
-    }
+    try {
+      if (mudouParaRecorrente) {
+        await excluirTransacao(transacaoEncontrada.id);
+        await adicionarTransacoesRecorrentes({
+          tipo: data.tipo,
+          tipoRecorrencia: data.tipoRecorrencia,
+          descricao: data.descricao,
+          valor: data.valor,
+          data: data.data,
+          categoriaId: data.categoriaId,
+          subtipoId: data.subtipoId,
+          contaId: data.contaId,
+          cartaoId: data.cartaoId,
+          parcelaAtual: data.parcelaAtual,
+          totalParcelas: data.totalParcelas,
+          intervaloDias: data.intervaloDias,
+          grupoParcelaId: null,
+          confirmada: data.confirmada,
+        });
+        navigate("/transacoes");
+        return;
+      }
 
-    const mudouParaUnica = transacaoEncontrada.tipoRecorrencia !== "unica" && data.tipoRecorrencia === "unica";
+      const mudouParaUnica = transacaoEncontrada.tipoRecorrencia !== "unica" && data.tipoRecorrencia === "unica";
 
-    if (mudouParaUnica && transacaoEncontrada.grupoParcelaId) {
-      const grupoTransacoes = (dados?.transacoes ?? [])
-        .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
+      if (mudouParaUnica && transacaoEncontrada.grupoParcelaId) {
+        const grupoTransacoes = (dados?.transacoes ?? [])
+          .filter((t) => t.grupoParcelaId === transacaoEncontrada.grupoParcelaId);
 
-      const idsParaExcluir = new Set(
-        grupoTransacoes.filter((t) => t.id !== transacaoEncontrada.id).map((t) => t.id)
-      );
-
-      const transacoesAtualizadas = dados!.transacoes
-        .filter((t) => !idsParaExcluir.has(t.id))
-        .map((t) =>
-          t.id === transacaoEncontrada.id
-            ? { ...t, ...data, grupoParcelaId: null }
-            : t
+        const idsParaExcluir = new Set(
+          grupoTransacoes.filter((t) => t.id !== transacaoEncontrada.id).map((t) => t.id)
         );
 
-      useFinanceStore.setState({
-        dados: { ...dados!, transacoes: transacoesAtualizadas },
+        const transacoesAtualizadas = dados!.transacoes
+          .filter((t) => !idsParaExcluir.has(t.id))
+          .map((t) =>
+            t.id === transacaoEncontrada.id
+              ? { ...t, ...data, grupoParcelaId: null }
+              : t
+          );
+
+        useFinanceStore.setState({
+          dados: { ...dados!, transacoes: transacoesAtualizadas },
+        });
+        await useFinanceStore.getState().salvarEstado();
+        navigate("/transacoes");
+        return;
+      }
+
+      if (isRecorrente && (
+        data.valor !== transacaoEncontrada.valor ||
+        data.data !== transacaoEncontrada.data ||
+        data.categoriaId !== transacaoEncontrada.categoriaId ||
+        data.subtipoId !== transacaoEncontrada.subtipoId
+      )) {
+        setDadosPendentes(data as unknown as Record<string, unknown>);
+        setDialogAberto(true);
+        return;
+      }
+
+      await editarTransacao(transacaoEncontrada.id, {
+        ...data,
+        grupoParcelaId: transacaoEncontrada.grupoParcelaId,
       });
-      await useFinanceStore.getState().salvarEstado();
       navigate("/transacoes");
-      return;
+    } catch (erro) {
+      setErroSalvar(erro instanceof Error ? erro.message : "Erro ao salvar transação");
     }
-
-    if (isRecorrente && (
-      data.valor !== transacaoEncontrada.valor ||
-      data.data !== transacaoEncontrada.data ||
-      data.categoriaId !== transacaoEncontrada.categoriaId ||
-      data.subtipoId !== transacaoEncontrada.subtipoId
-    )) {
-      setDadosPendentes(data as unknown as Record<string, unknown>);
-      setDialogAberto(true);
-      return;
-    }
-
-    await editarTransacao(transacaoEncontrada.id, {
-      ...data,
-      grupoParcelaId: transacaoEncontrada.grupoParcelaId,
-    });
-    navigate("/transacoes");
   }
 
   async function editarSomenteEssa(data: Record<string, unknown>) {
-    await editarTransacao(transacaoEncontrada.id, {
-      ...(data as Parameters<typeof editarTransacao>[1]),
-      grupoParcelaId: transacaoEncontrada.grupoParcelaId,
-    });
-    navigate("/transacoes");
+    setErroSalvar(null);
+    try {
+      await editarTransacao(transacaoEncontrada.id, {
+        ...(data as Parameters<typeof editarTransacao>[1]),
+        grupoParcelaId: transacaoEncontrada.grupoParcelaId,
+      });
+      navigate("/transacoes");
+    } catch (erro) {
+      setErroSalvar(erro instanceof Error ? erro.message : "Erro ao salvar transação");
+    }
   }
 
   async function editarTodas(data: Record<string, unknown>) {
+    setErroSalvar(null);
     const novosDados = data as { valor?: number; data?: string; categoriaId?: string; subtipoId?: string | null };
     const grupoId = transacaoEncontrada.grupoParcelaId;
 
-    if (grupoId) {
-      const transacoesAtuais = useFinanceStore.getState().dados?.transacoes ?? [];
-      const grupoTransacoes = transacoesAtuais
-        .filter((t) => t.grupoParcelaId === grupoId)
-        .filter((t) => t.data >= transacaoEncontrada.data)
-        .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+    try {
+      if (grupoId) {
+        const transacoesAtuais = useFinanceStore.getState().dados?.transacoes ?? [];
+        const grupoTransacoes = transacoesAtuais
+          .filter((t) => t.grupoParcelaId === grupoId)
+          .filter((t) => t.data >= transacaoEncontrada.data)
+          .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
-      const diffDias =
-        novosDados.data && novosDados.data !== transacaoEncontrada.data
-          ? Math.round(
-              (new Date(novosDados.data + "T00:00:00").getTime() -
-                new Date(transacaoEncontrada.data + "T00:00:00").getTime()) /
-                86400000
-            )
-          : 0;
+        const diffDias =
+          novosDados.data && novosDados.data !== transacaoEncontrada.data
+            ? Math.round(
+                (new Date(novosDados.data + "T00:00:00").getTime() -
+                  new Date(transacaoEncontrada.data + "T00:00:00").getTime()) /
+                  86400000
+              )
+            : 0;
 
-      const novoValor = novosDados.valor ?? transacaoEncontrada.valor;
-      const novaCategoria = novosDados.categoriaId ?? transacaoEncontrada.categoriaId;
-      const novoSubtipo = novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId;
+        const novoValor = novosDados.valor ?? transacaoEncontrada.valor;
+        const novaCategoria = novosDados.categoriaId ?? transacaoEncontrada.categoriaId;
+        const novoSubtipo = novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId;
 
-      const idsSet = new Set(grupoTransacoes.map((t) => t.id));
-      const transacoesAtualizadas = transacoesAtuais.map((t) => {
-        if (!idsSet.has(t.id)) return t;
-        return {
-          ...t,
-          valor: novoValor,
-          data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
-          categoriaId: novaCategoria,
-          subtipoId: novoSubtipo,
-        };
-      });
+        const idsSet = new Set(grupoTransacoes.map((t) => t.id));
+        const transacoesAtualizadas = transacoesAtuais.map((t) => {
+          if (!idsSet.has(t.id)) return t;
+          return {
+            ...t,
+            valor: novoValor,
+            data: diffDias !== 0 ? adicionarDias(t.data, diffDias) : t.data,
+            categoriaId: novaCategoria,
+            subtipoId: novoSubtipo,
+          };
+        });
 
-      useFinanceStore.setState({
-        dados: { ...useFinanceStore.getState().dados!, transacoes: transacoesAtualizadas },
-      });
-      await useFinanceStore.getState().salvarEstado();
+        useFinanceStore.setState({
+          dados: { ...useFinanceStore.getState().dados!, transacoes: transacoesAtualizadas },
+        });
+        await useFinanceStore.getState().salvarEstado();
+      }
+
+      navigate("/transacoes");
+    } catch (erro) {
+      setErroSalvar(erro instanceof Error ? erro.message : "Erro ao salvar transações");
     }
-
-    navigate("/transacoes");
   }
 
   return (
@@ -174,6 +190,15 @@ export function EditarTransacao() {
           )}
         </p>
       </div>
+
+      {erroSalvar && (
+        <div className="border border-destructive bg-destructive/5 rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-destructive">Erro ao salvar</p>
+          <p className="text-sm text-muted-foreground">
+            {erroSalvar}. Suas alterações não foram persistidas.
+          </p>
+        </div>
+      )}
 
       <div className="border rounded-lg p-6">
         <TransacaoForm

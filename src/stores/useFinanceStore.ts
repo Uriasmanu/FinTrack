@@ -83,7 +83,8 @@ interface FinanceState {
 }
 
 async function salvar(state: DadosApp) {
-  await storage.salvarDados(state);
+  const ok = await storage.salvarDados(state);
+  if (!ok) throw new Error("Falha ao salvar dados no servidor");
 }
 
 function adicionarItensArray<T extends { id: string }>(
@@ -114,6 +115,17 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   inicializar: async () => {
     let dados = await storage.carregarDados();
     let houveMudanca = false;
+
+    const categoriasVistas = new Set<string>();
+    const categoriasSemDuplicatas = dados.categorias.filter((c) => {
+      if (categoriasVistas.has(c.id)) return false;
+      categoriasVistas.add(c.id);
+      return true;
+    });
+    if (categoriasSemDuplicatas.length !== dados.categorias.length) {
+      dados.categorias = categoriasSemDuplicatas;
+      houveMudanca = true;
+    }
 
     const categoriasDefault = obterCategoriasDefault();
     const categoriasExistentes = new Set(dados.categorias.map(c => c.id));
@@ -182,8 +194,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 
@@ -202,19 +215,16 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 
   salvarEstado: async () => {
     const state = get().dados;
     if (!state) return;
-    try {
-      await salvar(state);
-    } catch {
-      // erro já tratado
-    }
+    await salvar(state);
   },
 
   excluirTransacao: async (id) => {
@@ -229,8 +239,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 
@@ -261,8 +272,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 
@@ -282,8 +294,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 
@@ -303,8 +316,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ dados: novoState });
     try {
       await salvar(novoState);
-    } catch {
+    } catch (erro) {
       set({ dados: state });
+      throw erro;
     }
   },
 

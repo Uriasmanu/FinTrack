@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFinanceStore } from "@/stores/useFinanceStore";
-import { formatarMoeda, formatarData } from "@/lib/calculos";
+import { formatarMoeda, formatarData, parseValorMoeda } from "@/lib/calculos";
 import type { TipoRecorrencia } from "@/types";
 
 import {
@@ -23,7 +23,10 @@ import {
 
 const transacaoSchema = z.object({
   descricao: z.string().min(1, "Descrição é obrigatória"),
-  valor: z.number().min(0.01, "Valor deve ser maior que zero"),
+  valor: z
+    .number({ invalid_type_error: "Informe um valor válido" })
+    .finite("Informe um valor válido")
+    .min(0.01, "Valor deve ser maior que zero"),
   data: z.string().min(1, "Data é obrigatória"),
   tipo: z.enum(["receita", "despesa"]),
   categoriaId: z.string().min(1, "Categoria é obrigatória"),
@@ -151,9 +154,12 @@ export function TransacaoForm({
         <div>
           <label className="text-sm font-medium">Valor (R$)</label>
           <Input
-            type="number"
-            step="0.01"
-            {...register("valor", { valueAsNumber: true })}
+            type="text"
+            inputMode="decimal"
+            placeholder="0,00"
+            {...register("valor", {
+              setValueAs: (v) => parseValorMoeda(String(v)),
+            })}
           />
           {errors.valor && (
             <p className="text-sm text-destructive">{errors.valor.message}</p>

@@ -7,6 +7,16 @@ export function formatarMoeda(valor: number): string {
   });
 }
 
+export function parseValorMoeda(texto: string): number {
+  const limpo = String(texto ?? "").trim();
+  if (!limpo) return NaN;
+  const normalizado = limpo.includes(",")
+    ? limpo.replace(/\./g, "").replace(",", ".")
+    : limpo;
+  const numero = parseFloat(normalizado);
+  return Number.isFinite(numero) ? numero : NaN;
+}
+
 export function formatarData(data: string): string {
   const [ano, mes, dia] = data.split("-");
   return `${dia}/${mes}/${ano}`;
