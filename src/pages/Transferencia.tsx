@@ -126,7 +126,7 @@ export function Transferencia() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(handleTransferencia)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Valor (R$)</label>
                 <Input
@@ -148,7 +148,7 @@ export function Transferencia() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Conta de Origem</label>
                 <Select

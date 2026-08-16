@@ -74,7 +74,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
           value={filtros.tipo}
           onValueChange={(v) => atualizarFiltro("tipo", v)}
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -88,7 +88,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
           value={filtros.categoriaId}
           onValueChange={(v) => atualizarFiltro("categoriaId", v)}
         >
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -105,7 +105,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
           value={filtros.contaId}
           onValueChange={(v) => atualizarFiltro("contaId", v)}
         >
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -126,7 +126,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
             type="date"
             value={filtros.dataInicio}
             onChange={(e) => atualizarFiltro("dataInicio", e.target.value)}
-            className="w-[150px]"
+            className="w-full sm:w-[150px]"
           />
         </div>
 
@@ -136,7 +136,7 @@ export function Filtros({ filtros, onFiltrosChange }: FiltrosProps) {
             type="date"
             value={filtros.dataFim}
             onChange={(e) => atualizarFiltro("dataFim", e.target.value)}
-            className="w-[150px]"
+            className="w-full sm:w-[150px]"
           />
         </div>
 

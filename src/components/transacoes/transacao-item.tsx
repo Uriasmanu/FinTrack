@@ -84,10 +84,10 @@ export function TransacaoItem({
   }
 
   return (
-    <div className="flex items-center justify-between py-3 px-2 border-b last:border-b-0 hover:bg-accent/50 transition-colors duration-150 ease-in-out rounded-lg">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3 px-2 border-b last:border-b-0 hover:bg-accent/50 transition-colors duration-150 ease-in-out rounded-lg gap-2 sm:gap-0">
       <div className="flex items-center gap-3">
         <div
-          className={`flex h-10 w-10 items-center justify-center rounded-full ${
+          className={`flex h-10 w-10 items-center justify-center rounded-full shrink-0 ${
             transacao.tipo === "receita"
               ? "bg-success/10"
               : "bg-destructive/10"
@@ -113,20 +113,20 @@ export function TransacaoItem({
             </span>
           )}
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-medium">{transacao.descricao}</p>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="text-sm font-medium truncate">{transacao.descricao}</p>
             {transacao.tipoRecorrencia === "parcelado" &&
               transacao.totalParcelas > 1 && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs shrink-0">
                   {transacao.parcelaAtual}/{transacao.totalParcelas}
                 </Badge>
               )}
-            <Badge variant={tipoRecorrenciaLabel(transacao.tipoRecorrencia).variant} className="text-xs">
+            <Badge variant={tipoRecorrenciaLabel(transacao.tipoRecorrencia).variant} className="text-xs shrink-0">
               {tipoRecorrenciaLabel(transacao.tipoRecorrencia).label}
             </Badge>
             {transacao.confirmada && (
-              <Badge variant="success" className="text-xs">
+              <Badge variant="success" className="text-xs shrink-0">
                 <Check className="mr-1 h-3 w-3" />
                 Efetivada
               </Badge>
@@ -156,19 +156,21 @@ export function TransacaoItem({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <span
-          className={`font-medium ${
-            transacao.tipo === "receita" ? "text-success" : "text-destructive"
-          }`}
-        >
-          {transacao.tipo === "receita" ? "+" : "-"}
-          {formatarMoeda(transacao.valor)}
-        </span>
+      <div className="flex items-center justify-between sm:justify-end gap-3 pl-13 sm:pl-0">
+        <div className="flex items-center gap-3">
+          <span
+            className={`font-medium ${
+              transacao.tipo === "receita" ? "text-success" : "text-destructive"
+            }`}
+          >
+            {transacao.tipo === "receita" ? "+" : "-"}
+            {formatarMoeda(transacao.valor)}
+          </span>
 
-        <span className="text-sm text-muted-foreground min-w-[100px] text-right">
-          Saldo: {formatarMoeda(saldoAcumulado)}
-        </span>
+          <span className="text-sm text-muted-foreground min-w-[100px] text-right hidden sm:inline">
+            Saldo: {formatarMoeda(saldoAcumulado)}
+          </span>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">

@@ -148,7 +148,7 @@ export function FiiCard({
           </div>
         )}
 
-        <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
+        <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
           <div>
             <p className="text-muted-foreground text-xs">Preço Médio</p>
             <p className="font-medium">{formatarMoeda(ativo.precoMedioCompra)}</p>
@@ -163,7 +163,7 @@ export function FiiCard({
           </div>
         </div>
 
-        <div className="mt-2 grid grid-cols-3 gap-2 text-sm">
+        <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
           <div>
             <p className="text-muted-foreground text-xs">DY Mensal</p>
             <p className="font-medium text-success">{formatarPercentual(indicadores.dyMensal)}</p>

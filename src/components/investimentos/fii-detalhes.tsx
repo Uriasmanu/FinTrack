@@ -64,7 +64,7 @@ export function FiiDetalhes({ open, onOpenChange, ativo }: FiiDetalhesProps) {
           <p className="text-sm text-muted-foreground">{ativo.nome}</p>
         </DialogHeader>
 
-        <div className="grid grid-cols-3 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Preço Mercado</p>
             <p className="font-bold">{formatarMoeda(ativo.precoAtualMercado)}</p>
@@ -125,7 +125,7 @@ export function FiiDetalhes({ open, onOpenChange, ativo }: FiiDetalhesProps) {
         <div className="mt-4">
           {aba === "indicadores" && (
             <div className="space-y-3 text-sm">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="rounded-lg border p-3">
                   <p className="text-muted-foreground">Preço Médio</p>
                   <p className="font-medium">{formatarMoeda(ativo.precoMedioCompra)}</p>

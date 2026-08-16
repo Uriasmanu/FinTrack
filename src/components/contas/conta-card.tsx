@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, Building2, AlertTriangle } from "lucide-react";
+import { Pencil, Trash2, Building2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,9 +84,9 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border rounded-xl bg-card hover:shadow-md transition-all duration-200 ease-in-out">
+    <div className="flex items-start sm:items-center justify-between p-4 border rounded-xl bg-card hover:shadow-md transition-all duration-200 ease-in-out gap-3">
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full ${tipoCor[conta.tipo]} flex items-center justify-center`}>
+        <div className={`w-10 h-10 rounded-full ${tipoCor[conta.tipo]} flex items-center justify-center shrink-0`}>
           <Building2 className="h-5 w-5 text-white" />
         </div>
         <div>
@@ -97,27 +97,29 @@ export function ContaCard({ conta, onEditar }: ContaCardProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="text-right">
-          <p
-            className={`font-bold ${
-              saldoAtual >= 0 ? "text-success" : "text-destructive"
-            }`}
-          >
-            {formatarMoeda(saldoAtual)}
-          </p>
-          <p className="text-xs text-muted-foreground">Saldo hoje</p>
-        </div>
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+          <div className="text-right">
+            <p
+              className={`font-bold ${
+                saldoAtual >= 0 ? "text-success" : "text-destructive"
+              }`}
+            >
+              {formatarMoeda(saldoAtual)}
+            </p>
+            <p className="text-xs text-muted-foreground">Saldo hoje</p>
+          </div>
 
-        <div className="text-right">
-          <p
-            className={`text-sm font-medium ${
-              saldoMes >= 0 ? "text-success" : "text-destructive"
-            }`}
-          >
-            {formatarMoeda(saldoMes)}
-          </p>
-          <p className="text-xs text-muted-foreground">Saldo do mês</p>
+          <div className="text-right">
+            <p
+              className={`text-sm font-medium ${
+                saldoMes >= 0 ? "text-success" : "text-destructive"
+              }`}
+            >
+              {formatarMoeda(saldoMes)}
+            </p>
+            <p className="text-xs text-muted-foreground">Saldo do mês</p>
+          </div>
         </div>
 
         <DropdownMenu>

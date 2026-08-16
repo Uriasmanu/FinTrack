@@ -214,9 +214,9 @@ export function Graficos() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg shrink-0">
             {mesSelecionado + 1}
           </div>
           <div>
@@ -241,7 +241,7 @@ export function Graficos() {
 
       <div className="flex flex-wrap gap-3">
         <Select value={tipoDado} onValueChange={(v) => setTipoDado(v as TipoDado)}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -252,7 +252,7 @@ export function Graficos() {
         </Select>
 
         <Select value={contaId} onValueChange={setContaId}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Todas contas" />
           </SelectTrigger>
           <SelectContent>

@@ -64,7 +64,7 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success/10">
