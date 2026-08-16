@@ -14329,24 +14329,6 @@
       "confirmada": true
     },
     {
-      "id": "ed79ac8b-565c-4652-bc3f-7a8f42c9b4db",
-      "tipo": "receita",
-      "tipoRecorrencia": "recorrente",
-      "descricao": "Vale",
-      "valor": 600,
-      "data": "2026-09-15",
-      "categoriaId": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
-      "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
-      "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "bc2c140d-4d88-40f5-ba3b-85c278871783",
-      "intervaloDias": null,
-      "criadoEm": "2026-08-07T22:07:11.880Z",
-      "confirmada": false
-    },
-    {
       "id": "72db746d-943c-464b-b42a-8a7348b2de94",
       "tipo": "receita",
       "tipoRecorrencia": "recorrente",
@@ -14560,24 +14542,6 @@
       "grupoParcelaId": "5b2d7c0c-500a-493f-ba8a-73c4bc2fda39",
       "intervaloDias": null,
       "criadoEm": "2026-08-08T15:09:25.892Z",
-      "confirmada": false
-    },
-    {
-      "id": "652292f3-bac8-4cda-9e21-3a73c97e87c0",
-      "tipo": "despesa",
-      "tipoRecorrencia": "recorrente",
-      "descricao": "academia",
-      "valor": 100,
-      "data": "2026-09-30",
-      "categoriaId": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
-      "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
-      "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "b6b61f52-3f8b-4521-94b4-68eb46cbb8a7",
-      "intervaloDias": null,
-      "criadoEm": "2026-08-08T21:49:49.713Z",
       "confirmada": false
     },
     {
@@ -14885,24 +14849,6 @@
       "confirmada": true,
       "id": "ed5ded42-0156-48ed-a93a-d3b34dd764a6",
       "criadoEm": "2026-08-16T13:41:13.095Z"
-    },
-    {
-      "id": "1e8a50da-bfe1-49b6-867b-0a91e4088b8d",
-      "tipo": "receita",
-      "tipoRecorrencia": "recorrente",
-      "descricao": "salario",
-      "valor": 900,
-      "data": "2026-09-07",
-      "categoriaId": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
-      "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
-      "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "52c57b2e-09d5-4149-b2d6-5e8dbb2aa6cd",
-      "intervaloDias": null,
-      "criadoEm": "2026-08-16T13:44:25.838Z",
-      "confirmada": false
     },
     {
       "id": "0825d1da-a95b-45a2-84cf-fb04a6a88862",
@@ -15533,6 +15479,24 @@
       "intervaloDias": null,
       "criadoEm": "2026-08-16T13:49:22.649Z",
       "confirmada": false
+    },
+    {
+      "descricao": "recisão",
+      "valor": 1745,
+      "data": "2026-08-28",
+      "tipo": "receita",
+      "categoriaId": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": false,
+      "grupoParcelaId": null,
+      "id": "a29c7540-1aad-4e9e-8371-d963e9ca9271",
+      "criadoEm": "2026-08-16T15:47:25.170Z"
     }
   ],
   "categorias": [
