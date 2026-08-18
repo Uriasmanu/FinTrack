@@ -15,15 +15,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-
+### [aberto] form de editar e criar meta não esta trazendo de forma visivel as contas cadastradas
 ---
 
 ## Histórico de Correções
 
-### [resolvido] Metas personalizadas devem monitorar progresso por conta bancária, não por renda
-**Data:** 18/08/2026
-**Solução:** Adicionado campo `contaId` (opcional) ao tipo `Meta`. Formulário de metas personalizadas agora exibe seletor de conta bancária em vez de categorias de receita. Progresso é calculado automaticamente com base no saldo da conta selecionada via `obterSaldoConta()`.
-**Arquivos afetados:** `src/types/index.ts`, `src/components/metas/meta-form.tsx`, `src/pages/Metas.tsx`
 
 # Guia de Spec para Implementação de Features
 
