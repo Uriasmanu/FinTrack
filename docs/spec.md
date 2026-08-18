@@ -16,39 +16,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [aberto] Acordeon para metas desabilitadas na página /metas
-
-**Comportamento atual:** Todas as metas (padrão e personalizadas) são exibidas em grids planos, independentemente do estado `ativo`. Metas desabilitadas aparecem com `opacity-60` mas ocupam o mesmo espaço visual, poluindo a interface quando há muitas metas inativas.
-
-**Comportamento esperado:** Metas com `ativo === false` devem ser agrupadas em um acordeon colapsado por padrão na seção "Metas Personalizadas". Se todas as metas estiverem desabilitadas, exibir mensagem informativa com opção de expandir o acordeon para habilitar ou visualizar. A seção "Metas Padrão" NÃO deve ser afetada (mantém lógica atual). Alteração APENAS no frontend, sem modificar regras de negócio.
-
-**Escopo:** `src/pages/Metas.tsx` (seção "Metas Personalizadas"), criação de componente accordion em `src/components/ui/accordion.tsx`
-
-**Status:** ✅ Resolvido em 18/08/2026
-
-### [aberto] Tela pisca ao salvar arquivos durante desenvolvimento (HMR)
-
-**Comportamento atual:** Ao salvar qualquer arquivo do projeto, a tela de desenvolvimento (localhost) pisca/flicker momentaneamente. Isso acontece porque: (1) O plugin `@tailwindcss/vite` do Tailwind CSS v4 regenera o CSS ao detectar mudanças em classes, causando ausência temporária de estilos; (2) O `React.StrictMode` em `src/main.tsx` executa o `useEffect` de `inicializar()` duas vezes, causando flash entre ciclos de mount; (3) O plugin `@vitejs/plugin-react` (Babel) é mais lento que a variante SWC, aumentando a chance de full page reload; (4) O Zustand store monolítico (1015 linhas) dificulta o hot-swap seguro pelo Fast Refresh.
-
-**Comportamento esperado:** A transição de HMR deve ser suave, sem flicker visível. O estado da aplicação deve persistir entre atualizações de módulo.
-
-**Escopo:** `vite.config.ts`, `src/main.tsx`, `src/stores/useFinanceStore.ts` (possível divisão)
-
-**Status:** ✅ Resolvido em 18/08/2026 (parcialmente - Tailwind v4 CSS regeneration ainda pode causar flicker leve)
-
 ---
 
 ## Histórico de Correções
 
-### [resolvido] Acordeon para metas desabilitadas na página /metas
-**Data:** 18/08/2026
-**Solução:** Criado componente `AccordionItem` em `src/components/ui/collapsible.tsx` usando Radix UI Collapsible. Modificada seção "Metas Personalizadas" em `src/pages/Metas.tsx` para separar metas ativas e desabilitadas. Metas desabilitadas são exibidas em acordeon colapsado por padrão com contador. Quando todas as metas estão desabilitadas, mensagem informativa é exibida.
-**Arquivos afetados:** `src/components/ui/collapsible.tsx` (novo), `src/pages/Metas.tsx`, `src/index.css`
-
-### [resolvido] Tela pisca ao salvar arquivos durante desenvolvimento (HMR)
-**Data:** 18/08/2026
-**Solução:** (1) Trocado `@vitejs/plugin-react` (Babel) por `@vitejs/plugin-react-swc` para transforms mais rápidos e melhor suporte a HMR; (2) Adicionado guard `inicializacaoEmAndamento` no Zustand store para prevenir dupla inicialização em StrictMode.
-**Arquivos afetados:** `vite.config.ts`, `src/stores/useFinanceStore.ts`
 
 ### [aberto] as metas personalizadas ao inves de qual renda tem que pergunta de qual conta no banco ela vai monitorar o progresso
 

@@ -445,7 +445,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Status: em andamento, concluída, cancelada
 - Habilitar/Desabilitar objetivos (toggle)
 - Seleção de categorias de receita como base para cálculo
-- **Acordeon para metas desabilitadas**: metas com `ativo === false` são agrupadas em acordeon colapsado por padrão na seção "Metas Personalizadas". Quando todas as metas estão desabilitadas, mensagem informativa é exibida com opção de expandir
+- **Acordeon para metas desabilitadas**: metas com `ativo === false` são agrupadas em acordeon colapsado por padrão tanto na seção "Metas Padrão" quanto "Metas Personalizadas".
 - ✅ **Implementado**: `Metas.tsx`, `meta-form.tsx`, `meta-card.tsx`, `objetivos-personalizados.tsx`, `collapsible.tsx`
 
 ### 7. Tema Claro/Escuro ✅
