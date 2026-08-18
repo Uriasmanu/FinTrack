@@ -15739,7 +15739,8 @@
       "dataFim": "2027-01-18",
       "parcelaMensal": 500,
       "status": "em_andamento",
-      "id": "f462ec17-c0cc-4cd7-9e49-92042b2b5e99"
+      "id": "f462ec17-c0cc-4cd7-9e49-92042b2b5e99",
+      "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a"
     }
   ],
   "ativosFii": [],

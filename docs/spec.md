@@ -21,6 +21,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ## Histórico de Correções
 
+### [resolvido] 18/08/2026 — Label do tipo da conta no seletor de metas personalizadas
+**Comportamento atual:** O dropdown de contas no formulário de metas personalizadas mostrava apenas o nome do banco, sem indicar o tipo da conta.
+**Comportamento esperado:** O dropdown deve exibir "NomeBanco (Tipo)" com o tipo em português (ex: "Itaú (Corrente)", "Nubank (Poupança)").
+**Escopo:** `meta-form.tsx`
+**Ação tomada:** Adicionado mapa `labelTipoConta` com labels em português para cada `TipoConta`, e atualizado `SelectItem` para exibir `{conta.banco} ({labelTipoConta[conta.tipo]})`.
+
 # Guia de Spec para Implementação de Features
 
 > Este documento define o padrão de especificação que deve ser seguido antes de implementar qualquer feature. Ao iniciar uma tarefa, analise este guia e aplique cada seção ao contexto da feature solicitada. Sempre siga a regra do SOLID.

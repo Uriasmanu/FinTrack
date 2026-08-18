@@ -22,6 +22,14 @@ import {
 import { formatarMoeda, formatarPrazo, calcularParcelaMensal } from "@/lib/calculos";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { Checkbox } from "@/components/ui/checkbox";
+import type { TipoConta } from "@/types";
+
+const labelTipoConta: Record<TipoConta, string> = {
+  corrente: "Corrente",
+  poupanca: "Poupança",
+  investimento: "Investimento",
+  ticket: "Ticket (Mercado)",
+};
 
 const metaSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -207,7 +215,7 @@ export function MetaForm({
                 <SelectContent className="z-[60]">
                   {contas.map((conta) => (
                     <SelectItem key={conta.id} value={conta.id}>
-                      {conta.banco}
+                      {conta.banco} ({labelTipoConta[conta.tipo]})
                     </SelectItem>
                   ))}
                 </SelectContent>
