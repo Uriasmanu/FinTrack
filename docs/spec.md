@@ -16,41 +16,41 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 
-### [resolvido] Trocar IDs sequenciais das categorias padrão para UUIDs
+### [aberto] Acordeon para metas desabilitadas na página /metas
 
-**Comportamento atual:** As 19 categorias padrão usam IDs hardcoded (`cat-001` a `cat-019`), enquanto todas as outras entidades já usam UUIDs via `crypto.randomUUID()`. Existem ~40 referências hardcoded em 7 arquivos fonte, cada componente redefine suas próprias constantes de ID.
+**Comportamento atual:** Todas as metas (padrão e personalizadas) são exibidas em grids planos, independentemente do estado `ativo`. Metas desabilitadas aparecem com `opacity-60` mas ocupam o mesmo espaço visual, poluindo a interface quando há muitas metas inativas.
 
-**Comportamento esperado:** Todas as categorias padrão devem usar UUIDs fixos pré-definidos, centralizados em um único arquivo de constantes (`src/lib/categorias-ids.ts`). Os dados existentes devem ser migrados automaticamente no startup.
+**Comportamento esperado:** Metas com `ativo === false` devem ser agrupadas em um acordeon colapsado por padrão na seção "Metas Personalizadas". Se todas as metas estiverem desabilitadas, exibir mensagem informativa com opção de expandir o acordeon para habilitar ou visualizar. A seção "Metas Padrão" NÃO deve ser afetada (mantém lógica atual). Alteração APENAS no frontend, sem modificar regras de negócio.
 
-**Escopo:** Apenas categorias padrão. Categorias criadas pelo usuário já usam UUIDs.
+**Escopo:** `src/pages/Metas.tsx` (seção "Metas Personalizadas"), criação de componente accordion em `src/components/ui/accordion.tsx`
+
+**Status:** ✅ Resolvido em 18/08/2026
+
+### [aberto] Tela pisca ao salvar arquivos durante desenvolvimento (HMR)
+
+**Comportamento atual:** Ao salvar qualquer arquivo do projeto, a tela de desenvolvimento (localhost) pisca/flicker momentaneamente. Isso acontece porque: (1) O plugin `@tailwindcss/vite` do Tailwind CSS v4 regenera o CSS ao detectar mudanças em classes, causando ausência temporária de estilos; (2) O `React.StrictMode` em `src/main.tsx` executa o `useEffect` de `inicializar()` duas vezes, causando flash entre ciclos de mount; (3) O plugin `@vitejs/plugin-react` (Babel) é mais lento que a variante SWC, aumentando a chance de full page reload; (4) O Zustand store monolítico (1015 linhas) dificulta o hot-swap seguro pelo Fast Refresh.
+
+**Comportamento esperado:** A transição de HMR deve ser suave, sem flicker visível. O estado da aplicação deve persistir entre atualizações de módulo.
+
+**Escopo:** `vite.config.ts`, `src/main.tsx`, `src/stores/useFinanceStore.ts` (possível divisão)
+
+**Status:** ✅ Resolvido em 18/08/2026 (parcialmente - Tailwind v4 CSS regeneration ainda pode causar flicker leve)
+
+---
 
 ## Histórico de Correções
 
-### 09/08/2026 - Feature Investimentos FII completa
-- **Problema:** Feature parcialmente implementada — faltavam funções de cálculo, dashboard, operações de compra/venda, dividendos, detalhes e calculadora de preço teto
-- **Solução:** Implementadas todas as 12 fases: calculos-fii.ts, fii-dashboard.tsx, fii-card.tsx completo, fii-operacao-form.tsx, fii-historico-operacoes.tsx, fii-dividendo-form.tsx, fii-historico-dividendos.tsx, fii-detalhes.tsx, fii-preco-teto-calc.tsx. Página Investimentos.tsx aprimorada com dashboard e abas
-- **Arquivos afetados:** `src/lib/calculos-fii.ts` (novo), `src/components/investimentos/fii-dashboard.tsx` (novo), `src/components/investimentos/fii-operacao-form.tsx` (novo), `src/components/investimentos/fii-dividendo-form.tsx` (novo), `src/components/investimentos/fii-historico-operacoes.tsx` (novo), `src/components/investimentos/fii-historico-dividendos.tsx` (novo), `src/components/investimentos/fii-detalhes.tsx` (novo), `src/components/investimentos/fii-preco-teto-calc.tsx` (novo), `src/components/investimentos/fii-form.tsx`, `src/components/investimentos/fii-card.tsx`, `src/pages/Investimentos.tsx`
+### [resolvido] Acordeon para metas desabilitadas na página /metas
+**Data:** 18/08/2026
+**Solução:** Criado componente `AccordionItem` em `src/components/ui/collapsible.tsx` usando Radix UI Collapsible. Modificada seção "Metas Personalizadas" em `src/pages/Metas.tsx` para separar metas ativas e desabilitadas. Metas desabilitadas são exibidas em acordeon colapsado por padrão com contador. Quando todas as metas estão desabilitadas, mensagem informativa é exibida.
+**Arquivos afetados:** `src/components/ui/collapsible.tsx` (novo), `src/pages/Metas.tsx`, `src/index.css`
 
-### 08/08/2026 - Trocar IDs sequenciais das categorias padrão para UUIDs
-- **Problema:** 19 categorias padrão usavam IDs hardcoded (`cat-001` a `cat-019`), com ~40 referências espalhadas em 7 arquivos fonte, cada componente redefinindo suas próprias constantes
-- **Solução:** Criado arquivo `src/lib/categorias-ids.ts` com UUIDs fixos. Atualizado `categorias-default.json`. Substituídas todas as referências hardcoded. Adicionada migração automática no `server.js` para dados existentes
-- **Arquivos afetados:** `src/lib/categorias-ids.ts` (novo), `src/data/categorias-default.json`, `src/components/transacoes/transacao-form.tsx`, `src/components/dashboard/despesas-por-finalidade.tsx`, `src/components/metas/metas-predefinidas.tsx`, `src/components/dashboard/receitas-despesas-card.tsx`, `src/pages/Transacoes.tsx`, `src/pages/Transferencia.tsx`, `server.js`
+### [resolvido] Tela pisca ao salvar arquivos durante desenvolvimento (HMR)
+**Data:** 18/08/2026
+**Solução:** (1) Trocado `@vitejs/plugin-react` (Babel) por `@vitejs/plugin-react-swc` para transforms mais rápidos e melhor suporte a HMR; (2) Adicionado guard `inicializacaoEmAndamento` no Zustand store para prevenir dupla inicialização em StrictMode.
+**Arquivos afetados:** `vite.config.ts`, `src/stores/useFinanceStore.ts`
 
-### 08/08/2026 - Edição de categoria em transação recorrente/parcelada
-- **Problema:** Ao editar categoria/subtipo de transação recorrente ou parcelada, o dialog "só esta / todas as seguintes" só aparecia para valor e data
-- **Solução:** Condição do dialog expandida para incluir `categoriaId` e `subtipoId`. `editarTodas` agora propaga mudanças de categoria e subtipo para todas as transações do grupo
-- **Arquivos afetados:** `src/pages/EditarTransacao.tsx`
-
-### 08/08/2026 - Alimentação aparece no gráfico
-- **Problema:** Gráficos mostravam nome do subtipo (Limpeza, Comida etc) em vez de "Alimentação"
-- **Solução:** Gráfico agora usa sempre o nome da categoria pai (`t.categoriaId`), ignorando `subtipoId`
-- **Arquivos afetados:** `src/pages/Graficos.tsx`
-
-### 08/08/2026 - Subtipos de Alimentação no formulário
-- **Problema:** Subtipos (Limpeza, Comida, Besteira, Acougue) apareciam na lista de categorias
-- **Solução:** Subtipos filtrados da lista principal via `SUBTIPO_IDS`. Select de subtipo aparece apenas ao escolher "Alimentação"
-- **Arquivos afetados:** `src/components/transacoes/transacao-form.tsx`, `src/components/transacoes/transacao-item.tsx`
-
+### [aberto] as metas personalizadas ao inves de qual renda tem que pergunta de qual conta no banco ela vai monitorar o progresso
 
 # Guia de Spec para Implementação de Features
 

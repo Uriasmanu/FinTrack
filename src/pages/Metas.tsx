@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Plus, Target } from "lucide-react";
+import { Plus, Target, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MetasPredefinidas } from "@/components/metas/metas-predefinidas";
 import { MetaCard } from "@/components/metas/meta-card";
 import { MetaForm } from "@/components/metas/meta-form";
+import { AccordionItem } from "@/components/ui/collapsible";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
 export function Metas() {
@@ -12,8 +13,11 @@ export function Metas() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingOverrides, setEditingOverrides] = useState<{ valorAlvo?: number; meses?: number; percentual?: number | null } | null>(null);
   const [editingMetaName, setEditingMetaName] = useState<string | undefined>(undefined);
+  const [accordionOpen, setAccordionOpen] = useState(false);
 
-  const metasPersonalizadas = dados?.metas.filter((m) => m.tipo === "personalizado") ?? [];
+  const todasPersonalizadas = dados?.metas.filter((m) => m.tipo === "personalizado") ?? [];
+  const metasAtivas = todasPersonalizadas.filter((m) => m.ativo);
+  const metasDesabilitadas = todasPersonalizadas.filter((m) => !m.ativo);
 
   function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) {
     setEditingId(id);
@@ -90,7 +94,7 @@ export function Metas() {
 
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Metas Personalizadas</h3>
-        {metasPersonalizadas.length === 0 ? (
+        {todasPersonalizadas.length === 0 ? (
           <div className="text-center py-12">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted mx-auto mb-4">
               <Target className="h-8 w-8 text-muted-foreground" />
@@ -104,10 +108,42 @@ export function Metas() {
             </Button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {metasPersonalizadas.map((meta) => (
-              <MetaCard key={meta.id} meta={meta} onEditar={handleEditar} />
-            ))}
+          <div className="space-y-4">
+            {metasAtivas.length > 0 && (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {metasAtivas.map((meta) => (
+                  <MetaCard key={meta.id} meta={meta} onEditar={handleEditar} />
+                ))}
+              </div>
+            )}
+
+            {metasAtivas.length === 0 && metasDesabilitadas.length > 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <EyeOff className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Todas as metas estão desabilitadas.</p>
+                <p className="text-xs mt-1">Expanda abaixo para habilitar ou visualizar.</p>
+              </div>
+            )}
+
+            {metasDesabilitadas.length > 0 && (
+              <AccordionItem
+                open={accordionOpen}
+                onOpenChange={setAccordionOpen}
+                triggerLabel={
+                  <span className="flex items-center gap-2 text-muted-foreground">
+                    <Eye className="h-4 w-4" />
+                    Metas Desabilitadas
+                  </span>
+                }
+                count={metasDesabilitadas.length}
+              >
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {metasDesabilitadas.map((meta) => (
+                    <MetaCard key={meta.id} meta={meta} onEditar={handleEditar} />
+                  ))}
+                </div>
+              </AccordionItem>
+            )}
           </div>
         )}
       </div>

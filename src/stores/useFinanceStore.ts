@@ -87,6 +87,8 @@ async function salvar(state: DadosApp) {
   if (!ok) throw new Error("Falha ao salvar dados no servidor");
 }
 
+let inicializacaoEmAndamento = false;
+
 function adicionarItensArray<T extends { id: string }>(
   array: T[],
   item: T
@@ -113,6 +115,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   dados: null,
 
   inicializar: async () => {
+    if (inicializacaoEmAndamento) return;
+    inicializacaoEmAndamento = true;
+
     let dados = await storage.carregarDados();
     let houveMudanca = false;
 
@@ -157,6 +162,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       await salvar(dados);
     }
     set({ dados });
+    inicializacaoEmAndamento = false;
   },
 
   adicionarTransacao: async (dados) => {

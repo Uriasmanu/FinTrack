@@ -445,7 +445,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Status: em andamento, concluída, cancelada
 - Habilitar/Desabilitar objetivos (toggle)
 - Seleção de categorias de receita como base para cálculo
-- ✅ **Implementado**: `Metas.tsx`, `meta-form.tsx`, `meta-card.tsx`, `objetivos-personalizados.tsx`
+- **Acordeon para metas desabilitadas**: metas com `ativo === false` são agrupadas em acordeon colapsado por padrão na seção "Metas Personalizadas". Quando todas as metas estão desabilitadas, mensagem informativa é exibida com opção de expandir
+- ✅ **Implementado**: `Metas.tsx`, `meta-form.tsx`, `meta-card.tsx`, `objetivos-personalizados.tsx`, `collapsible.tsx`
 
 ### 7. Tema Claro/Escuro ✅
 
@@ -718,3 +719,6 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 08/08/2026 | Gráficos: Alimentação aparece como categoria (subtipos não substituem o nome) |
 | 08/08/2026 | Formulário: subtipos de Alimentação filtrados da lista de categorias, aparecem só ao selecionar Alimentação |
 | 07/08/2026 | Correção: Saldo total no dashboard mostra somente transações efetivadas (`confirmada: true`) |
+| 18/08/2026 | UI/UX: Acordeon para metas desabilitadas na página /metas (colapsado por padrão, contador de metas) |
+| 18/08/2026 | Dev: Troca de `@vitejs/plugin-react` (Babel) por `@vitejs/plugin-react-swc` para HMR mais rápido |
+| 18/08/2026 | Dev: Guard de inicialização no Zustand store para prevenir dupla execução em StrictMode |

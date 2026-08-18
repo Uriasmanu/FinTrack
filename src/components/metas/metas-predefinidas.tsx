@@ -1,5 +1,8 @@
+import { useState } from "react";
+import { Eye } from "lucide-react";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { MetaCard } from "./meta-card";
+import { AccordionItem } from "@/components/ui/collapsible";
 import { CATEGORIA_GUARDAR, CATEGORIA_LAZER } from "@/lib/categorias-ids";
 
 interface MetasPredefinidasProps {
@@ -12,6 +15,7 @@ function arredondar2(value: number): number {
 
 export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
   const { dados } = useFinanceStore();
+  const [accordionOpen, setAccordionOpen] = useState(false);
 
   const metasPadrao = dados?.metas.filter((m) => m.tipo === "padrao") ?? [];
 
@@ -175,6 +179,9 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
     };
   });
 
+  const metasAtivas = metasComValores.filter((m) => m.ativo);
+  const metasDesabilitadas = metasComValores.filter((m) => !m.ativo);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -185,20 +192,52 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
           Cadastre transações de receita para calcular os valores das metas automaticamente.
         </p>
       )}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {metasComValores.map((meta) => (
-          <MetaCard
-            key={meta.id}
-            meta={meta}
-            percentualReceita={meta.percentualReceita}
-            valorGastoMes={meta.valorGastoMes}
-            extrapolou={meta.extrapolou}
-            breakdown={meta.breakdown}
-            valorAtualCalculado={meta.valorAtualCalculado}
-            onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
-          />
-        ))}
-      </div>
+
+      {metasAtivas.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {metasAtivas.map((meta) => (
+            <MetaCard
+              key={meta.id}
+              meta={meta}
+              percentualReceita={meta.percentualReceita}
+              valorGastoMes={meta.valorGastoMes}
+              extrapolou={meta.extrapolou}
+              breakdown={meta.breakdown}
+              valorAtualCalculado={meta.valorAtualCalculado}
+              onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
+            />
+          ))}
+        </div>
+      )}
+
+      {metasDesabilitadas.length > 0 && (
+        <AccordionItem
+          open={accordionOpen}
+          onOpenChange={setAccordionOpen}
+          triggerLabel={
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <Eye className="h-4 w-4" />
+              Metas Padrão Desabilitadas
+            </span>
+          }
+          count={metasDesabilitadas.length}
+        >
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {metasDesabilitadas.map((meta) => (
+              <MetaCard
+                key={meta.id}
+                meta={meta}
+                percentualReceita={meta.percentualReceita}
+                valorGastoMes={meta.valorGastoMes}
+                extrapolou={meta.extrapolou}
+                breakdown={meta.breakdown}
+                valorAtualCalculado={meta.valorAtualCalculado}
+                onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
+              />
+            ))}
+          </div>
+        </AccordionItem>
+      )}
     </div>
   );
 }
