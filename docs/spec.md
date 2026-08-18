@@ -15,17 +15,11 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] form de editar e criar meta não esta trazendo de forma visivel as contas cadastradas
 ---
 
+### [aberto] Nas metas personalizadas tem que trazer no selecionavel o tipo da conta entre parenteses exemplo itauu (conta correte)
+
 ## Histórico de Correções
-
-### [resolvido] 18/08/2026 — form de editar e criar meta não traz contas visíveis
-**Comportamento atual:** O formulário de criar/editar metas personalizadas não exibia o dropdown de contas, e ao editar metas padrão mostrava o dropdown de contas ao invés dos checkboxes de categorias. Causa raiz: 3 bugs encadeados — `meta-card.tsx` usava `meta.type` (inexistente, deveria ser `meta.tipo`), `metas-predefinidas.tsx` não passava `metaType` no callback `onEditar`, e `meta-form.tsx` tinha lógica `isPersonalizado` incorreta + referência `conta.nome` (inexistente, deveria ser `conta.banco`).
-**Comportamento esperado:** Form de meta personalizada exibe dropdown de contas; form de meta padrão exibe checkboxes de categorias de receita.
-**Escopo:** `meta-card.tsx`, `metas-predefinidas.tsx`, `meta-form.tsx`
-**Ação tomada:** Corrigido `meta.type` → `meta.tipo`, adicionado `metaType="padrao"` nas chamadas de edição de metas padrão, refatorado `isPersonalizado` para verificar `metaType !== "padrao"`, corrigido `conta.nome` → `conta.banco`.
-
 
 # Guia de Spec para Implementação de Features
 
