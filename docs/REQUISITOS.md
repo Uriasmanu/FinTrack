@@ -722,3 +722,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 18/08/2026 | UI/UX: Acordeon para metas desabilitadas na página /metas (colapsado por padrão, contador de metas) |
 | 18/08/2026 | Dev: Troca de `@vitejs/plugin-react` (Babel) por `@vitejs/plugin-react-swc` para HMR mais rápido |
 | 18/08/2026 | Dev: Guard de inicialização no Zustand store para prevenir dupla execução em StrictMode |
+| 18/08/2026 | Metas: personalizadas usam conta bancária para monitorar progresso (em vez de categorias de receita) |

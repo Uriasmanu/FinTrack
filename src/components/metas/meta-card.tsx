@@ -20,7 +20,7 @@ interface MetaCardProps {
   extrapolou?: boolean | null;
   breakdown?: { nome: string; valor: number }[];
   valorAtualCalculado?: number | null;
-  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) => void;
+  onEditar: (id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string, metaType?: "padrao" | "personalizado") => void;
 }
 
 export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, breakdown, valorAtualCalculado, onEditar }: MetaCardProps) {
@@ -82,7 +82,7 @@ export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, b
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onEditar(meta.id)}>
+            <DropdownMenuItem onClick={() => onEditar(meta.id, undefined, undefined, meta.type)}>
               <Pencil className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>

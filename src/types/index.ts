@@ -69,6 +69,7 @@ export interface Meta {
   dataFim: string;
   status: StatusMeta;
   receitasBase: string[];
+  contaId?: string;
 }
 
 export interface Multiplicadores {

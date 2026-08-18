@@ -232,7 +232,7 @@ export function MetasPredefinidas({ onEditar }: MetasPredefinidasProps) {
                 extrapolou={meta.extrapolou}
                 breakdown={meta.breakdown}
                 valorAtualCalculado={meta.valorAtualCalculado}
-                onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
+              onEditar={(id) => onEditar(id, { valorAlvo: meta.valorAlvo, meses: meta.meses, percentual: meta.percentualReceita }, meta.nome)}
               />
             ))}
           </div>

@@ -12,6 +12,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatarMoeda, formatarPrazo, calcularParcelaMensal } from "@/lib/calculos";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,6 +28,7 @@ const metaSchema = z.object({
   valorAlvo: z.number().min(0.01, "Valor deve ser maior que zero"),
   meses: z.number().min(1, "Mínimo 1 mês"),
   receitasBase: z.array(z.string()).default([]),
+  contaId: z.string().optional(),
   percentual: z.number().min(0).max(100).optional(),
 });
 
@@ -31,6 +39,7 @@ interface MetaFormProps {
   onOpenChange: (open: boolean) => void;
   initialData?: { id: string } & Partial<MetaFormData>;
   metaName?: string;
+  metaType?: "padrao" | "personalizado";
   onSubmit: (data: MetaFormData) => void;
 }
 
@@ -39,12 +48,15 @@ export function MetaForm({
   onOpenChange,
   initialData,
   metaName,
+  metaType,
   onSubmit,
 }: MetaFormProps) {
   const { dados } = useFinanceStore();
   const categoriasReceita = dados?.categorias.filter((c) => c.tipo === "receita" || c.tipo === "ambos") ?? [];
+  const contas = dados?.contas ?? [];
 
   const usaPercentual = metaName === "Guardar por Mes" || metaName === "Conta Fixa" || metaName === "Lazer";
+  const isPersonalizado = metaType === "personalizado" || (!metaName && !metaType);
 
   const {
     register,
@@ -60,6 +72,7 @@ export function MetaForm({
       valorAlvo: initialData?.valorAlvo ?? 0,
       meses: initialData?.meses ?? 12,
       receitasBase: initialData?.receitasBase ?? [],
+      contaId: initialData?.contaId ?? "",
       percentual: initialData?.percentual ?? 0,
     },
   });
@@ -71,7 +84,17 @@ export function MetaForm({
         valorAlvo: initialData.valorAlvo ?? 0,
         meses: initialData.meses ?? 12,
         receitasBase: initialData.receitasBase ?? [],
+        contaId: initialData.contaId ?? "",
         percentual: initialData.percentual ?? 0,
+      });
+    } else {
+      reset({
+        nome: "",
+        valorAlvo: 0,
+        meses: 12,
+        receitasBase: [],
+        contaId: "",
+        percentual: 0,
       });
     }
   }, [initialData, reset]);
@@ -79,6 +102,7 @@ export function MetaForm({
   const valorAlvo = watch("valorAlvo");
   const meses = watch("meses");
   const receitasBase = watch("receitasBase");
+  const contaId = watch("contaId");
   const percentual = watch("percentual");
   const parcelaMensal = calcularParcelaMensal(valorAlvo || 0, meses || 1);
 
@@ -168,23 +192,50 @@ export function MetaForm({
             <p className="text-2xl font-bold">{formatarMoeda(parcelaMensal)}</p>
           </div>
 
-          <div>
-            <label className="text-sm font-medium">Receitas base para cálculo</label>
-            <p className="text-xs text-muted-foreground mb-2">
-              Selecione as categorias de receita usadas como base para calcular o valor da meta
-            </p>
-            <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2">
-              {categoriasReceita.map((cat) => (
-                <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={(receitasBase ?? []).includes(cat.id)}
-                    onCheckedChange={() => toggleReceitaBase(cat.id)}
-                  />
-                  <span className="text-sm">{cat.nome}</span>
-                </label>
-              ))}
+          {isPersonalizado ? (
+            <div>
+              <label className="text-sm font-medium">Conta bancária para monitorar</label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Selecione a conta cujo saldo será usado para calcular o progresso da meta
+              </p>
+              {contas.length > 0 ? (
+              <Select value={contaId || undefined} onValueChange={(v) => setValue("contaId", v)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione uma conta" />
+                </SelectTrigger>
+                <SelectContent className="z-[60]">
+                  {contas.map((conta) => (
+                    <SelectItem key={conta.id} value={conta.id}>
+                      {conta.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Cadastre uma conta bancária primeiro em <strong>Contas</strong>.
+                </p>
+              )}
             </div>
-          </div>
+          ) : (
+            <div>
+              <label className="text-sm font-medium">Receitas base para cálculo</label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Selecione as categorias de receita usadas como base para calcular o valor da meta
+              </p>
+              <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2">
+                {categoriasReceita.map((cat) => (
+                  <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
+                    <Checkbox
+                      checked={(receitasBase ?? []).includes(cat.id)}
+                      onCheckedChange={() => toggleReceitaBase(cat.id)}
+                    />
+                    <span className="text-sm">{cat.nome}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

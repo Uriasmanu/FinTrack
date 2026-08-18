@@ -8,31 +8,34 @@ import { AccordionItem } from "@/components/ui/collapsible";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 
 export function Metas() {
-  const { dados, adicionarMeta, editarMeta } = useFinanceStore();
+  const { dados, adicionarMeta, editarMeta, obterSaldoConta } = useFinanceStore();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingOverrides, setEditingOverrides] = useState<{ valorAlvo?: number; meses?: number; percentual?: number | null } | null>(null);
   const [editingMetaName, setEditingMetaName] = useState<string | undefined>(undefined);
+  const [editingMetaType, setEditingMetaType] = useState<"padrao" | "personalizado" | undefined>(undefined);
   const [accordionOpen, setAccordionOpen] = useState(false);
 
   const todasPersonalizadas = dados?.metas.filter((m) => m.tipo === "personalizado") ?? [];
   const metasAtivas = todasPersonalizadas.filter((m) => m.ativo);
   const metasDesabilitadas = todasPersonalizadas.filter((m) => !m.ativo);
 
-  function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string) {
+  function handleEditar(id: string, overrides?: { valorAlvo?: number; meses?: number; percentual?: number | null }, metaName?: string, metaType?: "padrao" | "personalizado") {
     setEditingId(id);
     setEditingOverrides(overrides ?? null);
     setEditingMetaName(metaName);
+    setEditingMetaType(metaType);
     setOpen(true);
   }
 
   function handleNovo() {
     setEditingId(null);
     setEditingOverrides(null);
+    setEditingMetaType("personalizado");
     setOpen(true);
   }
 
-  function handleSubmit(data: { nome: string; valorAlvo: number; meses: number; receitasBase: string[] }) {
+  function handleSubmit(data: { nome: string; valorAlvo: number; meses: number; receitasBase: string[]; contaId?: string }) {
     const hoje = new Date();
     const dataInicio = hoje.toISOString().split("T")[0];
     const dataFim = new Date(
@@ -62,6 +65,7 @@ export function Metas() {
         parcelaMensal,
         status: "em_andamento",
         receitasBase: data.receitasBase ?? [],
+        contaId: data.contaId,
       });
     }
   }
@@ -112,7 +116,12 @@ export function Metas() {
             {metasAtivas.length > 0 && (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {metasAtivas.map((meta) => (
-                  <MetaCard key={meta.id} meta={meta} onEditar={handleEditar} />
+                  <MetaCard
+                    key={meta.id}
+                    meta={meta}
+                    valorAtualCalculado={meta.contaId ? obterSaldoConta(meta.contaId) : null}
+                    onEditar={handleEditar}
+                  />
                 ))}
               </div>
             )}
@@ -139,7 +148,12 @@ export function Metas() {
               >
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {metasDesabilitadas.map((meta) => (
-                    <MetaCard key={meta.id} meta={meta} onEditar={handleEditar} />
+                    <MetaCard
+                      key={meta.id}
+                      meta={meta}
+                      valorAtualCalculado={meta.contaId ? obterSaldoConta(meta.contaId) : null}
+                      onEditar={handleEditar}
+                    />
                   ))}
                 </div>
               </AccordionItem>
@@ -150,9 +164,18 @@ export function Metas() {
 
       <MetaForm
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) {
+            setEditingId(null);
+            setEditingOverrides(null);
+            setEditingMetaName(undefined);
+            setEditingMetaType(undefined);
+          }
+        }}
         initialData={metaEditando}
         metaName={editingMetaName}
+        metaType={editingMetaType}
         onSubmit={handleSubmit}
       />
     </div>
