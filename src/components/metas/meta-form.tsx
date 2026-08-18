@@ -56,7 +56,8 @@ export function MetaForm({
   const contas = dados?.contas ?? [];
 
   const usaPercentual = metaName === "Guardar por Mes" || metaName === "Conta Fixa" || metaName === "Lazer";
-  const isPersonalizado = metaType === "personalizado" || (!metaName && !metaType);
+  const isPadrao = metaType === "padrao";
+  const isPersonalizado = !isPadrao;
 
   const {
     register,
@@ -206,7 +207,7 @@ export function MetaForm({
                 <SelectContent className="z-[60]">
                   {contas.map((conta) => (
                     <SelectItem key={conta.id} value={conta.id}>
-                      {conta.nome}
+                      {conta.banco}
                     </SelectItem>
                   ))}
                 </SelectContent>

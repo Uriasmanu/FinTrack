@@ -82,7 +82,7 @@ export function MetaCard({ meta, percentualReceita, valorGastoMes, extrapolou, b
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onEditar(meta.id, undefined, undefined, meta.type)}>
+            <DropdownMenuItem onClick={() => onEditar(meta.id, undefined, undefined, meta.tipo)}>
               <Pencil className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>
