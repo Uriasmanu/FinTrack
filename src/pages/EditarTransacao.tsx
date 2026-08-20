@@ -13,6 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { criarTransacoesRecorrentes } from "@/lib/transacoes";
 
 function adicionarDias(dataISO: string, dias: number): string {
   const d = new Date(dataISO + "T00:00:00");
@@ -99,7 +100,9 @@ export function EditarTransacao() {
         data.valor !== transacaoEncontrada.valor ||
         data.data !== transacaoEncontrada.data ||
         data.categoriaId !== transacaoEncontrada.categoriaId ||
-        data.subtipoId !== transacaoEncontrada.subtipoId
+        data.subtipoId !== transacaoEncontrada.subtipoId ||
+        data.parcelaAtual !== transacaoEncontrada.parcelaAtual ||
+        data.totalParcelas !== transacaoEncontrada.totalParcelas
       )) {
         setDadosPendentes(data as unknown as Record<string, unknown>);
         setDialogAberto(true);
@@ -131,7 +134,15 @@ export function EditarTransacao() {
 
   async function editarTodas(data: Record<string, unknown>) {
     setErroSalvar(null);
-    const novosDados = data as { valor?: number; data?: string; categoriaId?: string; subtipoId?: string | null };
+    const novosDados = data as {
+      valor?: number;
+      data?: string;
+      categoriaId?: string;
+      subtipoId?: string | null;
+      parcelaAtual?: number;
+      totalParcelas?: number;
+      descricao?: string;
+    };
     const grupoId = transacaoEncontrada.grupoParcelaId;
 
     try {
@@ -139,8 +150,50 @@ export function EditarTransacao() {
         const transacoesAtuais = useFinanceStore.getState().dados?.transacoes ?? [];
         const grupoTransacoes = transacoesAtuais
           .filter((t) => t.grupoParcelaId === grupoId)
-          .filter((t) => t.data >= transacaoEncontrada.data)
           .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+
+        const mudouParcelaAtual =
+          novosDados.parcelaAtual !== undefined &&
+          novosDados.parcelaAtual !== transacaoEncontrada.parcelaAtual;
+
+        if (mudouParcelaAtual && transacaoEncontrada.tipoRecorrencia === "parcelado") {
+          const novaParcelaAtual = novosDados.parcelaAtual!;
+          const totalParcelas = novosDados.totalParcelas ?? transacaoEncontrada.totalParcelas;
+
+          const transacoesAnteriores = grupoTransacoes.filter(
+            (t) => t.parcelaAtual < novaParcelaAtual
+          );
+
+          const idsGrupo = new Set(grupoTransacoes.map((t) => t.id));
+          const transacoesForaDoGrupo = transacoesAtuais.filter((t) => !idsGrupo.has(t.id));
+
+          const novasParcelas = criarTransacoesRecorrentes({
+            tipo: transacaoEncontrada.tipo,
+            descricao: transacaoEncontrada.descricao.replace(/\s\d+\/\d+$/, ""),
+            valor: novosDados.valor ?? transacaoEncontrada.valor,
+            dataInicio: novosDados.data ?? transacaoEncontrada.data,
+            categoriaId: novosDados.categoriaId ?? transacaoEncontrada.categoriaId,
+            subtipoId: novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId,
+            contaId: transacaoEncontrada.contaId,
+            cartaoId: transacaoEncontrada.cartaoId,
+            tipoRecorrencia: "parcelado",
+            parcelaAtual: novaParcelaAtual,
+            totalParcelas,
+          });
+
+          const transacoesFinalizadas = [...transacoesForaDoGrupo, ...transacoesAnteriores, ...novasParcelas];
+
+          useFinanceStore.setState({
+            dados: { ...useFinanceStore.getState().dados!, transacoes: transacoesFinalizadas },
+          });
+          await useFinanceStore.getState().salvarEstado();
+          navigate("/transacoes");
+          return;
+        }
+
+        const transacoesNoGrupoAposData = grupoTransacoes.filter(
+          (t) => t.data >= transacaoEncontrada.data
+        );
 
         const diffDias =
           novosDados.data && novosDados.data !== transacaoEncontrada.data
@@ -155,7 +208,7 @@ export function EditarTransacao() {
         const novaCategoria = novosDados.categoriaId ?? transacaoEncontrada.categoriaId;
         const novoSubtipo = novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId;
 
-        const idsSet = new Set(grupoTransacoes.map((t) => t.id));
+        const idsSet = new Set(transacoesNoGrupoAposData.map((t) => t.id));
         const transacoesAtualizadas = transacoesAtuais.map((t) => {
           if (!idsSet.has(t.id)) return t;
           return {
