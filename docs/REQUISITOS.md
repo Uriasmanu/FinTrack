@@ -11,15 +11,18 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 | Camada | Tecnologia | Versão |
 |---|---|---|
 | Framework | React + Vite | 19.x / 8.x |
+| Build plugin | @vitejs/plugin-react-swc | 4.x |
 | Linguagem | TypeScript | 6.x |
 | Estilização | Tailwind CSS | 4.x |
-| Componentes | shadcn/ui | latest |
+| Componentes | shadcn/ui + Radix UI | latest |
 | Navegação | React Router | 7.x |
 | Estado | Zustand | 5.x |
 | Gráficos | Recharts | 3.x |
+| Backend | Express + CORS | 5.x / 2.x |
 | Armazenamento | Arquivo JSON único servido por backend Express (`data/fintrack.json`) | — |
 | Formulários | React Hook Form + Zod | latest |
 | Ícones | lucide-react | latest |
+| Exportação | xlsx (planilhas) | 0.18.x |
 | UUID | crypto.randomUUID() | nativo |
 
 ---
@@ -30,18 +33,21 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
 {
   "name": "fintrack",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -k -n SERVER,VITE -c blue,green \"node server.js\" \"vite\"",
+    "server": "node server.js",
+    "start": "npm run build && node server.js",
     "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-alert-dialog": "^1.1.23",
     "@radix-ui/react-checkbox": "^1.3.11",
+    "@radix-ui/react-collapsible": "^1.1.20",
     "@radix-ui/react-dialog": "^1.1.23",
     "@radix-ui/react-dropdown-menu": "^2.1.24",
     "@radix-ui/react-progress": "^1.1.16",
@@ -55,6 +61,8 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
     "@tailwindcss/vite": "^4.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.28.0",
@@ -67,16 +75,21 @@ O **FinTrack** é um aplicativo web desenvolvido em **React** para controle fina
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.2",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/node": "^24.13.3",
     "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
+    "@vitejs/plugin-react-swc": "^4.3.3",
+    "concurrently": "^9.2.4",
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
@@ -181,6 +194,7 @@ fintrack/
 │   │   ├── Cartoes.tsx
 │   │   ├── Graficos.tsx
 │   │   ├── Metas.tsx
+│   │   ├── Investimentos.tsx
 │   │   ├── Exportar.tsx
 │   │   └── Configuracoes.tsx
 │   ├── components/
@@ -199,6 +213,7 @@ fintrack/
 │   │   │   ├── slider.tsx
 │   │   │   ├── switch.tsx
 │   │   │   ├── checkbox.tsx
+│   │   │   ├── collapsible.tsx
 │   │   │   ├── alert-dialog.tsx
 │   │   │   ├── delete-confirm-dialog.tsx
 │   │   │   └── error-boundary.tsx
@@ -229,10 +244,20 @@ fintrack/
 │   │   ├── cartoes/
 │   │   │   ├── cartao-form.tsx
 │   │   │   └── cartao-card.tsx
-│   │   └── metas/
-│   │       ├── meta-form.tsx
-│   │       ├── meta-card.tsx
-│   │       └── metas-predefinidas.tsx
+│   │   ├── metas/
+│   │   │   ├── meta-form.tsx
+│   │   │   ├── meta-card.tsx
+│   │   │   └── metas-predefinidas.tsx
+│   │   └── investimentos/
+│   │       ├── fii-card.tsx
+│   │       ├── fii-dashboard.tsx
+│   │       ├── fii-detalhes.tsx
+│   │       ├── fii-form.tsx
+│   │       ├── fii-dividendo-form.tsx
+│   │       ├── fii-historico-dividendos.tsx
+│   │       ├── fii-historico-operacoes.tsx
+│   │       ├── fii-operacao-form.tsx
+│   │       └── fii-preco-teto-calc.tsx
 ├── eslint.config.js
 ├── tsconfig.json
 ├── tsconfig.app.json
@@ -305,6 +330,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 |---|---|---|
 | **Única** | Transação única, sem repetição | Compra de um produto à vista |
 | **Recorrente** | Repete indefinidamente, sem prazo final | Aluguel, assinatura de streaming |
+| **Recorrente Personalizado** | Repete em intervalo customizado de dias | Entregas periódicas com frequência variável |
 | **Parcelado** | Repete por número definido de parcelas | Compra parcelada em 12x |
 
 **Transação Única:**
@@ -315,7 +341,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Repete todo mês na mesma data
 - Sem número definido de parcelas
 - Pode ser cancelada a qualquer momento
-- Campo `tipoRecorrencia`: `"unica" | "recorrente" | "parcelado"`
+- Campo `tipoRecorrencia`: `"unica" | "recorrente" | "recorrente_personalizado" | "parcelado"`
 
 **Transação Parcelada:**
 - Campo adicional: `parcelaAtual` e `totalParcelas`
@@ -448,7 +474,20 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - **Acordeon para metas desabilitadas**: metas com `ativo === false` são agrupadas em acordeon colapsado por padrão tanto na seção "Metas Padrão" quanto "Metas Personalizadas".
 - ✅ **Implementado**: `Metas.tsx`, `meta-form.tsx`, `meta-card.tsx`, `objetivos-personalizados.tsx`, `collapsible.tsx`
 
-### 7. Tema Claro/Escuro ✅
+### 7. Investimentos FII (Fundos de Investimento Imobiliário) ✅
+
+- Rota `/investimentos`, item no menu lateral
+- Abas: "Carteira" e "Dividendos"
+- Cadastro de ativos FII (ticker, nome, tipo, segmento, perfil risco, indexador, etc.)
+- Operações de compra/venda de cotas com histórico
+- Registro de dividendos com competência e data de pagamento
+- Dashboard com indicadores: P/VP, Preço Teto, DY Mensal/Anual, Yield on Cost, Lucro/Prejuízo
+- Cálculo de Preço Teto baseado em taxa de retorno desejada
+- Cards com resumo da carteira (total investido, patrimônio, dividendos recebidos)
+- Proteção contra exclusão de ativos com operações vinculadas
+- ✅ **Implementado**: `Investimentos.tsx` + 9 componentes em `components/investimentos/`
+
+### 8. Tema Claro/Escuro ✅
 
 - Toggle de tema no header com dialog de confirmação
 - Persistência no arquivo `fintrack.json` (campo `config.tema`) via `PUT /api/data`
@@ -457,15 +496,16 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Tema aplicado sem flash na inicialização
 - ✅ **Implementado**: `layout.tsx`, `header.tsx`, `index.css`, `useFinanceStore.ts` (`atualizarConfig`)
 
-### 8. Exportação de Dados ✅ (parcial)
+### 9. Exportação de Dados ✅ (parcial)
 
 - **Exportar para JSON**: download do arquivo JSON com dados do ano atual
 - **Importar JSON**: upload com validação de estrutura e dialog de confirmação
+- **Exportar para XLSX**: exportação de transações para planilha Excel (dependência `xlsx` instalada e utilizada)
 - ✅ **Implementado**: `Exportar.tsx`, `storage.ts`
 - ❌ **Não implementado**: Exportação para PDF (dependências instaladas mas não utilizadas)
-- ❌ **Não implementado**: Exportação para CSV (dependência instalada mas não utilizada)
+- ❌ **Não implementado**: Exportação para CSV (dependência `papaparse` instalada mas não utilizada)
 
-### 9. Armazenamento em Arquivo JSON ✅
+### 10. Armazenamento em Arquivo JSON ✅
 
 - Persistência física em arquivo JSON único: `data/fintrack.json` (nome derivado do `package.json`)
 - Criado automaticamente na inicialização do servidor como primeira ação, com as informações padrão do sistema
@@ -485,16 +525,18 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
     {
       "id": "uuid",
       "tipo": "receita | despesa",
-      "tipoRecorrencia": "unica | recorrente | parcelado",
+      "tipoRecorrencia": "unica | recorrente | recorrente_personalizado | parcelado",
       "descricao": "string",
       "valor": 0.00,
       "data": "YYYY-MM-DD",
       "categoriaId": "uuid",
+      "subtipoId": "uuid | null",
       "contaId": "uuid",
       "cartaoId": "uuid | null",
       "parcelaAtual": 1,
       "totalParcelas": 1,
       "grupoParcelaId": "uuid | null",
+      "intervaloDias": "number | null",
       "criadoEm": "ISO timestamp",
       "confirmada": false
     }
@@ -542,7 +584,57 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
       "dataInicio": "YYYY-MM-DD",
       "dataFim": "YYYY-MM-DD",
       "status": "em_andamento | concluida | cancelada",
-      "receitasBase": ["categoriaId1", "categoriaId2"]
+      "receitasBase": ["categoriaId1", "categoriaId2"],
+      "contaId": "uuid (opcional)"
+    }
+  ],
+  "ativosFii": [
+    {
+      "id": "uuid",
+      "ticker": "string",
+      "nome": "string",
+      "tipo": "tijolo | papel | fof | misto | fiagro | desenvolvimento",
+      "segmento": "logistico | lajes | shopping | varejo | hospitalar | educacional | hotel | agropecuario | outro (opcional)",
+      "perfilRisco": "high_grade | high_yield (opcional)",
+      "indexador": "ipca | cdi | prefixado | outro (opcional)",
+      "taxaAdm": "number (opcional)",
+      "cotasAtuais": 0,
+      "precoMedioCompra": 0.00,
+      "precoAtualMercado": 0.00,
+      "valorPatrimonialCota": 0.00,
+      "taxaRetornoDesejada": 0.00,
+      "observacoes": "string (opcional)",
+      "ativo": true,
+      "criadoEm": "ISO timestamp"
+    }
+  ],
+  "operacoesFii": [
+    {
+      "id": "uuid",
+      "ativoFiiId": "uuid",
+      "tipo": "compra | venda",
+      "data": "YYYY-MM-DD",
+      "quantidade": 0,
+      "precoUnitario": 0.00,
+      "taxaB3": "number (opcional)",
+      "corretora": "string (opcional)",
+      "observacoes": "string (opcional)",
+      "criadoEm": "ISO timestamp"
+    }
+  ],
+  "dividendosFii": [
+    {
+      "id": "uuid",
+      "ativoFiiId": "uuid",
+      "competencia": "string",
+      "dataPagamento": "YYYY-MM-DD",
+      "valorPorCota": 0.00,
+      "quantidadeCotas": 0,
+      "totalRecebido": 0.00,
+      "recorrente": true,
+      "tipo": "string (opcional)",
+      "observacoes": "string (opcional)",
+      "criadoEm": "ISO timestamp"
     }
   ],
   "config": {
@@ -577,6 +669,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | `/cartoes` | Cartoes | Gestão de cartões de crédito |
 | `/graficos` | Graficos | Visualização gráfica dos dados |
 | `/metas` | Metas | Acompanhamento de metas de economia |
+| `/investimentos` | Investimentos | Gestão de fundos imobiliários (FIIs) |
 | `/exportar` | Exportar | Exportação e importação JSON |
 | `/configuracoes` | Configuracoes | Gerenciamento de categorias |
 
@@ -723,3 +816,14 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 18/08/2026 | Dev: Troca de `@vitejs/plugin-react` (Babel) por `@vitejs/plugin-react-swc` para HMR mais rápido |
 | 18/08/2026 | Dev: Guard de inicialização no Zustand store para prevenir dupla execução em StrictMode |
 | 18/08/2026 | Metas: personalizadas usam conta bancária para monitorar progresso (em vez de categorias de receita) |
+| 20/08/2026 | Requisitos: atualização completa — alinhamento documento vs aplicação real |
+| 20/08/2026 | Stack: `@vitejs/plugin-react` substituído por `@vitejs/plugin-react-swc` (SWC para HMR mais rápido) |
+| 20/08/2026 | Stack: adicionados `express`, `cors`, `concurrently`, `@radix-ui/react-collapsible`, `xlsx` nas dependências |
+| 20/08/2026 | Funcionalidade: seção 7 — Investimentos FII (fundos imobiliários) documentada (já implementada) |
+| 20/08/2026 | Estrutura de pastas: adicionada pasta `components/investimentos/` com 9 componentes |
+| 20/08/2026 | Estrutura de dados: adicionados `ativosFii`, `operacoesFii`, `dividendosFii` ao JSON |
+| 20/08/2026 | Estrutura de dados: adicionados campos `subtipoId`, `intervaloDias`, `contaId` (metas) |
+| 20/08/2026 | Estrutura de dados: `tipoRecorrencia` inclui `recorrente_personalizado` |
+| 20/08/2026 | Rotas: adicionada `/investimentos` na tabela de rotas |
+| 20/08/2026 | Scripts: atualizados para refletir package.json real (`dev` com concurrently, `server`, `start`) |
+| 20/08/2026 | Exportação: XLSX documentado como implementado (dependência `xlsx` utilizada) |
