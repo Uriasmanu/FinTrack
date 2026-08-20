@@ -15938,6 +15938,14 @@
       "id": "ae5007ae-43da-4c98-b18e-03089670ac2a",
       "criadoEm": "2026-08-08T16:09:54.611Z",
       "atualizadoEm": "2026-08-08T16:11:16.361Z"
+    },
+    {
+      "banco": "VR",
+      "saldoInicial": 208.72,
+      "tipo": "ticket",
+      "id": "7dc93a29-17fb-4733-aec0-c9abd61095c2",
+      "criadoEm": "2026-08-20T19:05:01.557Z",
+      "atualizadoEm": "2026-08-20T19:05:01.557Z"
     }
   ],
   "cartoes": [],

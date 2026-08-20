@@ -23,6 +23,8 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Não existe -R$ 0,00, esse valor aparece no extrato de transeções, tinha que se só R$ 0,00 e verde
 
+### [aberto] O saldo da conta da categoria ticket não deve ser contabilizado em extrato, assim como acontece com a poupança
+
 ## Histórico de Correções
 
 ### 20/08/2026 - Calculadora no formulário de transações
@@ -37,6 +39,13 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 - **Solução:** Adicionada prop `initialValue` ao componente Calculator que preenche a expressão ao abrir
 - **Arquivos afetados:** `calculator.tsx`, `transacao-form.tsx`, `Transferencia.tsx`
 - **RF/CA afetados:** RF-01 a RF-08, CA-01 a CA-07
+- **Status:** Implementado
+
+### 20/08/2026 - Valor zero no extrato sem sinal de menos
+- **Problema:** Extrato mostrava "-R$ 0,00" para transações com valor zero
+- **Solução:** Quando valor é 0, exibir "R$ 0,00" em verde sem prefixo "-"
+- **Arquivos afetados:** `transacao-item.tsx`
+- **RF/CA afetados:** Novo requisito de formatação
 - **Status:** Implementado
 
 

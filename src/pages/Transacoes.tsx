@@ -77,15 +77,15 @@ export function Transacoes() {
     .filter((c) => c.tipo === "poupanca")
     .map((c) => c.id);
 
-  const saldoInicialContas = contasFiltradas
+  const saldoInicialContas = Math.round(contasFiltradas
     .reduce((acc, c) => {
       const dataCriacao = c.dataCriacao ? new Date(c.dataCriacao) : null;
       const primeiroDiaPeriodo = new Date(filtros.dataInicio || formatarDataISO(primeiroDiaMes));
       if (dataCriacao && dataCriacao > primeiroDiaPeriodo) return acc;
       return acc + (c.saldoInicial ?? 0);
-    }, 0);
+    }, 0) * 100) / 100;
 
-  const transacoesAnteriores = (dados?.transacoes ?? [])
+  const transacoesAnteriores = Math.round((dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
@@ -93,9 +93,9 @@ export function Transacoes() {
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
-    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0) * 100) / 100;
 
-  const saldoConfirmadoAnterior = (dados?.transacoes ?? [])
+  const saldoConfirmadoAnterior = Math.round((dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
@@ -104,7 +104,7 @@ export function Transacoes() {
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
-    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
+    .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0) * 100) / 100;
 
   const transacoesFiltradas = (dados?.transacoes ?? [])
     .filter((t) => {
@@ -131,13 +131,13 @@ export function Transacoes() {
     })
     .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
-  let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
-  let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
+  let saldoAcumulado = Math.round((saldoInicialContas + transacoesAnteriores) * 100) / 100;
+  let saldoConfirmado = Math.round((saldoInicialContas + saldoConfirmadoAnterior) * 100) / 100;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
     if (t.categoriaId !== CATEGORIA_GUARDAR) {
-      saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
+      saldoAcumulado = Math.round((saldoAcumulado + (t.tipo === "receita" ? t.valor : -t.valor)) * 100) / 100;
       if (t.confirmada) {
-        saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;
+        saldoConfirmado = Math.round((saldoConfirmado + (t.tipo === "receita" ? t.valor : -t.valor)) * 100) / 100;
       }
     }
     return { ...t, saldoAcumulado, saldoConfirmado };
@@ -151,7 +151,7 @@ export function Transacoes() {
     return acc;
   }, {});
 
-  let saldoAcumuladoAnterior = saldoInicialContas + transacoesAnteriores;
+  let saldoAcumuladoAnterior = Math.round((saldoInicialContas + transacoesAnteriores) * 100) / 100;
 
   return (
     <div className="space-y-6">
@@ -245,7 +245,7 @@ export function Transacoes() {
             <div className="space-y-4">
               {Object.entries(transacoesPorDia).map(([data, transacoes]) => {
                 const saldoInicioDia = saldoAcumuladoAnterior;
-                const saldoFimDia = transacoes[transacoes.length - 1].saldoAcumulado;
+                const saldoFimDia = Math.round(transacoes[transacoes.length - 1].saldoAcumulado * 100) / 100;
                 saldoAcumuladoAnterior = saldoFimDia;
                 
                 return (
@@ -259,7 +259,7 @@ export function Transacoes() {
                               ? "text-success/70"
                               : "text-destructive/70"
                           }`}>
-                            Efetivado: {formatarMoeda(transacoes[transacoes.length - 1].saldoConfirmado)}
+                            Efetivado: {formatarMoeda(Math.round(transacoes[transacoes.length - 1].saldoConfirmado * 100) / 100)}
                           </span>
                         )}
                         <span className="text-xs text-muted-foreground">
@@ -300,13 +300,13 @@ export function Transacoes() {
                       saldoAcumulado >= 0 ? "text-success" : "text-destructive"
                     }`}
                   >
-                    {formatarMoeda(saldoAcumulado)}
+                    {formatarMoeda(Math.round(saldoAcumulado * 100) / 100)}
                   </span>
                   {saldoConfirmado !== saldoAcumulado && (
                     <p className={`text-xs ${
                       saldoConfirmado >= 0 ? "text-success/70" : "text-destructive/70"
                     }`}>
-                      Efetivado: {formatarMoeda(saldoConfirmado)}
+                      Efetivado: {formatarMoeda(Math.round(saldoConfirmado * 100) / 100)}
                     </p>
                   )}
                 </div>

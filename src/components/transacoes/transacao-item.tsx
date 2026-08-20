@@ -160,10 +160,14 @@ export function TransacaoItem({
         <div className="flex items-center gap-3">
           <span
             className={`font-medium ${
-              transacao.tipo === "receita" ? "text-success" : "text-destructive"
+              transacao.valor === 0
+                ? "text-success"
+                : transacao.tipo === "receita"
+                  ? "text-success"
+                  : "text-destructive"
             }`}
           >
-            {transacao.tipo === "receita" ? "+" : "-"}
+            {transacao.valor === 0 ? "" : transacao.tipo === "receita" ? "+" : "-"}
             {formatarMoeda(transacao.valor)}
           </span>
 
