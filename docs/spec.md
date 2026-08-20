@@ -17,15 +17,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 -->
 ---
 
-### [aberto] Nas metas personalizadas tem que trazer no selecionavel o tipo da conta entre parenteses exemplo itauu (conta correte)
+
 
 ## Histórico de Correções
 
-### [resolvido] 18/08/2026 — Label do tipo da conta no seletor de metas personalizadas
-**Comportamento atual:** O dropdown de contas no formulário de metas personalizadas mostrava apenas o nome do banco, sem indicar o tipo da conta.
-**Comportamento esperado:** O dropdown deve exibir "NomeBanco (Tipo)" com o tipo em português (ex: "Itaú (Corrente)", "Nubank (Poupança)").
-**Escopo:** `meta-form.tsx`
-**Ação tomada:** Adicionado mapa `labelTipoConta` com labels em português para cada `TipoConta`, e atualizado `SelectItem` para exibir `{conta.banco} ({labelTipoConta[conta.tipo]})`.
 
 # Guia de Spec para Implementação de Features
 
