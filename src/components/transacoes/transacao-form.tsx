@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calculator } from "@/components/ui/calculator";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData, parseValorMoeda } from "@/lib/calculos";
 import type { TipoRecorrencia } from "@/types";
@@ -153,14 +154,21 @@ export function TransacaoForm({
 
         <div>
           <label className="text-sm font-medium">Valor (R$)</label>
-          <Input
-            type="text"
-            inputMode="decimal"
-            placeholder="0,00"
-            {...register("valor", {
-              setValueAs: (v) => parseValorMoeda(String(v)),
-            })}
-          />
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              inputMode="decimal"
+              placeholder="0,00"
+              className="flex-1"
+              {...register("valor", {
+                setValueAs: (v) => parseValorMoeda(String(v)),
+              })}
+            />
+            <Calculator
+              onApply={(v) => setValue("valor", v)}
+              initialValue={valor ?? 0}
+            />
+          </div>
           {errors.valor && (
             <p className="text-sm text-destructive">{errors.valor.message}</p>
           )}

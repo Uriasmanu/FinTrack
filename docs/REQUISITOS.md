@@ -203,6 +203,7 @@ fintrack/
 │   │   │   ├── card.tsx
 │   │   │   ├── input.tsx
 │   │   │   ├── badge.tsx
+│   │   │   ├── calculator.tsx
 │   │   │   ├── dialog.tsx
 │   │   │   ├── select.tsx
 │   │   │   ├── tabs.tsx
@@ -370,6 +371,15 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Quando a categoria é "Alimentação" (cat-001), "Ticket" (cat-009) ou "VA/VR" (cat-012)
 - O formulário automaticamente seleciona a conta do tipo "ticket"
 - ✅ **Implementado**: `transacao-form.tsx`
+
+#### 2.7 Calculadora no Campo de Valor ✅
+
+- Ícone de calculadora ao lado do campo de valor nos formulários
+- Operações matemáticas: +, -, *, /, parênteses
+- Resultado exibido em tempo real
+- Botão "Aplicar" preenche o campo com o resultado
+- Funciona em: criar transação, editar transferência e transferência entre contas
+- ✅ **Implementado**: `calculator.tsx`, `transacao-form.tsx`, `Transferencia.tsx`
 
 ### 3. Categorias Personalizadas ✅
 
@@ -827,3 +837,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 20/08/2026 | Rotas: adicionada `/investimentos` na tabela de rotas |
 | 20/08/2026 | Scripts: atualizados para refletir package.json real (`dev` com concurrently, `server`, `start`) |
 | 20/08/2026 | Exportação: XLSX documentado como implementado (dependência `xlsx` utilizada) |
+| 20/08/2026 | Feature: Calculadora no campo de valor (criar, editar e transferir transação) |

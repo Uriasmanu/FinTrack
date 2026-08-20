@@ -17,9 +17,27 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 -->
 ---
 
+### [aberto] Adicionar uma calculadora no formulario de transaçoes, para que quando eu for colocar o valor pode fazer a conta, deve funcionar no editar e no criar nova transações. Todos os formularios que envolvem dar valor
 
+### [aberto] Quando for editar, quando eu clicar na calculadora, tem que trazer o valor que esta no input
+
+### [aberto] Não existe -R$ 0,00, esse valor aparece no extrato de transeções, tinha que se só R$ 0,00 e verde
 
 ## Histórico de Correções
+
+### 20/08/2026 - Calculadora no formulário de transações
+- **Problema:** Usuário precisava sair do app para fazer contas ao inserir valores
+- **Solução:** Criado componente `Calculator` com operações matemáticas básicas (+, -, *, /, parênteses)
+- **Arquivos afetados:** `transacao-form.tsx`, `Transferencia.tsx`
+- **RF/CA afetados:** RF-01 a RF-08, CA-01 a CA-07
+- **Status:** Implementado
+
+### 20/08/2026 - Calculadora traz valor do input ao editar
+- **Problema:** Ao abrir calculadora em modo de edição, o campo iniciava vazio
+- **Solução:** Adicionada prop `initialValue` ao componente Calculator que preenche a expressão ao abrir
+- **Arquivos afetados:** `calculator.tsx`, `transacao-form.tsx`, `Transferencia.tsx`
+- **RF/CA afetados:** RF-01 a RF-08, CA-01 a CA-07
+- **Status:** Implementado
 
 
 # Guia de Spec para Implementação de Features

@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calculator } from "@/components/ui/calculator";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { gerarId } from "@/lib/uuid";
 import { CATEGORIA_TRANSFERENCIA, CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
@@ -129,11 +130,18 @@ export function Transferencia() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Valor (R$)</label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  {...register("valor", { valueAsNumber: true })}
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    step="0.01"
+                    className="flex-1"
+                    {...register("valor", { valueAsNumber: true })}
+                  />
+                  <Calculator
+                    onApply={(v) => setValue("valor", v)}
+                    initialValue={watch("valor") ?? 0}
+                  />
+                </div>
                 {errors.valor && (
                   <p className="text-sm text-destructive">{errors.valor.message}</p>
                 )}
