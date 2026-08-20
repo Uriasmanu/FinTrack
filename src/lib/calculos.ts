@@ -1,7 +1,8 @@
 import type { Transacao } from "@/types";
 
 export function formatarMoeda(valor: number): string {
-  return valor.toLocaleString("pt-BR", {
+  const arredondado = Math.round(valor * 100) / 100;
+  return arredondado.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });

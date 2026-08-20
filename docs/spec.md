@@ -23,8 +23,6 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 
 ### [aberto] Não existe -R$ 0,00, esse valor aparece no extrato de transeções, tinha que se só R$ 0,00 e verde
 
-### [aberto] O saldo da conta da categoria ticket não deve ser contabilizado em extrato, assim como acontece com a poupança
-
 ## Histórico de Correções
 
 ### 20/08/2026 - Calculadora no formulário de transações
@@ -46,6 +44,13 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 - **Solução:** Quando valor é 0, exibir "R$ 0,00" em verde sem prefixo "-"
 - **Arquivos afetados:** `transacao-item.tsx`
 - **RF/CA afetados:** Novo requisito de formatação
+- **Status:** Implementado
+
+### 20/08/2026 - Exclusão de contas ticket do extrato
+- **Problema:** O saldo de contas do tipo ticket era contabilizado no extrato, gerando distorção nos saldos
+- **Solução:** Aplicado o mesmo padrão de exclusão da poupança: contas ticket são excluídas do cálculo de saldo inicial, transações anteriores, saldo confirmado e lista de transações do extrato
+- **Arquivos afetados:** `Transacoes.tsx`
+- **RF/CA afetados:** Requisito de exclusão de contas ticket do extrato
 - **Status:** Implementado
 
 
