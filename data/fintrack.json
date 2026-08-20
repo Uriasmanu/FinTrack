@@ -659,7 +659,7 @@
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
       "cartaoId": null,
-      "parcelaAtual": 25,
+      "parcelaAtual": 21,
       "totalParcelas": 48,
       "grupoParcelaId": "0883ce52-5076-45f1-9183-67ec5e3d1926",
       "intervaloDias": null,
@@ -15726,7 +15726,7 @@
     },
     {
       "nome": "IPVA e licenciamento",
-      "valorAlvo": 2500,
+      "valorAlvo": 3000,
       "meses": 5,
       "receitasBase": [
         "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3"
@@ -15736,8 +15736,8 @@
       "ativo": true,
       "valorAtual": 0,
       "dataInicio": "2026-08-18",
-      "dataFim": "2027-01-18",
-      "parcelaMensal": 500,
+      "dataFim": "2027-01-20",
+      "parcelaMensal": 600,
       "status": "em_andamento",
       "id": "f462ec17-c0cc-4cd7-9e49-92042b2b5e99",
       "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a"
