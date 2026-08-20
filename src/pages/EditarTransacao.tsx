@@ -159,6 +159,13 @@ export function EditarTransacao() {
         if (mudouParcelaAtual && transacaoEncontrada.tipoRecorrencia === "parcelado") {
           const novaParcelaAtual = novosDados.parcelaAtual!;
           const totalParcelas = novosDados.totalParcelas ?? transacaoEncontrada.totalParcelas;
+          const parcelaAntiga = transacaoEncontrada.parcelaAtual;
+          const diffParcelas = novaParcelaAtual - parcelaAntiga;
+
+          const dataBase = new Date((novosDados.data ?? transacaoEncontrada.data) + "T00:00:00");
+          dataBase.setMonth(dataBase.getMonth() - (parcelaAntiga - 1));
+          dataBase.setMonth(dataBase.getMonth() + (novaParcelaAtual - 1));
+          const novaDataInicio = `${dataBase.getFullYear()}-${String(dataBase.getMonth() + 1).padStart(2, "0")}-${String(dataBase.getDate()).padStart(2, "0")}`;
 
           const transacoesAnteriores = grupoTransacoes.filter(
             (t) => t.parcelaAtual < novaParcelaAtual
@@ -171,7 +178,7 @@ export function EditarTransacao() {
             tipo: transacaoEncontrada.tipo,
             descricao: transacaoEncontrada.descricao.replace(/\s\d+\/\d+$/, ""),
             valor: novosDados.valor ?? transacaoEncontrada.valor,
-            dataInicio: novosDados.data ?? transacaoEncontrada.data,
+            dataInicio: novaDataInicio,
             categoriaId: novosDados.categoriaId ?? transacaoEncontrada.categoriaId,
             subtipoId: novosDados.subtipoId !== undefined ? novosDados.subtipoId : transacaoEncontrada.subtipoId,
             contaId: transacaoEncontrada.contaId,
