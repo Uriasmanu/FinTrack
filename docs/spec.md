@@ -16,42 +16,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 ---
-
-### [aberto] Adicionar uma calculadora no formulario de transaçoes, para que quando eu for colocar o valor pode fazer a conta, deve funcionar no editar e no criar nova transações. Todos os formularios que envolvem dar valor
-
-### [aberto] Quando for editar, quando eu clicar na calculadora, tem que trazer o valor que esta no input
-
-### [aberto] Não existe -R$ 0,00, esse valor aparece no extrato de transeções, tinha que se só R$ 0,00 e verde
+### [aberto] calculadora deve aceitar as entradas do teclado, ou seja usar os numeros e os sinais
 
 ## Histórico de Correções
-
-### 20/08/2026 - Calculadora no formulário de transações
-- **Problema:** Usuário precisava sair do app para fazer contas ao inserir valores
-- **Solução:** Criado componente `Calculator` com operações matemáticas básicas (+, -, *, /, parênteses)
-- **Arquivos afetados:** `transacao-form.tsx`, `Transferencia.tsx`
-- **RF/CA afetados:** RF-01 a RF-08, CA-01 a CA-07
-- **Status:** Implementado
-
-### 20/08/2026 - Calculadora traz valor do input ao editar
-- **Problema:** Ao abrir calculadora em modo de edição, o campo iniciava vazio
-- **Solução:** Adicionada prop `initialValue` ao componente Calculator que preenche a expressão ao abrir
-- **Arquivos afetados:** `calculator.tsx`, `transacao-form.tsx`, `Transferencia.tsx`
-- **RF/CA afetados:** RF-01 a RF-08, CA-01 a CA-07
-- **Status:** Implementado
-
-### 20/08/2026 - Valor zero no extrato sem sinal de menos
-- **Problema:** Extrato mostrava "-R$ 0,00" para transações com valor zero
-- **Solução:** Quando valor é 0, exibir "R$ 0,00" em verde sem prefixo "-"
-- **Arquivos afetados:** `transacao-item.tsx`
-- **RF/CA afetados:** Novo requisito de formatação
-- **Status:** Implementado
-
-### 20/08/2026 - Exclusão de contas ticket do extrato
-- **Problema:** O saldo de contas do tipo ticket era contabilizado no extrato, gerando distorção nos saldos
-- **Solução:** Aplicado o mesmo padrão de exclusão da poupança: contas ticket são excluídas do cálculo de saldo inicial, transações anteriores, saldo confirmado e lista de transações do extrato
-- **Arquivos afetados:** `Transacoes.tsx`
-- **RF/CA afetados:** Requisito de exclusão de contas ticket do extrato
-- **Status:** Implementado
 
 
 # Guia de Spec para Implementação de Features
