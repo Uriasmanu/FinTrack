@@ -751,6 +751,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 11 | Contas sem timestamp | Adicionados `criadoEm`/`atualizadoEm` no CRUD de contas |
 | 12 | "Editar todas as seguintes" não aplicava alteração | `editarTodas` lê estado via `getState()`, passa todos os campos, handlers com `await` |
 | 13 | Saldo dashboard incluía não efetivadas | Seletores `obterSaldoAtual`, `obterReceitasMes`, `obterDespesasMes` etc. filtram por `confirmada: true` |
+| 14 | Calculadora sem input do teclado | Adicionado `useEffect` com listener de teclado para números, operadores, parênteses, Enter, Backspace e Escape |
 
 ### Componentes não utilizados
 

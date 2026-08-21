@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Calculator as CalculatorIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -76,6 +76,40 @@ export function Calculator({ onApply, initialValue = 0 }: CalculatorProps) {
       setOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+
+      if (key >= "0" && key <= "9") {
+        e.preventDefault();
+        handleButton(key);
+      } else if (["+", "-", "*", "/"].includes(key)) {
+        e.preventDefault();
+        handleButton(key);
+      } else if (key === "(" || key === ")") {
+        e.preventDefault();
+        handleButton(key);
+      } else if (key === ".") {
+        e.preventDefault();
+        handleButton(".");
+      } else if (key === "Enter") {
+        e.preventDefault();
+        handleApply();
+      } else if (key === "Backspace") {
+        e.preventDefault();
+        handleBackspace();
+      } else if (key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, expression, handleApply, handleBackspace, handleButton]);
 
   const buttons = [
     ["7", "8", "9", "/"],

@@ -16,9 +16,14 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
 ---
-### [aberto] calculadora deve aceitar as entradas do teclado, ou seja usar os numeros e os sinais
-
 ## Histórico de Correções
+
+### [resolvido] calculadora deve aceitar as entradas do teclado, ou seja usar os numeros e os sinais
+- **Data:** 21/08/2026
+- **Solução:** Adicionado `useEffect` com listener de teclado no `window` para capturar números (0-9), operadores (+, -, *, /), parênteses, ponto decimal, Enter (aplicar), Backspace (apagar) e Escape (fechar)
+- **Arquivo afetado:** `src/components/ui/calculator.tsx`
+- **RF afetado:** RF-07 (Calculadora no Campo de Valor)
+- **CA afetado:** CA-01 a CA-06 (ver implementado/calculadora-teclado.md)
 
 
 # Guia de Spec para Implementação de Features
