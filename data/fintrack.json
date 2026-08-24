@@ -15050,7 +15050,7 @@
     },
     {
       "descricao": "recisão",
-      "valor": 1578.21,
+      "valor": 1583.21,
       "data": "2026-08-28",
       "tipo": "receita",
       "categoriaId": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
@@ -15839,6 +15839,24 @@
       "grupoParcelaId": null,
       "id": "52076e88-7ebe-451e-80ce-126b2a4c21d2",
       "criadoEm": "2026-08-24T12:45:24.561Z"
+    },
+    {
+      "descricao": "salgado",
+      "valor": 5,
+      "data": "2026-08-24",
+      "tipo": "despesa",
+      "categoriaId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "subtipoId": "f8091a20-3b4c-45e6-f708-192031425364",
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "2da1d1f8-e26e-4705-9fbc-abb00413f957",
+      "criadoEm": "2026-08-24T22:19:16.298Z"
     }
   ],
   "categorias": [

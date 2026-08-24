@@ -25,6 +25,20 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 - **RF afetado:** RF-07 (Calculadora no Campo de Valor)
 - **CA afetado:** CA-01 a CA-06 (ver implementado/calculadora-teclado.md)
 
+### [resolvido] Transação com categoria Alimentação não pode obrigar a ser conta ticket
+- **Data:** 21/08/2026
+- **Solução:** Removida lógica de auto-vinculação forçada que setava `contaId` para conta ticket ao selecionar categorias Alimentação, Ticket ou VA/VR
+- **Arquivo afetado:** `src/components/transacoes/transacao-form.tsx`
+- **RF afetado:** RF-06 (Auto-vinculação a Conta Ticket)
+- **CA afetado:** CA-01 a CA-03 (ver implementado/auto-vinculacao-ticket-correcao.md)
+
+### [resolvido] Transações de refeição não podem afetar o cálculo do saldo
+- **Data:** 21/08/2026
+- **Solução:** Transações em contas ticket agora aparecem no extrato mas não afetam o cálculo de saldo. Removido filtro que excluía ticket de `transacoesFiltradas`. Adicionada exclusão de ticket no cálculo de `saldoAcumulado` e `saldoConfirmado` em `transacoesComSaldo`
+- **Arquivo afetado:** `src/pages/Transacoes.tsx`
+- **RF afetado:** RF-02 (Extrato com Saldo)
+- **CA afetado:** CA-01 a CA-04 (ver implementado/transacao-refeicao-nao-afeta-saldo.md)
+
 
 # Guia de Spec para Implementação de Features
 

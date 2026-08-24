@@ -130,7 +130,6 @@ export function Transacoes() {
         return false;
       }
       if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
-      if (ticketIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) {
         return false;
       }
@@ -144,7 +143,7 @@ export function Transacoes() {
   let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
   let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
-    if (t.categoriaId !== CATEGORIA_GUARDAR) {
+    if (t.categoriaId !== CATEGORIA_GUARDAR && !ticketIds.includes(t.contaId)) {
       saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
       if (t.confirmada) {
         saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;

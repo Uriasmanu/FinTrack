@@ -19,7 +19,6 @@ import type { TipoRecorrencia } from "@/types";
 import {
   SUBTIPO_IDS,
   CATEGORIA_ALIMENTACAO,
-  CATEGORIAS_AUTO_TICKET,
 } from "@/lib/categorias-ids";
 
 const transacaoSchema = z.object({
@@ -104,8 +103,6 @@ export function TransacaoForm({
     return true;
   });
 
-  const contaTicket = contas.find((c) => c.tipo === "ticket");
-
   const contaSelecionada = watch("contaId");
   const dataTransacao = watch("data");
 
@@ -136,10 +133,6 @@ export function TransacaoForm({
 
   const saldoPrevistoFimDia = saldoAposTransacao + transacoesDoDia;
   const saldoNegativo = tipo === "despesa" && saldoPrevistoFimDia < 0;
-
-  if (CATEGORIAS_AUTO_TICKET.includes(categoriaId) && contaTicket && !isEditing && watch("contaId") !== contaTicket.id) {
-    setValue("contaId", contaTicket.id);
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
