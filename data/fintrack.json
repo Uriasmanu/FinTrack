@@ -15857,6 +15857,24 @@
       "grupoParcelaId": null,
       "id": "2da1d1f8-e26e-4705-9fbc-abb00413f957",
       "criadoEm": "2026-08-24T22:19:16.298Z"
+    },
+    {
+      "descricao": "mercado",
+      "valor": 21.13,
+      "data": "2026-08-25",
+      "tipo": "despesa",
+      "categoriaId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "subtipoId": "e7f80919-2a3b-44d5-e6f7-081920314253",
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "9b70e332-d934-4bee-8101-3dfda03ee24d",
+      "criadoEm": "2026-08-25T18:56:59.187Z"
     }
   ],
   "categorias": [
