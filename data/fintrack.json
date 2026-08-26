@@ -16127,6 +16127,22 @@
       "status": "em_andamento",
       "id": "f462ec17-c0cc-4cd7-9e49-92042b2b5e99",
       "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a"
+    },
+    {
+      "nome": "dividas",
+      "valorAlvo": 10000,
+      "meses": 12,
+      "receitasBase": [],
+      "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a",
+      "percentual": 0,
+      "tipo": "personalizado",
+      "ativo": true,
+      "valorAtual": 0,
+      "dataInicio": "2026-08-26",
+      "dataFim": "2027-08-26",
+      "parcelaMensal": 833.3333333333334,
+      "status": "em_andamento",
+      "id": "5b07af28-d771-490b-8fac-cb60ad027676"
     }
   ],
   "ativosFii": [],
