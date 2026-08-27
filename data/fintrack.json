@@ -15875,6 +15875,24 @@
       "grupoParcelaId": null,
       "id": "9b70e332-d934-4bee-8101-3dfda03ee24d",
       "criadoEm": "2026-08-25T18:56:59.187Z"
+    },
+    {
+      "descricao": "taro",
+      "valor": 27,
+      "data": "2026-08-27",
+      "tipo": "despesa",
+      "categoriaId": "d0e1f2a3-b4c5-4d6e-7f80-91a2b3c4d5e6",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "850850a9-28ca-4ad5-ad71-b19d27c44657",
+      "criadoEm": "2026-08-27T10:16:23.220Z"
     }
   ],
   "categorias": [
