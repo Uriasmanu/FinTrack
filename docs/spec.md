@@ -15,29 +15,9 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] Conta poupança aumenta mensaglmente conforme porcentagem de juros todo mes, quero implementar essa porcentagem, essa porcentagem pode ser definida manualmente, somente contas poupança
 ---
 ## Histórico de Correções
-
-### [resolvido] calculadora deve aceitar as entradas do teclado, ou seja usar os numeros e os sinais
-- **Data:** 21/08/2026
-- **Solução:** Adicionado `useEffect` com listener de teclado no `window` para capturar números (0-9), operadores (+, -, *, /), parênteses, ponto decimal, Enter (aplicar), Backspace (apagar) e Escape (fechar)
-- **Arquivo afetado:** `src/components/ui/calculator.tsx`
-- **RF afetado:** RF-07 (Calculadora no Campo de Valor)
-- **CA afetado:** CA-01 a CA-06 (ver implementado/calculadora-teclado.md)
-
-### [resolvido] Transação com categoria Alimentação não pode obrigar a ser conta ticket
-- **Data:** 21/08/2026
-- **Solução:** Removida lógica de auto-vinculação forçada que setava `contaId` para conta ticket ao selecionar categorias Alimentação, Ticket ou VA/VR
-- **Arquivo afetado:** `src/components/transacoes/transacao-form.tsx`
-- **RF afetado:** RF-06 (Auto-vinculação a Conta Ticket)
-- **CA afetado:** CA-01 a CA-03 (ver implementado/auto-vinculacao-ticket-correcao.md)
-
-### [resolvido] Transações de refeição não podem afetar o cálculo do saldo
-- **Data:** 21/08/2026
-- **Solução:** Transações em contas ticket agora aparecem no extrato mas não afetam o cálculo de saldo. Removido filtro que excluía ticket de `transacoesFiltradas`. Adicionada exclusão de ticket no cálculo de `saldoAcumulado` e `saldoConfirmado` em `transacoesComSaldo`
-- **Arquivo afetado:** `src/pages/Transacoes.tsx`
-- **RF afetado:** RF-02 (Extrato com Saldo)
-- **CA afetado:** CA-01 a CA-04 (ver implementado/transacao-refeicao-nao-afeta-saldo.md)
 
 
 # Guia de Spec para Implementação de Features
