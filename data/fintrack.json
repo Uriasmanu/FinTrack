@@ -14377,7 +14377,7 @@
       "parcelaAtual": 1,
       "totalParcelas": 1,
       "intervaloDias": null,
-      "confirmada": false,
+      "confirmada": true,
       "grupoParcelaId": null,
       "id": "5b18c7ca-ad20-4eb4-90a1-27433458824c",
       "criadoEm": "2026-08-16T13:40:43.845Z"
