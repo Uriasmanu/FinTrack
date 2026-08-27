@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Conta poupança aumenta mensaglmente conforme porcentagem de juros todo mes, quero implementar essa porcentagem, essa porcentagem pode ser definida manualmente, somente contas poupança
+
 ---
 ## Histórico de Correções
 
