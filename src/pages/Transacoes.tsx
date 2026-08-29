@@ -7,7 +7,6 @@ import { TransacaoItem } from "@/components/transacoes/transacao-item";
 import { Filtros, type FiltrosTransacao } from "@/components/transacoes/filtros";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda, formatarData } from "@/lib/calculos";
-import { CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
 
 const arredondar = (v: number) => Math.round(v * 100) / 100;
 
@@ -76,15 +75,16 @@ export function Transacoes() {
     .filter((c) => c.tipo !== "poupanca")
     .filter((c) => c.tipo !== "ticket");
 
+  const correnteIds = (dados?.contas ?? [])
+    .filter((c) => c.tipo === "corrente")
+    .map((c) => c.id);
+
   const poupancaIds = (dados?.contas ?? [])
     .filter((c) => c.tipo === "poupanca")
     .map((c) => c.id);
 
-  const ticketIds = (dados?.contas ?? [])
-    .filter((c) => c.tipo === "ticket")
-    .map((c) => c.id);
-
   const saldoInicialContas = contasFiltradas
+    .filter((c) => c.tipo === "corrente")
     .reduce((acc, c) => {
       const dataCriacao = c.dataCriacao ? new Date(c.dataCriacao) : null;
       const primeiroDiaPeriodo = new Date(filtros.dataInicio || formatarDataISO(primeiroDiaMes));
@@ -95,9 +95,7 @@ export function Transacoes() {
   const transacoesAnteriores = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
-      if (poupancaIds.includes(t.contaId)) return false;
-      if (ticketIds.includes(t.contaId)) return false;
-      if (t.categoriaId === CATEGORIA_GUARDAR) return false;
+      if (!correnteIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
     })
@@ -106,9 +104,7 @@ export function Transacoes() {
   const saldoConfirmadoAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
-      if (poupancaIds.includes(t.contaId)) return false;
-      if (ticketIds.includes(t.contaId)) return false;
-      if (t.categoriaId === CATEGORIA_GUARDAR) return false;
+      if (!correnteIds.includes(t.contaId)) return false;
       if (!t.confirmada) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
       return false;
@@ -143,7 +139,7 @@ export function Transacoes() {
   let saldoAcumulado = saldoInicialContas + transacoesAnteriores;
   let saldoConfirmado = saldoInicialContas + saldoConfirmadoAnterior;
   const transacoesComSaldo = transacoesFiltradas.map((t) => {
-    if (t.categoriaId !== CATEGORIA_GUARDAR && !ticketIds.includes(t.contaId)) {
+    if (correnteIds.includes(t.contaId)) {
       saldoAcumulado += t.tipo === "receita" ? t.valor : -t.valor;
       if (t.confirmada) {
         saldoConfirmado += t.tipo === "receita" ? t.valor : -t.valor;

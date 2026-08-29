@@ -15983,6 +15983,24 @@
       "grupoParcelaId": null,
       "id": "d9bb81cf-d0c1-4b13-a22d-bc5d350be3f6",
       "criadoEm": "2026-08-29T17:24:58.042Z"
+    },
+    {
+      "descricao": "luz",
+      "valor": 122.81,
+      "data": "2026-09-30",
+      "tipo": "despesa",
+      "categoriaId": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": false,
+      "grupoParcelaId": null,
+      "id": "bfab71f8-6a8f-4985-a593-a3d77f2f75a2",
+      "criadoEm": "2026-08-29T18:58:50.717Z"
     }
   ],
   "categorias": [
