@@ -95,7 +95,7 @@ export function Transacoes() {
   const transacoesAnteriores = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
-      if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
+      if (poupancaIds.includes(t.contaId)) return false;
       if (ticketIds.includes(t.contaId)) return false;
       if (t.categoriaId === CATEGORIA_GUARDAR) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) return true;
@@ -106,7 +106,7 @@ export function Transacoes() {
   const saldoConfirmadoAnterior = (dados?.transacoes ?? [])
     .filter((t) => {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) return false;
-      if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
+      if (poupancaIds.includes(t.contaId)) return false;
       if (ticketIds.includes(t.contaId)) return false;
       if (t.categoriaId === CATEGORIA_GUARDAR) return false;
       if (!t.confirmada) return false;
@@ -129,7 +129,7 @@ export function Transacoes() {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) {
         return false;
       }
-      if (poupancaIds.includes(t.contaId) && t.tipo === "despesa") return false;
+      if (poupancaIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) {
         return false;
       }
