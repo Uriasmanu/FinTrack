@@ -15,15 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Gráfico de dividendos deve ser apenas anual
-**Comportamento atual:** O gráfico mensal mostra 12 meses com investimento vs dividendos.
-**Comportamento esperado:** O gráfico deve mostrar o total anual de investido vs dividendos recebidos, facilitando a visão consolidada do ano.
-**Escopo:** fii-mensal-chart.tsx
-
-### [aberto] Falta registro de variações de dividendos mensais
-**Comportamento atual:** O campo `valorDividendoMensal` é um valor fixo. Se o dividendo muda de um mês para outro (ex: R$ 0,09 → R$ 0,10), não há registro da alteração.
-**Comportamento esperado:** Deve haver um histórico de valores de dividendos por mês, permitindo registrar variações mensais (ex: Jan/26: R$ 0,09, Fev/26: R$ 0,10, Mar/26: R$ 0,09).
-**Escopo:** types, store, formulário de dividendos, card FII, gráfico anual.
+### [aberto] Com grafico anual eu quis dizer somente os 12 meses do ano atual
 
 ---
 ## Histórico de Correções
@@ -44,6 +36,18 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Data:** 31/08/2026
 **Ação:** Adicionado campo `dataCompra` ao type `AtivoFii`, campo "Data da Compra" nos formulários de novo FII e de compra de cotas.
 **Arquivos afetados:** types/index.ts, fii-form.tsx, fii-compra-form.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
+
+### [resolvido] Gráfico de dividendos deve ser apenas anual
+**Data:** 31/08/2026
+**Ação:** Transformado gráfico de acompanhamento de mensal para anual, mostrando 5 anos (último ano atual + 4 anteriores) com total investido vs dividendos por ano.
+**Arquivos afetados:** fii-mensal-chart.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
+
+### [resolvido] Falta registro de variações de dividendos mensais
+**Data:** 31/08/2026
+**Ação:** Adicionado type `RegistroDividendoFii`, campo `historicoDividendos` ao `AtivoFii`, formulário `fii-dividendo-form.tsx` para registrar dividendos por competência, método `registrarDividendoFii` no store.
+**Arquivos afetados:** types/index.ts, fii-dividendo-form.tsx (novo), fii-card.tsx, useFinanceStore.ts, Investimentos.tsx
 **Spec:** implementado/investimentos-fii-simplificado.md
 
 
