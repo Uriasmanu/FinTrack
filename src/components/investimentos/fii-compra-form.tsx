@@ -13,6 +13,7 @@ import {
 import type { AtivoFii } from "@/types";
 
 const compraSchema = z.object({
+  data: z.string().min(1, "Data é obrigatória"),
   quantidade: z.number().min(1, "Quantidade deve ser no mínimo 1"),
   precoPago: z.number().min(0.01, "Preço deve ser maior que 0"),
 });
@@ -23,7 +24,7 @@ interface FiiCompraFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   ativo: AtivoFii;
-  onSubmit: (data: { quantidade: number; precoPago: number }) => void;
+  onSubmit: (data: { data: string; quantidade: number; precoPago: number }) => void;
 }
 
 export function FiiCompraForm({ open, onOpenChange, ativo, onSubmit }: FiiCompraFormProps) {

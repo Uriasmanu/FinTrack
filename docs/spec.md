@@ -15,8 +15,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] tem que perguta que dia foi feita a compra
+### [aberto] Falta campo de data na compra de cotas
+**Comportamento atual:** O formulário de compra de cotas só pergunta quantidade e preço pago, sem informar quando a compra foi feita.
+**Comportamento esperado:** O formulário deve perguntar também o dia da compra (data).
+**Escopo:** fii-compra-form.tsx
 
+### [aberto] PRecisa haver um registro de todas as alterações de dividendos mensais, pois um mes pode se 0,09 e outros 0,10
 ---
 ## Histórico de Correções
 
