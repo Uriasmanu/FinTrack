@@ -16710,7 +16710,20 @@
       "id": "5b07af28-d771-490b-8fac-cb60ad027676"
     }
   ],
-  "ativosFii": [],
+  "ativosFii": [
+    {
+      "ticker": "MXRF11",
+      "nome": "MXRF11",
+      "precoCota": 9.38,
+      "quantidadeCotas": 1,
+      "diaDividendo": 10,
+      "valorDividendoMensal": 0.09,
+      "observacoes": "",
+      "id": "4cec6bce-1035-4b42-ac00-385bc1b08afe",
+      "ativo": true,
+      "criadoEm": "2026-08-31T21:17:50.424Z"
+    }
+  ],
   "operacoesFii": [],
   "dividendosFii": [],
   "config": {

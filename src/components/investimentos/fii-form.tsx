@@ -11,90 +11,27 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import type { AtivoFii } from "@/types";
 import { cn } from "@/lib/cn";
 
-const fiiSchema = z
-  .object({
-    ticker: z.string().min(1, "Ticker é obrigatório").max(10),
-    nome: z.string().min(1, "Nome é obrigatório"),
-    tipo: z.enum(["tijolo", "papel", "fof", "misto", "fiagro", "desenvolvimento"]),
-    segmento: z.string().optional().nullable(),
-    perfilRisco: z.string().optional().nullable(),
-    indexador: z.string().optional().nullable(),
-    taxaAdm: z.number().min(0).optional().nullable(),
-    valorPatrimonialCota: z.number().min(0.01, "VP deve ser maior que 0"),
-    precoAtualMercado: z.number().min(0.01, "Preço de mercado deve ser maior que 0"),
-    taxaRetornoDesejada: z.number().min(0.01, "Taxa deve ser maior que 0"),
-    observacoes: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.tipo === "tijolo" || data.tipo === "fiagro") {
-        return !!data.segmento;
-      }
-      return true;
-    },
-    { message: "Segmento é obrigatório para este tipo", path: ["segmento"] }
-  )
-  .refine(
-    (data) => {
-      if (data.tipo === "papel") {
-        return !!data.perfilRisco && !!data.indexador;
-      }
-      return true;
-    },
-    { message: "Perfil de Risco e Indexador são obrigatórios para Papel", path: ["perfilRisco"] }
-  );
+const fiiSchema = z.object({
+  ticker: z.string().min(1, "Ticker é obrigatório").max(10),
+  nome: z.string().min(1, "Nome é obrigatório"),
+  precoCota: z.number().min(0.01, "Preço da cota deve ser maior que 0"),
+  quantidadeCotas: z.number().min(1, "Quantidade deve ser no mínimo 1"),
+  diaDividendo: z.number().min(1, "Dia deve ser entre 1 e 31").max(31, "Dia deve ser entre 1 e 31"),
+  valorDividendoMensal: z.number().min(0, "Valor do dividendo deve ser maior ou igual a 0"),
+  observacoes: z.string().optional(),
+});
 
 type FiiFormData = z.infer<typeof fiiSchema>;
-
-const tiposFii = [
-  { value: "tijolo", label: "Tijolo" },
-  { value: "papel", label: "Papel" },
-  { value: "fof", label: "FOF" },
-  { value: "misto", label: "Misto" },
-  { value: "fiagro", label: "Fiagro" },
-  { value: "desenvolvimento", label: "Desenvolvimento" },
-];
-
-const segmentosFii = [
-  { value: "logistico", label: "Logístico" },
-  { value: "lajes", label: "Lajes" },
-  { value: "shopping", label: "Shopping" },
-  { value: "varejo", label: "Varejo" },
-  { value: "hospitalar", label: "Hospitalar" },
-  { value: "educacional", label: "Educacional" },
-  { value: "hotel", label: "Hotel" },
-  { value: "agropecuario", label: "Agropecuário" },
-  { value: "outro", label: "Outro" },
-];
-
-const perfisRisco = [
-  { value: "high_grade", label: "High Grade" },
-  { value: "high_yield", label: "High Yield" },
-];
-
-const indexadores = [
-  { value: "ipca", label: "IPCA" },
-  { value: "cdi", label: "CDI" },
-  { value: "prefixado", label: "Prefixado" },
-  { value: "outro", label: "Outro" },
-];
 
 interface FiiFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: AtivoFii;
-  onSubmit: (data: Omit<AtivoFii, "id" | "criadoEm" | "cotasAtuais" | "precoMedioCompra" | "ativo">) => void;
+  onSubmit: (data: Omit<AtivoFii, "id" | "criadoEm" | "ativo">) => void;
 }
 
 export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormProps) {
@@ -113,14 +50,10 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
     defaultValues: {
       ticker: initialData?.ticker ?? "",
       nome: initialData?.nome ?? "",
-      tipo: initialData?.tipo ?? "tijolo",
-      segmento: initialData?.segmento ?? null,
-      perfilRisco: initialData?.perfilRisco ?? null,
-      indexador: initialData?.indexador ?? null,
-      taxaAdm: initialData?.taxaAdm ?? null,
-      valorPatrimonialCota: initialData?.valorPatrimonialCota ?? 0,
-      precoAtualMercado: initialData?.precoAtualMercado ?? 0,
-      taxaRetornoDesejada: initialData?.taxaRetornoDesejada ?? 0,
+      precoCota: initialData?.precoCota ?? 0,
+      quantidadeCotas: initialData?.quantidadeCotas ?? 1,
+      diaDividendo: initialData?.diaDividendo ?? 10,
+      valorDividendoMensal: initialData?.valorDividendoMensal ?? 0,
       observacoes: initialData?.observacoes ?? "",
     },
   });
@@ -130,41 +63,34 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
       reset({
         ticker: initialData?.ticker ?? "",
         nome: initialData?.nome ?? "",
-        tipo: initialData?.tipo ?? "tijolo",
-        segmento: initialData?.segmento ?? null,
-        perfilRisco: initialData?.perfilRisco ?? null,
-        indexador: initialData?.indexador ?? null,
-        taxaAdm: initialData?.taxaAdm ?? null,
-        valorPatrimonialCota: initialData?.valorPatrimonialCota ?? 0,
-        precoAtualMercado: initialData?.precoAtualMercado ?? 0,
-        taxaRetornoDesejada: initialData?.taxaRetornoDesejada ?? 0,
+        precoCota: initialData?.precoCota ?? 0,
+        quantidadeCotas: initialData?.quantidadeCotas ?? 1,
+        diaDividendo: initialData?.diaDividendo ?? 10,
+        valorDividendoMensal: initialData?.valorDividendoMensal ?? 0,
         observacoes: initialData?.observacoes ?? "",
       });
     }
   }, [initialData, reset, open]);
 
-  const tipo = watch("tipo");
+  const valorTotal = watch("precoCota") * watch("quantidadeCotas");
+  const dividendoMensalTotal = watch("valorDividendoMensal") * watch("quantidadeCotas");
 
   function handleFormSubmit(data: FiiFormData) {
     onSubmit({
       ticker: data.ticker.toUpperCase(),
       nome: data.nome,
-      tipo: data.tipo,
-      segmento: (data.segmento as AtivoFii["segmento"]) ?? undefined,
-      perfilRisco: (data.perfilRisco as AtivoFii["perfilRisco"]) ?? undefined,
-      indexador: (data.indexador as AtivoFii["indexador"]) ?? undefined,
-      taxaAdm: data.taxaAdm ?? undefined,
-      valorPatrimonialCota: data.valorPatrimonialCota,
-      precoAtualMercado: data.precoAtualMercado,
-      taxaRetornoDesejada: data.taxaRetornoDesejada,
+      precoCota: data.precoCota,
+      quantidadeCotas: data.quantidadeCotas,
+      diaDividendo: data.diaDividendo,
+      valorDividendoMensal: data.valorDividendoMensal,
       observacoes: data.observacoes,
     });
     reset();
     onOpenChange(false);
   }
 
-  const showSegmento = tipo === "tijolo" || tipo === "fiagro";
-  const showPapelFields = tipo === "papel";
+  const formatarMoeda = (v: number) =>
+    v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -198,151 +124,77 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
             )}
           </div>
 
-          <div>
-            <label className="text-sm font-medium">Tipo</label>
-            <Select
-              value={tipo}
-              onValueChange={(v) => {
-                setValue("tipo", v as FiiFormData["tipo"], { shouldValidate: true });
-                if (v !== "tijolo" && v !== "fiagro") {
-                  setValue("segmento", null);
-                }
-                if (v !== "papel") {
-                  setValue("perfilRisco", null);
-                  setValue("indexador", null);
-                }
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {tiposFii.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    {t.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {showSegmento && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium">Segmento</label>
-              <Select
-                value={watch("segmento") ?? ""}
-                onValueChange={(v) => setValue("segmento", v || null, { shouldValidate: true })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  {segmentosFii.map((s) => (
-                    <SelectItem key={s.value} value={s.value}>
-                      {s.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.segmento && (
-                <p className="text-sm text-destructive">{errors.segmento.message}</p>
+              <label className="text-sm font-medium">Preço da Cota (R$)</label>
+              <Input
+                type="number"
+                step="0.01"
+                {...register("precoCota", { valueAsNumber: true })}
+              />
+              {errors.precoCota && (
+                <p className="text-sm text-destructive">{errors.precoCota.message}</p>
               )}
             </div>
-          )}
+            <div>
+              <label className="text-sm font-medium">Quantidade de Cotas</label>
+              <Input
+                type="number"
+                min="1"
+                {...register("quantidadeCotas", { valueAsNumber: true })}
+              />
+              {errors.quantidadeCotas && (
+                <p className="text-sm text-destructive">{errors.quantidadeCotas.message}</p>
+              )}
+            </div>
+          </div>
 
-          {showPapelFields && (
-            <>
-              <div>
-                <label className="text-sm font-medium">Perfil de Risco</label>
-                <Select
-                  value={watch("perfilRisco") ?? ""}
-                  onValueChange={(v) => setValue("perfilRisco", v || null, { shouldValidate: true })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {perfisRisco.map((p) => (
-                      <SelectItem key={p.value} value={p.value}>
-                        {p.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.perfilRisco && (
-                  <p className="text-sm text-destructive">{errors.perfilRisco.message}</p>
-                )}
+          <div className="rounded-lg bg-muted p-3 space-y-1">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Valor Total Investido:</span>
+              <span className="font-medium">{formatarMoeda(valorTotal)}</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium">Dia do Dividendo</label>
+              <Input
+                type="number"
+                min="1"
+                max="31"
+                {...register("diaDividendo", { valueAsNumber: true })}
+              />
+              <p className="text-xs text-muted-foreground mt-1">Dia do mês que cai o dividendo</p>
+              {errors.diaDividendo && (
+                <p className="text-sm text-destructive">{errors.diaDividendo.message}</p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Dividendo por Cota (R$/mês)</label>
+              <Input
+                type="number"
+                step="0.01"
+                {...register("valorDividendoMensal", { valueAsNumber: true })}
+              />
+              {errors.valorDividendoMensal && (
+                <p className="text-sm text-destructive">{errors.valorDividendoMensal.message}</p>
+              )}
+            </div>
+          </div>
+
+          {dividendoMensalTotal > 0 && (
+            <div className="rounded-lg bg-success/10 border border-success/20 p-3 space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Dividendo Mensal Estimado:</span>
+                <span className="font-medium text-success">{formatarMoeda(dividendoMensalTotal)}</span>
               </div>
-
-              <div>
-                <label className="text-sm font-medium">Indexador</label>
-                <Select
-                  value={watch("indexador") ?? ""}
-                  onValueChange={(v) => setValue("indexador", v || null, { shouldValidate: true })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {indexadores.map((i) => (
-                      <SelectItem key={i.value} value={i.value}>
-                        {i.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.indexador && (
-                  <p className="text-sm text-destructive">{errors.indexador.message}</p>
-                )}
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Dividendo Anual Estimado:</span>
+                <span className="font-medium text-success">{formatarMoeda(dividendoMensalTotal * 12)}</span>
               </div>
-            </>
+            </div>
           )}
-
-          <div>
-            <label className="text-sm font-medium">Taxa de Administração (%)</label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register("taxaAdm", { valueAsNumber: true })}
-              placeholder="Opcional"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">Valor Patrimonial por Cota (R$)</label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register("valorPatrimonialCota", { valueAsNumber: true })}
-            />
-            {errors.valorPatrimonialCota && (
-              <p className="text-sm text-destructive">{errors.valorPatrimonialCota.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">Preço de Mercado Atual (R$)</label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register("precoAtualMercado", { valueAsNumber: true })}
-            />
-            {errors.precoAtualMercado && (
-              <p className="text-sm text-destructive">{errors.precoAtualMercado.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">Taxa de Retorno Anual Desejada (%)</label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register("taxaRetornoDesejada", { valueAsNumber: true })}
-            />
-            {errors.taxaRetornoDesejada && (
-              <p className="text-sm text-destructive">{errors.taxaRetornoDesejada.message}</p>
-            )}
-          </div>
 
           <div>
             <label className="text-sm font-medium">Observações</label>

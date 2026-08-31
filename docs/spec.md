@@ -15,20 +15,16 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Quero simplificar a aba de investimentos, pois por enquanto eu só compro FII, então, alem dos campos a baixo quero que só pergunte o valor que paguei na cota, quantas cotas e quanto rendeu de dividendo aquele mes, no caso transforme a aba de FII em uma conta, vou registrar essas informações que podem mudar mensalmente e quero um grafico para acompanhar quanto eu tenho pago e quanto eu tenho recebido mes a mes
-Novo FII
-Ticker
-Ex: HGLG11
-Nome
-Ex: CSHG Logística
-Tipo
-Tijolo
-
-Tijolo
-Segmento
+### [aberto] (nenhum problema aberto no momento)
 
 ---
 ## Histórico de Correções
+
+### [resolvido] Simplificar aba de Investimentos FII — Modelo de Conta Mensal
+**Data:** 31/08/2026
+**Ação:** Formulário simplificado para Ticker, Nome, Preço da Cota, Quantidade. Adicionados campos diaDividendo e valorDividendoMensal. Criado gráfico mensal comparativo. Removidos formulários complexos de operação/dividendo.
+**Arquivos afetados:** types/index.ts, useFinanceStore.ts, fii-form.tsx, fii-card.tsx, fii-dashboard.tsx, Investimentos.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
 
 
 # Guia de Spec para Implementação de Features

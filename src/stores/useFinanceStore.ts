@@ -8,10 +8,6 @@ import type {
   Meta,
   Config,
   AtivoFii,
-  OperacaoFii,
-  DividendoFii,
-  IndicadoresFii,
-  StatusPrecoFii,
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
@@ -58,28 +54,10 @@ interface FinanceState {
 
   // Ativos FII
   ativosFii: AtivoFii[];
-  operacoesFii: OperacaoFii[];
-  dividendosFii: DividendoFii[];
-  adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "cotasAtuais" | "precoMedioCompra" | "ativo">) => Promise<void>;
+  adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "ativo">) => Promise<void>;
   editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => Promise<void>;
   excluirAtivoFii: (id: string) => Promise<void>;
-
-  // Operações FII
-  adicionarOperacaoFii: (dados: Omit<OperacaoFii, "id" | "criadoEm">) => Promise<void>;
-  excluirOperacaoFii: (id: string) => Promise<void>;
-
-  // Dividendos FII
-  adicionarDividendoFii: (dados: Omit<DividendoFii, "id" | "criadoEm" | "totalRecebido">) => Promise<void>;
-  editarDividendoFii: (id: string, dados: Partial<DividendoFii>) => Promise<void>;
-  excluirDividendoFii: (id: string) => Promise<void>;
-
-  // Seletores FII
   obterAtivosFiiAtivos: () => AtivoFii[];
-  obterOperacoesFii: (ativoFiiId: string) => OperacaoFii[];
-  obterDividendosFii: (ativoFiiId: string) => DividendoFii[];
-  obterDividendosFiiMes: (mes: number, ano: number) => DividendoFii[];
-  obterTotalDividendosAno: (ano: number) => number;
-  obterIndicadoresFii: (ativoFiiId: string) => IndicadoresFii;
 }
 
 async function salvar(state: DadosApp) {
@@ -675,8 +653,6 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   // ==================== FII ====================
 
   ativosFii: [],
-  operacoesFii: [],
-  dividendosFii: [],
 
   adicionarAtivoFii: async (dados) => {
     const state = get().dados;
@@ -685,8 +661,6 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const novoAtivo: AtivoFii = {
       ...dados,
       id: gerarId(),
-      cotasAtuais: 0,
-      precoMedioCompra: 0,
       ativo: true,
       criadoEm: new Date().toISOString(),
     };
@@ -725,154 +699,9 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return;
 
-    const temOperacoes = state.operacoesFii.some((o) => o.ativoFiiId === id);
-    const temDividendos = state.dividendosFii.some((d) => d.ativoFiiId === id);
-
-    if (temOperacoes || temDividendos) {
-      throw new Error("Não é possível excluir ativo com operações ou dividendos vinculados");
-    }
-
     const novoState: DadosApp = {
       ...state,
       ativosFii: excluirItemArray(state.ativosFii, id),
-    };
-
-    set({ dados: novoState });
-    try {
-      await salvar(novoState);
-    } catch {
-      set({ dados: state });
-    }
-  },
-
-  adicionarOperacaoFii: async (dados) => {
-    const state = get().dados;
-    if (!state) return;
-
-    const ativo = state.ativosFii.find((a) => a.id === dados.ativoFiiId);
-    if (!ativo) throw new Error("Ativo FII não encontrado");
-
-    const novaOperacao: OperacaoFii = {
-      ...dados,
-      id: gerarId(),
-      criadoEm: new Date().toISOString(),
-    };
-
-    let novasCotasAtuais = ativo.cotasAtuais;
-    let novoPrecoMedio = ativo.precoMedioCompra;
-
-    if (dados.tipo === "compra") {
-      const custoTotal = dados.precoUnitario * dados.quantidade + (dados.taxaB3 ?? 0);
-      novasCotasAtuais = ativo.cotasAtuais + dados.quantidade;
-      novoPrecoMedio =
-        novasCotasAtuais > 0
-          ? (ativo.precoMedioCompra * ativo.cotasAtuais + custoTotal) / novasCotasAtuais
-          : 0;
-    } else {
-      if (dados.quantidade > ativo.cotasAtuais) {
-        throw new Error("Quantidade vendida maior que cotas disponíveis");
-      }
-      novasCotasAtuais = ativo.cotasAtuais - dados.quantidade;
-    }
-
-    const novosAtivos = state.ativosFii.map((a) => {
-      if (a.id !== dados.ativoFiiId) return a;
-      return {
-        ...a,
-        cotasAtuais: novasCotasAtuais,
-        precoMedioCompra: dados.tipo === "compra" ? novoPrecoMedio : a.precoMedioCompra,
-        ativo: novasCotasAtuais > 0,
-      };
-    });
-
-    const novoState: DadosApp = {
-      ...state,
-      operacoesFii: adicionarItensArray(state.operacoesFii, novaOperacao),
-      ativosFii: novosAtivos,
-    };
-
-    set({ dados: novoState });
-    try {
-      await salvar(novoState);
-    } catch {
-      set({ dados: state });
-    }
-  },
-
-  excluirOperacaoFii: async (id) => {
-    const state = get().dados;
-    if (!state) return;
-
-    const novoState: DadosApp = {
-      ...state,
-      operacoesFii: excluirItemArray(state.operacoesFii, id),
-    };
-
-    set({ dados: novoState });
-    try {
-      await salvar(novoState);
-    } catch {
-      set({ dados: state });
-    }
-  },
-
-  adicionarDividendoFii: async (dados) => {
-    const state = get().dados;
-    if (!state) return;
-
-    const novoDividendo: DividendoFii = {
-      ...dados,
-      id: gerarId(),
-      totalRecebido: dados.valorPorCota * dados.quantidadeCotas,
-      criadoEm: new Date().toISOString(),
-    };
-
-    const novoState: DadosApp = {
-      ...state,
-      dividendosFii: adicionarItensArray(state.dividendosFii, novoDividendo),
-    };
-
-    set({ dados: novoState });
-    try {
-      await salvar(novoState);
-    } catch {
-      set({ dados: state });
-    }
-  },
-
-  editarDividendoFii: async (id, dados) => {
-    const state = get().dados;
-    if (!state) return;
-
-    const dividendosAtualizados = state.dividendosFii.map((d) => {
-      if (d.id !== id) return d;
-      const atualizado = { ...d, ...dados };
-      if (dados.valorPorCota !== undefined || dados.quantidadeCotas !== undefined) {
-        atualizado.totalRecebido = atualizado.valorPorCota * atualizado.quantidadeCotas;
-      }
-      return atualizado;
-    });
-
-    const novoState: DadosApp = {
-      ...state,
-      dividendosFii: dividendosAtualizados,
-    };
-
-    set({ dados: novoState });
-    try {
-      await salvar(novoState);
-    } catch {
-      set({ dados: state });
-    }
-  },
-
-  excluirDividendoFii: async (id) => {
-    const state = get().dados;
-    if (!state) return;
-
-    const novoState: DadosApp = {
-      ...state,
-      dividendosFii: excluirItemArray(state.dividendosFii, id),
     };
 
     set({ dados: novoState });
@@ -887,135 +716,5 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return [];
     return state.ativosFii.filter((a) => a.ativo);
-  },
-
-  obterOperacoesFii: (ativoFiiId) => {
-    const state = get().dados;
-    if (!state) return [];
-    return state.operacoesFii.filter((o) => o.ativoFiiId === ativoFiiId);
-  },
-
-  obterDividendosFii: (ativoFiiId) => {
-    const state = get().dados;
-    if (!state) return [];
-    return state.dividendosFii.filter((d) => d.ativoFiiId === ativoFiiId);
-  },
-
-  obterDividendosFiiMes: (mes, ano) => {
-    const state = get().dados;
-    if (!state) return [];
-    return state.dividendosFii.filter((d) => {
-      const data = new Date(d.dataPagamento);
-      return data.getMonth() === mes && data.getFullYear() === ano;
-    });
-  },
-
-  obterTotalDividendosAno: (ano) => {
-    const state = get().dados;
-    if (!state) return 0;
-    return state.dividendosFii
-      .filter((d) => new Date(d.dataPagamento).getFullYear() === ano)
-      .reduce((total, d) => total + d.totalRecebido, 0);
-  },
-
-  obterIndicadoresFii: (ativoFiiId) => {
-    const state = get().dados;
-    if (!state) {
-      return {
-        pVp: 0,
-        precoTeto: 0,
-        dyMensal: 0,
-        dyAnual: 0,
-        yieldOnCost: 0,
-        statusPreco: "justo",
-        alertaVenda: false,
-        alertaGanhoNaoRecorrente: false,
-        lucroPrejuizoValor: 0,
-        lucroPrejuizoPercentual: 0,
-      };
-    }
-
-    const ativo = state.ativosFii.find((a) => a.id === ativoFiiId);
-    if (!ativo) {
-      return {
-        pVp: 0,
-        precoTeto: 0,
-        dyMensal: 0,
-        dyAnual: 0,
-        yieldOnCost: 0,
-        statusPreco: "justo",
-        alertaVenda: false,
-        alertaGanhoNaoRecorrente: false,
-        lucroPrejuizoValor: 0,
-        lucroPrejuizoPercentual: 0,
-      };
-    }
-
-    const dividendosAtivo = state.dividendosFii.filter((d) => d.ativoFiiId === ativoFiiId);
-    const ultimos12Meses = dividendosAtivo.filter((d) => {
-      const data = new Date(d.dataPagamento);
-      const agora = new Date();
-      const hace12Meses = new Date();
-      hace12Meses.setMonth(hace12Meses.getMonth() - 12);
-      return data >= hace12Meses && data <= agora;
-    });
-
-    const totalDividendos12Meses = ultimos12Meses.reduce((acc, d) => acc + d.totalRecebido, 0);
-    const dividendosMesAtual = dividendosAtivo.filter((d) => {
-      const data = new Date(d.dataPagamento);
-      const agora = new Date();
-      return data.getMonth() === agora.getMonth() && data.getFullYear() === agora.getFullYear();
-    });
-    const dividendosMesAtualTotal = dividendosMesAtual.reduce((acc, d) => acc + d.totalRecebido, 0);
-
-    const pVp = ativo.valorPatrimonialCota > 0
-      ? ativo.precoAtualMercado / ativo.valorPatrimonialCota
-      : 0;
-
-    const precoTeto = ativo.valorPatrimonialCota * 1.0;
-
-    const dyMensal = ativo.precoAtualMercado > 0
-      ? (dividendosMesAtualTotal / ativo.precoAtualMercado) * 100
-      : 0;
-
-    const dyAnual = ativo.precoAtualMercado > 0
-      ? (totalDividendos12Meses / ativo.precoAtualMercado) * 100
-      : 0;
-
-    const yieldOnCost = ativo.precoMedioCompra > 0
-      ? (totalDividendos12Meses / ativo.precoMedioCompra) * 100
-      : 0;
-
-    let statusPreco: StatusPrecoFii = "justo";
-    if (pVp < 0.9) statusPreco = "desconto";
-    else if (pVp <= 1.05) statusPreco = "justo";
-    else if (pVp <= 1.2) statusPreco = "agio_moderado";
-    else statusPreco = "agio_excessivo";
-
-    const alertaVenda = pVp > 1.2 || dyAnual < 6;
-
-    const ganhosNaoRecorrentes = dividendosAtivo.filter((d) => !d.recorrente);
-    const alertaGanhoNaoRecorrente = ganhosNaoRecorrentes.length > 0;
-
-    const lucroPrejuizoValor = ativo.cotasAtuais > 0
-      ? (ativo.precoAtualMercado - ativo.precoMedioCompra) * ativo.cotasAtuais
-      : 0;
-
-    const lucroPrejuizoPercentual = ativo.precoMedioCompra > 0
-      ? ((ativo.precoAtualMercado - ativo.precoMedioCompra) / ativo.precoMedioCompra) * 100
-      : 0;
-
-    return {
-      pVp,
-      precoTeto,
-      dyMensal,
-      dyAnual,
-      yieldOnCost,
-      statusPreco,
-      alertaVenda,
-      alertaGanhoNaoRecorrente,
-      lucroPrejuizoValor,
-      lucroPrejuizoPercentual,
-    };
   },
 }));

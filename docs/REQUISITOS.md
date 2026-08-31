@@ -487,15 +487,13 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 ### 7. Investimentos FII (Fundos de Investimento Imobiliário) ✅
 
 - Rota `/investimentos`, item no menu lateral
-- Abas: "Carteira" e "Dividendos"
-- Cadastro de ativos FII (ticker, nome, tipo, segmento, perfil risco, indexador, etc.)
-- Operações de compra/venda de cotas com histórico
-- Registro de dividendos com competência e data de pagamento
-- Dashboard com indicadores: P/VP, Preço Teto, DY Mensal/Anual, Yield on Cost, Lucro/Prejuízo
-- Cálculo de Preço Teto baseado em taxa de retorno desejada
-- Cards com resumo da carteira (total investido, patrimônio, dividendos recebidos)
-- Proteção contra exclusão de ativos com operações vinculadas
-- ✅ **Implementado**: `Investimentos.tsx` + 9 componentes em `components/investimentos/`
+- Cadastro simplificado de ativos FII: Ticker, Nome, Preço da Cota, Quantidade de Cotas
+- Campos de dividendos: Dia do mês que cai o dividendo, Valor do dividendo por cota/mês
+- Dashboard com cards: Total Investido, Dividendos/Mês, DY Médio Anual, FIIs Ativos
+- Gráfico de barras comparativo mensal: Investido vs Dividendos (últimos 12 meses)
+- Cards com resumo: preço cota, quantidade, valor posição, DY mensal/anual, dividendo mensal
+- Edição e exclusão de FIIs
+- ✅ **Implementado**: `Investimentos.tsx` + `fii-dashboard.tsx`, `fii-card.tsx`, `fii-form.tsx`, `fii-mensal-chart.tsx`
 
 ### 8. Tema Claro/Escuro ✅
 

@@ -1,26 +1,34 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
-import { calcularValorCarteiraFii, calcularIndicadoresFii, calcularDyMedioCarteira, calcularTotalDividendosAno } from "@/lib/calculos-fii";
 
 export function FiiDashboard() {
   const { dados } = useFinanceStore();
 
   const ativos = dados?.ativosFii?.filter((a) => a.ativo) ?? [];
-  const dividendos = dados?.dividendosFii ?? [];
 
-  const indicadoresPorAtivo = useMemo(() => {
-    const map: Record<string, ReturnType<typeof calcularIndicadoresFii>> = {};
-    for (const ativo of ativos) {
-      map[ativo.id] = calcularIndicadoresFii(ativo, dividendos);
-    }
-    return map;
-  }, [ativos, dividendos]);
+  const totais = useMemo(() => {
+    const totalInvestido = ativos.reduce(
+      (soma, a) => soma + a.quantidadeCotas * a.precoCota,
+      0
+    );
+    const totalDividendosMensal = ativos.reduce(
+      (soma, a) => soma + a.valorDividendoMensal * a.quantidadeCotas,
+      0
+    );
+    const totalDividendosAnual = totalDividendosMensal * 12;
+    const dyMedio = totalInvestido > 0
+      ? (totalDividendosMensal / totalInvestido) * 100 * 12
+      : 0;
 
-  const valorCarteira = calcularValorCarteiraFii(ativos);
-  const dyMedio = calcularDyMedioCarteira(ativos, indicadoresPorAtivo);
-  const totalDividendosAno = calcularTotalDividendosAno(dividendos, new Date().getFullYear());
-  const totalAtivos = ativos.length;
+    return {
+      totalInvestido,
+      totalDividendosMensal,
+      totalDividendosAnual,
+      dyMedio,
+      totalAtivos: ativos.length,
+    };
+  }, [ativos]);
 
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -29,23 +37,23 @@ export function FiiDashboard() {
 
   const cards = [
     {
-      titulo: "Valor da Carteira",
-      valor: formatarMoeda(valorCarteira),
+      titulo: "Total Investido",
+      valor: formatarMoeda(totais.totalInvestido),
       cor: "text-primary",
     },
     {
-      titulo: "DY Médio",
-      valor: formatarPercentual(dyMedio),
+      titulo: "Dividendos/Mês",
+      valor: formatarMoeda(totais.totalDividendosMensal),
       cor: "text-success",
     },
     {
-      titulo: "Dividendos no Ano",
-      valor: formatarMoeda(totalDividendosAno),
-      cor: "text-warning",
+      titulo: "DY Médio Anual",
+      valor: formatarPercentual(totais.dyMedio),
+      cor: "text-success",
     },
     {
       titulo: "FIIs Ativos",
-      valor: String(totalAtivos),
+      valor: String(totais.totalAtivos),
       cor: "text-foreground",
     },
   ];
