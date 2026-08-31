@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Com grafico anual eu quis dizer somente os 12 meses do ano atual
+### [aberto] registrar dividendos não esta funcionando
 
 ---
 ## Histórico de Correções
@@ -48,6 +48,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Data:** 31/08/2026
 **Ação:** Adicionado type `RegistroDividendoFii`, campo `historicoDividendos` ao `AtivoFii`, formulário `fii-dividendo-form.tsx` para registrar dividendos por competência, método `registrarDividendoFii` no store.
 **Arquivos afetados:** types/index.ts, fii-dividendo-form.tsx (novo), fii-card.tsx, useFinanceStore.ts, Investimentos.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
+
+### [resolvido] Gráfico deve mostrar apenas os 12 meses do ano atual
+**Data:** 31/08/2026
+**Ação:** Gráfico atualizado para mostrar apenas os meses do ano atual (Jan até mês atual), com dados de investimento e dividendos por mês.
+**Arquivos afetados:** fii-mensal-chart.tsx
 **Spec:** implementado/investimentos-fii-simplificado.md
 
 

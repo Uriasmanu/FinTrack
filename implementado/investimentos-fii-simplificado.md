@@ -65,7 +65,7 @@ Cenários alternativos:
 - [x] Criar formulário de compra de cotas com campo de data (fii-compra-form.tsx)
 - [x] Criar formulário de registro de dividendos por competência (fii-dividendo-form.tsx)
 - [x] Simplificar card FII (info essencial + indicadores + ações Comprar Cotas e Registrar Dividendo)
-- [x] Criar gráfico anual comparativo (investido vs dividendos por ano)
+- [x] Criar gráfico dos 12 meses do ano atual comparativo (investido vs dividendos por mês)
 - [x] Atualizar dashboard (novos cards)
 - [x] Atualizar página Investimentos
 - [x] Remover arquivos não utilizados (fii-detalhes, fii-historico-*, fii-preco-teto-calc, fii-operacao-form)
@@ -76,7 +76,7 @@ Cenários alternativos:
 
 - [x] CA-01: dado um novo FII, quando preencho ticker, nome, data compra, preço cota e quantidade, então o FII é cadastrado com sucesso
 - [x] CA-02: dado um FII cadastrado, quando visualizo o card, então vejo ticker, nome, preço, quantidade, valor total e dividendo mensal
-- [x] CA-03: dado um FII, quando visualizo o gráfico, então vejo comparativo anual investido vs dividendos
+- [x] CA-03: dado um FII, quando visualizo o gráfico, então vejo os 12 meses do ano atual com investido vs dividendos
 - [x] CA-04: dado um FII, quando clico em excluir, então o FII é removido
 - [x] CA-05: quando a tela carrega em mobile, então layout não quebra e elementos são acessíveis
 - [x] CA-06: dado um FII existente, quando clico em "Comprar Cotas", então posso adicionar mais cotas informando data, quantidade e preço pago

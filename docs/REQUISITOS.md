@@ -489,12 +489,13 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Rota `/investimentos`, item no menu lateral
 - Cadastro simplificado de ativos FII: Ticker, Nome, Data da Compra, Preço da Cota, Quantidade de Cotas
 - Campos de dividendos: Dia do mês que cai o dividendo, Valor do dividendo por cota/mês
+- Histórico de dividendos por competência (registro de variações mensais)
 - Compra de cotas em FII existente (data, quantidade + preço pago, com recálculo de preço médio)
 - Dashboard com cards: Total Investido, Dividendos/Mês, DY Médio Anual, FIIs Ativos
-- Gráfico de barras comparativo mensal: Investido vs Dividendos (últimos 12 meses)
+- Gráfico de barras dos 12 meses do ano atual: Investido vs Dividendos
 - Cards com resumo: preço cota, quantidade, valor posição, DY mensal/anual, dividendo mensal
 - Edição e exclusão de FIIs
-- ✅ **Implementado**: `Investimentos.tsx` + `fii-dashboard.tsx`, `fii-card.tsx`, `fii-form.tsx`, `fii-compra-form.tsx`, `fii-mensal-chart.tsx`
+- ✅ **Implementado**: `Investimentos.tsx` + `fii-dashboard.tsx`, `fii-card.tsx`, `fii-form.tsx`, `fii-compra-form.tsx`, `fii-dividendo-form.tsx`, `fii-mensal-chart.tsx`
 
 ### 8. Tema Claro/Escuro ✅
 
