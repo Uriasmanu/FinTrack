@@ -53,7 +53,7 @@ export function FiiDividendoForm({ open, onOpenChange, ativo, onSubmit }: FiiDiv
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-  const competenciasExistentes = ativo.historicoDividendos.map((h) => h.competencia);
+  const competenciasExistentes = (ativo.historicoDividendos ?? []).map((h) => h.competencia);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
