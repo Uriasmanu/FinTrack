@@ -15,12 +15,15 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] grafico dos dividendos deve ser apenas anual.
+### [aberto] Gráfico de dividendos deve ser apenas anual
+**Comportamento atual:** O gráfico mensal mostra 12 meses com investimento vs dividendos.
+**Comportamento esperado:** O gráfico deve mostrar o total anual de investido vs dividendos recebidos, facilitando a visão consolidada do ano.
+**Escopo:** fii-mensal-chart.tsx
 
-### [aberto] PRecisa haver um registro de todas as alterações de dividendos mensais, pois um mes pode se 0,09 e outros 0,10
+### [aberto] Falta registro de variações de dividendos mensais
 **Comportamento atual:** O campo `valorDividendoMensal` é um valor fixo. Se o dividendo muda de um mês para outro (ex: R$ 0,09 → R$ 0,10), não há registro da alteração.
-**Comportamento esperado:** Deve haver um histórico de valores de dividendos por mês, permitindo registrar variações mensais.
-**Escopo:** types, store, formulário de dividendos, card FII, gráfico mensal.
+**Comportamento esperado:** Deve haver um histórico de valores de dividendos por mês, permitindo registrar variações mensais (ex: Jan/26: R$ 0,09, Fev/26: R$ 0,10, Mar/26: R$ 0,09).
+**Escopo:** types, store, formulário de dividendos, card FII, gráfico anual.
 
 ---
 ## Histórico de Correções

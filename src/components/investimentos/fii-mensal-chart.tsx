@@ -14,52 +14,51 @@ const tooltipStyle = {
   color: "hsl(var(--foreground))",
 };
 
-const mesesPT = [
-  "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-  "Jul", "Ago", "Set", "Out", "Nov", "Dez"
-];
-
 export function FiiMensalChart({ ativos }: FiiMensalChartProps) {
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   const dadosGrafico = useMemo(() => {
     const agora = new Date();
-    const mesAtual = agora.getMonth();
     const anoAtual = agora.getFullYear();
 
-    const dados: { name: string; investido: number; dividendos: number }[] = [];
+    const anos: { name: string; investido: number; dividendos: number }[] = [];
 
-    for (let i = 11; i >= 0; i--) {
-      const data = new Date(anoAtual, mesAtual - i, 1);
-      const mes = data.getMonth();
-      const ano = data.getFullYear();
-      const nomeMes = `${mesesPT[mes]}/${String(ano).slice(2)}`;
-
+    for (let ano = anoAtual - 4; ano <= anoAtual; ano++) {
       let totalInvestido = 0;
       let totalDividendos = 0;
 
       for (const ativo of ativos) {
-        const dataCriacao = new Date(ativo.criadoEm);
-        const mesCriacao = dataCriacao.getMonth();
-        const anoCriacao = dataCriacao.getFullYear();
+        const dataCompra = new Date(ativo.dataCompra);
+        const anoCompra = dataCompra.getFullYear();
 
-        if (ano < anoCriacao || (ano === anoCriacao && mes < mesCriacao)) {
+        if (ano < anoCompra) {
           continue;
         }
 
         totalInvestido += ativo.quantidadeCotas * ativo.precoCota;
-        totalDividendos += ativo.valorDividendoMensal * ativo.quantidadeCotas;
+
+        const historico = ativo.historicoDividendos ?? [];
+        const dividendosAno = historico
+          .filter((h) => h.competencia.startsWith(String(ano)))
+          .reduce((soma, h) => soma + h.valorPorCota * ativo.quantidadeCotas, 0);
+
+        if (dividendosAno > 0) {
+          totalDividendos += dividendosAno;
+        } else {
+          const mesesNoAno = ano < anoAtual ? 12 : agora.getMonth() + 1;
+          totalDividendos += ativo.valorDividendoMensal * ativo.quantidadeCotas * mesesNoAno;
+        }
       }
 
-      dados.push({
-        name: nomeMes,
+      anos.push({
+        name: String(ano),
         investido: totalInvestido,
         dividendos: totalDividendos,
       });
     }
 
-    return dados;
+    return anos;
   }, [ativos]);
 
   const totalInvestido = dadosGrafico.reduce((soma, d) => soma + d.investido, 0);
@@ -69,7 +68,7 @@ export function FiiMensalChart({ ativos }: FiiMensalChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium">Acompanhamento Mensal</CardTitle>
+          <CardTitle className="text-sm font-medium">Acompanhamento Anual</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground text-center py-4">
@@ -83,13 +82,13 @@ export function FiiMensalChart({ ativos }: FiiMensalChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">Acompanhamento Mensal — Investido vs Dividendos</CardTitle>
+        <CardTitle className="text-sm font-medium">Acompanhamento Anual — Investido vs Dividendos</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dadosGrafico}>
-              <XAxis dataKey="name" fontSize={10} tick={{ fill: "hsl(var(--foreground))" }} />
+              <XAxis dataKey="name" fontSize={12} tick={{ fill: "hsl(var(--foreground))" }} />
               <YAxis fontSize={10} tickFormatter={(v) => `R$ ${v}`} tick={{ fill: "hsl(var(--foreground))" }} />
               <Tooltip
                 formatter={(value, name) => [
@@ -109,11 +108,11 @@ export function FiiMensalChart({ ativos }: FiiMensalChartProps) {
 
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="rounded-lg bg-muted p-3">
-            <p className="text-muted-foreground text-xs">Total Investido (12 meses)</p>
+            <p className="text-muted-foreground text-xs">Total Investido</p>
             <p className="font-bold text-primary">{formatarMoeda(totalInvestido)}</p>
           </div>
           <div className="rounded-lg bg-muted p-3">
-            <p className="text-muted-foreground text-xs">Total Dividendos (12 meses)</p>
+            <p className="text-muted-foreground text-xs">Total Dividendos</p>
             <p className="font-bold text-success">{formatarMoeda(totalDividendos)}</p>
           </div>
         </div>

@@ -79,6 +79,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
   const dividendoMensalTotal = watch("valorDividendoMensal") * watch("quantidadeCotas");
 
   function handleFormSubmit(data: FiiFormData) {
+    const competenciaInicial = data.dataCompra.slice(0, 7);
     onSubmit({
       ticker: data.ticker.toUpperCase(),
       nome: data.nome,
@@ -87,6 +88,9 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
       quantidadeCotas: data.quantidadeCotas,
       diaDividendo: data.diaDividendo,
       valorDividendoMensal: data.valorDividendoMensal,
+      historicoDividendos: [
+        { competencia: competenciaInicial, valorPorCota: data.valorDividendoMensal }
+      ],
       observacoes: data.observacoes,
     });
     reset();

@@ -58,6 +58,7 @@ interface FinanceState {
   editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => Promise<void>;
   excluirAtivoFii: (id: string) => Promise<void>;
   comprarCotasFii: (id: string, quantidade: number, precoPago: number) => Promise<void>;
+  registrarDividendoFii: (id: string, competencia: string, valorPorCota: number) => Promise<void>;
   obterAtivosFiiAtivos: () => AtivoFii[];
 }
 
@@ -731,6 +732,45 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         ...a,
         quantidadeCotas: novasCotas,
         precoCota: novoPrecoCota,
+      };
+    });
+
+    const novoState: DadosApp = {
+      ...state,
+      ativosFii: novosAtivos,
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  registrarDividendoFii: async (id, competencia, valorPorCota) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novosAtivos = state.ativosFii.map((a) => {
+      if (a.id !== id) return a;
+
+      const historicoExistente = a.historicoDividendos ?? [];
+      const competenciaExiste = historicoExistente.findIndex((h) => h.competencia === competencia);
+
+      let novoHistorico;
+      if (competenciaExiste >= 0) {
+        novoHistorico = historicoExistente.map((h, i) =>
+          i === competenciaExiste ? { competencia, valorPorCota } : h
+        );
+      } else {
+        novoHistorico = [...historicoExistente, { competencia, valorPorCota }];
+      }
+
+      return {
+        ...a,
+        valorDividendoMensal: valorPorCota,
+        historicoDividendos: novoHistorico,
       };
     });
 

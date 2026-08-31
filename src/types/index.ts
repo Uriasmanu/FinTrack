@@ -88,6 +88,11 @@ export interface Config {
   criadoEm?: string;
 }
 
+export interface RegistroDividendoFii {
+  competencia: string;
+  valorPorCota: number;
+}
+
 export interface AtivoFii {
   id: string;
   ticker: string;
@@ -97,6 +102,7 @@ export interface AtivoFii {
   quantidadeCotas: number;
   diaDividendo: number;
   valorDividendoMensal: number;
+  historicoDividendos: RegistroDividendoFii[];
   observacoes?: string;
   ativo: boolean;
   criadoEm: string;
