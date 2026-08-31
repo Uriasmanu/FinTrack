@@ -15,6 +15,17 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
+### [aberto] Quero simplificar a aba de investimentos, pois por enquanto eu só compro FII, então, alem dos campos a baixo quero que só pergunte o valor que paguei na cota, quantas cotas e quanto rendeu de dividendo aquele mes, no caso transforme a aba de FII em uma conta, vou registrar essas informações que podem mudar mensalmente e quero um grafico para acompanhar quanto eu tenho pago e quanto eu tenho recebido mes a mes
+Novo FII
+Ticker
+Ex: HGLG11
+Nome
+Ex: CSHG Logística
+Tipo
+Tijolo
+
+Tijolo
+Segmento
 
 ---
 ## Histórico de Correções
