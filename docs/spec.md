@@ -15,7 +15,7 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] (nenhum problema aberto no momento)
+### [aberto] só aparece a opção de novo FII não esta aparecendo a opção de comprar cota
 
 ---
 ## Histórico de Correções
