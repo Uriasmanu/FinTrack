@@ -15,14 +15,33 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] Falta campo de data na compra de cotas
-**Comportamento atual:** O formulário de compra de cotas só pergunta quantidade e preço pago, sem informar quando a compra foi feita.
-**Comportamento esperado:** O formulário deve perguntar também o dia da compra (data).
-**Escopo:** fii-compra-form.tsx
+### [aberto] grafico dos dividendos deve ser apenas anual.
 
 ### [aberto] PRecisa haver um registro de todas as alterações de dividendos mensais, pois um mes pode se 0,09 e outros 0,10
+**Comportamento atual:** O campo `valorDividendoMensal` é um valor fixo. Se o dividendo muda de um mês para outro (ex: R$ 0,09 → R$ 0,10), não há registro da alteração.
+**Comportamento esperado:** Deve haver um histórico de valores de dividendos por mês, permitindo registrar variações mensais.
+**Escopo:** types, store, formulário de dividendos, card FII, gráfico mensal.
+
 ---
 ## Histórico de Correções
+
+### [resolvido] Simplificar aba de Investimentos FII — Modelo de Conta Mensal
+**Data:** 31/08/2026
+**Ação:** Formulário simplificado para Ticker, Nome, Preço da Cota, Quantidade. Adicionados campos diaDividendo e valorDividendoMensal. Criado gráfico mensal comparativo. Removidos formulários complexos de operação/dividendo.
+**Arquivos afetados:** types/index.ts, useFinanceStore.ts, fii-form.tsx, fii-card.tsx, fii-dashboard.tsx, Investimentos.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
+
+### [resolvido] Falta opção de comprar cota em FII existente
+**Data:** 31/08/2026
+**Ação:** Adicionado formulário de compra de cotas (`fii-compra-form.tsx`), ação "Comprar Cotas" no card FII, método `comprarCotasFii` no store com recálculo de preço médio.
+**Arquivos afetados:** fii-compra-form.tsx (novo), fii-card.tsx, useFinanceStore.ts, Investimentos.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
+
+### [resolvido] Falta campo de data na compra de cotas
+**Data:** 31/08/2026
+**Ação:** Adicionado campo `dataCompra` ao type `AtivoFii`, campo "Data da Compra" nos formulários de novo FII e de compra de cotas.
+**Arquivos afetados:** types/index.ts, fii-form.tsx, fii-compra-form.tsx
+**Spec:** implementado/investimentos-fii-simplificado.md
 
 
 # Guia de Spec para Implementação de Features

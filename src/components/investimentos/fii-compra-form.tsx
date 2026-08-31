@@ -37,6 +37,7 @@ export function FiiCompraForm({ open, onOpenChange, ativo, onSubmit }: FiiCompra
   } = useForm<CompraFormData>({
     resolver: zodResolver(compraSchema),
     defaultValues: {
+      data: new Date().toISOString().split("T")[0],
       quantidade: 1,
       precoPago: ativo.precoCota,
     },
@@ -77,6 +78,14 @@ export function FiiCompraForm({ open, onOpenChange, ativo, onSubmit }: FiiCompra
               <span className="text-muted-foreground">Preço atual:</span>
               <span className="font-medium">{formatarMoeda(ativo.precoCota)}</span>
             </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Data da Compra</label>
+            <Input type="date" {...register("data")} />
+            {errors.data && (
+              <p className="text-sm text-destructive">{errors.data.message}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

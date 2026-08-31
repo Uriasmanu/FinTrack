@@ -92,6 +92,7 @@ export interface AtivoFii {
   id: string;
   ticker: string;
   nome: string;
+  dataCompra: string;
   precoCota: number;
   quantidadeCotas: number;
   diaDividendo: number;

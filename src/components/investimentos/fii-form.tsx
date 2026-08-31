@@ -18,6 +18,7 @@ import { cn } from "@/lib/cn";
 const fiiSchema = z.object({
   ticker: z.string().min(1, "Ticker é obrigatório").max(10),
   nome: z.string().min(1, "Nome é obrigatório"),
+  dataCompra: z.string().min(1, "Data da compra é obrigatória"),
   precoCota: z.number().min(0.01, "Preço da cota deve ser maior que 0"),
   quantidadeCotas: z.number().min(1, "Quantidade deve ser no mínimo 1"),
   diaDividendo: z.number().min(1, "Dia deve ser entre 1 e 31").max(31, "Dia deve ser entre 1 e 31"),
@@ -50,6 +51,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
     defaultValues: {
       ticker: initialData?.ticker ?? "",
       nome: initialData?.nome ?? "",
+      dataCompra: initialData?.dataCompra ?? new Date().toISOString().split("T")[0],
       precoCota: initialData?.precoCota ?? 0,
       quantidadeCotas: initialData?.quantidadeCotas ?? 1,
       diaDividendo: initialData?.diaDividendo ?? 10,
@@ -63,6 +65,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
       reset({
         ticker: initialData?.ticker ?? "",
         nome: initialData?.nome ?? "",
+        dataCompra: initialData?.dataCompra ?? new Date().toISOString().split("T")[0],
         precoCota: initialData?.precoCota ?? 0,
         quantidadeCotas: initialData?.quantidadeCotas ?? 1,
         diaDividendo: initialData?.diaDividendo ?? 10,
@@ -79,6 +82,7 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
     onSubmit({
       ticker: data.ticker.toUpperCase(),
       nome: data.nome,
+      dataCompra: data.dataCompra,
       precoCota: data.precoCota,
       quantidadeCotas: data.quantidadeCotas,
       diaDividendo: data.diaDividendo,
@@ -121,6 +125,14 @@ export function FiiForm({ open, onOpenChange, initialData, onSubmit }: FiiFormPr
             <Input {...register("nome")} placeholder="Ex: CSHG Logística" />
             {errors.nome && (
               <p className="text-sm text-destructive">{errors.nome.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Data da Compra</label>
+            <Input type="date" {...register("dataCompra")} />
+            {errors.dataCompra && (
+              <p className="text-sm text-destructive">{errors.dataCompra.message}</p>
             )}
           </div>
 

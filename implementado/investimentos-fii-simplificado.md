@@ -59,10 +59,10 @@ Cenários alternativos:
 
 ## Checklist de Implementação
 
-- [x] Atualizar types (AtivoFii simplificado + novos campos)
+- [x] Atualizar types (AtivoFii simplificado + novos campos + dataCompra)
 - [x] Atualizar store (remover métodos de operação/dividendo, adicionar comprarCotasFii)
-- [x] Simplificar formulário FII (ticker, nome, preço cota, quantidade, dia dividendo, valor dividendo)
-- [x] Criar formulário de compra de cotas (fii-compra-form.tsx)
+- [x] Simplificar formulário FII (ticker, nome, data compra, preço cota, quantidade, dia dividendo, valor dividendo)
+- [x] Criar formulário de compra de cotas com campo de data (fii-compra-form.tsx)
 - [x] Simplificar card FII (info essencial + indicadores + ação Comprar Cotas)
 - [x] Criar gráfico mensal comparativo (investido vs dividendos)
 - [x] Atualizar dashboard (novos cards)
@@ -73,12 +73,12 @@ Cenários alternativos:
 
 ## Critérios de Aceite
 
-- [x] CA-01: dado um novo FII, quando preencho ticker, nome, preço cota e quantidade, então o FII é cadastrado com sucesso
+- [x] CA-01: dado um novo FII, quando preencho ticker, nome, data compra, preço cota e quantidade, então o FII é cadastrado com sucesso
 - [x] CA-02: dado um FII cadastrado, quando visualizo o card, então vejo ticker, nome, preço, quantidade, valor total e dividendo mensal
 - [x] CA-03: dado um FII com dividendos registrados, quando visualizo o gráfico, então vejo comparativo mensal investido vs dividendos
 - [x] CA-04: dado um FII, quando clico em excluir, então o FII é removido
 - [x] CA-05: quando a tela carrega em mobile, então layout não quebra e elementos são acessíveis
-- [x] CA-06: dado um FII existente, quando clico em "Comprar Cotas", então posso adicionar mais cotas informando quantidade e preço pago
+- [x] CA-06: dado um FII existente, quando clico em "Comprar Cotas", então posso adicionar mais cotas informando data, quantidade e preço pago
 
 ## DDR — Design Decision Record
 
