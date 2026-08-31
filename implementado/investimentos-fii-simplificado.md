@@ -60,9 +60,10 @@ Cenários alternativos:
 ## Checklist de Implementação
 
 - [x] Atualizar types (AtivoFii simplificado + novos campos)
-- [x] Atualizar store (remover métodos de operação/dividendo)
+- [x] Atualizar store (remover métodos de operação/dividendo, adicionar comprarCotasFii)
 - [x] Simplificar formulário FII (ticker, nome, preço cota, quantidade, dia dividendo, valor dividendo)
-- [x] Simplificar card FII (info essencial + indicadores)
+- [x] Criar formulário de compra de cotas (fii-compra-form.tsx)
+- [x] Simplificar card FII (info essencial + indicadores + ação Comprar Cotas)
 - [x] Criar gráfico mensal comparativo (investido vs dividendos)
 - [x] Atualizar dashboard (novos cards)
 - [x] Atualizar página Investimentos
@@ -77,6 +78,7 @@ Cenários alternativos:
 - [x] CA-03: dado um FII com dividendos registrados, quando visualizo o gráfico, então vejo comparativo mensal investido vs dividendos
 - [x] CA-04: dado um FII, quando clico em excluir, então o FII é removido
 - [x] CA-05: quando a tela carrega em mobile, então layout não quebra e elementos são acessíveis
+- [x] CA-06: dado um FII existente, quando clico em "Comprar Cotas", então posso adicionar mais cotas informando quantidade e preço pago
 
 ## DDR — Design Decision Record
 

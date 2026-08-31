@@ -15,16 +15,10 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 **Comportamento esperado:** o que deveria acontecer.
 **Escopo:** onde no código isso precisa ser resolvido (geração, exibição, ambos...).
 -->
-### [aberto] só aparece a opção de novo FII não esta aparecendo a opção de comprar cota
+### [aberto] (nenhum problema aberto no momento)
 
 ---
 ## Histórico de Correções
-
-### [resolvido] Simplificar aba de Investimentos FII — Modelo de Conta Mensal
-**Data:** 31/08/2026
-**Ação:** Formulário simplificado para Ticker, Nome, Preço da Cota, Quantidade. Adicionados campos diaDividendo e valorDividendoMensal. Criado gráfico mensal comparativo. Removidos formulários complexos de operação/dividendo.
-**Arquivos afetados:** types/index.ts, useFinanceStore.ts, fii-form.tsx, fii-card.tsx, fii-dashboard.tsx, Investimentos.tsx
-**Spec:** implementado/investimentos-fii-simplificado.md
 
 
 # Guia de Spec para Implementação de Features

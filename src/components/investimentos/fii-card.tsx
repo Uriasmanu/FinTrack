@@ -1,4 +1,4 @@
-import { MoreVertical, Pencil, Trash2, Coins, TrendingUp, TrendingDown } from "lucide-react";
+import { MoreVertical, Pencil, Trash2, ShoppingCart } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +14,14 @@ interface FiiCardProps {
   ativo: AtivoFii;
   onEditar: (ativo: AtivoFii) => void;
   onExcluir: (ativo: AtivoFii) => void;
+  onComprar: (ativo: AtivoFii) => void;
 }
 
 export function FiiCard({
   ativo,
   onEditar,
   onExcluir,
+  onComprar,
 }: FiiCardProps) {
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -50,6 +52,10 @@ export function FiiCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onComprar(ativo)}>
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Comprar Cotas
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onEditar(ativo)}>
                 <Pencil className="mr-2 h-4 w-4" />
                 Editar

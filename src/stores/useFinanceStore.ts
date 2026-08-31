@@ -57,6 +57,7 @@ interface FinanceState {
   adicionarAtivoFii: (dados: Omit<AtivoFii, "id" | "criadoEm" | "ativo">) => Promise<void>;
   editarAtivoFii: (id: string, dados: Partial<AtivoFii>) => Promise<void>;
   excluirAtivoFii: (id: string) => Promise<void>;
+  comprarCotasFii: (id: string, quantidade: number, precoPago: number) => Promise<void>;
   obterAtivosFiiAtivos: () => AtivoFii[];
 }
 
@@ -702,6 +703,40 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const novoState: DadosApp = {
       ...state,
       ativosFii: excluirItemArray(state.ativosFii, id),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  comprarCotasFii: async (id, quantidade, precoPago) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const ativo = state.ativosFii.find((a) => a.id === id);
+    if (!ativo) return;
+
+    const novasCotas = ativo.quantidadeCotas + quantidade;
+    const novoPrecoCota = ativo.quantidadeCotas > 0
+      ? ((ativo.precoCota * ativo.quantidadeCotas) + (precoPago * quantidade)) / novasCotas
+      : precoPago;
+
+    const novosAtivos = state.ativosFii.map((a) => {
+      if (a.id !== id) return a;
+      return {
+        ...a,
+        quantidadeCotas: novasCotas,
+        precoCota: novoPrecoCota,
+      };
+    });
+
+    const novoState: DadosApp = {
+      ...state,
+      ativosFii: novosAtivos,
     };
 
     set({ dados: novoState });

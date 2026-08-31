@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FiiDashboard } from "@/components/investimentos/fii-dashboard";
 import { FiiCard } from "@/components/investimentos/fii-card";
 import { FiiForm } from "@/components/investimentos/fii-form";
+import { FiiCompraForm } from "@/components/investimentos/fii-compra-form";
 import { FiiMensalChart } from "@/components/investimentos/fii-mensal-chart";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
@@ -15,11 +16,13 @@ export function Investimentos() {
     adicionarAtivoFii,
     editarAtivoFii,
     excluirAtivoFii,
+    comprarCotasFii,
   } = useFinanceStore();
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingAtivo, setEditingAtivo] = useState<AtivoFii | null>(null);
   const [deleteAtivo, setDeleteAtivo] = useState<AtivoFii | null>(null);
+  const [compraAtivo, setCompraAtivo] = useState<AtivoFii | null>(null);
 
   const ativos = dados?.ativosFii ?? [];
   const ativosAtivos = ativos.filter((a) => a.ativo);
@@ -38,6 +41,10 @@ export function Investimentos() {
     setDeleteAtivo(ativo);
   }
 
+  function handleComprar(ativo: AtivoFii) {
+    setCompraAtivo(ativo);
+  }
+
   function confirmarExclusao() {
     if (!deleteAtivo) return;
     excluirAtivoFii(deleteAtivo.id);
@@ -50,6 +57,12 @@ export function Investimentos() {
     } else {
       adicionarAtivoFii(data);
     }
+  }
+
+  function handleCompraSubmit(data: { quantidade: number; precoPago: number }) {
+    if (!compraAtivo) return;
+    comprarCotasFii(compraAtivo.id, data.quantidade, data.precoPago);
+    setCompraAtivo(null);
   }
 
   return (
@@ -94,6 +107,7 @@ export function Investimentos() {
                 ativo={ativo}
                 onEditar={handleEditar}
                 onExcluir={handleExcluir}
+                onComprar={handleComprar}
               />
             ))}
           </div>
@@ -106,6 +120,15 @@ export function Investimentos() {
         initialData={editingAtivo ?? undefined}
         onSubmit={handleSubmit}
       />
+
+      {compraAtivo && (
+        <FiiCompraForm
+          open={!!compraAtivo}
+          onOpenChange={(open) => { if (!open) setCompraAtivo(null); }}
+          ativo={compraAtivo}
+          onSubmit={handleCompraSubmit}
+        />
+      )}
 
       <DeleteConfirmDialog
         open={!!deleteAtivo}
