@@ -16469,6 +16469,24 @@
       "grupoParcelaId": null,
       "id": "fbba75b3-87b8-42a8-b17c-90d89d7915d1",
       "criadoEm": "2026-09-01T06:22:03.321Z"
+    },
+    {
+      "descricao": "capinha e pulseira",
+      "valor": 42.73,
+      "data": "2026-09-01",
+      "tipo": "despesa",
+      "categoriaId": "e2d12134-f768-45ca-962c-a867782b79d0",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "9588b8fc-8463-475b-adc7-fae547ba2a4a",
+      "criadoEm": "2026-09-01T13:05:59.060Z"
     }
   ],
   "categorias": [
