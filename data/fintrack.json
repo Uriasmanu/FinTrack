@@ -14820,17 +14820,17 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "internet",
       "valor": 130,
-      "data": "2026-09-06",
+      "data": "2026-09-01",
       "categoriaId": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
       "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "contaId": "7dc93a29-17fb-4733-aec0-c9abd61095c2",
       "cartaoId": null,
       "parcelaAtual": 1,
       "totalParcelas": 1,
       "grupoParcelaId": "b520d6a2-d545-4842-833c-0d5dacc23221",
       "intervaloDias": null,
       "criadoEm": "2026-08-16T13:49:22.649Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "e41f007e-c2b6-4a32-9555-79c1dadd48bd",
