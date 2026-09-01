@@ -15989,7 +15989,7 @@
       "tipo": "receita",
       "tipoRecorrencia": "recorrente",
       "descricao": "ticket",
-      "valor": 640,
+      "valor": 672,
       "data": "2026-09-01",
       "categoriaId": "c9d0e1f2-a3b4-4c5d-6e7f-8091a2b3c4d5",
       "subtipoId": null,
@@ -16000,7 +16000,7 @@
       "grupoParcelaId": "d9c75cd1-2390-47c9-aad2-d8c424fe8366",
       "intervaloDias": null,
       "criadoEm": "2026-08-29T19:03:19.164Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "d5e6f181-6796-47a9-91b5-97a20ce48435",
@@ -16216,7 +16216,7 @@
       "grupoParcelaId": "8f20dee7-fca2-4718-9bb9-bb7fc531fb99",
       "intervaloDias": null,
       "criadoEm": "2026-08-29T21:41:10.319Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "ad87d078-920d-4759-a188-894eec049c6a",
@@ -16433,6 +16433,42 @@
       "grupoParcelaId": null,
       "id": "253549db-75dc-4a4e-8314-92d8cdcab68f",
       "criadoEm": "2026-08-31T20:57:11.541Z"
+    },
+    {
+      "descricao": "oculos",
+      "valor": 38.59,
+      "data": "2026-09-01",
+      "tipo": "despesa",
+      "categoriaId": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "1486f015-3bb4-487a-bb78-3d39f4fc1442",
+      "criadoEm": "2026-09-01T06:21:23.181Z"
+    },
+    {
+      "descricao": "brinquedo",
+      "valor": 39.99,
+      "data": "2026-09-01",
+      "tipo": "despesa",
+      "categoriaId": "d0e1f2a3-b4c5-4d6e-7f80-91a2b3c4d5e6",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "fbba75b3-87b8-42a8-b17c-90d89d7915d1",
+      "criadoEm": "2026-09-01T06:22:03.321Z"
     }
   ],
   "categorias": [
