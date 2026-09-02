@@ -122,8 +122,22 @@ export function EditarTransacao() {
   async function editarSomenteEssa(data: Record<string, unknown>) {
     setErroSalvar(null);
     try {
+      const dadosEditados = { ...(data as Parameters<typeof editarTransacao>[1]) };
+
+      const novaParcelaAtual = dadosEditados.parcelaAtual as number | undefined;
+      const novoTotalParcelas = dadosEditados.totalParcelas as number | undefined;
+      const mudouNumeroParcela =
+        transacaoEncontrada.tipoRecorrencia === "parcelado" &&
+        ((novaParcelaAtual !== undefined && novaParcelaAtual !== transacaoEncontrada.parcelaAtual) ||
+          (novoTotalParcelas !== undefined && novoTotalParcelas !== transacaoEncontrada.totalParcelas));
+
+      if (mudouNumeroParcela) {
+        const descricaoBase = ((dadosEditados.descricao as string | undefined) ?? transacaoEncontrada.descricao).replace(/\s\d+\/\d+$/, "");
+        dadosEditados.descricao = `${descricaoBase} ${novaParcelaAtual ?? transacaoEncontrada.parcelaAtual}/${novoTotalParcelas ?? transacaoEncontrada.totalParcelas}`;
+      }
+
       await editarTransacao(transacaoEncontrada.id, {
-        ...(data as Parameters<typeof editarTransacao>[1]),
+        ...dadosEditados,
         grupoParcelaId: transacaoEncontrada.grupoParcelaId,
       });
       navigate("/transacoes");
