@@ -17495,6 +17495,42 @@
       "grupoParcelaId": null,
       "id": "3623173e-f2e4-4b43-b57e-e49248a17d87",
       "criadoEm": "2026-09-03T13:00:43.357Z"
+    },
+    {
+      "descricao": "jogo",
+      "valor": 24.99,
+      "data": "2026-09-05",
+      "tipo": "despesa",
+      "categoriaId": "e2d12134-f768-45ca-962c-a867782b79d0",
+      "subtipoId": null,
+      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "bf0e027a-029a-48df-aedc-5ea3b06aa7a3",
+      "criadoEm": "2026-09-05T13:45:17.644Z"
+    },
+    {
+      "descricao": "mercado",
+      "valor": 50.62,
+      "data": "2026-09-05",
+      "tipo": "despesa",
+      "categoriaId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "subtipoId": "e7f80919-2a3b-44d5-e6f7-081920314253",
+      "contaId": "7dc93a29-17fb-4733-aec0-c9abd61095c2",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "cf6b627e-b5cb-4c2b-a353-86fe21d1143d",
+      "criadoEm": "2026-09-06T00:09:39.267Z"
     }
   ],
   "categorias": [
