@@ -79,10 +79,6 @@ export function Transacoes() {
     .filter((c) => c.tipo === "corrente")
     .map((c) => c.id);
 
-  const poupancaIds = (dados?.contas ?? [])
-    .filter((c) => c.tipo === "poupanca")
-    .map((c) => c.id);
-
   const saldoInicialContas = contasFiltradas
     .filter((c) => c.tipo === "corrente")
     .reduce((acc, c) => {
@@ -125,7 +121,6 @@ export function Transacoes() {
       if (filtros.contaId !== "todas" && t.contaId !== filtros.contaId) {
         return false;
       }
-      if (poupancaIds.includes(t.contaId)) return false;
       if (filtros.dataInicio && t.data < filtros.dataInicio) {
         return false;
       }
