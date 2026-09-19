@@ -1,4 +1,4 @@
-import type { CompraMercado, ItemMercado } from "@/types";
+import type { CompraMercado, ItemMercado, CatalogoItemMercado } from "@/types";
 
 export function normalizarNomeItem(nome: string): string {
   return nome.trim().toLowerCase();
@@ -113,4 +113,34 @@ export function calcularComparacaoItens(
   }
 
   return resultado.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+}
+
+export function atualizarCatalogoMercado(
+  catalogoAtual: CatalogoItemMercado[],
+  compra: CompraMercado
+): CatalogoItemMercado[] {
+  const catalogo = new Map<string, CatalogoItemMercado>(
+    catalogoAtual.map((entrada) => [entrada.nomeNormalizado, entrada])
+  );
+
+  for (const item of compra.itens) {
+    const chave = normalizarNomeItem(item.nome);
+    const existente = catalogo.get(chave);
+    const marcas = new Set(existente?.marcas ?? []);
+
+    if (item.marca && item.marca.trim() !== "") {
+      marcas.add(item.marca.trim());
+    }
+
+    catalogo.set(chave, {
+      nomeNormalizado: chave,
+      nomeExibicao: item.nome,
+      marcas: Array.from(marcas),
+      ultimaUnidade: item.unidade,
+      ultimoPreco: item.precoUnitario,
+      atualizadoEm: new Date().toISOString(),
+    });
+  }
+
+  return Array.from(catalogo.values());
 }
