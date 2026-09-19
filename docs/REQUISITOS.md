@@ -176,6 +176,7 @@ fintrack/
 │   ├── lib/
 │   │   ├── storage.ts
 │   │   ├── calculos.ts
+│   │   ├── calculos-mercado.ts
 │   │   ├── transacoes.ts
 │   │   ├── uuid.ts
 │   │   └── cn.ts
@@ -195,6 +196,7 @@ fintrack/
 │   │   ├── Graficos.tsx
 │   │   ├── Metas.tsx
 │   │   ├── Investimentos.tsx
+│   │   ├── Mercado.tsx
 │   │   ├── Exportar.tsx
 │   │   └── Configuracoes.tsx
 │   ├── components/
@@ -249,16 +251,21 @@ fintrack/
 │   │   │   ├── meta-form.tsx
 │   │   │   ├── meta-card.tsx
 │   │   │   └── metas-predefinidas.tsx
-│   │   └── investimentos/
-│   │       ├── fii-card.tsx
-│   │       ├── fii-dashboard.tsx
-│   │       ├── fii-detalhes.tsx
-│   │       ├── fii-form.tsx
-│   │       ├── fii-dividendo-form.tsx
-│   │       ├── fii-historico-dividendos.tsx
-│   │       ├── fii-historico-operacoes.tsx
-│   │       ├── fii-operacao-form.tsx
-│   │       └── fii-preco-teto-calc.tsx
+│   │   ├── investimentos/
+│   │   │   ├── fii-card.tsx
+│   │   │   ├── fii-dashboard.tsx
+│   │   │   ├── fii-detalhes.tsx
+│   │   │   ├── fii-form.tsx
+│   │   │   ├── fii-dividendo-form.tsx
+│   │   │   ├── fii-historico-dividendos.tsx
+│   │   │   ├── fii-historico-operacoes.tsx
+│   │   │   ├── fii-operacao-form.tsx
+│   │   │   └── fii-preco-teto-calc.tsx
+│   │   └── mercado/
+│   │       ├── compra-form.tsx
+│   │       ├── compra-card.tsx
+│   │       ├── mercado-dashboard.tsx
+│   │       └── itens-comparacao.tsx
 ├── eslint.config.js
 ├── tsconfig.json
 ├── tsconfig.app.json
@@ -497,7 +504,18 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Edição e exclusão de FIIs
 - ✅ **Implementado**: `Investimentos.tsx` + `fii-dashboard.tsx`, `fii-card.tsx`, `fii-form.tsx`, `fii-compra-form.tsx`, `fii-dividendo-form.tsx`, `fii-mensal-chart.tsx`
 
-### 8. Tema Claro/Escuro ✅
+### 8. Mercado — Registro de Compras ✅
+
+- Rota `/mercado`, item no menu lateral
+- Cadastro de compras: data + lista de itens (nome, preço unitário, quantidade), com subtotal e total calculados em tempo real
+- Suporte a preço escalonado/promocional: o mesmo item pode ser lançado em múltiplas linhas na mesma compra com preços/quantidades diferentes
+- Dashboard com cards: Total Mês Atual, Total Mês Anterior, Variação (%), Compras no Mês
+- Comparativo de preço por item: preço médio unitário ponderado por quantidade do mês atual vs mês anterior, com indicador de alta/baixa/estável e badge "novo" para itens sem histórico
+- Não gera transação no extrato nem afeta saldo de contas (módulo paralelo, mesmo padrão de Investimentos FII)
+- Edição e exclusão de compras
+- ✅ **Implementado**: `Mercado.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `calculos-mercado.ts`
+
+### 9. Tema Claro/Escuro ✅
 
 - Toggle de tema no header com dialog de confirmação
 - Persistência no arquivo `fintrack.json` (campo `config.tema`) via `PUT /api/data`
@@ -506,7 +524,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Tema aplicado sem flash na inicialização
 - ✅ **Implementado**: `layout.tsx`, `header.tsx`, `index.css`, `useFinanceStore.ts` (`atualizarConfig`)
 
-### 9. Exportação de Dados ✅ (parcial)
+### 10. Exportação de Dados ✅ (parcial)
 
 - **Exportar para JSON**: download do arquivo JSON com dados do ano atual
 - **Importar JSON**: upload com validação de estrutura e dialog de confirmação
@@ -515,7 +533,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - ❌ **Não implementado**: Exportação para PDF (dependências instaladas mas não utilizadas)
 - ❌ **Não implementado**: Exportação para CSV (dependência `papaparse` instalada mas não utilizada)
 
-### 10. Armazenamento em Arquivo JSON ✅
+### 11. Armazenamento em Arquivo JSON ✅
 
 - Persistência física em arquivo JSON único: `data/fintrack.json` (nome derivado do `package.json`)
 - Criado automaticamente na inicialização do servidor como primeira ação, com as informações padrão do sistema
@@ -647,6 +665,22 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
       "criadoEm": "ISO timestamp"
     }
   ],
+  "comprasMercado": [
+    {
+      "id": "uuid",
+      "data": "YYYY-MM-DD",
+      "itens": [
+        {
+          "id": "uuid",
+          "nome": "string",
+          "precoUnitario": 0.00,
+          "quantidade": 0
+        }
+      ],
+      "observacoes": "string (opcional)",
+      "criadoEm": "ISO timestamp"
+    }
+  ],
   "config": {
     "salario": 0.00,
     "tema": "claro | escuro",
@@ -680,6 +714,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | `/graficos` | Graficos | Visualização gráfica dos dados |
 | `/metas` | Metas | Acompanhamento de metas de economia |
 | `/investimentos` | Investimentos | Gestão de fundos imobiliários (FIIs) |
+| `/mercado` | Mercado | Registro de compras e comparativo de preço por item |
 | `/exportar` | Exportar | Exportação e importação JSON |
 | `/configuracoes` | Configuracoes | Gerenciamento de categorias |
 
@@ -841,3 +876,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 20/08/2026 | Scripts: atualizados para refletir package.json real (`dev` com concurrently, `server`, `start`) |
 | 20/08/2026 | Exportação: XLSX documentado como implementado (dependência `xlsx` utilizada) |
 | 20/08/2026 | Feature: Calculadora no campo de valor (criar, editar e transferir transação) |
+| 19/09/2026 | Funcionalidade: seção 8 — Mercado, registro de compras (implementada); seções 8-10 renumeradas para 9-11 |
+| 19/09/2026 | Estrutura de pastas: adicionada pasta `components/mercado/` com 4 componentes, `pages/Mercado.tsx` e `lib/calculos-mercado.ts` |
+| 19/09/2026 | Estrutura de dados: adicionado `comprasMercado` (com itens `ItemMercado`) ao JSON |
+| 19/09/2026 | Rotas: adicionada `/mercado` na tabela de rotas |

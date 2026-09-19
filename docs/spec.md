@@ -20,6 +20,12 @@ NÃO alterar os comentario e NÃO apagar algo, apenas adicione suas observaçoes
 ---
 ## Histórico de Correções
 
+### [resolvido] Nova feature: Mercado — registro de compras e comparativo de preços
+**Data:** 19/09/2026
+**Ação:** Criado módulo Mercado (compras com itens, dashboard mensal, comparativo de preço por item ponderado por quantidade). Não afeta saldo/extrato.
+**Arquivos afetados:** types/index.ts, storage.ts, server.js, useFinanceStore.ts, calculos-mercado.ts (novo), compra-form.tsx (novo), compra-card.tsx (novo), mercado-dashboard.tsx (novo), itens-comparacao.tsx (novo), Mercado.tsx (novo), App.tsx, sidebar.tsx
+**Spec:** implementado/mercado.md
+
 ### [resolvido] Simplificar aba de Investimentos FII — Modelo de Conta Mensal
 **Data:** 31/08/2026
 **Ação:** Formulário simplificado para Ticker, Nome, Preço da Cota, Quantidade. Adicionados campos diaDividendo e valorDividendoMensal. Criado gráfico mensal comparativo. Removidos formulários complexos de operação/dividendo.

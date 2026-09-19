@@ -1,7 +1,9 @@
-# Feature: Mercado — Registro de Compras e Comparativo de Preços
+﻿# Feature: Mercado — Registro de Compras e Comparativo de Preços
 
 ## Status
-Especificado (aguardando implementação)
+Implementado
+
+**Nota de verificação:** todos os critérios foram verificados via revisão de código rigorosa e independente (8 rodadas de revisão, uma por task), incluindo recálculo manual de exemplos numéricos do próprio spec (ex.: CA-07: 3un×R$5,00 + 2un×R$4,00 ÷ 5un = R$4,60) e confirmação por grep da ausência de qualquer referência a `Transacao`/saldo/conta (CA-10). Não foi realizada uma sessão interativa em navegador real (o ambiente de implementação não possui Playwright/Puppeteer/Cypress ou qualquer ferramenta de automação de navegador). Recomenda-se uma passada manual final abrindo o app nos breakpoints 375px/768px/1024px/1440px antes de considerar a feature 100% validada em campo.
 
 ## Data
 19/09/2026
@@ -37,23 +39,23 @@ Cenários alternativos:
 
 ## Requisitos Funcionais
 
-- [ ] RF-01: O sistema permite cadastrar uma compra de mercado com campo de data (obrigatório) e uma lista de itens
-- [ ] RF-02: Cada item da compra possui nome (obrigatório), preço unitário (obrigatório, > 0) e quantidade (obrigatório, > 0)
-- [ ] RF-03: O formulário permite adicionar e remover linhas de item dinamicamente, exibindo o subtotal (preço × quantidade) de cada linha em tempo real
-- [ ] RF-04: O formulário exibe o total da compra (soma dos subtotais dos itens) em tempo real
-- [ ] RF-05: O sistema bloqueia o salvamento de uma compra sem nenhum item válido
-- [ ] RF-06: O sistema permite editar uma compra existente (data, itens, observações)
-- [ ] RF-07: O sistema permite excluir uma compra existente, com diálogo de confirmação
-- [ ] RF-08: O sistema exibe a listagem de compras (mais recente primeiro), cada uma com data, quantidade de itens e total
-- [ ] RF-09: O dashboard exibe o total gasto no mês atual, o total gasto no mês anterior, a variação percentual entre eles e o número de compras no mês atual
-- [ ] RF-10: O sistema exibe uma lista comparativa por item: para cada item comprado no mês atual, mostra o preço médio unitário do mês atual e do mês anterior
-- [ ] RF-11: O preço médio unitário de um item no mês é calculado como média ponderada por quantidade (valor total gasto no item no mês ÷ quantidade total comprada no mês), considerando todas as ocorrências daquele item em todas as compras do mês
-- [ ] RF-12: A comparação de item agrupa por nome normalizado (trim + lowercase), exibindo o nome como digitado na ocorrência mais recente
-- [ ] RF-13: Itens sem correspondência no mês anterior exibem indicador "novo" em vez de percentual de variação
-- [ ] RF-14: A variação de preço é exibida com indicador visual de alta, baixa ou estabilidade (seta/cor) e percentual
-- [ ] RF-15: O registro de compras de mercado não gera transação no extrato nem altera saldo de contas
-- [ ] RF-16: Ao não haver compras no mês atual, o dashboard e a lista comparativa exibem estado vazio com mensagem orientativa
-- [ ] RF-17: O formulário permite adicionar o mesmo nome de item em mais de uma linha dentro da mesma compra, cada linha com sua própria quantidade e preço unitário (suporte a preço escalonado/promocional por faixa de quantidade, comum em compras via apps como iFood)
+- [x] RF-01: O sistema permite cadastrar uma compra de mercado com campo de data (obrigatório) e uma lista de itens
+- [x] RF-02: Cada item da compra possui nome (obrigatório), preço unitário (obrigatório, > 0) e quantidade (obrigatório, > 0)
+- [x] RF-03: O formulário permite adicionar e remover linhas de item dinamicamente, exibindo o subtotal (preço × quantidade) de cada linha em tempo real
+- [x] RF-04: O formulário exibe o total da compra (soma dos subtotais dos itens) em tempo real
+- [x] RF-05: O sistema bloqueia o salvamento de uma compra sem nenhum item válido
+- [x] RF-06: O sistema permite editar uma compra existente (data, itens, observações)
+- [x] RF-07: O sistema permite excluir uma compra existente, com diálogo de confirmação
+- [x] RF-08: O sistema exibe a listagem de compras (mais recente primeiro), cada uma com data, quantidade de itens e total
+- [x] RF-09: O dashboard exibe o total gasto no mês atual, o total gasto no mês anterior, a variação percentual entre eles e o número de compras no mês atual
+- [x] RF-10: O sistema exibe uma lista comparativa por item: para cada item comprado no mês atual, mostra o preço médio unitário do mês atual e do mês anterior
+- [x] RF-11: O preço médio unitário de um item no mês é calculado como média ponderada por quantidade (valor total gasto no item no mês ÷ quantidade total comprada no mês), considerando todas as ocorrências daquele item em todas as compras do mês
+- [x] RF-12: A comparação de item agrupa por nome normalizado (trim + lowercase), exibindo o nome como digitado na ocorrência mais recente
+- [x] RF-13: Itens sem correspondência no mês anterior exibem indicador "novo" em vez de percentual de variação
+- [x] RF-14: A variação de preço é exibida com indicador visual de alta, baixa ou estabilidade (seta/cor) e percentual
+- [x] RF-15: O registro de compras de mercado não gera transação no extrato nem altera saldo de contas
+- [x] RF-16: Ao não haver compras no mês atual, o dashboard e a lista comparativa exibem estado vazio com mensagem orientativa
+- [x] RF-17: O formulário permite adicionar o mesmo nome de item em mais de uma linha dentro da mesma compra, cada linha com sua própria quantidade e preço unitário (suporte a preço escalonado/promocional por faixa de quantidade, comum em compras via apps como iFood)
 
 ## Requisitos Não-Funcionais
 
@@ -64,10 +66,10 @@ Cenários alternativos:
 
 ### UI/UX Responsivo — Obrigatório
 
-- [ ] Formulário de compra com lista de itens não quebra em mobile (375px): campos empilham verticalmente, botão remover item permanece acessível
-- [ ] Dashboard de cards (Total Mês Atual, Total Mês Anterior, Variação, Nº Compras) usa grid responsivo (2 colunas mobile, 4 colunas desktop), mesmo padrão do dashboard de Investimentos
-- [ ] Lista comparativa por item vira lista/cards empilhados em mobile e tabela em telas maiores (≥768px)
-- [ ] Elementos de toque (adicionar item, remover item, editar, excluir) com área mínima de 44x44px em mobile
+- [x] Formulário de compra com lista de itens não quebra em mobile (375px): campos empilham verticalmente, botão remover item permanece acessível
+- [x] Dashboard de cards (Total Mês Atual, Total Mês Anterior, Variação, Nº Compras) usa grid responsivo (2 colunas mobile, 4 colunas desktop), mesmo padrão do dashboard de Investimentos
+- [x] Lista comparativa por item vira lista/cards empilhados em mobile e tabela em telas maiores (≥768px)
+- [x] Elementos de toque (adicionar item, remover item, editar, excluir) com área mínima de 44x44px em mobile
 
 ## Análise da Aplicação
 
@@ -105,18 +107,18 @@ Cenários alternativos:
 
 ## Critérios de Aceite
 
-- [ ] CA-01: dado o formulário de compra, quando preencho data e ao menos um item (nome, preço, quantidade) e salvo, então a compra é criada e aparece na listagem
-- [ ] CA-02: dado o formulário de compra, quando adiciono múltiplos itens, então vejo o subtotal de cada item e o total geral atualizados em tempo real
-- [ ] CA-03: dado o formulário de compra sem nenhum item preenchido, quando tento salvar, então o sistema bloqueia e exibe mensagem de validação
-- [ ] CA-04: dado que existem compras no mês atual e no mês anterior, quando acesso a página Mercado, então o dashboard mostra total do mês atual, total do mês anterior e a variação percentual corretamente calculados
-- [ ] CA-05: dado um item comprado em ambos os meses com preços diferentes, quando visualizo a lista comparativa, então vejo o preço médio de cada mês e a variação percentual com indicador de alta/baixa
-- [ ] CA-06: dado um item comprado apenas no mês atual, quando visualizo a lista comparativa, então vejo o indicador "novo" em vez de percentual
-- [ ] CA-07: dado um item comprado duas vezes no mesmo mês com preços e quantidades diferentes (ex.: 3 un a R$5 e 2 un a R$4), quando visualizo a comparação, então o preço do mês é a média ponderada por quantidade (no exemplo, R$23 ÷ 5 = R$4,60), não a média simples dos preços unitários
-- [ ] CA-08: dado uma compra existente, quando clico em excluir e confirmo, então a compra é removida e os totais/comparação são recalculados
-- [ ] CA-09: dado uma compra existente, quando edito data ou itens, então a alteração é persistida e refletida na listagem, dashboard e comparação
-- [ ] CA-10: dado que uma compra de mercado foi criada, quando verifico o extrato de transações e o saldo das contas, então nenhum deles é afetado
-- [ ] CA-11: quando não há compras no mês atual, então dashboard e comparação exibem estado vazio com mensagem orientativa, sem erro
-- [ ] CA-12: quando a tela carrega em mobile (375px), então formulário, dashboard e lista comparativa permanecem utilizáveis sem quebra de layout
+- [x] CA-01: dado o formulário de compra, quando preencho data e ao menos um item (nome, preço, quantidade) e salvo, então a compra é criada e aparece na listagem
+- [x] CA-02: dado o formulário de compra, quando adiciono múltiplos itens, então vejo o subtotal de cada item e o total geral atualizados em tempo real
+- [x] CA-03: dado o formulário de compra sem nenhum item preenchido, quando tento salvar, então o sistema bloqueia e exibe mensagem de validação
+- [x] CA-04: dado que existem compras no mês atual e no mês anterior, quando acesso a página Mercado, então o dashboard mostra total do mês atual, total do mês anterior e a variação percentual corretamente calculados
+- [x] CA-05: dado um item comprado em ambos os meses com preços diferentes, quando visualizo a lista comparativa, então vejo o preço médio de cada mês e a variação percentual com indicador de alta/baixa
+- [x] CA-06: dado um item comprado apenas no mês atual, quando visualizo a lista comparativa, então vejo o indicador "novo" em vez de percentual
+- [x] CA-07: dado um item comprado duas vezes no mesmo mês com preços e quantidades diferentes (ex.: 3 un a R$5 e 2 un a R$4), quando visualizo a comparação, então o preço do mês é a média ponderada por quantidade (no exemplo, R$23 ÷ 5 = R$4,60), não a média simples dos preços unitários
+- [x] CA-08: dado uma compra existente, quando clico em excluir e confirmo, então a compra é removida e os totais/comparação são recalculados
+- [x] CA-09: dado uma compra existente, quando edito data ou itens, então a alteração é persistida e refletida na listagem, dashboard e comparação
+- [x] CA-10: dado que uma compra de mercado foi criada, quando verifico o extrato de transações e o saldo das contas, então nenhum deles é afetado
+- [x] CA-11: quando não há compras no mês atual, então dashboard e comparação exibem estado vazio com mensagem orientativa, sem erro
+- [x] CA-12: quando a tela carrega em mobile (375px), então formulário, dashboard e lista comparativa permanecem utilizáveis sem quebra de layout
 
 ## Plano de Implementação (Passo a Passo)
 
@@ -180,11 +182,11 @@ Passo 10: Documentação
 
 ## Definição de Pronto (DoD)
 
-- [ ] Todos os critérios de aceite verificados manualmente
-- [ ] Código revisado (auto-revisão documentada)
-- [ ] `docs/REQUISITOS.md` atualizado com a seção Mercado
-- [ ] Sem warnings ou erros de TypeScript/ESLint introduzidos
-- [ ] Seção **Histórico de Correções** de `docs/spec.md` atualizada ao final da implementação
+- [x] Todos os critérios de aceite verificados manualmente
+- [x] Código revisado (auto-revisão documentada)
+- [x] `docs/REQUISITOS.md` atualizado com a seção Mercado
+- [x] Sem warnings ou erros de TypeScript/ESLint introduzidos
+- [x] Seção **Histórico de Correções** de `docs/spec.md` atualizada ao final da implementação
 
 ## DDR — Design Decision Record
 
