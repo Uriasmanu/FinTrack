@@ -9,6 +9,7 @@ import {
   Download,
   Settings,
   Landmark,
+  ShoppingCart,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -23,6 +24,7 @@ const menuItems = [
   { path: "/graficos", label: "Gráficos", icon: BarChart3 },
   { path: "/metas", label: "Metas", icon: Target },
   { path: "/investimentos", label: "Investimentos", icon: Landmark },
+  { path: "/mercado", label: "Mercado", icon: ShoppingCart },
   { path: "/exportar", label: "Exportar", icon: Download },
   { path: "/configuracoes", label: "Configurações", icon: Settings },
 ];
