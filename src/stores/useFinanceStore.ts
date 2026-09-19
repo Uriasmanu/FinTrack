@@ -8,6 +8,7 @@ import type {
   Meta,
   Config,
   AtivoFii,
+  CompraMercado,
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
@@ -60,6 +61,11 @@ interface FinanceState {
   comprarCotasFii: (id: string, quantidade: number, precoPago: number) => Promise<void>;
   registrarDividendoFii: (id: string, competencia: string, valorPorCota: number) => Promise<void>;
   obterAtivosFiiAtivos: () => AtivoFii[];
+
+  // Mercado
+  adicionarCompraMercado: (dados: Omit<CompraMercado, "id" | "criadoEm">) => Promise<void>;
+  editarCompraMercado: (id: string, dados: Partial<CompraMercado>) => Promise<void>;
+  excluirCompraMercado: (id: string) => Promise<void>;
 }
 
 async function salvar(state: DadosApp) {
@@ -791,5 +797,64 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return [];
     return state.ativosFii.filter((a) => a.ativo);
+  },
+
+  // ==================== Mercado ====================
+
+  adicionarCompraMercado: async (dados) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novaCompra: CompraMercado = {
+      ...dados,
+      id: gerarId(),
+      criadoEm: new Date().toISOString(),
+    };
+
+    const novoState: DadosApp = {
+      ...state,
+      comprasMercado: adicionarItensArray(state.comprasMercado, novaCompra),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  editarCompraMercado: async (id, dados) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novoState: DadosApp = {
+      ...state,
+      comprasMercado: editarItemArray(state.comprasMercado, id, dados),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  excluirCompraMercado: async (id) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novoState: DadosApp = {
+      ...state,
+      comprasMercado: excluirItemArray(state.comprasMercado, id),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
   },
 }));
