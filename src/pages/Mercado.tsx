@@ -97,6 +97,7 @@ export function Mercado() {
         open={formOpen}
         onOpenChange={setFormOpen}
         initialData={editingCompra ?? undefined}
+        catalogo={dados?.catalogoMercado ?? []}
         onSubmit={handleSubmit}
       />
 

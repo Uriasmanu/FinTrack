@@ -1,10 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -13,10 +20,15 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { gerarId } from "@/lib/uuid";
-import type { CompraMercado } from "@/types";
+import { normalizarNomeItem } from "@/lib/calculos-mercado";
+import type { CompraMercado, UnidadeMedida, CatalogoItemMercado } from "@/types";
+
+const UNIDADES: UnidadeMedida[] = ["un", "kg", "g", "L", "ml"];
 
 const itemSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
+  marca: z.string().optional(),
+  unidade: z.enum(["un", "kg", "g", "L", "ml"]),
   precoUnitario: z.number().min(0.01, "Preço deve ser maior que 0"),
   quantidade: z.number().min(0.01, "Quantidade deve ser maior que 0"),
 });
@@ -33,11 +45,12 @@ interface CompraFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: CompraMercado;
+  catalogo: CatalogoItemMercado[];
   onSubmit: (data: Omit<CompraMercado, "id" | "criadoEm">) => void;
 }
 
 function itemVazio() {
-  return { nome: "", precoUnitario: 0, quantidade: 1 };
+  return { nome: "", marca: "", unidade: "un" as UnidadeMedida, precoUnitario: 0, quantidade: 1 };
 }
 
 function valoresIniciais(initialData?: CompraMercado): CompraFormData {
@@ -45,6 +58,8 @@ function valoresIniciais(initialData?: CompraMercado): CompraFormData {
     data: initialData?.data ?? new Date().toISOString().split("T")[0],
     itens: initialData?.itens.map((i) => ({
       nome: i.nome,
+      marca: i.marca ?? "",
+      unidade: i.unidade ?? "un",
       precoUnitario: i.precoUnitario,
       quantidade: i.quantidade,
     })) ?? [itemVazio()],
@@ -52,12 +67,13 @@ function valoresIniciais(initialData?: CompraMercado): CompraFormData {
   };
 }
 
-export function CompraForm({ open, onOpenChange, initialData, onSubmit }: CompraFormProps) {
+export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit }: CompraFormProps) {
   const {
     register,
     control,
     handleSubmit,
     watch,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<CompraFormData>({
@@ -66,6 +82,19 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: "itens" });
+  const ultimoNomeCasado = useRef<Record<number, string>>({});
+
+  function handleNomeBlur(index: number, valor: string) {
+    const chave = normalizarNomeItem(valor);
+    if (!chave || ultimoNomeCasado.current[index] === chave) return;
+
+    const entrada = catalogo.find((c) => c.nomeNormalizado === chave);
+    if (!entrada) return;
+
+    ultimoNomeCasado.current[index] = chave;
+    setValue(`itens.${index}.unidade`, entrada.ultimaUnidade);
+    setValue(`itens.${index}.precoUnitario`, entrada.ultimoPreco);
+  }
 
   useEffect(() => {
     if (open) {
@@ -88,11 +117,14 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
       itens: data.itens.map((item) => ({
         id: gerarId(),
         nome: item.nome,
+        marca: item.marca?.trim() ? item.marca.trim() : undefined,
+        unidade: item.unidade,
         precoUnitario: item.precoUnitario,
         quantidade: item.quantidade,
       })),
       observacoes: data.observacoes,
     });
+    ultimoNomeCasado.current = {};
     reset(valoresIniciais(undefined));
     onOpenChange(false);
   }
@@ -105,6 +137,12 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
         </DialogHeader>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+          <datalist id="mercado-nomes-catalogo">
+            {catalogo.map((c) => (
+              <option key={c.nomeNormalizado} value={c.nomeExibicao} />
+            ))}
+          </datalist>
+
           <div>
             <label className="text-sm font-medium">Data</label>
             <Input type="date" {...register("data")} />
@@ -127,16 +165,45 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
             {fields.map((field, index) => {
               const item = itensAtuais[index];
               const subtotal = (item?.precoUnitario || 0) * (item?.quantidade || 0);
+              const nomeAtual = item?.nome ?? "";
+              const marcasSugeridas =
+                catalogo.find((c) => c.nomeNormalizado === normalizarNomeItem(nomeAtual))
+                  ?.marcas ?? [];
+              const { onBlur: onBlurNomeRegistrado, ...restoRegistroNome } = register(
+                `itens.${index}.nome` as const
+              );
+
               return (
                 <div key={field.id} className="rounded-lg border p-3 space-y-2">
+                  <datalist id={`mercado-marcas-${index}`}>
+                    {marcasSugeridas.map((m) => (
+                      <option key={m} value={m} />
+                    ))}
+                  </datalist>
+
                   <div className="flex items-start gap-2">
-                    <div className="flex-1">
-                      <Input placeholder="Nome do item" {...register(`itens.${index}.nome` as const)} />
-                      {errors.itens?.[index]?.nome && (
-                        <p className="text-sm text-destructive">
-                          {errors.itens[index]?.nome?.message}
-                        </p>
-                      )}
+                    <div className="flex-1 space-y-2">
+                      <div>
+                        <Input
+                          list="mercado-nomes-catalogo"
+                          placeholder="Nome do item"
+                          {...restoRegistroNome}
+                          onBlur={(e) => {
+                            onBlurNomeRegistrado(e);
+                            handleNomeBlur(index, e.target.value);
+                          }}
+                        />
+                        {errors.itens?.[index]?.nome && (
+                          <p className="text-sm text-destructive">
+                            {errors.itens[index]?.nome?.message}
+                          </p>
+                        )}
+                      </div>
+                      <Input
+                        list={`mercado-marcas-${index}`}
+                        placeholder="Marca (opcional)"
+                        {...register(`itens.${index}.marca` as const)}
+                      />
                     </div>
                     <Button
                       type="button"
@@ -150,7 +217,7 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
                     </Button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-3 gap-2">
                     <div>
                       <label className="text-xs text-muted-foreground">Preço Unit. (R$)</label>
                       <Input
@@ -180,6 +247,24 @@ export function CompraForm({ open, onOpenChange, initialData, onSubmit }: Compra
                           {errors.itens[index]?.quantidade?.message}
                         </p>
                       )}
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Unidade</label>
+                      <Select
+                        value={watch(`itens.${index}.unidade`)}
+                        onValueChange={(v) => setValue(`itens.${index}.unidade`, v as UnidadeMedida)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {UNIDADES.map((u) => (
+                            <SelectItem key={u} value={u}>
+                              {u}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
