@@ -108,6 +108,21 @@ export interface AtivoFii {
   criadoEm: string;
 }
 
+export interface ItemMercado {
+  id: string;
+  nome: string;
+  precoUnitario: number;
+  quantidade: number;
+}
+
+export interface CompraMercado {
+  id: string;
+  data: string;
+  itens: ItemMercado[];
+  observacoes?: string;
+  criadoEm: string;
+}
+
 export interface DadosApp {
   transacoes: Transacao[];
   categorias: Categoria[];
@@ -116,4 +131,5 @@ export interface DadosApp {
   metas: Meta[];
   config: Config;
   ativosFii: AtivoFii[];
+  comprasMercado: CompraMercado[];
 }
