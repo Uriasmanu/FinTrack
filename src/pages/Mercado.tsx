@@ -5,17 +5,28 @@ import { MercadoDashboard } from "@/components/mercado/mercado-dashboard";
 import { ItensComparacao } from "@/components/mercado/itens-comparacao";
 import { CompraCard } from "@/components/mercado/compra-card";
 import { CompraForm } from "@/components/mercado/compra-form";
+import { CatalogoLista } from "@/components/mercado/catalogo-lista";
+import { CatalogoItemForm } from "@/components/mercado/catalogo-item-form";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
-import type { CompraMercado } from "@/types";
+import type { CompraMercado, CatalogoItemMercado } from "@/types";
 
 export function Mercado() {
-  const { dados, adicionarCompraMercado, editarCompraMercado, excluirCompraMercado } =
-    useFinanceStore();
+  const {
+    dados,
+    adicionarCompraMercado,
+    editarCompraMercado,
+    excluirCompraMercado,
+    editarItemCatalogoMercado,
+    excluirItemCatalogoMercado,
+  } = useFinanceStore();
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingCompra, setEditingCompra] = useState<CompraMercado | null>(null);
   const [deleteCompra, setDeleteCompra] = useState<CompraMercado | null>(null);
+
+  const [editingCatalogoItem, setEditingCatalogoItem] = useState<CatalogoItemMercado | null>(null);
+  const [deleteCatalogoItem, setDeleteCatalogoItem] = useState<CatalogoItemMercado | null>(null);
 
   const compras = [...(dados?.comprasMercado ?? [])].sort((a, b) => b.data.localeCompare(a.data));
 
@@ -45,6 +56,27 @@ export function Mercado() {
     } else {
       adicionarCompraMercado(data);
     }
+  }
+
+  function handleEditarCatalogoItem(item: CatalogoItemMercado) {
+    setEditingCatalogoItem(item);
+  }
+
+  function handleExcluirCatalogoItem(item: CatalogoItemMercado) {
+    setDeleteCatalogoItem(item);
+  }
+
+  function confirmarExclusaoCatalogoItem() {
+    if (!deleteCatalogoItem) return;
+    excluirItemCatalogoMercado(deleteCatalogoItem.nomeNormalizado);
+    setDeleteCatalogoItem(null);
+  }
+
+  function handleSubmitCatalogoItem(
+    nomeNormalizadoAntigo: string,
+    dados: { nome: string; marcas: string[] }
+  ) {
+    editarItemCatalogoMercado(nomeNormalizadoAntigo, dados);
   }
 
   return (
@@ -93,6 +125,12 @@ export function Mercado() {
         )}
       </div>
 
+      <CatalogoLista
+        catalogo={dados?.catalogoMercado ?? []}
+        onEditar={handleEditarCatalogoItem}
+        onExcluir={handleExcluirCatalogoItem}
+      />
+
       <CompraForm
         open={formOpen}
         onOpenChange={setFormOpen}
@@ -109,6 +147,25 @@ export function Mercado() {
         onConfirm={confirmarExclusao}
         title="Excluir Compra"
         description="Tem certeza que deseja excluir esta compra? Esta ação não pode ser desfeita."
+      />
+
+      <CatalogoItemForm
+        open={!!editingCatalogoItem}
+        onOpenChange={(open) => {
+          if (!open) setEditingCatalogoItem(null);
+        }}
+        item={editingCatalogoItem}
+        onSubmit={handleSubmitCatalogoItem}
+      />
+
+      <DeleteConfirmDialog
+        open={!!deleteCatalogoItem}
+        onOpenChange={(open) => {
+          if (!open) setDeleteCatalogoItem(null);
+        }}
+        onConfirm={confirmarExclusaoCatalogoItem}
+        title="Excluir Item do Catálogo"
+        description="Tem certeza que deseja excluir este item do catálogo? Ele não será mais sugerido ao digitar uma nova compra. Isso não afeta compras já registradas."
       />
     </div>
   );

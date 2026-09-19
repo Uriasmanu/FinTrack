@@ -144,3 +144,48 @@ export function atualizarCatalogoMercado(
 
   return Array.from(catalogo.values());
 }
+
+export function editarEntradaCatalogoMercado(
+  catalogo: CatalogoItemMercado[],
+  nomeNormalizadoAntigo: string,
+  dados: { nome: string; marcas: string[] }
+): CatalogoItemMercado[] {
+  const entradaAntiga = catalogo.find((c) => c.nomeNormalizado === nomeNormalizadoAntigo);
+  if (!entradaAntiga) return catalogo;
+
+  const novoNomeNormalizado = normalizarNomeItem(dados.nome);
+  const marcasLimpas = Array.from(
+    new Set(dados.marcas.map((m) => m.trim()).filter((m) => m !== ""))
+  );
+
+  const restante = catalogo.filter((c) => c.nomeNormalizado !== nomeNormalizadoAntigo);
+  const entradaColidente = restante.find((c) => c.nomeNormalizado === novoNomeNormalizado);
+
+  const maisRecente =
+    entradaColidente && entradaColidente.atualizadoEm > entradaAntiga.atualizadoEm
+      ? entradaColidente
+      : entradaAntiga;
+
+  const entradaAtualizada: CatalogoItemMercado = {
+    nomeNormalizado: novoNomeNormalizado,
+    nomeExibicao: dados.nome,
+    marcas: entradaColidente
+      ? Array.from(new Set([...entradaColidente.marcas, ...marcasLimpas]))
+      : marcasLimpas,
+    ultimaUnidade: maisRecente.ultimaUnidade,
+    ultimoPreco: maisRecente.ultimoPreco,
+    atualizadoEm: new Date().toISOString(),
+  };
+
+  return [
+    ...restante.filter((c) => c.nomeNormalizado !== novoNomeNormalizado),
+    entradaAtualizada,
+  ];
+}
+
+export function excluirEntradaCatalogoMercado(
+  catalogo: CatalogoItemMercado[],
+  nomeNormalizado: string
+): CatalogoItemMercado[] {
+  return catalogo.filter((c) => c.nomeNormalizado !== nomeNormalizado);
+}

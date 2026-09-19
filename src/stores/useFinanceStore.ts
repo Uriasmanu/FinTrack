@@ -12,7 +12,11 @@ import type {
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
-import { atualizarCatalogoMercado } from "@/lib/calculos-mercado";
+import {
+  atualizarCatalogoMercado,
+  editarEntradaCatalogoMercado,
+  excluirEntradaCatalogoMercado,
+} from "@/lib/calculos-mercado";
 import { obterCategoriasDefault, obterConfigDefault, obterMetasDefault } from "@/data/defaults";
 import {
   criarTransacoesRecorrentes,
@@ -67,6 +71,11 @@ interface FinanceState {
   adicionarCompraMercado: (dados: Omit<CompraMercado, "id" | "criadoEm">) => Promise<void>;
   editarCompraMercado: (id: string, dados: Partial<CompraMercado>) => Promise<void>;
   excluirCompraMercado: (id: string) => Promise<void>;
+  editarItemCatalogoMercado: (
+    nomeNormalizadoAntigo: string,
+    dados: { nome: string; marcas: string[] }
+  ) => Promise<void>;
+  excluirItemCatalogoMercado: (nomeNormalizado: string) => Promise<void>;
 }
 
 async function salvar(state: DadosApp) {
@@ -856,6 +865,44 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const novoState: DadosApp = {
       ...state,
       comprasMercado: excluirItemArray(state.comprasMercado, id),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  editarItemCatalogoMercado: async (nomeNormalizadoAntigo, dados) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novoState: DadosApp = {
+      ...state,
+      catalogoMercado: editarEntradaCatalogoMercado(
+        state.catalogoMercado,
+        nomeNormalizadoAntigo,
+        dados
+      ),
+    };
+
+    set({ dados: novoState });
+    try {
+      await salvar(novoState);
+    } catch {
+      set({ dados: state });
+    }
+  },
+
+  excluirItemCatalogoMercado: async (nomeNormalizado) => {
+    const state = get().dados;
+    if (!state) return;
+
+    const novoState: DadosApp = {
+      ...state,
+      catalogoMercado: excluirEntradaCatalogoMercado(state.catalogoMercado, nomeNormalizado),
     };
 
     set({ dados: novoState });
