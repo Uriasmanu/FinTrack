@@ -13,6 +13,7 @@ function criarDadosNovos(): DadosApp {
     operacoesFii: [],
     dividendosFii: [],
     comprasMercado: [],
+    catalogoMercado: [],
     config: {
       salario: 0,
       tema: "claro",

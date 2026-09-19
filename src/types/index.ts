@@ -108,9 +108,13 @@ export interface AtivoFii {
   criadoEm: string;
 }
 
+export type UnidadeMedida = "un" | "kg" | "g" | "L" | "ml";
+
 export interface ItemMercado {
   id: string;
   nome: string;
+  marca?: string;
+  unidade: UnidadeMedida;
   precoUnitario: number;
   quantidade: number;
 }
@@ -123,6 +127,15 @@ export interface CompraMercado {
   criadoEm: string;
 }
 
+export interface CatalogoItemMercado {
+  nomeNormalizado: string;
+  nomeExibicao: string;
+  marcas: string[];
+  ultimaUnidade: UnidadeMedida;
+  ultimoPreco: number;
+  atualizadoEm: string;
+}
+
 export interface DadosApp {
   transacoes: Transacao[];
   categorias: Categoria[];
@@ -132,4 +145,5 @@ export interface DadosApp {
   config: Config;
   ativosFii: AtivoFii[];
   comprasMercado: CompraMercado[];
+  catalogoMercado: CatalogoItemMercado[];
 }

@@ -92,6 +92,7 @@ function criarDadosNovos() {
     operacoesFii: [],
     dividendosFii: [],
     comprasMercado: [],
+    catalogoMercado: [],
     config: {
       salario: 0,
       tema: "claro",
@@ -194,6 +195,7 @@ function carregarOuCriar() {
   dados.operacoesFii = dados.operacoesFii ?? [];
   dados.dividendosFii = dados.dividendosFii ?? [];
   dados.comprasMercado = dados.comprasMercado ?? [];
+  dados.catalogoMercado = dados.catalogoMercado ?? [];
   dados.config = dados.config ?? criarDadosNovos().config;
 
   if (migrarIdsCategorias(dados)) {
@@ -226,6 +228,7 @@ app.put("/api/data", async (req, res) => {
     dados.operacoesFii = dados.operacoesFii ?? [];
     dados.dividendosFii = dados.dividendosFii ?? [];
     dados.comprasMercado = dados.comprasMercado ?? [];
+    dados.catalogoMercado = dados.catalogoMercado ?? [];
 
     await writeFile(ARQUIVO_UNICO, JSON.stringify(dados, null, 2), "utf-8");
     res.json({ ok: true });
