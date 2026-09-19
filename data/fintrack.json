@@ -17134,5 +17134,219 @@
       "lazer": 0.3
     },
     "criadoEm": "2026-08-07T21:00:01.019Z"
-  }
+  },
+  "comprasMercado": [
+    {
+      "data": "2026-09-07",
+      "itens": [
+        {
+          "id": "992e3287-749c-463b-98f4-495e5f2d43db",
+          "nome": "creme de leite mococa",
+          "precoUnitario": 1.79,
+          "quantidade": 4
+        },
+        {
+          "id": "457d13e4-cd4c-4ad4-9ae8-aab879f740a4",
+          "nome": "manteiga vigor",
+          "precoUnitario": 16.31,
+          "quantidade": 1
+        },
+        {
+          "id": "29bd09a2-297f-40bc-8b26-b0ec28f57e75",
+          "nome": "detergente Ype",
+          "precoUnitario": 2.19,
+          "quantidade": 4
+        },
+        {
+          "id": "431dc480-3b7f-4aa1-b752-ed215be8fdac",
+          "nome": "oleo Soya",
+          "precoUnitario": 7.15,
+          "quantidade": 3
+        },
+        {
+          "id": "8d52858d-5afd-4c08-8540-59369eba3aa0",
+          "nome": "tapioca Akio",
+          "precoUnitario": 5.46,
+          "quantidade": 9
+        },
+        {
+          "id": "fd8e27c8-6b90-4c14-b54a-0b2acaa08882",
+          "nome": "sabonete flor de ype",
+          "precoUnitario": 1.3,
+          "quantidade": 2
+        },
+        {
+          "id": "50c75555-eede-4413-8a32-210e2a79da30",
+          "nome": "sabonete lux",
+          "precoUnitario": 2.72,
+          "quantidade": 2
+        },
+        {
+          "id": "6fed2eca-ee95-44ea-a3cf-9e3153a188a1",
+          "nome": "Farinha Farina",
+          "precoUnitario": 3.16,
+          "quantidade": 3
+        },
+        {
+          "id": "a541f437-d7d6-45c3-81e7-2617404092e0",
+          "nome": "12 rolos Papel higienico folha dupla neutro Klass",
+          "precoUnitario": 16.31,
+          "quantidade": 1
+        },
+        {
+          "id": "e1f0331e-8909-4e27-9a98-7df329b6d1ea",
+          "nome": "20 Ovos Joframa",
+          "precoUnitario": 10.9,
+          "quantidade": 6
+        },
+        {
+          "id": "6cffcda4-7997-4c18-9235-032148683911",
+          "nome": "vassoura Santa maria",
+          "precoUnitario": 15.3,
+          "quantidade": 1
+        },
+        {
+          "id": "9cde89ff-f0c6-4bbc-965b-51bf04d80958",
+          "nome": "500g Cafe 3 coreações",
+          "precoUnitario": 23.9,
+          "quantidade": 2
+        },
+        {
+          "id": "7a7cb511-1f45-49a6-a0e1-e5814e4b91be",
+          "nome": "pao de forma puma",
+          "precoUnitario": 7.64,
+          "quantidade": 1
+        },
+        {
+          "id": "719e1906-2685-4d9b-a4af-3f3eb406cd94",
+          "nome": "500ml Amaciante Downy",
+          "precoUnitario": 14.12,
+          "quantidade": 1
+        },
+        {
+          "id": "2ac9b0a9-79fd-4798-9126-12270bdf5866",
+          "nome": "sazon",
+          "precoUnitario": 6.77,
+          "quantidade": 3
+        },
+        {
+          "id": "81f64f7d-ffb6-43aa-8829-214d11932bb6",
+          "nome": "sazon",
+          "precoUnitario": 6.19,
+          "quantidade": 1
+        },
+        {
+          "id": "2100134f-73d2-4898-970a-e6e1d783654e",
+          "nome": "Vinagre Castelo",
+          "precoUnitario": 4.25,
+          "quantidade": 1
+        },
+        {
+          "id": "da935089-d9aa-4b3c-a8ba-2529ef577b37",
+          "nome": "170g ervilha e Milho Bonare",
+          "precoUnitario": 3.23,
+          "quantidade": 3
+        },
+        {
+          "id": "07c84c73-44cb-42da-a5e6-f01ce38a0304",
+          "nome": "1kg açucar",
+          "precoUnitario": 3.01,
+          "quantidade": 5
+        },
+        {
+          "id": "34ab0214-a5f2-4e64-8271-bf36e92433c3",
+          "nome": "Gelatina royal",
+          "precoUnitario": 2.5,
+          "quantidade": 4
+        },
+        {
+          "id": "0b221f7f-45dd-4954-8415-8b4fe4b1baec",
+          "nome": "Proteina de soja belo frango",
+          "precoUnitario": 10.93,
+          "quantidade": 1
+        },
+        {
+          "id": "b2d27cea-77c9-4e94-bb31-644d1cc9cd39",
+          "nome": "1 L Agua sanitaria",
+          "precoUnitario": 2.97,
+          "quantidade": 1
+        },
+        {
+          "id": "6339491f-9e68-4754-9802-f0d8f8215201",
+          "nome": "Molho de tomate Fugini",
+          "precoUnitario": 1.63,
+          "quantidade": 2
+        },
+        {
+          "id": "f4eb2a6f-bf1e-4f9b-b1a9-3ac67dd853c3",
+          "nome": "Molho de tomate Fugini",
+          "precoUnitario": 2.17,
+          "quantidade": 1
+        },
+        {
+          "id": "760fcfab-5f17-49f7-b496-fa40d5b639d0",
+          "nome": "limpador Multiuso Veja",
+          "precoUnitario": 3.49,
+          "quantidade": 1
+        },
+        {
+          "id": "e6911cd5-5c69-4a4d-9b08-8857db2c1f14",
+          "nome": "Alho",
+          "precoUnitario": 11.53,
+          "quantidade": 1
+        },
+        {
+          "id": "fe5b472c-7310-42c2-bcbd-9923d21a741e",
+          "nome": "cebola",
+          "precoUnitario": 4.51,
+          "quantidade": 1
+        },
+        {
+          "id": "20e66e23-0ad0-4eb5-81f6-94e18a41ca8f",
+          "nome": "tomate",
+          "precoUnitario": 8.17,
+          "quantidade": 1
+        },
+        {
+          "id": "e6a9114e-9673-4a27-a12c-e7967f3f81fd",
+          "nome": "pementão",
+          "precoUnitario": 6.68,
+          "quantidade": 1
+        },
+        {
+          "id": "59400481-272f-46c4-b1a1-b1c710cb6087",
+          "nome": "abobrinha",
+          "precoUnitario": 4.44,
+          "quantidade": 1
+        },
+        {
+          "id": "d1cc0880-0399-4000-98d4-c1b38c66a903",
+          "nome": "beterraba",
+          "precoUnitario": 2.92,
+          "quantidade": 1
+        },
+        {
+          "id": "57301681-a093-414b-ad54-a158f958b83d",
+          "nome": "cenoura",
+          "precoUnitario": 7.34,
+          "quantidade": 1
+        },
+        {
+          "id": "4048c34e-33a7-45c0-8330-a3fe681c374c",
+          "nome": "Leite condensado Maraloara",
+          "precoUnitario": 4.59,
+          "quantidade": 4
+        },
+        {
+          "id": "150a092d-518a-44fe-94d3-3822c3fe892d",
+          "nome": "taxa ifood",
+          "precoUnitario": 3.99,
+          "quantidade": 1
+        }
+      ],
+      "observacoes": "",
+      "id": "03b6088d-90e2-4ac4-94a4-5ddaec8965af",
+      "criadoEm": "2026-09-19T19:29:03.962Z"
+    }
+  ]
 }
