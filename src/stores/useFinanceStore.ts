@@ -12,6 +12,7 @@ import type {
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
+import { atualizarCatalogoMercado } from "@/lib/calculos-mercado";
 import { obterCategoriasDefault, obterConfigDefault, obterMetasDefault } from "@/data/defaults";
 import {
   criarTransacoesRecorrentes,
@@ -814,6 +815,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const novoState: DadosApp = {
       ...state,
       comprasMercado: adicionarItensArray(state.comprasMercado, novaCompra),
+      catalogoMercado: atualizarCatalogoMercado(state.catalogoMercado, novaCompra),
     };
 
     set({ dados: novoState });
@@ -828,9 +830,15 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return;
 
+    const comprasAtualizadas = editarItemArray(state.comprasMercado, id, dados);
+    const compraEditada = comprasAtualizadas.find((c) => c.id === id);
+
     const novoState: DadosApp = {
       ...state,
-      comprasMercado: editarItemArray(state.comprasMercado, id, dados),
+      comprasMercado: comprasAtualizadas,
+      catalogoMercado: compraEditada
+        ? atualizarCatalogoMercado(state.catalogoMercado, compraEditada)
+        : state.catalogoMercado,
     };
 
     set({ dados: novoState });
