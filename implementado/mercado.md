@@ -5,6 +5,8 @@ Implementado
 
 **Nota de verificação:** todos os critérios foram verificados via revisão de código rigorosa e independente (8 rodadas de revisão, uma por task), incluindo recálculo manual de exemplos numéricos do próprio spec (ex.: CA-07: 3un×R$5,00 + 2un×R$4,00 ÷ 5un = R$4,60) e confirmação por grep da ausência de qualquer referência a `Transacao`/saldo/conta (CA-10). Não foi realizada uma sessão interativa em navegador real (o ambiente de implementação não possui Playwright/Puppeteer/Cypress ou qualquer ferramenta de automação de navegador). Recomenda-se uma passada manual final abrindo o app nos breakpoints 375px/768px/1024px/1440px antes de considerar a feature 100% validada em campo.
 
+**Nota de verificação (extensão marca/unidade/catálogo, RF-18–23):** a lógica de merge do catálogo (`atualizarCatalogoMercado`) foi traçada manualmente contra 4 casos (catálogo vazio, marca nova em item existente, marca vazia ignorada, grafia mais recente prevalece); o fluxo de persistência foi verificado com um teste real de round-trip via `curl` (PUT com `catalogoMercado` populado seguido de GET confirmando os dados voltam intactos) contra o servidor Express rodando localmente, com os dados originais restaurados ao final. A interação de UI (autocompletar por `<datalist>`, pré-preenchimento ao sair do campo nome, layout do grid de 3 colunas em 375px) não foi verificada em um navegador real pelo mesmo motivo — recomenda-se validação manual desses pontos específicos.
+
 ## Data
 19/09/2026
 
@@ -56,6 +58,12 @@ Cenários alternativos:
 - [x] RF-15: O registro de compras de mercado não gera transação no extrato nem altera saldo de contas
 - [x] RF-16: Ao não haver compras no mês atual, o dashboard e a lista comparativa exibem estado vazio com mensagem orientativa
 - [x] RF-17: O formulário permite adicionar o mesmo nome de item em mais de uma linha dentro da mesma compra, cada linha com sua própria quantidade e preço unitário (suporte a preço escalonado/promocional por faixa de quantidade, comum em compras via apps como iFood)
+- [x] RF-18: Cada item pode ter uma unidade de medida (un, kg, g, L, ml), com "un" como padrão; a unidade é apenas rótulo de exibição e não afeta o cálculo de subtotal
+- [x] RF-19: Cada item pode ter uma marca opcional
+- [x] RF-20: O sistema mantém um catálogo de itens/marcas já comprados, atualizado automaticamente a cada compra criada ou editada; o catálogo nunca perde uma entrada por causa de uma edição ou exclusão de compra
+- [x] RF-21: Ao digitar o nome de um item, o formulário sugere nomes já usados (via catálogo); ao digitar/focar o campo marca, sugere as marcas já usadas para aquele item específico
+- [x] RF-22: Ao reconhecer um nome de item já existente no catálogo, o formulário pré-preenche automaticamente a última unidade e o último preço unitário usados para aquele item
+- [x] RF-23: A marca e a unidade não afetam o agrupamento do comparativo de preços por item (RF-11/RF-12 continuam agrupando só por nome normalizado)
 
 ## Requisitos Não-Funcionais
 

@@ -513,6 +513,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Comparativo de preço por item: preço médio unitário ponderado por quantidade do mês atual vs mês anterior, com indicador de alta/baixa/estável e badge "novo" para itens sem histórico
 - Não gera transação no extrato nem afeta saldo de contas (módulo paralelo, mesmo padrão de Investimentos FII)
 - Edição e exclusão de compras
+- Itens podem ter marca (opcional) e unidade de medida (un/kg/g/L/ml, padrão "un")
+- Catálogo de itens/marcas já comprados, atualizado automaticamente, usado para sugerir e pré-preencher nome/marca/unidade/preço ao digitar um item conhecido
 - ✅ **Implementado**: `Mercado.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `calculos-mercado.ts`
 
 ### 9. Tema Claro/Escuro ✅
@@ -673,12 +675,24 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
         {
           "id": "uuid",
           "nome": "string",
+          "marca": "string (opcional)",
+          "unidade": "un | kg | g | L | ml",
           "precoUnitario": 0.00,
           "quantidade": 0
         }
       ],
       "observacoes": "string (opcional)",
       "criadoEm": "ISO timestamp"
+    }
+  ],
+  "catalogoMercado": [
+    {
+      "nomeNormalizado": "string",
+      "nomeExibicao": "string",
+      "marcas": ["string"],
+      "ultimaUnidade": "un | kg | g | L | ml",
+      "ultimoPreco": 0.00,
+      "atualizadoEm": "ISO timestamp"
     }
   ],
   "config": {
@@ -880,3 +894,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 19/09/2026 | Estrutura de pastas: adicionada pasta `components/mercado/` com 4 componentes, `pages/Mercado.tsx` e `lib/calculos-mercado.ts` |
 | 19/09/2026 | Estrutura de dados: adicionado `comprasMercado` (com itens `ItemMercado`) ao JSON |
 | 19/09/2026 | Rotas: adicionada `/mercado` na tabela de rotas |
+| 19/09/2026 | Feature: Mercado — itens passam a ter marca (opcional) e unidade de medida (un/kg/g/L/ml); catálogo de itens/marcas auto-populado usado para sugerir e pré-preencher o formulário de compra |
