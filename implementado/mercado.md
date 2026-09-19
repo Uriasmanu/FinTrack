@@ -7,6 +7,8 @@ Implementado
 
 **Nota de verificação (extensão marca/unidade/catálogo, RF-18–23):** a lógica de merge do catálogo (`atualizarCatalogoMercado`) foi traçada manualmente contra 4 casos (catálogo vazio, marca nova em item existente, marca vazia ignorada, grafia mais recente prevalece); o fluxo de persistência foi verificado com um teste real de round-trip via `curl` (PUT com `catalogoMercado` populado seguido de GET confirmando os dados voltam intactos) contra o servidor Express rodando localmente, com os dados originais restaurados ao final. A interação de UI (autocompletar por `<datalist>`, pré-preenchimento ao sair do campo nome, layout do grid de 3 colunas em 375px) não foi verificada em um navegador real pelo mesmo motivo — recomenda-se validação manual desses pontos específicos.
 
+**Nota de verificação (extensão visualizar/editar/excluir catálogo, RF-24–27):** a lógica de mesclagem por colisão de nome ao editar (`editarEntradaCatalogoMercado`) foi traçada manualmente contra o caso de renomear um item para um nome que já existe como outra entrada, confirmando que as marcas das duas entradas se unem em vez de duplicar. `npm run build` e `npx eslint` (escopo: arquivos de mercado + store) não introduziram nenhum erro ou aviso novo. A interação de UI (menu "⋮" na lista do catálogo, diálogo de edição com marcas dinâmicas, confirmação de exclusão) não foi verificada em navegador real, pelo mesmo motivo das notas anteriores.
+
 ## Data
 19/09/2026
 
@@ -64,6 +66,10 @@ Cenários alternativos:
 - [x] RF-21: Ao digitar o nome de um item, o formulário sugere nomes já usados (via catálogo); ao digitar/focar o campo marca, sugere as marcas já usadas para aquele item específico
 - [x] RF-22: Ao reconhecer um nome de item já existente no catálogo, o formulário pré-preenche automaticamente a última unidade e o último preço unitário usados para aquele item
 - [x] RF-23: A marca e a unidade não afetam o agrupamento do comparativo de preços por item (RF-11/RF-12 continuam agrupando só por nome normalizado)
+- [x] RF-24: O sistema exibe uma seção "Catálogo de Itens" na página Mercado, listando cada item conhecido com suas marcas e a última unidade/preço usados (referência, somente leitura)
+- [x] RF-25: O usuário pode editar o nome e a lista de marcas de um item do catálogo; a edição afeta apenas sugestões futuras, nunca compras já registradas
+- [x] RF-26: Ao editar o nome de um item do catálogo para um nome que normaliza igual a outro item já existente, os dois itens são mesclados (união das marcas) em vez de duplicados
+- [x] RF-27: O usuário pode excluir um item inteiro do catálogo (nome + todas as marcas); a exclusão não afeta compras já registradas
 
 ## Requisitos Não-Funcionais
 

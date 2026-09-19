@@ -515,7 +515,8 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Edição e exclusão de compras
 - Itens podem ter marca (opcional) e unidade de medida (un/kg/g/L/ml, padrão "un")
 - Catálogo de itens/marcas já comprados, atualizado automaticamente, usado para sugerir e pré-preencher nome/marca/unidade/preço ao digitar um item conhecido
-- ✅ **Implementado**: `Mercado.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `calculos-mercado.ts`
+- Seção "Catálogo de Itens" na página Mercado: lista os itens conhecidos e suas marcas, permite editar nome/marcas (com mesclagem automática se o novo nome colidir com outro item já existente) ou excluir um item inteiro do catálogo — sem afetar compras já registradas
+- ✅ **Implementado**: `Mercado.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `catalogo-lista.tsx`, `catalogo-item-form.tsx`, `calculos-mercado.ts`
 
 ### 9. Tema Claro/Escuro ✅
 
@@ -894,4 +895,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 19/09/2026 | Estrutura de pastas: adicionada pasta `components/mercado/` com 4 componentes, `pages/Mercado.tsx` e `lib/calculos-mercado.ts` |
 | 19/09/2026 | Estrutura de dados: adicionado `comprasMercado` (com itens `ItemMercado`) ao JSON |
 | 19/09/2026 | Rotas: adicionada `/mercado` na tabela de rotas |
+| 19/09/2026 | Feature: Mercado — seção "Catálogo de Itens" para visualizar, editar (com mesclagem em caso de colisão de nome) e excluir itens/marcas do catálogo |
 | 19/09/2026 | Feature: Mercado — itens passam a ter marca (opcional) e unidade de medida (un/kg/g/L/ml); catálogo de itens/marcas auto-populado usado para sugerir e pré-preencher o formulário de compra |
