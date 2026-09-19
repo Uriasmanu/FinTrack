@@ -10,9 +10,9 @@ import {
 
 export function MercadoDashboard() {
   const { dados } = useFinanceStore();
-  const compras = dados?.comprasMercado ?? [];
 
   const totais = useMemo(() => {
+    const compras = dados?.comprasMercado ?? [];
     const agora = new Date();
     const mesAtual = agora.getMonth();
     const anoAtual = agora.getFullYear();
@@ -24,7 +24,7 @@ export function MercadoDashboard() {
     const quantidadeCompras = calcularQuantidadeComprasMes(compras, mesAtual, anoAtual);
 
     return { totalMesAtual, totalMesAnterior, variacao, quantidadeCompras };
-  }, [compras]);
+  }, [dados]);
 
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

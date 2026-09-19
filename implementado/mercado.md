@@ -1,4 +1,4 @@
-﻿# Feature: Mercado — Registro de Compras e Comparativo de Preços
+# Feature: Mercado — Registro de Compras e Comparativo de Preços
 
 ## Status
 Implementado
@@ -68,15 +68,15 @@ Cenários alternativos:
 
 - [x] Formulário de compra com lista de itens não quebra em mobile (375px): campos empilham verticalmente, botão remover item permanece acessível
 - [x] Dashboard de cards (Total Mês Atual, Total Mês Anterior, Variação, Nº Compras) usa grid responsivo (2 colunas mobile, 4 colunas desktop), mesmo padrão do dashboard de Investimentos
-- [x] Lista comparativa por item vira lista/cards empilhados em mobile e tabela em telas maiores (≥768px)
-- [x] Elementos de toque (adicionar item, remover item, editar, excluir) com área mínima de 44x44px em mobile
+- [ ] Lista comparativa por item vira lista/cards empilhados em mobile e tabela em telas maiores (≥768px) (implementado como lista responsiva com flex-wrap em todos os breakpoints, sem uma variante de tabela dedicada — o plano de implementação não especificou uma tabela; funcionalmente equivalente, mas não segue a apresentação exata descrita aqui)
+- [ ] Elementos de toque (adicionar item, remover item, editar, excluir) com área mínima de 44x44px em mobile (atual: 32-40px, seguindo o padrão já usado em outros módulos como Investimentos FII — não atinge o alvo de 44px declarado; ajuste ficaria fora do escopo desta feature, pois exigiria revisar todos os módulos)
 
 ## Análise da Aplicação
 
 - **Arquitetura:** SPA React + Zustand (estado global) + Express (persistência em `data/fintrack.json`). Sem mudanças de arquitetura — Mercado segue o mesmo modelo dos demais domínios (transações, metas, FII).
 - **Padrões em uso:** cada domínio tem: type em `types/index.ts`, slice de estado + ações CRUD em `useFinanceStore.ts` (imutável, com rollback em caso de falha ao salvar), pasta de componentes em `components/{dominio}/`, página em `pages/{Dominio}.tsx`, rota registrada em `App.tsx` e item em `sidebar.tsx`.
 - **Fluxo de dados:** formulário (React Hook Form + Zod) → ação do store → merge imutável no `DadosApp` → `salvar()` (PUT para o backend Express) → re-render via seletores do Zustand.
-- **Contratos de API:** não há endpoint novo — persistência via `PUT /api/data` já existente (arquivo JSON único), sem alteração no `server.js`.
+- **Contratos de API:** não há endpoint novo — persistência via `PUT /api/data` já existente (arquivo JSON único); `server.js` foi modificado apenas para normalizar o valor padrão do novo campo (`dados.comprasMercado = dados.comprasMercado ?? []`), sem adicionar rotas novas.
 
 ## Arquivos Envolvidos
 
@@ -93,6 +93,9 @@ Cenários alternativos:
 | `src/App.tsx` | Modificar | Registrar rota `/mercado` |
 | `src/components/layout/sidebar.tsx` | Modificar | Adicionar item de menu "Mercado" (ícone `ShoppingCart`) |
 | `docs/REQUISITOS.md` | Modificar | Documentar nova seção "Mercado" após implementação |
+| `server.js` | Modificar | Normalizar valor padrão de `comprasMercado` (`?? []`) ao ler/gravar dados |
+| `src/lib/storage.ts` | Modificar | Incluir `comprasMercado: []` no estado inicial padrão |
+| `docs/spec.md` | Modificar | Registrar entrada na Seção Histórico de Correções sobre a feature Mercado |
 
 ## Problemas e Impedimentos
 
@@ -182,10 +185,10 @@ Passo 10: Documentação
 
 ## Definição de Pronto (DoD)
 
-- [x] Todos os critérios de aceite verificados manualmente
+- [x] Todos os critérios de aceite verificados via revisão de código rigorosa (ver Nota de verificação acima); CA-12 e os itens de responsividade UI/UX aguardam validação visual manual final
 - [x] Código revisado (auto-revisão documentada)
 - [x] `docs/REQUISITOS.md` atualizado com a seção Mercado
-- [x] Sem warnings ou erros de TypeScript/ESLint introduzidos
+- [x] Sem erros novos de TypeScript/ESLint; 1 warning pré-existente da biblioteca react-hook-form (`watch()`), não acionável sem mudança de arquitetura
 - [x] Seção **Histórico de Correções** de `docs/spec.md` atualizada ao final da implementação
 
 ## DDR — Design Decision Record

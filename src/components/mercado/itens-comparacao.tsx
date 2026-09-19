@@ -7,12 +7,12 @@ import { calcularComparacaoItens } from "@/lib/calculos-mercado";
 
 export function ItensComparacao() {
   const { dados } = useFinanceStore();
-  const compras = dados?.comprasMercado ?? [];
 
   const comparacao = useMemo(() => {
+    const compras = dados?.comprasMercado ?? [];
     const agora = new Date();
     return calcularComparacaoItens(compras, agora.getMonth(), agora.getFullYear());
-  }, [compras]);
+  }, [dados]);
 
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -55,21 +55,21 @@ export function ItensComparacao() {
                   </span>
                   <span
                     className={`flex items-center gap-1 font-medium ${
-                      item.variacaoPercentual! > 0
+                      (item.variacaoPercentual ?? 0) > 0
                         ? "text-destructive"
-                        : item.variacaoPercentual! < 0
+                        : (item.variacaoPercentual ?? 0) < 0
                           ? "text-success"
                           : "text-muted-foreground"
                     }`}
                   >
-                    {item.variacaoPercentual! > 0 ? (
+                    {(item.variacaoPercentual ?? 0) > 0 ? (
                       <TrendingUp className="h-4 w-4" />
-                    ) : item.variacaoPercentual! < 0 ? (
+                    ) : (item.variacaoPercentual ?? 0) < 0 ? (
                       <TrendingDown className="h-4 w-4" />
                     ) : (
                       <Minus className="h-4 w-4" />
                     )}
-                    {Math.abs(item.variacaoPercentual!).toFixed(1)}%
+                    {Math.abs(item.variacaoPercentual ?? 0).toFixed(1)}%
                   </span>
                 </>
               )}

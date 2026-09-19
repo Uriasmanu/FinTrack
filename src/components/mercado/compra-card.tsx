@@ -63,7 +63,7 @@ export function CompraCard({ compra, onEditar, onExcluir }: CompraCardProps) {
           {compra.itens.map((item) => (
             <li key={item.id} className="flex justify-between text-muted-foreground">
               <span>
-                {item.nome} ({item.quantidade}x)
+                {item.nome} ({item.quantidade.toLocaleString("pt-BR")}x)
               </span>
               <span>{formatarMoeda(calcularSubtotalItem(item))}</span>
             </li>
