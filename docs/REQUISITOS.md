@@ -515,8 +515,9 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Edição e exclusão de compras
 - Itens podem ter marca (opcional) e unidade de medida (un/kg/g/L/ml, padrão "un")
 - Catálogo de itens/marcas já comprados, atualizado automaticamente, usado para sugerir e pré-preencher nome/marca/unidade/preço ao digitar um item conhecido
-- Seção "Catálogo de Itens" na página Mercado: lista os itens conhecidos e suas marcas, permite editar nome/marcas (com mesclagem automática se o novo nome colidir com outro item já existente) ou excluir um item inteiro do catálogo — sem afetar compras já registradas
-- ✅ **Implementado**: `Mercado.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `catalogo-lista.tsx`, `catalogo-item-form.tsx`, `calculos-mercado.ts`
+- Página dedicada "Catálogo de Itens" (`/mercado/catalogo`), acessada pelo botão "Catálogo" ao lado de "Nova Compra": lista os itens conhecidos e suas marcas, permite editar nome/marcas (com mesclagem automática se o novo nome colidir com outro item já existente) ou excluir um item inteiro do catálogo — sem afetar compras já registradas
+- Ao carregar o app, compras registradas antes da existência do catálogo são retroativamente processadas para popular `catalogoMercado` (backfill), e itens antigos sem `unidade` são normalizados para `"un"`
+- ✅ **Implementado**: `Mercado.tsx`, `MercadoCatalogo.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `catalogo-lista.tsx`, `catalogo-item-form.tsx`, `calculos-mercado.ts`
 
 ### 9. Tema Claro/Escuro ✅
 
@@ -730,6 +731,7 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | `/metas` | Metas | Acompanhamento de metas de economia |
 | `/investimentos` | Investimentos | Gestão de fundos imobiliários (FIIs) |
 | `/mercado` | Mercado | Registro de compras e comparativo de preço por item |
+| `/mercado/catalogo` | MercadoCatalogo | Catálogo de itens/marcas já comprados (visualizar, editar, excluir) |
 | `/exportar` | Exportar | Exportação e importação JSON |
 | `/configuracoes` | Configuracoes | Gerenciamento de categorias |
 
@@ -897,3 +899,5 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 19/09/2026 | Rotas: adicionada `/mercado` na tabela de rotas |
 | 19/09/2026 | Feature: Mercado — seção "Catálogo de Itens" para visualizar, editar (com mesclagem em caso de colisão de nome) e excluir itens/marcas do catálogo |
 | 19/09/2026 | Feature: Mercado — itens passam a ter marca (opcional) e unidade de medida (un/kg/g/L/ml); catálogo de itens/marcas auto-populado usado para sugerir e pré-preencher o formulário de compra |
+| 20/09/2026 | Feature: Mercado — catálogo de itens movido para página própria (`/mercado/catalogo`), acessada por botão ao lado de "Nova Compra"; compras registradas antes da feature de catálogo passam por backfill automático na inicialização |
+| 20/09/2026 | Rotas: adicionada `/mercado/catalogo` na tabela de rotas |

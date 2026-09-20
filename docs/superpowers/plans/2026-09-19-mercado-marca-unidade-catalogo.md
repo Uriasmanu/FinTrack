@@ -1,6 +1,6 @@
 # Mercado: Marca, Unidade de Medida e Catálogo de Itens Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Extend the existing "Mercado" module so items can be measured by weight/volume (not just unit count), track an optional brand per item, and auto-populate a reusable catalog of previously bought item names/brands that suggests and pre-fills values when registering a new purchase.
 
@@ -32,7 +32,7 @@
 **Interfaces:**
 - Produces: `UnidadeMedida = "un" | "kg" | "g" | "L" | "ml"`, `ItemMercado` com os novos campos `marca?: string` e `unidade: UnidadeMedida`, `CatalogoItemMercado { nomeNormalizado, nomeExibicao, marcas, ultimaUnidade, ultimoPreco, atualizadoEm }`, e `DadosApp.catalogoMercado: CatalogoItemMercado[]` — todas as tasks seguintes leem/escrevem esses campos.
 
-- [ ] **Step 1: Adicionar os tipos em `src/types/index.ts`**
+- [x] **Step 1: Adicionar os tipos em `src/types/index.ts`**
 
 Localizar a interface `ItemMercado` atual (logo após `AtivoFii`):
 
@@ -89,7 +89,7 @@ export interface DadosApp {
 }
 ```
 
-- [ ] **Step 2: Atualizar o fallback local em `src/lib/storage.ts`**
+- [x] **Step 2: Atualizar o fallback local em `src/lib/storage.ts`**
 
 Na função `criarDadosNovos()` (linha 15 atualmente tem `comprasMercado: [],`), adicionar `catalogoMercado: [],` logo depois:
 
@@ -98,7 +98,7 @@ Na função `criarDadosNovos()` (linha 15 atualmente tem `comprasMercado: [],`),
     catalogoMercado: [],
 ```
 
-- [ ] **Step 3: Atualizar o backend `server.js` em três pontos**
+- [x] **Step 3: Atualizar o backend `server.js` em três pontos**
 
 Em `criarDadosNovos()` (linha 94 atualmente tem `comprasMercado: [],`):
 
@@ -121,12 +121,12 @@ No handler `PUT /api/data` (linha 228 atualmente tem `dados.comprasMercado = dad
     dados.catalogoMercado = dados.catalogoMercado ?? [];
 ```
 
-- [ ] **Step 4: Verificar tipos**
+- [x] **Step 4: Verificar tipos**
 
 Run: `npm run build`
 Expected: o build vai falhar até que `src/lib/storage.ts` e qualquer outro objeto literal tipado como `DadosApp` inclua `catalogoMercado` — depois do Step 2, deve compilar sem NOVOS erros (a baseline pré-existente do projeto já tem ~24-27 erros de TypeScript não relacionados a este módulo; confirme que nenhum erro novo menciona `catalogoMercado`, `UnidadeMedida`, `CatalogoItemMercado`, `marca` ou `unidade`).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/types/index.ts src/lib/storage.ts server.js
@@ -144,7 +144,7 @@ git commit -m "feat(mercado): adicionar tipos de marca, unidade e catálogo de i
 - Consumes: `CompraMercado`, `ItemMercado`, `CatalogoItemMercado` de `@/types` (Task 1); `normalizarNomeItem` já existe neste mesmo arquivo.
 - Produces: `atualizarCatalogoMercado(catalogoAtual: CatalogoItemMercado[], compra: CompraMercado): CatalogoItemMercado[]`. Task 3 chama esta função por este nome exato.
 
-- [ ] **Step 1: Adicionar a função no arquivo**
+- [x] **Step 1: Adicionar a função no arquivo**
 
 No topo do arquivo, atualizar o import para incluir o novo tipo:
 
@@ -188,12 +188,12 @@ export function atualizarCatalogoMercado(
 
 Nota de design: a função nunca remove uma entrada de `catalogoAtual` — só adiciona/atualiza a partir dos itens da compra recebida (satisfaz a regra "catálogo só cresce" do Global Constraints). `marcas` é um `Set` só para deduplicar durante a montagem; o campo persistido continua `string[]`.
 
-- [ ] **Step 2: Verificar tipos**
+- [x] **Step 2: Verificar tipos**
 
 Run: `npm run build`
 Expected: sem erros novos.
 
-- [ ] **Step 3: Verificação manual (oráculo: exemplos do design)**
+- [x] **Step 3: Verificação manual (oráculo: exemplos do design)**
 
 Trace à mão os seguintes casos lendo o código (sem framework de testes neste projeto):
 
@@ -204,7 +204,7 @@ Trace à mão os seguintes casos lendo o código (sem framework de testes neste 
 
 Confirme lendo o código que os 4 casos produzem exatamente esses resultados.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/lib/calculos-mercado.ts
@@ -222,7 +222,7 @@ git commit -m "feat(mercado): adicionar função de atualização do catálogo d
 - Consumes: `atualizarCatalogoMercado` de `@/lib/calculos-mercado` (Task 2); `CatalogoItemMercado` de `@/types` (Task 1); ações existentes `adicionarCompraMercado`/`editarCompraMercado`/`excluirCompraMercado` (já implementadas no módulo original).
 - Produces: nenhuma interface nova exposta — o comportamento interno de `adicionarCompraMercado`/`editarCompraMercado` muda para também atualizar `state.catalogoMercado`, mas as assinaturas públicas dessas ações não mudam.
 
-- [ ] **Step 1: Importar a função de cálculo e o tipo**
+- [x] **Step 1: Importar a função de cálculo e o tipo**
 
 No bloco de import de tipos no topo do arquivo, adicionar `CatalogoItemMercado`:
 
@@ -247,7 +247,7 @@ Adicionar um novo import (perto dos outros imports de `@/lib/*`):
 import { atualizarCatalogoMercado } from "@/lib/calculos-mercado";
 ```
 
-- [ ] **Step 2: Atualizar `adicionarCompraMercado`**
+- [x] **Step 2: Atualizar `adicionarCompraMercado`**
 
 Localizar a implementação atual:
 
@@ -304,7 +304,7 @@ Substituir por (adiciona `catalogoMercado` ao `novoState`):
   },
 ```
 
-- [ ] **Step 3: Atualizar `editarCompraMercado`**
+- [x] **Step 3: Atualizar `editarCompraMercado`**
 
 Localizar a implementação atual:
 
@@ -356,12 +356,12 @@ Substituir por (calcula a lista atualizada primeiro, encontra a compra editada, 
 
 Nota: `excluirCompraMercado` **não muda** — a regra é que o catálogo nunca perde entradas ao excluir uma compra (Global Constraints).
 
-- [ ] **Step 4: Verificar tipos**
+- [x] **Step 4: Verificar tipos**
 
 Run: `npm run build`
 Expected: sem erros novos.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/stores/useFinanceStore.ts
@@ -380,7 +380,7 @@ git commit -m "feat(mercado): atualizar catálogo automaticamente ao salvar comp
 - Consumes: `UnidadeMedida`, `CatalogoItemMercado` de `@/types` (Task 1); `normalizarNomeItem` de `@/lib/calculos-mercado` (já existe); `Select`/`SelectContent`/`SelectItem`/`SelectTrigger`/`SelectValue` de `@/components/ui/select` (já usado em outros formulários do app, ex. `src/components/contas/conta-form.tsx`).
 - Produces: `CompraForm` passa a exigir uma nova prop `catalogo: CatalogoItemMercado[]`. Mercado.tsx (consumidor único) passa `dados?.catalogoMercado ?? []`.
 
-- [ ] **Step 1: Atualizar os imports e o schema em `compra-form.tsx`**
+- [x] **Step 1: Atualizar os imports e o schema em `compra-form.tsx`**
 
 Substituir o bloco de imports do topo do arquivo:
 
@@ -456,7 +456,7 @@ const itemSchema = z.object({
 });
 ```
 
-- [ ] **Step 2: Atualizar `CompraFormProps`, `itemVazio` e `valoresIniciais`**
+- [x] **Step 2: Atualizar `CompraFormProps`, `itemVazio` e `valoresIniciais`**
 
 Substituir:
 
@@ -515,7 +515,7 @@ function valoresIniciais(initialData?: CompraMercado): CompraFormData {
 }
 ```
 
-- [ ] **Step 3: Atualizar a assinatura do componente, adicionar o ref de rastreio e o handler de pré-preenchimento**
+- [x] **Step 3: Atualizar a assinatura do componente, adicionar o ref de rastreio e o handler de pré-preenchimento**
 
 Substituir a linha de declaração do componente e o `useForm`:
 
@@ -571,7 +571,7 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
 
 Nota: `ultimoNomeCasado` evita reaplicar o pré-preenchimento repetidamente enquanto o usuário navega para fora e volta ao mesmo campo sem mudar o nome (spec, seção Formulário — "só dispara para itens novos").
 
-- [ ] **Step 4: Adicionar o `<datalist>` de nomes (uma vez, compartilhado entre as linhas)**
+- [x] **Step 4: Adicionar o `<datalist>` de nomes (uma vez, compartilhado entre as linhas)**
 
 Logo depois da abertura do `<form onSubmit={...}>`, antes do campo Data, adicionar:
 
@@ -584,7 +584,7 @@ Logo depois da abertura do `<form onSubmit={...}>`, antes do campo Data, adicion
 
 ```
 
-- [ ] **Step 5: Atualizar a linha do item — nome com datalist+onBlur, marca, unidade**
+- [x] **Step 5: Atualizar a linha do item — nome com datalist+onBlur, marca, unidade**
 
 Localizar o bloco que renderiza cada linha de item (dentro de `{fields.map((field, index) => { ... })}`). O bloco atual é:
 
@@ -767,7 +767,7 @@ Substituir por:
               );
 ```
 
-- [ ] **Step 6: Atualizar `handleFormSubmit` para incluir marca/unidade**
+- [x] **Step 6: Atualizar `handleFormSubmit` para incluir marca/unidade**
 
 Localizar:
 
@@ -812,7 +812,7 @@ Substituir por:
 
 (Reseta `ultimoNomeCasado` junto com o formulário, para que o próximo "Nova Compra" comece sem estado de rastreio residual das linhas da compra anterior.)
 
-- [ ] **Step 7: Passar a prop `catalogo` a partir de `src/pages/Mercado.tsx`**
+- [x] **Step 7: Passar a prop `catalogo` a partir de `src/pages/Mercado.tsx`**
 
 Localizar em `Mercado.tsx`:
 
@@ -837,12 +837,12 @@ Substituir por:
       />
 ```
 
-- [ ] **Step 8: Verificar tipos**
+- [x] **Step 8: Verificar tipos**
 
 Run: `npm run build`
 Expected: sem erros novos. Se o `register`/`setValue` com o path `itens.${index}.unidade` reclamar de inferência de tipo, confirme que `UNIDADES`/`itemSchema` usam exatamente os mesmos 5 literais (`"un" | "kg" | "g" | "L" | "ml"`) em ambos os lugares.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/components/mercado/compra-form.tsx src/pages/Mercado.tsx
@@ -860,7 +860,7 @@ git commit -m "feat(mercado): adicionar marca, unidade e sugestões do catálogo
 - Consumes: `ItemMercado.marca`/`ItemMercado.unidade` (Task 1) — já presentes em qualquer `CompraMercado` lido do estado.
 - Produces: nenhuma interface nova — só muda a renderização.
 
-- [ ] **Step 1: Atualizar a exibição de cada item**
+- [x] **Step 1: Atualizar a exibição de cada item**
 
 Localizar:
 
@@ -894,12 +894,12 @@ Substituir por:
         </ul>
 ```
 
-- [ ] **Step 2: Verificar tipos**
+- [x] **Step 2: Verificar tipos**
 
 Run: `npm run build`
 Expected: sem erros novos.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/mercado/compra-card.tsx
@@ -917,7 +917,7 @@ git commit -m "feat(mercado): exibir marca e unidade no card de compra"
 **Interfaces:**
 - None (documentação only).
 
-- [ ] **Step 1: Verificação manual end-to-end**
+- [x] **Step 1: Verificação manual end-to-end**
 
 Run: `npm run dev`, abrir `/mercado`.
 
@@ -930,7 +930,7 @@ Run: `npm run dev`, abrir `/mercado`.
 7. Excluir a compra do item "Tomate" — confirmar que, ao abrir "Nova Compra" de novo e digitar "Tomate", a sugestão de autocompletar **continua aparecendo** (o catálogo não esqueceu o item por causa da exclusão).
 8. Abrir DevTools responsivo em 375px — confirmar que a nova linha de 3 colunas (Preço/Quantidade/Unidade) e o campo de marca não quebram o layout nem forçam scroll horizontal. Repetir em 768px e 1440px.
 
-- [ ] **Step 2: Atualizar `implementado/mercado.md`**
+- [x] **Step 2: Atualizar `implementado/mercado.md`**
 
 Adicionar ao final da seção **Requisitos Funcionais** (mantendo a numeração existente RF-01 a RF-17, adicionando a partir de RF-18):
 
@@ -945,7 +945,7 @@ Adicionar ao final da seção **Requisitos Funcionais** (mantendo a numeração 
 
 Adicionar uma nova linha na tabela **Histórico de Alterações** com a data de hoje descrevendo esta extensão.
 
-- [ ] **Step 3: Atualizar `docs/REQUISITOS.md`**
+- [x] **Step 3: Atualizar `docs/REQUISITOS.md`**
 
 Na seção "8. Mercado — Registro de Compras" (criada pelo módulo original), adicionar ao final da lista de bullets:
 
@@ -956,7 +956,7 @@ Na seção "8. Mercado — Registro de Compras" (criada pelo módulo original), 
 
 Adicionar uma linha na tabela "Histórico de Alterações" ao final do documento com a data de hoje.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add implementado/mercado.md docs/REQUISITOS.md

@@ -15,6 +15,7 @@ import { Configuracoes } from "@/pages/Configuracoes";
 import { Transferencia } from "@/pages/Transferencia";
 import { Investimentos } from "@/pages/Investimentos";
 import { Mercado } from "@/pages/Mercado";
+import { MercadoCatalogo } from "@/pages/MercadoCatalogo";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 
@@ -44,6 +45,7 @@ function App() {
             <Route path="/transferencia" element={<Transferencia />} />
             <Route path="/investimentos" element={<Investimentos />} />
             <Route path="/mercado" element={<Mercado />} />
+            <Route path="/mercado/catalogo" element={<MercadoCatalogo />} />
           </Route>
         </Routes>
       </BrowserRouter>

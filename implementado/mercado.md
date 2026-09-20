@@ -9,6 +9,8 @@ Implementado
 
 **Nota de verificação (extensão visualizar/editar/excluir catálogo, RF-24–27):** a lógica de mesclagem por colisão de nome ao editar (`editarEntradaCatalogoMercado`) foi traçada manualmente contra o caso de renomear um item para um nome que já existe como outra entrada, confirmando que as marcas das duas entradas se unem em vez de duplicar. `npm run build` e `npx eslint` (escopo: arquivos de mercado + store) não introduziram nenhum erro ou aviso novo. A interação de UI (menu "⋮" na lista do catálogo, diálogo de edição com marcas dinâmicas, confirmação de exclusão) não foi verificada em navegador real, pelo mesmo motivo das notas anteriores.
 
+**Nota de verificação (extensão página própria + backfill do catálogo, RF-28–29):** o catálogo foi extraído de `Mercado.tsx` para a nova página `MercadoCatalogo.tsx`, com rota `/mercado/catalogo` registrada em `App.tsx` e navegação via `useNavigate` (mesmo padrão de `/transacoes/nova`). O backfill (`inicializar()` em `useFinanceStore.ts`) foi verificado com dados reais de produção do próprio usuário: uma compra registrada antes desta feature, com itens sem o campo `unidade`, foi carregada pelo app rodando localmente; a inicialização normalizou os itens para `unidade: "un"` e populou `catalogoMercado` com as 32 entradas do catálogo (incluindo mesclagem correta do item "sazon", comprado duas vezes na mesma compra), persistindo o resultado via `PUT /api/data` — confirmado lendo `data/fintrack.json` após o carregamento. `npm run build` não introduziu nenhum erro novo (baseline inalterada).
+
 ## Data
 19/09/2026
 
@@ -70,6 +72,8 @@ Cenários alternativos:
 - [x] RF-25: O usuário pode editar o nome e a lista de marcas de um item do catálogo; a edição afeta apenas sugestões futuras, nunca compras já registradas
 - [x] RF-26: Ao editar o nome de um item do catálogo para um nome que normaliza igual a outro item já existente, os dois itens são mesclados (união das marcas) em vez de duplicados
 - [x] RF-27: O usuário pode excluir um item inteiro do catálogo (nome + todas as marcas); a exclusão não afeta compras já registradas
+- [x] RF-28: O catálogo de itens é exibido em uma página própria (`/mercado/catalogo`), acessada por um botão "Catálogo" ao lado do botão "Nova Compra" na página Mercado — não mais em uma seção inline na mesma página
+- [x] RF-29: Compras registradas antes da existência do catálogo (ou de itens sem `unidade` salva) são normalizadas e usadas para popular o catálogo automaticamente na primeira inicialização do app após a atualização, sem exigir que o usuário edite cada compra antiga manualmente
 
 ## Requisitos Não-Funcionais
 
@@ -103,8 +107,9 @@ Cenários alternativos:
 | `src/components/mercado/compra-card.tsx` | Criar | Card de uma compra com ações editar/excluir |
 | `src/components/mercado/mercado-dashboard.tsx` | Criar | Cards de resumo (total mês atual/anterior, variação, nº compras) |
 | `src/components/mercado/itens-comparacao.tsx` | Criar | Lista/tabela comparativa de preço unitário por item |
-| `src/pages/Mercado.tsx` | Criar | Página principal, orquestra dashboard + form + lista de compras + comparação |
-| `src/App.tsx` | Modificar | Registrar rota `/mercado` |
+| `src/pages/Mercado.tsx` | Criar/Modificar | Página principal, orquestra dashboard + form + lista de compras + comparação; catálogo extraído para página própria |
+| `src/pages/MercadoCatalogo.tsx` | Criar | Página dedicada ao catálogo de itens (`/mercado/catalogo`), com edição/exclusão de entradas |
+| `src/App.tsx` | Modificar | Registrar rotas `/mercado` e `/mercado/catalogo` |
 | `src/components/layout/sidebar.tsx` | Modificar | Adicionar item de menu "Mercado" (ícone `ShoppingCart`) |
 | `docs/REQUISITOS.md` | Modificar | Documentar nova seção "Mercado" após implementação |
 | `server.js` | Modificar | Normalizar valor padrão de `comprasMercado` (`?? []`) ao ler/gravar dados |

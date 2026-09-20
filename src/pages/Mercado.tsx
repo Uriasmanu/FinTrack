@@ -1,32 +1,23 @@
 import { useState } from "react";
-import { Plus, ShoppingCart } from "lucide-react";
+import { Plus, ShoppingCart, BookMarked } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MercadoDashboard } from "@/components/mercado/mercado-dashboard";
 import { ItensComparacao } from "@/components/mercado/itens-comparacao";
 import { CompraCard } from "@/components/mercado/compra-card";
 import { CompraForm } from "@/components/mercado/compra-form";
-import { CatalogoLista } from "@/components/mercado/catalogo-lista";
-import { CatalogoItemForm } from "@/components/mercado/catalogo-item-form";
 import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { useFinanceStore } from "@/stores/useFinanceStore";
-import type { CompraMercado, CatalogoItemMercado } from "@/types";
+import type { CompraMercado } from "@/types";
 
 export function Mercado() {
-  const {
-    dados,
-    adicionarCompraMercado,
-    editarCompraMercado,
-    excluirCompraMercado,
-    editarItemCatalogoMercado,
-    excluirItemCatalogoMercado,
-  } = useFinanceStore();
+  const navigate = useNavigate();
+  const { dados, adicionarCompraMercado, editarCompraMercado, excluirCompraMercado } =
+    useFinanceStore();
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingCompra, setEditingCompra] = useState<CompraMercado | null>(null);
   const [deleteCompra, setDeleteCompra] = useState<CompraMercado | null>(null);
-
-  const [editingCatalogoItem, setEditingCatalogoItem] = useState<CatalogoItemMercado | null>(null);
-  const [deleteCatalogoItem, setDeleteCatalogoItem] = useState<CatalogoItemMercado | null>(null);
 
   const compras = [...(dados?.comprasMercado ?? [])].sort((a, b) => b.data.localeCompare(a.data));
 
@@ -58,27 +49,6 @@ export function Mercado() {
     }
   }
 
-  function handleEditarCatalogoItem(item: CatalogoItemMercado) {
-    setEditingCatalogoItem(item);
-  }
-
-  function handleExcluirCatalogoItem(item: CatalogoItemMercado) {
-    setDeleteCatalogoItem(item);
-  }
-
-  function confirmarExclusaoCatalogoItem() {
-    if (!deleteCatalogoItem) return;
-    excluirItemCatalogoMercado(deleteCatalogoItem.nomeNormalizado);
-    setDeleteCatalogoItem(null);
-  }
-
-  function handleSubmitCatalogoItem(
-    nomeNormalizadoAntigo: string,
-    dados: { nome: string; marcas: string[] }
-  ) {
-    editarItemCatalogoMercado(nomeNormalizadoAntigo, dados);
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -88,10 +58,16 @@ export function Mercado() {
             Registre suas compras e acompanhe a variação de preços
           </p>
         </div>
-        <Button onClick={handleNovo}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nova Compra
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => navigate("/mercado/catalogo")}>
+            <BookMarked className="mr-2 h-4 w-4" />
+            Catálogo
+          </Button>
+          <Button onClick={handleNovo}>
+            <Plus className="mr-2 h-4 w-4" />
+            Nova Compra
+          </Button>
+        </div>
       </div>
 
       <MercadoDashboard />
@@ -125,12 +101,6 @@ export function Mercado() {
         )}
       </div>
 
-      <CatalogoLista
-        catalogo={dados?.catalogoMercado ?? []}
-        onEditar={handleEditarCatalogoItem}
-        onExcluir={handleExcluirCatalogoItem}
-      />
-
       <CompraForm
         open={formOpen}
         onOpenChange={setFormOpen}
@@ -147,25 +117,6 @@ export function Mercado() {
         onConfirm={confirmarExclusao}
         title="Excluir Compra"
         description="Tem certeza que deseja excluir esta compra? Esta ação não pode ser desfeita."
-      />
-
-      <CatalogoItemForm
-        open={!!editingCatalogoItem}
-        onOpenChange={(open) => {
-          if (!open) setEditingCatalogoItem(null);
-        }}
-        item={editingCatalogoItem}
-        onSubmit={handleSubmitCatalogoItem}
-      />
-
-      <DeleteConfirmDialog
-        open={!!deleteCatalogoItem}
-        onOpenChange={(open) => {
-          if (!open) setDeleteCatalogoItem(null);
-        }}
-        onConfirm={confirmarExclusaoCatalogoItem}
-        title="Excluir Item do Catálogo"
-        description="Tem certeza que deseja excluir este item do catálogo? Ele não será mais sugerido ao digitar uma nova compra. Isso não afeta compras já registradas."
       />
     </div>
   );

@@ -9,6 +9,7 @@ import type {
   Config,
   AtivoFii,
   CompraMercado,
+  CatalogoItemMercado,
 } from "@/types";
 import { storage } from "@/lib/storage";
 import { gerarId } from "@/lib/uuid";
@@ -151,6 +152,34 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
     if (dados.metas.length === 0) {
       dados.metas = obterMetasDefault();
+      houveMudanca = true;
+    }
+
+    let itemMercadoMudou = false;
+    const comprasMercadoNormalizadas = dados.comprasMercado.map((compra) => {
+      let itensMudaram = false;
+      const itens = compra.itens.map((item) => {
+        if (item.unidade) return item;
+        itensMudaram = true;
+        return { ...item, unidade: "un" as const };
+      });
+      if (!itensMudaram) return compra;
+      itemMercadoMudou = true;
+      return { ...compra, itens };
+    });
+    if (itemMercadoMudou) {
+      dados.comprasMercado = comprasMercadoNormalizadas;
+      houveMudanca = true;
+    }
+
+    if (dados.catalogoMercado.length === 0 && dados.comprasMercado.length > 0) {
+      const comprasOrdenadas = [...dados.comprasMercado].sort((a, b) =>
+        a.criadoEm.localeCompare(b.criadoEm)
+      );
+      dados.catalogoMercado = comprasOrdenadas.reduce(
+        (catalogo, compra) => atualizarCatalogoMercado(catalogo, compra),
+        [] as CatalogoItemMercado[]
+      );
       houveMudanca = true;
     }
 
