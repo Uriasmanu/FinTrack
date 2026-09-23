@@ -47,6 +47,13 @@ export function TransacaoItem({
 
   const isParcelada = transacao.grupoParcelaId !== null;
 
+  const tipoContaLabel: Record<string, string> = {
+    corrente: "Corrente",
+    poupanca: "Poupança",
+    investimento: "Investimento",
+    ticket: "Ticket",
+  };
+
   function handleExcluir() {
     if (isParcelada) {
       setParcelaDialogOpen(true);
@@ -149,7 +156,9 @@ export function TransacaoItem({
             {conta && (
               <>
                 <span>·</span>
-                <span>{conta.banco}</span>
+                <span>
+                  {conta.banco} ({tipoContaLabel[conta.tipo] ?? conta.tipo})
+                </span>
               </>
             )}
           </div>
