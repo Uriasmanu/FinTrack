@@ -16847,6 +16847,24 @@
       "grupoParcelaId": null,
       "id": "647a82eb-51d7-46b9-bdda-aaa6e2ab1800",
       "criadoEm": "2026-09-23T01:34:32.658Z"
+    },
+    {
+      "descricao": "tarot",
+      "valor": 12,
+      "data": "2026-09-24",
+      "tipo": "despesa",
+      "categoriaId": "d0e1f2a3-b4c5-4d6e-7f80-91a2b3c4d5e6",
+      "subtipoId": null,
+      "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "c0a8e4f7-5db3-4812-b629-ccbc01401382",
+      "criadoEm": "2026-09-25T02:40:17.611Z"
     }
   ],
   "categorias": [
