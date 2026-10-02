@@ -60,16 +60,23 @@ export function CompraCard({ compra, onEditar, onExcluir }: CompraCardProps) {
         </div>
 
         <ul className="mt-3 space-y-1 text-sm">
-          {compra.itens.map((item) => (
-            <li key={item.id} className="flex justify-between text-muted-foreground">
-              <span>
-                {item.nome}
-                {item.marca ? ` (${item.marca})` : ""} —{" "}
-                {item.quantidade.toLocaleString("pt-BR")} {item.unidade}
-              </span>
-              <span>{formatarMoeda(calcularSubtotalItem(item))}</span>
-            </li>
-          ))}
+          {compra.itens.map((item) => {
+            const quantidade = item.quantidade.toLocaleString("pt-BR");
+            const detalhe =
+              item.unidade === "un"
+                ? `${quantidade} un × ${formatarMoeda(item.precoUnitario)}`
+                : `${quantidade} ${item.unidade}`;
+
+            return (
+              <li key={item.id} className="flex justify-between gap-2 text-muted-foreground">
+                <span>
+                  {item.nome}
+                  {item.marca ? ` (${item.marca})` : ""} — {detalhe}
+                </span>
+                <span className="shrink-0">{formatarMoeda(calcularSubtotalItem(item))}</span>
+              </li>
+            );
+          })}
         </ul>
 
         {compra.observacoes && (

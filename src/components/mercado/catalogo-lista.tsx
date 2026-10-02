@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { dimensaoDaUnidade, unidadeBaseDaDimensao } from "@/lib/calculos-mercado";
 import type { CatalogoItemMercado } from "@/types";
 
 interface CatalogoListaProps {
@@ -61,7 +62,8 @@ export function CatalogoLista({ catalogo, onEditar, onExcluir }: CatalogoListaPr
                 ))}
               </div>
               <p className="text-xs text-muted-foreground">
-                Última compra: {formatarMoeda(item.ultimoPreco)} / {item.ultimaUnidade}
+                Última compra: {formatarMoeda(item.ultimoPreco)} /{" "}
+                {unidadeBaseDaDimensao(dimensaoDaUnidade(item.ultimaUnidade))}
               </p>
             </div>
 

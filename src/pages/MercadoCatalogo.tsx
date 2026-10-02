@@ -31,7 +31,7 @@ export function MercadoCatalogo() {
 
   function handleSubmit(
     nomeNormalizadoAntigo: string,
-    dadosItem: { nome: string; marcas: string[] }
+    dadosItem: { nome: string; marcas: string[]; marcaComprasAntigas?: string }
   ) {
     editarItemCatalogoMercado(nomeNormalizadoAntigo, dadosItem);
   }

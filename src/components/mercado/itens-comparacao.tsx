@@ -40,18 +40,20 @@ export function ItensComparacao() {
       <CardContent className="space-y-2">
         {comparacao.map((item) => (
           <div
-            key={item.nome}
+            key={item.chave}
             className="flex flex-col gap-1 border-b pb-2 last:border-0 sm:flex-row sm:items-center sm:justify-between"
           >
             <span className="font-medium">{item.nome}</span>
             <div className="flex flex-wrap items-center gap-3 text-sm">
-              <span className="text-muted-foreground">{formatarMoeda(item.precoMedioAtual)}</span>
+              <span className="text-muted-foreground">
+                {formatarMoeda(item.precoMedioAtual)}/{item.unidadeBase}
+              </span>
               {item.precoMedioAnterior === null ? (
                 <Badge variant="secondary">novo</Badge>
               ) : (
                 <>
                   <span className="text-xs text-muted-foreground">
-                    (antes {formatarMoeda(item.precoMedioAnterior)})
+                    (antes {formatarMoeda(item.precoMedioAnterior)}/{item.unidadeBase})
                   </span>
                   <span
                     className={`flex items-center gap-1 font-medium ${

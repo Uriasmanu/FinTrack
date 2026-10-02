@@ -23,13 +23,13 @@ Efeito nos dados atuais (2 compras: 07/09 = R$ 443,16 e 01/10 = R$ 343,61), com 
 - Variação −100% (esperado −22,5%) e Compras no Mês 0 (esperado 1).
 - Comparativo mostra "Registre uma compra neste mês", pois nenhum item cai em outubro.
 
-Correção: ler ano e mês direto da string `YYYY-MM-DD` (`split("-")`), sem passar por `Date`. Vale para `estaNoMes` e para qualquer outro ponto do módulo que faça `new Date(compra.data)`.
+Correção: ler ano e mês direto da string `YYYY-MM-DD` (`split("-")`), sem passar por `Date`. Vale para `estaNoMes` e para qualquer outro ponto do módulo que faça `new Date(compra.data)`. A data padrão do formulário (`new Date().toISOString()`, em UTC) vira "amanhã" depois das 21h em Brasília; passa a usar `dataLocalISO()`.
 
 ## Nomes diferentes entre meses quebram o comparativo
 
 O comparativo agrupa por nome normalizado, e a compra de outubro já separa a marca do nome: "creme de leite mococa" (set) vs "creme de leite" + marca Mococa (out); "detergente Ype" vs "detergente" + Ypê; "oleo Soya" vs "Oleo" + Soya; "Farinha Farina" vs "Farinha" + Farina; "tapioca Akio" vs "Tapioca" + Terrinha. Mesmo com o bug de data corrigido, quase todos os itens apareceriam como "novo", e o catálogo (60 entradas) duplica o mesmo produto.
 
-Decisão: o comparativo agrupa só por nome (sem marca), como já definido; o catálogo ganha uma ação de **mesclar entradas** (ex.: "creme de leite mococa" → "creme de leite", com a marca Mococa) em `MercadoCatalogo`. Ao mesclar, as compras antigas com o nome antigo passam a usar o nome novo, e a marca extraída vai para o campo `marca` do item. Itens que só mudaram de produto ("sazon" vs "tempero em pó") ficam sob responsabilidade do usuário.
+Decisão: o comparativo agrupa só por nome (sem marca), como já definido; o catálogo ganha uma ação de **mesclar entradas** (ex.: "creme de leite mococa" → "creme de leite", com a marca Mococa) em `MercadoCatalogo`. Ao mesclar, as compras antigas com o nome antigo passam a usar o nome novo, e a marca extraída vai para o campo `marca` do item. A mesclagem é feita pela edição do item no catálogo (nome novo + marca opcional das compras antigas). Itens que só mudaram de produto ("sazon" vs "tempero em pó") ficam sob responsabilidade do usuário.
 
 ## Regra central
 
@@ -75,7 +75,7 @@ type Dimensao = "contagem" | "massa" | "volume";
 
 1. Linha do item: **Unidade** (Select), **Quantidade** e **valor** (Preço Unit. ou Valor pago).
 2. Ao escolher `kg`/`g`/`L`/`ml`: o rótulo do campo de valor vira "Valor pago (R$)", o da quantidade vira "Peso (kg)" / "Volume (L)" conforme a unidade, e o subtotal mostrado é o valor pago (sem multiplicar).
-3. Texto auxiliar abaixo da linha com o preço normalizado quando há valor e quantidade: "≈ R$ 6,62/kg".
+3. Texto auxiliar abaixo da linha com o preço normalizado quando há valor e quantidade e a unidade é de peso/volume (para `un` seria igual ao preço unitário): "≈ R$ 6,62/kg".
 4. A ordem Unidade → Quantidade → Valor segue como está no formulário atual; step da quantidade: 1 para `un`, 0,001 para peso/volume.
 5. **O botão "Adicionar Item" fica abaixo da última linha de item**, antes do bloco "Total da Compra", com largura total. O cabeçalho da seção fica só com o rótulo "Itens".
 6. Layout de 3 colunas precisa caber em 375 px.

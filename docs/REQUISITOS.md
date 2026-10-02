@@ -517,6 +517,9 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 - Catálogo de itens/marcas já comprados, atualizado automaticamente, usado para sugerir e pré-preencher nome/marca/unidade/preço ao digitar um item conhecido
 - Página dedicada "Catálogo de Itens" (`/mercado/catalogo`), acessada pelo botão "Catálogo" ao lado de "Nova Compra": lista os itens conhecidos e suas marcas, permite editar nome/marcas (com mesclagem automática se o novo nome colidir com outro item já existente) ou excluir um item inteiro do catálogo — sem afetar compras já registradas
 - Ao carregar o app, compras registradas antes da existência do catálogo são retroativamente processadas para popular `catalogoMercado` (backfill), e itens antigos sem `unidade` são normalizados para `"un"`
+- Itens em kg/g/L/ml registram o valor pago e o peso/volume como anotação (sem multiplicar); itens em `un` calculam preço × quantidade
+- Comparativo de preços por nome e dimensão, exibido em R$/un, R$/kg ou R$/L
+- Edição do nome de um item no catálogo renomeia as compras e permite aplicar marca às compras sem marca
 - ✅ **Implementado**: `Mercado.tsx`, `MercadoCatalogo.tsx` + `mercado-dashboard.tsx`, `itens-comparacao.tsx`, `compra-form.tsx`, `compra-card.tsx`, `catalogo-lista.tsx`, `catalogo-item-form.tsx`, `calculos-mercado.ts`
 
 ### 9. Tema Claro/Escuro ✅
@@ -901,3 +904,4 @@ Ao cadastrar uma transação, o usuário deve escolher o tipo de recorrência:
 | 19/09/2026 | Feature: Mercado — itens passam a ter marca (opcional) e unidade de medida (un/kg/g/L/ml); catálogo de itens/marcas auto-populado usado para sugerir e pré-preencher o formulário de compra |
 | 20/09/2026 | Feature: Mercado — catálogo de itens movido para página própria (`/mercado/catalogo`), acessada por botão ao lado de "Nova Compra"; compras registradas antes da feature de catálogo passam por backfill automático na inicialização |
 | 20/09/2026 | Rotas: adicionada `/mercado/catalogo` na tabela de rotas |
+| 02/10/2026 | Feature: Mercado — peso/volume com valor pago e preço por kg/L, comparativo por dimensão, mesclagem de itens do catálogo nas compras, botão "Adicionar Item" abaixo da lista; correção do mês/data no fuso local |

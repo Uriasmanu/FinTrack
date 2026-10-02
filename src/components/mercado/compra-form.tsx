@@ -20,10 +20,25 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { gerarId } from "@/lib/uuid";
-import { normalizarNomeItem } from "@/lib/calculos-mercado";
+import {
+  normalizarNomeItem,
+  dataLocalISO,
+  calcularSubtotalItem,
+  calcularPrecoPorUnidadeBase,
+  dimensaoDaUnidade,
+  unidadeBaseDaDimensao,
+} from "@/lib/calculos-mercado";
 import type { CompraMercado, UnidadeMedida, CatalogoItemMercado } from "@/types";
 
 const UNIDADES: UnidadeMedida[] = ["un", "kg", "g", "L", "ml"];
+
+const ROTULO_QUANTIDADE: Record<UnidadeMedida, string> = {
+  un: "Quantidade",
+  kg: "Peso (kg)",
+  g: "Peso (g)",
+  L: "Volume (L)",
+  ml: "Volume (ml)",
+};
 
 const itemSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -41,6 +56,15 @@ const compraSchema = z.object({
 
 type CompraFormData = z.infer<typeof compraSchema>;
 
+function subtotalDoFormulario(item?: CompraFormData["itens"][number]): number {
+  if (!item) return 0;
+  return calcularSubtotalItem({
+    unidade: item.unidade,
+    precoUnitario: item.precoUnitario || 0,
+    quantidade: item.quantidade || 0,
+  });
+}
+
 interface CompraFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -55,7 +79,7 @@ function itemVazio() {
 
 function valoresIniciais(initialData?: CompraMercado): CompraFormData {
   return {
-    data: initialData?.data ?? new Date().toISOString().split("T")[0],
+    data: initialData?.data ?? dataLocalISO(),
     itens: initialData?.itens.map((i) => ({
       nome: i.nome,
       marca: i.marca ?? "",
@@ -93,7 +117,9 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
 
     ultimoNomeCasado.current[index] = chave;
     setValue(`itens.${index}.unidade`, entrada.ultimaUnidade);
-    setValue(`itens.${index}.precoUnitario`, entrada.ultimoPreco);
+    if (entrada.ultimaUnidade === "un") {
+      setValue(`itens.${index}.precoUnitario`, entrada.ultimoPreco);
+    }
   }
 
   useEffect(() => {
@@ -103,10 +129,7 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
   }, [initialData, reset, open]);
 
   const itensAtuais = watch("itens");
-  const totalCompra = itensAtuais.reduce(
-    (soma, item) => soma + (item.precoUnitario || 0) * (item.quantidade || 0),
-    0
-  );
+  const totalCompra = itensAtuais.reduce((soma, item) => soma + subtotalDoFormulario(item), 0);
 
   const formatarMoeda = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -150,13 +173,7 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Itens</label>
-              <Button type="button" variant="outline" size="sm" onClick={() => append(itemVazio())}>
-                <Plus className="mr-1 h-4 w-4" />
-                Adicionar Item
-              </Button>
-            </div>
+            <label className="text-sm font-medium">Itens</label>
 
             {errors.itens?.message && (
               <p className="text-sm text-destructive">{errors.itens.message}</p>
@@ -164,11 +181,29 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
 
             {fields.map((field, index) => {
               const item = itensAtuais[index];
-              const subtotal = (item?.precoUnitario || 0) * (item?.quantidade || 0);
+              const subtotal = subtotalDoFormulario(item);
               const nomeAtual = item?.nome ?? "";
-              const marcasSugeridas =
-                catalogo.find((c) => c.nomeNormalizado === normalizarNomeItem(nomeAtual))
-                  ?.marcas ?? [];
+              const entradaCatalogo = catalogo.find(
+                (c) => c.nomeNormalizado === normalizarNomeItem(nomeAtual)
+              );
+              const marcasSugeridas = entradaCatalogo?.marcas ?? [];
+              const unidade = item?.unidade ?? "un";
+              const ehUnidade = unidade === "un";
+              const unidadeBase = unidadeBaseDaDimensao(dimensaoDaUnidade(unidade));
+              const precoBase =
+                !ehUnidade && (item?.precoUnitario ?? 0) > 0 && (item?.quantidade ?? 0) > 0
+                  ? calcularPrecoPorUnidadeBase({
+                      unidade,
+                      precoUnitario: item.precoUnitario,
+                      quantidade: item.quantidade,
+                    })
+                  : null;
+              const ultimoPrecoBase =
+                entradaCatalogo &&
+                !ehUnidade &&
+                dimensaoDaUnidade(entradaCatalogo.ultimaUnidade) === dimensaoDaUnidade(unidade)
+                  ? entradaCatalogo.ultimoPreco
+                  : null;
               const { onBlur: onBlurNomeRegistrado, ...restoRegistroNome } = register(
                 `itens.${index}.nome` as const
               );
@@ -219,39 +254,9 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <label className="text-xs text-muted-foreground">Preço Unit. (R$)</label>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        {...register(`itens.${index}.precoUnitario` as const, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                      {errors.itens?.[index]?.precoUnitario && (
-                        <p className="text-sm text-destructive">
-                          {errors.itens[index]?.precoUnitario?.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="text-xs text-muted-foreground">Quantidade</label>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        {...register(`itens.${index}.quantidade` as const, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                      {errors.itens?.[index]?.quantidade && (
-                        <p className="text-sm text-destructive">
-                          {errors.itens[index]?.quantidade?.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
                       <label className="text-xs text-muted-foreground">Unidade</label>
                       <Select
-                        value={watch(`itens.${index}.unidade`)}
+                        value={unidade}
                         onValueChange={(v) => setValue(`itens.${index}.unidade`, v as UnidadeMedida)}
                       >
                         <SelectTrigger>
@@ -266,7 +271,50 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
                         </SelectContent>
                       </Select>
                     </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">
+                        {ROTULO_QUANTIDADE[unidade]}
+                      </label>
+                      <Input
+                        type="number"
+                        step={ehUnidade ? "1" : "0.001"}
+                        {...register(`itens.${index}.quantidade` as const, {
+                          valueAsNumber: true,
+                        })}
+                      />
+                      {errors.itens?.[index]?.quantidade && (
+                        <p className="text-sm text-destructive">
+                          {errors.itens[index]?.quantidade?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">
+                        {ehUnidade ? "Preço Unit. (R$)" : "Valor pago (R$)"}
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...register(`itens.${index}.precoUnitario` as const, {
+                          valueAsNumber: true,
+                        })}
+                      />
+                      {errors.itens?.[index]?.precoUnitario && (
+                        <p className="text-sm text-destructive">
+                          {errors.itens[index]?.precoUnitario?.message}
+                        </p>
+                      )}
+                    </div>
                   </div>
+
+                  {(precoBase !== null || ultimoPrecoBase !== null) && (
+                    <p className="text-xs text-muted-foreground">
+                      {precoBase !== null && `≈ ${formatarMoeda(precoBase)}/${unidadeBase}`}
+                      {precoBase !== null && ultimoPrecoBase !== null && " · "}
+                      {ultimoPrecoBase !== null &&
+                        `último: ${formatarMoeda(ultimoPrecoBase)}/${unidadeBase}`}
+                    </p>
+                  )}
 
                   <div className="text-right text-sm text-muted-foreground">
                     Subtotal:{" "}
@@ -275,6 +323,15 @@ export function CompraForm({ open, onOpenChange, initialData, catalogo, onSubmit
                 </div>
               );
             })}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => append(itemVazio())}
+            >
+              <Plus className="mr-1 h-4 w-4" />
+              Adicionar Item
+            </Button>
           </div>
 
           <div className="rounded-lg bg-muted p-3">

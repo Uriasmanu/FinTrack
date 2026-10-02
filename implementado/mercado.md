@@ -69,11 +69,17 @@ Cenários alternativos:
 - [x] RF-22: Ao reconhecer um nome de item já existente no catálogo, o formulário pré-preenche automaticamente a última unidade e o último preço unitário usados para aquele item
 - [x] RF-23: A marca e a unidade não afetam o agrupamento do comparativo de preços por item (RF-11/RF-12 continuam agrupando só por nome normalizado)
 - [x] RF-24: O sistema exibe uma seção "Catálogo de Itens" na página Mercado, listando cada item conhecido com suas marcas e a última unidade/preço usados (referência, somente leitura)
-- [x] RF-25: O usuário pode editar o nome e a lista de marcas de um item do catálogo; a edição afeta apenas sugestões futuras, nunca compras já registradas
+- [x] RF-25: O usuário pode editar o nome e a lista de marcas de um item do catálogo; a edição de nome passa a valer também para as compras já registradas (ver RF-35)
 - [x] RF-26: Ao editar o nome de um item do catálogo para um nome que normaliza igual a outro item já existente, os dois itens são mesclados (união das marcas) em vez de duplicados
 - [x] RF-27: O usuário pode excluir um item inteiro do catálogo (nome + todas as marcas); a exclusão não afeta compras já registradas
 - [x] RF-28: O catálogo de itens é exibido em uma página própria (`/mercado/catalogo`), acessada por um botão "Catálogo" ao lado do botão "Nova Compra" na página Mercado — não mais em uma seção inline na mesma página
 - [x] RF-29: Compras registradas antes da existência do catálogo (ou de itens sem `unidade` salva) são normalizadas e usadas para popular o catálogo automaticamente na primeira inicialização do app após a atualização, sem exigir que o usuário edite cada compra antiga manualmente
+- [x] RF-30: Para itens em `kg`, `g`, `L` ou `ml`, o campo de valor é "Valor pago" e a quantidade é só o peso/volume anotado; o subtotal é o valor pago (sem multiplicar). Para `un`, o subtotal continua `preço × quantidade`
+- [x] RF-31: O formulário mostra o preço por unidade base ("≈ R$ 10,93/kg") para itens de peso/volume e a dica do último preço por kg/L do catálogo
+- [x] RF-32: O comparativo de preços agrupa por nome + dimensão (contagem, massa, volume) e exibe o preço médio por unidade base (R$/un, R$/kg, R$/L); o mesmo nome em dimensões diferentes vira linhas separadas
+- [x] RF-33: O mês de cada compra e a data padrão do formulário são calculados no fuso local (compra do dia 1º conta no mês correto)
+- [x] RF-34: O botão "Adicionar Item" fica abaixo da lista de itens no formulário de compra
+- [x] RF-35: Editar o nome de um item no catálogo renomeia o item em todas as compras e, opcionalmente, aplica uma marca às compras que estão sem marca; nomes que colidem são mesclados
 
 ## Requisitos Não-Funcionais
 

@@ -1,20 +1,70 @@
-import type { CompraMercado, ItemMercado, CatalogoItemMercado } from "@/types";
+import type { CompraMercado, ItemMercado, CatalogoItemMercado, UnidadeMedida } from "@/types";
+
+export type Dimensao = "contagem" | "massa" | "volume";
+export type ItemCalculavel = Pick<ItemMercado, "unidade" | "precoUnitario" | "quantidade">;
+
+const DIMENSAO_POR_UNIDADE: Record<UnidadeMedida, Dimensao> = {
+  un: "contagem",
+  g: "massa",
+  kg: "massa",
+  ml: "volume",
+  L: "volume",
+};
+
+const FATOR_PARA_BASE: Record<UnidadeMedida, number> = {
+  un: 1,
+  g: 0.001,
+  kg: 1,
+  ml: 0.001,
+  L: 1,
+};
+
+const UNIDADE_BASE: Record<Dimensao, UnidadeMedida> = {
+  contagem: "un",
+  massa: "kg",
+  volume: "L",
+};
+
+export function dimensaoDaUnidade(unidade: UnidadeMedida): Dimensao {
+  return DIMENSAO_POR_UNIDADE[unidade];
+}
+
+export function unidadeBaseDaDimensao(dimensao: Dimensao): UnidadeMedida {
+  return UNIDADE_BASE[dimensao];
+}
+
+function quantidadeNaBase(item: ItemCalculavel): number {
+  return item.quantidade * FATOR_PARA_BASE[item.unidade];
+}
 
 export function normalizarNomeItem(nome: string): string {
   return nome.trim().toLowerCase();
 }
 
-export function calcularSubtotalItem(item: ItemMercado): number {
-  return item.precoUnitario * item.quantidade;
+export function calcularSubtotalItem(item: ItemCalculavel): number {
+  return item.unidade === "un" ? item.precoUnitario * item.quantidade : item.precoUnitario;
+}
+
+export function calcularPrecoPorUnidadeBase(item: ItemCalculavel): number | null {
+  const base = quantidadeNaBase(item);
+  if (!(base > 0)) return null;
+  return calcularSubtotalItem(item) / base;
 }
 
 export function calcularTotalCompra(compra: CompraMercado): number {
   return compra.itens.reduce((soma, item) => soma + calcularSubtotalItem(item), 0);
 }
 
+// Não usar new Date(data): "YYYY-MM-DD" é lido como UTC e recua um dia no fuso do Brasil.
 function estaNoMes(data: string, mes: number, ano: number): boolean {
-  const d = new Date(data);
-  return d.getMonth() === mes && d.getFullYear() === ano;
+  const [anoData, mesData] = data.split("-").map(Number);
+  return anoData === ano && mesData - 1 === mes;
+}
+
+export function dataLocalISO(data: Date = new Date()): string {
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${data.getFullYear()}-${mes}-${dia}`;
 }
 
 export function calcularTotalMes(compras: CompraMercado[], mes: number, ano: number): number {
@@ -42,32 +92,39 @@ export function calcularVariacaoPercentual(atual: number, anterior: number): num
 }
 
 export interface ComparacaoItem {
+  chave: string;
   nome: string;
+  dimensao: Dimensao;
+  unidadeBase: UnidadeMedida;
   precoMedioAtual: number;
   precoMedioAnterior: number | null;
   variacaoPercentual: number | null;
 }
 
+function chaveComparacao(item: ItemMercado): string {
+  return `${normalizarNomeItem(item.nome)}|${dimensaoDaUnidade(item.unidade)}`;
+}
+
 function calcularPrecoMedioPonderado(
   compras: CompraMercado[],
-  nomeNormalizado: string,
+  chave: string,
   mes: number,
   ano: number
 ): number | null {
   let valorTotal = 0;
-  let quantidadeTotal = 0;
+  let baseTotal = 0;
 
   for (const compra of compras) {
     if (!estaNoMes(compra.data, mes, ano)) continue;
     for (const item of compra.itens) {
-      if (normalizarNomeItem(item.nome) !== nomeNormalizado) continue;
+      if (chaveComparacao(item) !== chave) continue;
       valorTotal += calcularSubtotalItem(item);
-      quantidadeTotal += item.quantidade;
+      baseTotal += quantidadeNaBase(item);
     }
   }
 
-  if (quantidadeTotal === 0) return null;
-  return valorTotal / quantidadeTotal;
+  if (baseTotal <= 0) return null;
+  return valorTotal / baseTotal;
 }
 
 export function calcularComparacaoItens(
@@ -77,32 +134,34 @@ export function calcularComparacaoItens(
 ): ComparacaoItem[] {
   const { mes: mesAnt, ano: anoAnt } = obterMesAnterior(mes, ano);
 
-  const nomesExibicao = new Map<string, { nome: string; data: string }>();
+  const exibicao = new Map<string, { nome: string; data: string; dimensao: Dimensao }>();
   for (const compra of compras) {
     if (!estaNoMes(compra.data, mes, ano)) continue;
     for (const item of compra.itens) {
-      const chave = normalizarNomeItem(item.nome);
-      const atual = nomesExibicao.get(chave);
+      const chave = chaveComparacao(item);
+      const atual = exibicao.get(chave);
       if (!atual || compra.data >= atual.data) {
-        nomesExibicao.set(chave, { nome: item.nome, data: compra.data });
+        exibicao.set(chave, {
+          nome: item.nome,
+          data: compra.data,
+          dimensao: dimensaoDaUnidade(item.unidade),
+        });
       }
     }
   }
 
   const resultado: ComparacaoItem[] = [];
-  for (const [nomeNormalizado, { nome: nomeExibicao }] of nomesExibicao) {
-    const precoMedioAtual = calcularPrecoMedioPonderado(compras, nomeNormalizado, mes, ano);
+  for (const [chave, { nome, dimensao }] of exibicao) {
+    const precoMedioAtual = calcularPrecoMedioPonderado(compras, chave, mes, ano);
     if (precoMedioAtual === null) continue;
 
-    const precoMedioAnterior = calcularPrecoMedioPonderado(
-      compras,
-      nomeNormalizado,
-      mesAnt,
-      anoAnt
-    );
+    const precoMedioAnterior = calcularPrecoMedioPonderado(compras, chave, mesAnt, anoAnt);
 
     resultado.push({
-      nome: nomeExibicao,
+      chave,
+      nome,
+      dimensao,
+      unidadeBase: unidadeBaseDaDimensao(dimensao),
       precoMedioAtual,
       precoMedioAnterior,
       variacaoPercentual:
@@ -112,7 +171,9 @@ export function calcularComparacaoItens(
     });
   }
 
-  return resultado.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+  return resultado.sort(
+    (a, b) => a.nome.localeCompare(b.nome, "pt-BR") || a.dimensao.localeCompare(b.dimensao)
+  );
 }
 
 export function atualizarCatalogoMercado(
@@ -137,7 +198,7 @@ export function atualizarCatalogoMercado(
       nomeExibicao: item.nome,
       marcas: Array.from(marcas),
       ultimaUnidade: item.unidade,
-      ultimoPreco: item.precoUnitario,
+      ultimoPreco: calcularPrecoPorUnidadeBase(item) ?? existente?.ultimoPreco ?? item.precoUnitario,
       atualizadoEm: new Date().toISOString(),
     });
   }
@@ -188,4 +249,27 @@ export function excluirEntradaCatalogoMercado(
   nomeNormalizado: string
 ): CatalogoItemMercado[] {
   return catalogo.filter((c) => c.nomeNormalizado !== nomeNormalizado);
+}
+
+export function renomearItemNasCompras(
+  compras: CompraMercado[],
+  nomeNormalizadoAntigo: string,
+  novoNome: string,
+  marcaParaItensSemMarca?: string
+): CompraMercado[] {
+  const marcaNova = marcaParaItensSemMarca?.trim() || undefined;
+
+  return compras.map((compra) => {
+    let mudou = false;
+    const itens = compra.itens.map((item) => {
+      if (normalizarNomeItem(item.nome) !== nomeNormalizadoAntigo) return item;
+      mudou = true;
+      return {
+        ...item,
+        nome: novoNome.trim(),
+        marca: item.marca?.trim() ? item.marca : marcaNova,
+      };
+    });
+    return mudou ? { ...compra, itens } : compra;
+  });
 }

@@ -16,6 +16,7 @@ import type { CatalogoItemMercado } from "@/types";
 
 const catalogoItemFormSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
+  marcaComprasAntigas: z.string().optional(),
   marcas: z.array(z.object({ valor: z.string() })),
 });
 
@@ -25,12 +26,16 @@ interface CatalogoItemFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   item: CatalogoItemMercado | null;
-  onSubmit: (nomeNormalizadoAntigo: string, dados: { nome: string; marcas: string[] }) => void;
+  onSubmit: (
+    nomeNormalizadoAntigo: string,
+    dados: { nome: string; marcas: string[]; marcaComprasAntigas?: string }
+  ) => void;
 }
 
 function valoresIniciais(item: CatalogoItemMercado | null): CatalogoItemFormData {
   return {
     nome: item?.nomeExibicao ?? "",
+    marcaComprasAntigas: "",
     marcas:
       item && item.marcas.length > 0
         ? item.marcas.map((m) => ({ valor: m }))
@@ -63,6 +68,7 @@ export function CatalogoItemForm({ open, onOpenChange, item, onSubmit }: Catalog
     onSubmit(item.nomeNormalizado, {
       nome: data.nome,
       marcas: data.marcas.map((m) => m.valor),
+      marcaComprasAntigas: data.marcaComprasAntigas,
     });
     onOpenChange(false);
   }
@@ -79,6 +85,14 @@ export function CatalogoItemForm({ open, onOpenChange, item, onSubmit }: Catalog
             <label className="text-sm font-medium">Nome</label>
             <Input {...register("nome")} />
             {errors.nome && <p className="text-sm text-destructive">{errors.nome.message}</p>}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Marca das compras antigas</label>
+            <Input placeholder="Opcional" {...register("marcaComprasAntigas")} />
+            <p className="text-xs text-muted-foreground">
+              Aplicada às compras deste item que estão sem marca. O nome novo vale para todas.
+            </p>
           </div>
 
           <div className="space-y-2">

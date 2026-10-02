@@ -17,6 +17,7 @@ import {
   atualizarCatalogoMercado,
   editarEntradaCatalogoMercado,
   excluirEntradaCatalogoMercado,
+  renomearItemNasCompras,
 } from "@/lib/calculos-mercado";
 import { obterCategoriasDefault, obterConfigDefault, obterMetasDefault } from "@/data/defaults";
 import {
@@ -74,7 +75,7 @@ interface FinanceState {
   excluirCompraMercado: (id: string) => Promise<void>;
   editarItemCatalogoMercado: (
     nomeNormalizadoAntigo: string,
-    dados: { nome: string; marcas: string[] }
+    dados: { nome: string; marcas: string[]; marcaComprasAntigas?: string }
   ) => Promise<void>;
   excluirItemCatalogoMercado: (nomeNormalizado: string) => Promise<void>;
 }
@@ -908,13 +909,20 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     const state = get().dados;
     if (!state) return;
 
+    const marcaComprasAntigas = dados.marcaComprasAntigas?.trim();
+
     const novoState: DadosApp = {
       ...state,
-      catalogoMercado: editarEntradaCatalogoMercado(
-        state.catalogoMercado,
+      comprasMercado: renomearItemNasCompras(
+        state.comprasMercado,
         nomeNormalizadoAntigo,
-        dados
+        dados.nome,
+        marcaComprasAntigas
       ),
+      catalogoMercado: editarEntradaCatalogoMercado(state.catalogoMercado, nomeNormalizadoAntigo, {
+        nome: dados.nome,
+        marcas: marcaComprasAntigas ? [...dados.marcas, marcaComprasAntigas] : dados.marcas,
+      }),
     };
 
     set({ dados: novoState });
