@@ -17543,6 +17543,263 @@
       "observacoes": "",
       "id": "03b6088d-90e2-4ac4-94a4-5ddaec8965af",
       "criadoEm": "2026-09-19T19:29:03.962Z"
+    },
+    {
+      "data": "2026-10-01",
+      "itens": [
+        {
+          "id": "030168ef-8756-44ba-be71-324e31d6ab26",
+          "nome": "tomate",
+          "unidade": "g",
+          "precoUnitario": 5.56,
+          "quantidade": 1
+        },
+        {
+          "id": "8f7bea28-967b-4a79-9404-6ae47d94448e",
+          "nome": "cebola",
+          "unidade": "un",
+          "precoUnitario": 3.19,
+          "quantidade": 1
+        },
+        {
+          "id": "7aeeb621-55a8-4bd7-aa33-5f5e7d2fb1f9",
+          "nome": "cenoura",
+          "unidade": "un",
+          "precoUnitario": 5.55,
+          "quantidade": 1
+        },
+        {
+          "id": "2b4e8b5c-2464-4d68-b5dd-e4c55d4971bc",
+          "nome": "creme de leite",
+          "marca": "Mococa",
+          "unidade": "un",
+          "precoUnitario": 1.89,
+          "quantidade": 4
+        },
+        {
+          "id": "50067b58-acf6-4201-9807-700a0fad18b2",
+          "nome": "manteiga",
+          "marca": "Vigor",
+          "unidade": "kg",
+          "precoUnitario": 16.46,
+          "quantidade": 1
+        },
+        {
+          "id": "71f0da43-b69d-4ee2-8707-f0c2882fe5f4",
+          "nome": "Agua sanitaria",
+          "marca": "Qboa",
+          "unidade": "L",
+          "precoUnitario": 4.07,
+          "quantidade": 1
+        },
+        {
+          "id": "6e0c8603-513e-4c35-822d-0e25644ab8d0",
+          "nome": "Desodorante",
+          "marca": "Axe",
+          "unidade": "un",
+          "precoUnitario": 14.25,
+          "quantidade": 1
+        },
+        {
+          "id": "ec40376c-878e-4bf1-9045-9d15c65ed009",
+          "nome": "mostarda",
+          "marca": "Cepêra",
+          "unidade": "L",
+          "precoUnitario": 12.04,
+          "quantidade": 1
+        },
+        {
+          "id": "9b688f0e-f2bc-416e-b463-267384cdc333",
+          "nome": "detergente",
+          "marca": "Ypê",
+          "unidade": "un",
+          "precoUnitario": 1.99,
+          "quantidade": 2
+        },
+        {
+          "id": "84d15436-0e7d-4276-b1d6-c2747296af60",
+          "nome": "Sabão em pó",
+          "marca": "Tixan Ypê",
+          "unidade": "kg",
+          "precoUnitario": 17.49,
+          "quantidade": 1
+        },
+        {
+          "id": "efdaffe4-c17b-43ca-9e25-81a965715ef6",
+          "nome": "Tapioca",
+          "marca": "Terrinha",
+          "unidade": "un",
+          "precoUnitario": 4.74,
+          "quantidade": 8
+        },
+        {
+          "id": "1d0d08ed-6b83-4054-8370-16a75d983f4c",
+          "nome": "sabonete",
+          "marca": "flor de Ypê",
+          "unidade": "un",
+          "precoUnitario": 1.42,
+          "quantidade": 3
+        },
+        {
+          "id": "e607813f-f054-467c-a186-f0a05c01c263",
+          "nome": "Farinha",
+          "marca": "Farina",
+          "unidade": "un",
+          "precoUnitario": 3.3,
+          "quantidade": 2
+        },
+        {
+          "id": "739fec89-ac33-4ef6-8b96-d2f39038adb8",
+          "nome": "Café",
+          "marca": "3 Corações",
+          "unidade": "un",
+          "precoUnitario": 22.9,
+          "quantidade": 1
+        },
+        {
+          "id": "0f37aa49-aba1-4c71-9088-be9629ce5a57",
+          "nome": "molho de tomate",
+          "marca": "Fugini",
+          "unidade": "un",
+          "precoUnitario": 2.3,
+          "quantidade": 2
+        },
+        {
+          "id": "9083b365-634b-4608-9e3f-6f674a5a188b",
+          "nome": "Leite condensado",
+          "marca": "marajoara",
+          "unidade": "un",
+          "precoUnitario": 4.39,
+          "quantidade": 4
+        },
+        {
+          "id": "347b0cd9-ece2-41e4-a74b-7a3c6c8484ce",
+          "nome": "abobora cabotiá",
+          "unidade": "un",
+          "precoUnitario": 6.78,
+          "quantidade": 1
+        },
+        {
+          "id": "fa3c4d8e-b71e-431c-a6d7-8150de1bf6f7",
+          "nome": "ração",
+          "marca": "Pedigree",
+          "unidade": "un",
+          "precoUnitario": 26.4,
+          "quantidade": 1
+        },
+        {
+          "id": "82735d54-9295-4bba-9ae5-a23b96f01798",
+          "nome": "tempero em pó",
+          "marca": "sazon",
+          "unidade": "un",
+          "precoUnitario": 5.51,
+          "quantidade": 2
+        },
+        {
+          "id": "7ec134b4-c9df-4cc2-a983-5f6a4876848b",
+          "nome": "amaciante",
+          "marca": "downy",
+          "unidade": "un",
+          "precoUnitario": 14.25,
+          "quantidade": 1
+        },
+        {
+          "id": "197ce168-200c-4757-8312-e9cf45afec6a",
+          "nome": "açucar",
+          "marca": "Santa isabel",
+          "unidade": "un",
+          "precoUnitario": 3.19,
+          "quantidade": 3
+        },
+        {
+          "id": "f71eb236-14d8-4bf8-9f2f-2bd3a05f12ec",
+          "nome": "creme dental",
+          "marca": "colgate",
+          "unidade": "un",
+          "precoUnitario": 7.51,
+          "quantidade": 1
+        },
+        {
+          "id": "f1c79558-a722-4d6b-ab78-d8b2374f2075",
+          "nome": "sucrilhos",
+          "unidade": "un",
+          "precoUnitario": 19.77,
+          "quantidade": 1
+        },
+        {
+          "id": "31cb3274-e3c8-4f06-8a2a-954f46eba660",
+          "nome": "cravo",
+          "marca": "Terrinha",
+          "unidade": "un",
+          "precoUnitario": 5.29,
+          "quantidade": 1
+        },
+        {
+          "id": "7473e8d6-9bb9-430f-91ad-d267ceeefb1c",
+          "nome": "Tinta ",
+          "marca": "niely cor&ton",
+          "unidade": "un",
+          "precoUnitario": 11.03,
+          "quantidade": 1
+        },
+        {
+          "id": "8f6c0e1f-1e20-4ead-a7a6-0e1e0a51060f",
+          "nome": "gelatina abacaxi",
+          "marca": "Apti",
+          "unidade": "un",
+          "precoUnitario": 0.93,
+          "quantidade": 2
+        },
+        {
+          "id": "c7e2060b-25ef-47b0-9b95-a90ede4bd404",
+          "nome": "gelatina morango",
+          "marca": "Oetker",
+          "unidade": "un",
+          "precoUnitario": 1.63,
+          "quantidade": 2
+        },
+        {
+          "id": "ddf1022a-51da-40f0-9201-af1b9402ad5d",
+          "nome": "biscoito",
+          "marca": "clube social",
+          "unidade": "un",
+          "precoUnitario": 10.37,
+          "quantidade": 2
+        },
+        {
+          "id": "10ce7e7b-7dfe-4e73-8148-3d8113dca0fe",
+          "nome": "milho pipoca",
+          "marca": "Yoki",
+          "unidade": "un",
+          "precoUnitario": 6.61,
+          "quantidade": 1
+        },
+        {
+          "id": "3323369a-da4f-4866-be2b-8216d08e2c56",
+          "nome": "Oleo",
+          "marca": "Soya",
+          "unidade": "un",
+          "precoUnitario": 5.39,
+          "quantidade": 1
+        },
+        {
+          "id": "0aa006c3-de72-455d-bd3c-629cb154010f",
+          "nome": "taxa ifood",
+          "unidade": "un",
+          "precoUnitario": 3.99,
+          "quantidade": 1
+        },
+        {
+          "id": "5a25eaf8-438b-4c19-917d-229cd57eb1ec",
+          "nome": "batata",
+          "unidade": "un",
+          "precoUnitario": 6.15,
+          "quantidade": 1
+        }
+      ],
+      "observacoes": "",
+      "id": "7eb29a9e-204e-4c76-bd19-9f1d938b5430",
+      "criadoEm": "2026-10-02T21:07:47.610Z"
     }
   ],
   "catalogoMercado": [
@@ -17743,16 +18000,16 @@
       "nomeExibicao": "cebola",
       "marcas": [],
       "ultimaUnidade": "un",
-      "ultimoPreco": 4.51,
-      "atualizadoEm": "2026-09-20T16:00:05.033Z"
+      "ultimoPreco": 3.19,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
     },
     {
       "nomeNormalizado": "tomate",
       "nomeExibicao": "tomate",
       "marcas": [],
-      "ultimaUnidade": "un",
-      "ultimoPreco": 8.17,
-      "atualizadoEm": "2026-09-20T16:00:05.033Z"
+      "ultimaUnidade": "g",
+      "ultimoPreco": 5.56,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
     },
     {
       "nomeNormalizado": "pementão",
@@ -17783,8 +18040,8 @@
       "nomeExibicao": "cenoura",
       "marcas": [],
       "ultimaUnidade": "un",
-      "ultimoPreco": 7.34,
-      "atualizadoEm": "2026-09-20T16:00:05.033Z"
+      "ultimoPreco": 5.55,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
     },
     {
       "nomeNormalizado": "leite condensado maraloara",
@@ -17800,7 +18057,281 @@
       "marcas": [],
       "ultimaUnidade": "un",
       "ultimoPreco": 3.99,
-      "atualizadoEm": "2026-09-20T16:00:05.033Z"
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "creme de leite",
+      "nomeExibicao": "creme de leite",
+      "marcas": [
+        "Mococa"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 1.89,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "manteiga",
+      "nomeExibicao": "manteiga",
+      "marcas": [
+        "Vigor"
+      ],
+      "ultimaUnidade": "kg",
+      "ultimoPreco": 16.46,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "agua sanitaria",
+      "nomeExibicao": "Agua sanitaria",
+      "marcas": [
+        "Qboa"
+      ],
+      "ultimaUnidade": "L",
+      "ultimoPreco": 4.07,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "desodorante",
+      "nomeExibicao": "Desodorante",
+      "marcas": [
+        "Axe"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 14.25,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "mostarda",
+      "nomeExibicao": "mostarda",
+      "marcas": [
+        "Cepêra"
+      ],
+      "ultimaUnidade": "L",
+      "ultimoPreco": 12.04,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "detergente",
+      "nomeExibicao": "detergente",
+      "marcas": [
+        "Ypê"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 1.99,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "sabão em pó",
+      "nomeExibicao": "Sabão em pó",
+      "marcas": [
+        "Tixan Ypê"
+      ],
+      "ultimaUnidade": "kg",
+      "ultimoPreco": 17.49,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "tapioca",
+      "nomeExibicao": "Tapioca",
+      "marcas": [
+        "Terrinha"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 4.74,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "sabonete",
+      "nomeExibicao": "sabonete",
+      "marcas": [
+        "flor de Ypê"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 1.42,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "farinha",
+      "nomeExibicao": "Farinha",
+      "marcas": [
+        "Farina"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 3.3,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "café",
+      "nomeExibicao": "Café",
+      "marcas": [
+        "3 Corações"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 22.9,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "molho de tomate",
+      "nomeExibicao": "molho de tomate",
+      "marcas": [
+        "Fugini"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 2.3,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "leite condensado",
+      "nomeExibicao": "Leite condensado",
+      "marcas": [
+        "marajoara"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 4.39,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "abobora cabotiá",
+      "nomeExibicao": "abobora cabotiá",
+      "marcas": [],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 6.78,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "ração",
+      "nomeExibicao": "ração",
+      "marcas": [
+        "Pedigree"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 26.4,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "tempero em pó",
+      "nomeExibicao": "tempero em pó",
+      "marcas": [
+        "sazon"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 5.51,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "amaciante",
+      "nomeExibicao": "amaciante",
+      "marcas": [
+        "downy"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 14.25,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "açucar",
+      "nomeExibicao": "açucar",
+      "marcas": [
+        "Santa isabel"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 3.19,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "creme dental",
+      "nomeExibicao": "creme dental",
+      "marcas": [
+        "colgate"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 7.51,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "sucrilhos",
+      "nomeExibicao": "sucrilhos",
+      "marcas": [],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 19.77,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "cravo",
+      "nomeExibicao": "cravo",
+      "marcas": [
+        "Terrinha"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 5.29,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "tinta",
+      "nomeExibicao": "Tinta ",
+      "marcas": [
+        "niely cor&ton"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 11.03,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "gelatina abacaxi",
+      "nomeExibicao": "gelatina abacaxi",
+      "marcas": [
+        "Apti"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 0.93,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "gelatina morango",
+      "nomeExibicao": "gelatina morango",
+      "marcas": [
+        "Oetker"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 1.63,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "biscoito",
+      "nomeExibicao": "biscoito",
+      "marcas": [
+        "clube social"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 10.37,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "milho pipoca",
+      "nomeExibicao": "milho pipoca",
+      "marcas": [
+        "Yoki"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 6.61,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "oleo",
+      "nomeExibicao": "Oleo",
+      "marcas": [
+        "Soya"
+      ],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 5.39,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
+    },
+    {
+      "nomeNormalizado": "batata",
+      "nomeExibicao": "batata",
+      "marcas": [],
+      "ultimaUnidade": "un",
+      "ultimoPreco": 6.15,
+      "atualizadoEm": "2026-10-02T21:07:47.610Z"
     }
   ]
 }
