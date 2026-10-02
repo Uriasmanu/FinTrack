@@ -13,6 +13,24 @@ Análise de `data/fintrack.json` (1 compra, 34 itens, 32 entradas no catálogo):
 - Não existe preço por kg/L, então não dá para comparar a mesma coisa comprada em pesos diferentes.
 - "taxa ifood" está como item de mercado e entra na média de preços.
 
+## Bug do painel: mês calculado com fuso errado
+
+`estaNoMes` (`calculos-mercado.ts`) faz `new Date("2026-10-01")`. Esse formato é lido como meia-noite UTC, e no fuso de Brasília (UTC-3) vira 30/09 às 21h, então `getMonth()` devolve setembro. Toda compra lançada no **dia 1º** conta no mês anterior.
+
+Efeito nos dados atuais (2 compras: 07/09 = R$ 443,16 e 01/10 = R$ 343,61), com hoje em outubro:
+
+- Total Mês Atual R$ 0,00 (esperado R$ 343,61), Total Mês Anterior R$ 786,77 (esperado R$ 443,16).
+- Variação −100% (esperado −22,5%) e Compras no Mês 0 (esperado 1).
+- Comparativo mostra "Registre uma compra neste mês", pois nenhum item cai em outubro.
+
+Correção: ler ano e mês direto da string `YYYY-MM-DD` (`split("-")`), sem passar por `Date`. Vale para `estaNoMes` e para qualquer outro ponto do módulo que faça `new Date(compra.data)`.
+
+## Nomes diferentes entre meses quebram o comparativo
+
+O comparativo agrupa por nome normalizado, e a compra de outubro já separa a marca do nome: "creme de leite mococa" (set) vs "creme de leite" + marca Mococa (out); "detergente Ype" vs "detergente" + Ypê; "oleo Soya" vs "Oleo" + Soya; "Farinha Farina" vs "Farinha" + Farina; "tapioca Akio" vs "Tapioca" + Terrinha. Mesmo com o bug de data corrigido, quase todos os itens apareceriam como "novo", e o catálogo (60 entradas) duplica o mesmo produto.
+
+Decisão: o comparativo agrupa só por nome (sem marca), como já definido; o catálogo ganha uma ação de **mesclar entradas** (ex.: "creme de leite mococa" → "creme de leite", com a marca Mococa) em `MercadoCatalogo`. Ao mesclar, as compras antigas com o nome antigo passam a usar o nome novo, e a marca extraída vai para o campo `marca` do item. Itens que só mudaram de produto ("sazon" vs "tempero em pó") ficam sob responsabilidade do usuário.
+
 ## Regra central
 
 A unidade define como a linha é calculada:
@@ -77,7 +95,7 @@ type Dimensao = "contagem" | "massa" | "volume";
 ## Fora de escopo
 
 - Converter entre dimensões (g ↔ ml, un ↔ kg).
-- Extrair tamanho ou marca de dentro do nome.
+- Extrair tamanho ou marca do nome automaticamente (a mesclagem no catálogo é manual).
 - Marcar itens que não são produto (ex.: "taxa ifood") para excluí-los da média.
 - Agrupar o comparativo por marca.
 
@@ -90,4 +108,6 @@ type Dimensao = "contagem" | "massa" | "volume";
 5. Mesmo nome em `kg` e `un` → duas linhas no comparativo.
 6. Compras antigas: totais idênticos aos de antes.
 7. Trocar a unidade de `un` para `kg` no formulário atualiza rótulos e subtotal na hora.
+9. Compra de 01/10 conta em outubro (fuso America/Sao_Paulo): painel mostra Total Mês Atual R$ 343,61, Anterior R$ 443,16, Variação −22,5%, 1 compra.
+10. Mesclar "creme de leite mococa" em "creme de leite" faz o comparativo de outubro mostrar o item com preço anterior (R$ 1,79) e variação (+5,6%).
 8. "Adicionar Item" abaixo da lista em 375, 768 e 1440 px, sem scroll horizontal.
