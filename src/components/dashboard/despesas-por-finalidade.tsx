@@ -11,6 +11,7 @@ import {
   CATEGORIA_COMIDA,
   CATEGORIA_BESTEIRA,
   CATEGORIA_ACOUGUE,
+  CATEGORIA_TRANSFERENCIA,
 } from "@/lib/categorias-ids";
 
 export function DespesasPorFinalidade() {
@@ -22,7 +23,7 @@ export function DespesasPorFinalidade() {
   if (!dados) return null;
 
   const despesasMes = dados.transacoes.filter((t) => {
-    if (t.tipo !== "despesa") return false;
+    if (t.tipo !== "despesa" || t.categoriaId === CATEGORIA_TRANSFERENCIA) return false;
     const data = new Date(t.data);
     return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
   });

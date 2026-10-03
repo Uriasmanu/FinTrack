@@ -44,14 +44,14 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
     .reduce((acc, t) => acc + (t.tipo === "receita" ? t.valor : -t.valor), 0);
 
   const saldoMesAnterior = saldoInicialCorrente + transacoesAteMesAnterior;
+  const diferenca = saldoHoje - saldoMesAnterior;
 
-  const variacao =
-    saldoMesAnterior !== 0
-      ? ((saldoHoje - saldoMesAnterior) / Math.abs(saldoMesAnterior)) * 100
-      : 0;
+  const baseEhZero = Math.abs(saldoMesAnterior) < 0.01;
+  const variacao = baseEhZero ? 0 : (diferenca / Math.abs(saldoMesAnterior)) * 100;
 
   const isPositivo = saldoHoje >= 0;
-  const variacaoPositiva = variacao >= 0;
+  const variacaoPositiva = baseEhZero ? diferenca >= 0 : variacao >= 0;
+  const mostrarVariacao = baseEhZero ? diferenca !== 0 : variacao !== 0;
 
   return (
     <Card className="overflow-hidden">
@@ -70,7 +70,7 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
           {isPositivo ? "+" : ""}
           {formatarMoeda(saldoHoje)}
         </div>
-        {variacao !== 0 && (
+        {mostrarVariacao && (
           <div
             className={`mt-1 flex items-center gap-1 text-xs ${
               variacaoPositiva ? "text-success" : "text-destructive"
@@ -81,7 +81,7 @@ export function SaldoCard({ mes, ano }: SaldoCardProps) {
             ) : (
               <ArrowDown className="h-3 w-3" />
             )}
-            {Math.abs(variacao).toFixed(1)}%
+            {baseEhZero ? formatarMoeda(Math.abs(diferenca)) : `${Math.abs(variacao).toFixed(1)}%`}
             <span className="text-muted-foreground ml-1">
               {variacaoPositiva ? "Aumento" : "Redução"} vs mês anterior
             </span>

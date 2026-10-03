@@ -20,6 +20,7 @@ import {
   renomearItemNasCompras,
 } from "@/lib/calculos-mercado";
 import { obterCategoriasDefault, obterConfigDefault, obterMetasDefault } from "@/data/defaults";
+import { CATEGORIA_TRANSFERENCIA } from "@/lib/categorias-ids";
 import {
   criarTransacoesRecorrentes,
   excluirParcelasFuturas,
@@ -607,6 +608,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         (t) =>
           t.confirmada &&
           t.tipo === "receita" &&
+          t.categoriaId !== CATEGORIA_TRANSFERENCIA &&
           new Date(t.data).getMonth() === mes &&
           new Date(t.data).getFullYear() === ano
       )
@@ -622,6 +624,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         (t) =>
           t.confirmada &&
           t.tipo === "despesa" &&
+          t.categoriaId !== CATEGORIA_TRANSFERENCIA &&
           new Date(t.data).getMonth() === mes &&
           new Date(t.data).getFullYear() === ano
       )

@@ -2,7 +2,7 @@ import { ArrowUp, ArrowDown, TrendingUp, TrendingDown, PiggyBank } from "lucide-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
-import { CATEGORIA_GUARDAR } from "@/lib/categorias-ids";
+import { CATEGORIA_GUARDAR, CATEGORIA_TRANSFERENCIA } from "@/lib/categorias-ids";
 
 interface ReceitasDespesasCardProps {
   mes: number;
@@ -18,11 +18,11 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
   });
 
   const receitasAtual = transacoesMes
-    .filter((t) => t.tipo === "receita")
+    .filter((t) => t.tipo === "receita" && t.categoriaId !== CATEGORIA_TRANSFERENCIA)
     .reduce((total, t) => total + t.valor, 0);
 
   const despesasAtual = transacoesMes
-    .filter((t) => t.tipo === "despesa")
+    .filter((t) => t.tipo === "despesa" && t.categoriaId !== CATEGORIA_TRANSFERENCIA)
     .reduce((total, t) => total + t.valor, 0);
 
   const guardarMes = transacoesMes
@@ -31,20 +31,22 @@ export function ReceitasDespesasCard({ mes, ano }: ReceitasDespesasCardProps) {
 
   const percentualGuardado = receitasAtual > 0 ? (guardarMes / receitasAtual) * 100 : 0;
 
-  const mostrarComparacao = mes > 0;
   const mesAnterior = mes === 0 ? 11 : mes - 1;
+  const anoAnterior = mes === 0 ? ano - 1 : ano;
 
   const transacoesAnterior = (dados?.transacoes ?? []).filter((t) => {
     const data = new Date(t.data);
-    return data.getMonth() === mesAnterior && data.getFullYear() === ano;
+    return data.getMonth() === mesAnterior && data.getFullYear() === anoAnterior;
   });
 
-  const receitasAnterior = mostrarComparacao
-    ? transacoesAnterior.filter((t) => t.tipo === "receita").reduce((total, t) => total + t.valor, 0)
-    : 0;
-  const despesasAnterior = mostrarComparacao
-    ? transacoesAnterior.filter((t) => t.tipo === "despesa").reduce((total, t) => total + t.valor, 0)
-    : 0;
+  const receitasAnterior = transacoesAnterior
+    .filter((t) => t.tipo === "receita" && t.categoriaId !== CATEGORIA_TRANSFERENCIA)
+    .reduce((total, t) => total + t.valor, 0);
+  const despesasAnterior = transacoesAnterior
+    .filter((t) => t.tipo === "despesa" && t.categoriaId !== CATEGORIA_TRANSFERENCIA)
+    .reduce((total, t) => total + t.valor, 0);
+
+  const mostrarComparacao = receitasAnterior !== 0 || despesasAnterior !== 0;
 
   const variacaoReceitas =
     receitasAnterior !== 0

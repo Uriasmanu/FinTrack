@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useFinanceStore } from "@/stores/useFinanceStore";
 import { formatarMoeda } from "@/lib/calculos";
+import { CATEGORIA_TRANSFERENCIA } from "@/lib/categorias-ids";
 
 interface ResumoCategoriasProps {
   mes: number;
@@ -13,7 +14,7 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
 
   const despesasMes = (dados?.transacoes ?? [])
     .filter((t) => {
-      if (t.tipo !== "despesa") return false;
+      if (t.tipo !== "despesa" || t.categoriaId === CATEGORIA_TRANSFERENCIA) return false;
       const data = new Date(t.data);
       return data.getMonth() === mes && data.getFullYear() === ano;
     })
@@ -38,7 +39,7 @@ export function ResumoCategorias({ mes, ano }: ResumoCategoriasProps) {
 
   const despesasPorCategoria = dados.transacoes
     .filter((t) => {
-      if (t.tipo !== "despesa") return false;
+      if (t.tipo !== "despesa" || t.categoriaId === CATEGORIA_TRANSFERENCIA) return false;
       const data = new Date(t.data);
       return data.getMonth() === mes && data.getFullYear() === ano;
     })
