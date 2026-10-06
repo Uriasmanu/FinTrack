@@ -167,7 +167,7 @@ export function excluirParcelasFuturas(
 ): Transacao[] {
   return transacoes.filter((t) => {
     if (t.grupoParcelaId !== grupoParcelaId) return true;
-    return t.data <= dataLimite;
+    return t.data < dataLimite;
   });
 }
 

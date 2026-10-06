@@ -221,9 +221,11 @@ export function TransacaoItem({
       <AlertDialog open={parcelaDialogOpen} onOpenChange={setParcelaDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir transação parcelada</AlertDialogTitle>
+            <AlertDialogTitle>
+              Excluir transação {transacao.tipoRecorrencia === "parcelado" ? "parcelada" : "recorrente"}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Esta transação faz parte de um grupo parcelado. O que deseja fazer?
+              Esta transação faz parte de um grupo {transacao.tipoRecorrencia === "parcelado" ? "parcelado" : "recorrente"}. O que deseja fazer?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col gap-2 sm:flex-row">

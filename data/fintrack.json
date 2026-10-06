@@ -13897,24 +13897,6 @@
       "confirmada": true
     },
     {
-      "id": "3218b391-daa3-438e-be50-9cc948ade17b",
-      "tipo": "receita",
-      "tipoRecorrencia": "recorrente",
-      "descricao": "Vale",
-      "valor": 1400,
-      "data": "2026-10-20",
-      "categoriaId": "a7b8c9d0-e1f2-4a3b-4c5d-6e7f8091a2b3",
-      "subtipoId": null,
-      "contaId": "96701dd0-1088-4505-848e-4620a3696672",
-      "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "bc2c140d-4d88-40f5-ba3b-85c278871783",
-      "intervaloDias": null,
-      "criadoEm": "2026-08-07T22:07:11.880Z",
-      "confirmada": false
-    },
-    {
       "id": "d479a8a0-2b32-46b6-ad53-68c02bee01c0",
       "tipo": "despesa",
       "tipoRecorrencia": "parcelado",
