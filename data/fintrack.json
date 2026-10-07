@@ -5974,7 +5974,7 @@
       "grupoParcelaId": "d2cd1641-d969-44be-8c23-784681518994",
       "intervaloDias": 19,
       "criadoEm": "2026-08-07T21:38:16.486Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "37e7434b-e06d-41de-8493-a6cd51d37210",
@@ -16939,40 +16939,22 @@
       "criadoEm": "2026-10-06T15:10:02.693Z"
     },
     {
+      "descricao": "campeonato",
+      "valor": 132,
+      "data": "2026-10-07",
       "tipo": "despesa",
-      "tipoRecorrencia": "unica",
-      "descricao": "Transferência entre contas",
-      "valor": 1138.54,
-      "data": "2026-10-30",
-      "categoriaId": "a3b4c5d6-e7f8-4091-a2b3-c4d5e6f70819",
+      "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
       "cartaoId": null,
-      "parcelaAtual": 1,
-      "totalParcelas": 1,
-      "grupoParcelaId": "54029c9f-7142-4f23-9d6e-ae7d78f57cab",
-      "intervaloDias": null,
-      "confirmada": true,
-      "id": "a005c661-7183-48c6-a002-c59a697ee03e",
-      "criadoEm": "2026-10-06T15:18:46.913Z"
-    },
-    {
-      "tipo": "receita",
       "tipoRecorrencia": "unica",
-      "descricao": "Transferência entre contas",
-      "valor": 1138.54,
-      "data": "2026-10-30",
-      "categoriaId": "a3b4c5d6-e7f8-4091-a2b3-c4d5e6f70819",
-      "subtipoId": null,
-      "contaId": "ae5007ae-43da-4c98-b18e-03089670ac2a",
-      "cartaoId": null,
       "parcelaAtual": 1,
       "totalParcelas": 1,
-      "grupoParcelaId": "54029c9f-7142-4f23-9d6e-ae7d78f57cab",
       "intervaloDias": null,
       "confirmada": true,
-      "id": "3bec4680-c92f-4174-b651-c05b01463a41",
-      "criadoEm": "2026-10-06T15:18:46.930Z"
+      "grupoParcelaId": null,
+      "id": "7470fdce-2542-420b-9242-533dde0234cc",
+      "criadoEm": "2026-10-07T12:21:35.341Z"
     }
   ],
   "categorias": [
