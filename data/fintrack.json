@@ -16955,6 +16955,24 @@
       "grupoParcelaId": null,
       "id": "7470fdce-2542-420b-9242-533dde0234cc",
       "criadoEm": "2026-10-07T12:21:35.341Z"
+    },
+    {
+      "descricao": "mercado",
+      "valor": 18.92,
+      "data": "2026-10-07",
+      "tipo": "despesa",
+      "categoriaId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "subtipoId": "e7f80919-2a3b-44d5-e6f7-081920314253",
+      "contaId": "7dc93a29-17fb-4733-aec0-c9abd61095c2",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "575a8809-b725-4e2b-9468-a28f3ed0d2a8",
+      "criadoEm": "2026-10-07T22:19:39.866Z"
     }
   ],
   "categorias": [
