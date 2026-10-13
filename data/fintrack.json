@@ -52,7 +52,7 @@
       "grupoParcelaId": "c10c47b0-ca42-45e3-a932-351ddf2e51fb",
       "intervaloDias": null,
       "criadoEm": "2026-08-07T21:22:04.087Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "2c658579-a8f2-49ee-9135-67bb9f5ca490",
@@ -268,7 +268,7 @@
       "grupoParcelaId": "897a8030-c5fb-4486-a076-aabe90f2b7eb",
       "intervaloDias": null,
       "criadoEm": "2026-08-07T21:23:24.337Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "bffa260c-f898-4a18-9481-6d37ad671814",
@@ -10114,7 +10114,7 @@
       "grupoParcelaId": "d51529fd-dc06-48db-8038-9cc4c4fc6eb7",
       "intervaloDias": 25,
       "criadoEm": "2026-08-07T21:40:27.310Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "d0466b6d-9153-4dd4-98fb-8af42509efa5",
@@ -13254,7 +13254,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2026-10-21",
+      "data": "2026-10-13",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13264,7 +13264,7 @@
       "grupoParcelaId": "74c31379-fc2f-453e-aa65-197198d22ddd",
       "intervaloDias": null,
       "criadoEm": "2026-08-07T21:40:54.858Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "ee6f7e4a-1028-4f09-826d-ecd5061d3cff",
@@ -13272,7 +13272,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2026-11-20",
+      "data": "2026-11-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13290,7 +13290,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2026-12-21",
+      "data": "2026-12-13",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13308,7 +13308,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-01-20",
+      "data": "2027-01-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13326,7 +13326,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-02-20",
+      "data": "2027-02-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13344,7 +13344,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-03-23",
+      "data": "2027-03-15",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13362,7 +13362,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-04-20",
+      "data": "2027-04-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13380,7 +13380,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-05-21",
+      "data": "2027-05-13",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13398,7 +13398,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-06-20",
+      "data": "2027-06-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13416,7 +13416,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-07-21",
+      "data": "2027-07-13",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -13434,7 +13434,7 @@
       "tipoRecorrencia": "recorrente",
       "descricao": "Netflix",
       "valor": 20.9,
-      "data": "2027-08-20",
+      "data": "2027-08-12",
       "categoriaId": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
       "subtipoId": null,
       "contaId": "96701dd0-1088-4505-848e-4620a3696672",
@@ -16973,6 +16973,24 @@
       "grupoParcelaId": null,
       "id": "575a8809-b725-4e2b-9468-a28f3ed0d2a8",
       "criadoEm": "2026-10-07T22:19:39.866Z"
+    },
+    {
+      "descricao": "mercado",
+      "valor": 24.19,
+      "data": "2026-10-13",
+      "tipo": "despesa",
+      "categoriaId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "subtipoId": "e7f80919-2a3b-44d5-e6f7-081920314253",
+      "contaId": "7dc93a29-17fb-4733-aec0-c9abd61095c2",
+      "cartaoId": null,
+      "tipoRecorrencia": "unica",
+      "parcelaAtual": 1,
+      "totalParcelas": 1,
+      "intervaloDias": null,
+      "confirmada": true,
+      "grupoParcelaId": null,
+      "id": "e9dbcc65-d88a-43ab-8469-16e3422bbe58",
+      "criadoEm": "2026-10-13T20:21:29.933Z"
     }
   ],
   "categorias": [
