@@ -473,7 +473,7 @@
       "tipo": "despesa",
       "tipoRecorrencia": "recorrente",
       "descricao": "Cartão de credito itau",
-      "valor": 250,
+      "valor": 195.14,
       "data": "2026-10-23",
       "categoriaId": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
       "subtipoId": null,
@@ -484,7 +484,7 @@
       "grupoParcelaId": "348bf70d-284b-4cea-bbc1-d0afd9df615a",
       "intervaloDias": null,
       "criadoEm": "2026-08-07T21:25:46.141Z",
-      "confirmada": false
+      "confirmada": true
     },
     {
       "id": "0cd4aff7-bd6b-4fe7-b66b-ce897e2fd6b9",
